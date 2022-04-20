@@ -1,0 +1,10 @@
+[Unit]
+Description=SciCat Dataset Ingerstor
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/jkotan/ndts/ingestor/beamtimeWatcher.py
+
+[Install]
+WantedBy=multi-user.target
