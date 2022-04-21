@@ -68,7 +68,7 @@ class DatasetWatcher(threading.Thread):
                         # logger.info(str(btmd))
             while self.running:
                 time.sleep(self.delay)
-                logger.info('Dt Tick')
+                logger.info('Dt Tac')
         finally:
             self.stop()
 

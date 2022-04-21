@@ -59,4 +59,4 @@ class ScanWatcher(threading.Thread):
         logger.info('Scans ingested: %s' % str(self.sc_ingested))
         while self.running:
             time.sleep(self.delay)
-            logger.info('Sc Tick')
+            logger.info('Sc Talk')
