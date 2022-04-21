@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#   This file is part of sctools - Scientific Catalog Tools
+#   This file is part of scingestor - Scientific Catalog Dataset Ingestor
 #
 #    Copyright (C) 2021-2021 DESY, Jan Kotanski <jkotan@mail.desy.de>
 #
@@ -14,6 +14,6 @@
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with sctools.  If not, see <http://www.gnu.org/licenses/>.
+#    along with scingestor.  If not, see <http://www.gnu.org/licenses/>.
 #
-__version__ = "0.0.2"
+__version__ = "0.0.1"
