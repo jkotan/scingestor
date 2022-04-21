@@ -8,17 +8,6 @@ import threading
 import glob
 
 
-# sudo ln -sf ~/ndts/ingestor/scicat-dataset-ingestor.service \
-#  /etc/systemd/system/scicat-dataset-ingestor.service
-
-# sudo systemctl daemon-reload
-# sudo systemctl enable scicat-dataset-ingestor.service
-#
-# sudo systemctl start scicat-dataset-ingestor.service
-# sudo systemctl stop scicat-dataset-ingestor.service
-# sudo journalctl -u scicat-dataset-ingestor.service
-
-
 def init_logger(name=__name__):
     """ init logger
     """

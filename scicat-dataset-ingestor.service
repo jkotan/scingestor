@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /home/jkotan/ndts/ingestor/beamtimeWatcher.py
+ExecStart=/usr/bin/python3 /home/jkotan/ndts/scingestor/scicat_dataset_ingestor
 
 [Install]
 WantedBy=multi-user.target
