@@ -17,126 +17,13 @@
 #
 import os
 import time
-import logging
 import signal
 import sys
 import json
 import threading
-import glob
 
-
-def init_logger(name=__name__):
-    """ init logger
-    """
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    stdout_handler = logging.StreamHandler()
-    stdout_handler.setLevel(logging.DEBUG)
-    stdout_handler.setFormatter(
-        logging.Formatter('%(levelname)8s : %(message)s'))
-    logger.addHandler(stdout_handler)
-    return logger
-
-
-logger = init_logger("BeamtimeWatcher")
-
-
-class ScanWatcher(threading.Thread):
-    """ Beamtime Watcher
-    """
-
-    def __init__(self, dsfile, idsfile, beamtimeId, delay=5):
-        """ constructor
-
-        :param delay: time delay
-        :type delay: :obj:`str`
-        """
-        threading.Thread.__init__(self)
-        self.__dsfile = dsfile
-        self.__idsfile = idsfile
-        self.__bid = beamtimeId
-        self.delay = delay
-        self.running = True
-        self.sc_ingested = []
-        self.sc_waiting = []
-
-    def run(self):
-        """ dataset watcher thread
-        """
-        with open(self.__dsfile, "r") as dsf:
-            scans = [sc.strip() for sc in dsf.read().split("\n")
-                     if sc.strip()]
-        if os.path.isfile(self.__idsfile):
-            with open(self.__idsfile, "r") as idsf:
-                self.sc_ingested = [
-                    sc.strip() for sc in idsf.read().split("\n")
-                    if sc.strip()]
-        self.sc_waiting = [sc for sc in scans
-                           if sc not in self.sc_ingested]
-
-        logger.info('Scans waiting: %s' % str(self.sc_waiting))
-        logger.info('Scans ingested: %s' % str(self.sc_ingested))
-        while self.running:
-            time.sleep(self.delay)
-            logger.info('Sc Tick')
-
-
-class DatasetWatcher(threading.Thread):
-    """ Beamtime Watcher
-    """
-
-    def __init__(self, path, meta, delay=5):
-        """ constructor
-
-        :param delay: time delay
-        :type delay: :obj:`str`
-        """
-        threading.Thread.__init__(self)
-        self.__path = path
-        self.__meta = meta
-        self.beamtimeId = meta["beamtimeId"]
-        self.delay = delay
-        self.running = True
-        self.ds_pattern = "scicat-datasets-{bt}.lst"
-        self.ids_pattern = "scicat-ingested-datasets-{bt}.lst"
-
-        self.scan_watchers = {}
-        self.scan_lock = threading.Lock()
-
-        self.datasets = self.ds_pattern.format(bt=self.beamtimeId)
-        self.idatasets = self.ids_pattern.format(bt=self.beamtimeId)
-        self.glds_pattern = os.path.join(
-            self.__path, "**", self.datasets)
-
-    def run(self):
-        """ dataset watcher thread
-        """
-        try:
-            files = glob.glob(self.glds_pattern, recursive=True)
-            logger.info("Dataset files: %s" % files)
-            for ffn in files:
-                with self.scan_lock:
-                    if ffn not in self.scan_watchers.keys():
-                        ifn = ffn[:-(len(self.datasets))] + self.idatasets
-                        self.scan_watchers[ffn] = ScanWatcher(
-                            ffn, ifn, self.beamtimeId)
-                        self.scan_watchers[ffn].start()
-                        logger.info('Starting %s' % ffn)
-                        # logger.info(str(btmd))
-            while self.running:
-                time.sleep(self.delay)
-                logger.info('Dt Tick')
-        finally:
-            self.stop()
-
-    def stop(self):
-        """ stop the watcher
-        """
-        self.running = False
-        for ffn, scw in self.scan_watchers.items():
-            logger.info('Stopping %s' % ffn)
-            scw.running = False
-            scw.join()
+from .datasetWatcher import DatasetWatcher
+from .logger import logger
 
 
 class BeamtimeWatcher:
@@ -226,7 +113,3 @@ def main():
     """
     bw = BeamtimeWatcher()
     bw.start()
-
-
-if __name__ == '__main__':
-    main()
