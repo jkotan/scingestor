@@ -15,11 +15,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with scingestor.  If not, see <http://www.gnu.org/licenses/>.
 #
+#
+#
 import os
 import time
 import threading
 
-from .logger import logger
+from .logger import get_logger
 
 
 class ScanWatcher(threading.Thread):
@@ -55,8 +57,8 @@ class ScanWatcher(threading.Thread):
         self.sc_waiting = [sc for sc in scans
                            if sc not in self.sc_ingested]
 
-        logger.info('Scans waiting: %s' % str(self.sc_waiting))
-        logger.info('Scans ingested: %s' % str(self.sc_ingested))
+        get_logger().info('Scans waiting: %s' % str(self.sc_waiting))
+        get_logger().info('Scans ingested: %s' % str(self.sc_ingested))
         while self.running:
             time.sleep(self.delay)
-            logger.info('Sc Talk')
+            get_logger().debug('Sc Talk')

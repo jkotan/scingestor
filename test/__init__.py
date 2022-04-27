@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #   This file is part of scingestor - Scientific Catalog Dataset Ingestor
 #
 #    Copyright (C) 2021-2021 DESY, Jan Kotanski <jkotan@mail.desy.de>
@@ -15,32 +16,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with scingestor.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Authors:
+#     Jan Kotanski <jan.kotanski@desy.de>
+#
 
-import logging
-
-levels = {'debug': logging.DEBUG,
-          'info': logging.INFO,
-          'warning': logging.WARNING,
-          'error': logging.ERROR,
-          'critical': logging.CRITICAL}
-
-_logger = None
-
-
-def init_logger(name=__name__, level='debug'):
-    """ init logger
-    """
-    global _logger
-    _logger = logging.getLogger()
-    ll = levels.get(level, "debug")
-    _logger.setLevel(ll)
-    stdout_handler = logging.StreamHandler()
-    stdout_handler.setLevel(ll)
-    stdout_handler.setFormatter(
-        logging.Formatter('%(levelname)s : %(message)s'))
-    _logger.addHandler(stdout_handler)
-
-
-def get_logger():
-    global _logger
-    return _logger
+""" Tests """

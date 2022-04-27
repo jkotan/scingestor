@@ -21,9 +21,10 @@ import signal
 import sys
 import json
 import threading
+import argparse
 
 from .datasetWatcher import DatasetWatcher
-from .logger import logger
+from .logger import get_logger, init_logger
 
 import inotifyx
 
@@ -32,15 +33,16 @@ class BeamtimeWatcher:
     """ Beamtime Watcher
     """
 
-    def __init__(self, delay=5):
+    def __init__(self, options):
         """ constructor
 
-        :param delay: time delay
-        :type delay: :obj:`str`
+        :param options: time delay
+        :type options: :obj:`str`
         """
-        self.delay = delay
+
         signal.signal(signal.SIGTERM, self._signal_handle)
 
+        # self.delay = 5
         self.beamtime_dirs = [
             "/home/jkotan/gpfs/current",
             "/home/jkotan/gpfs/commissioning",
@@ -50,6 +52,7 @@ class BeamtimeWatcher:
         self.wait_for_dirs = {}
 
         self.notifier = None
+        self.running = True
         self.wd_to_path = {}
         self.wd_to_bpath = {}
 
@@ -79,7 +82,7 @@ class BeamtimeWatcher:
                          if (fl.startswith(prefix)
                              and fl.endswith(postfix))]
         except Exception as e:
-            logger.warning(str(e))
+            get_logger().warning(str(e))
         return files
 
     def _start_notifier(self, paths):
@@ -107,10 +110,10 @@ class BeamtimeWatcher:
                 inotifyx.IN_ALL_EVENTS |
                 inotifyx.IN_MOVED_TO | inotifyx.IN_MOVED_FROM)
             self.wd_to_path[watch_descriptor] = path
-            logger.info('Starting %s: %s'
-                        % (str(watch_descriptor), path))
+            get_logger().info('Starting %s: %s'
+                              % (str(watch_descriptor), path))
         except Exception as e:
-            logger.warning('%s: %s' % (path, str(e)))
+            get_logger().warning('%s: %s' % (path, str(e)))
             self._add_base_path(path)
 
     def _add_base_path(self, path):
@@ -137,11 +140,11 @@ class BeamtimeWatcher:
                 )
                 failing = False
                 self.wd_to_bpath[watch_descriptor] = bpath
-                logger.info('Starting base %s: %s'
-                            % (str(watch_descriptor), bpath))
+                get_logger().info('Starting base %s: %s'
+                                  % (str(watch_descriptor), bpath))
                 self.wait_for_dirs[bpath] = path
             except Exception as e:
-                logger.warning('%s: %s' % (bpath, str(e)))
+                get_logger().warning('%s: %s' % (bpath, str(e)))
                 if bpath == '/':
                     failing = False
 
@@ -151,15 +154,16 @@ class BeamtimeWatcher:
         for wd in list(self.wd_to_path.keys()):
             inotifyx.rm_watch(self.notifier, wd)
             self.wd_to_path.pop(wd)
-            logger.info('Stoping notifier %s' % str(wd))
+            get_logger().info('Stoping notifier %s' % str(wd))
         for wd in list(self.wd_to_bpath.keys()):
             inotifyx.rm_watch(self.notifier, wd)
             self.wd_to_bpath.pop(wd)
-            logger.info('Stoping notifier %s' % str(wd))
+            get_logger().info('Stoping notifier %s' % str(wd))
 
     def start(self):
         """ start beamtime watcher
         """
+        self.running = True
         try:
             self._start_notifier(self.beamtime_dirs)
 
@@ -168,15 +172,15 @@ class BeamtimeWatcher:
                     path, self.bt_prefix, self.bt_postfix)
 
                 self._lunch_dataset_watcher(path, files)
-                logger.info('Files of %s: %s' % (path, files))
+                get_logger().info('Files of %s: %s' % (path, files))
 
-            while True:
+            while self.running:
                 # time.sleep(self.delay)
                 events = inotifyx.get_events(self.notifier, self.timeout)
-                logger.info('Bt Tic')
+                get_logger().debug('Bt Tic')
                 for event in events:
                     if event.wd in self.wd_to_path.keys():
-                        logger.info(
+                        get_logger().info(
                             'Bt: %s %s %s' % (event.name,
                                               event.get_mask_description(),
                                               self.wd_to_path[event.wd]))
@@ -185,9 +189,17 @@ class BeamtimeWatcher:
                            "IN_MOVE_FROM" in masks or \
                            "IN_DELETE" in masks or \
                            "IN_MOVE_SELF" in masks:
+                            # path/file  does not exist anymore (moved/deleted)
                             path = self.wd_to_path.pop(event.wd)
-                            logger.info('Removed %s' % path)
+                            get_logger().info('Removed %s' % path)
+                            ffn = os.path.abspath(path)
+                            with self.dataset_lock:
+                                if ffn in self.dataset_watchers.keys():
+                                    # stop dataset watcher if running
+                                    ds = self.dataset_watchers.pop(ffn)
+                                    ds.stop()
                             self._add_path(path)
+
                         elif "IN_CREATE" in masks or \
                              "IN_MOVE_TO" in masks:
 
@@ -195,22 +207,24 @@ class BeamtimeWatcher:
                                      if (fl.startswith(self.bt_prefix) and
                                          fl.endswith(self.bt_postfix))]
                             if files:
+                                # new beamtime file
                                 self._lunch_dataset_watcher(
                                     self.wd_to_path[event.wd], files)
                             else:
                                 path = self.wd_to_path.pop(event.wd)
+                                get_logger().info("POP path: %s" % path)
                                 files = self.find_bt_files(
                                     path, self.bt_prefix, self.bt_postfix)
 
                                 self._lunch_dataset_watcher(path, files)
 
-                            logger.info('Start beamtime %s' % event.name)
+                            get_logger().info('Start beamtime %s' % event.name)
                         # elif "IN_DELETE" in masks or \
                         #      "IN_MOVE_MOVE" in masks:
                         #     " remove dataset_watcher "
 
                     if event.wd in self.wd_to_bpath.keys():
-                        logger.info(
+                        get_logger().info(
                             'BB: %s %s %s' % (event.name,
                                               event.get_mask_description(),
                                               self.wd_to_bpath[event.wd]))
@@ -224,7 +238,7 @@ class BeamtimeWatcher:
                         self._add_path(path)
 
         except KeyboardInterrupt:
-            logger.warning('Keyboard interrupt (SIGINT) received...')
+            get_logger().warning('Keyboard interrupt (SIGINT) received...')
             self.stop()
 
     def _lunch_dataset_watcher(self, path, files):
@@ -241,22 +255,22 @@ class BeamtimeWatcher:
                 with self.dataset_lock:
                     with open(ffn) as fl:
                         btmd = json.load(fl)
-                        if ffn in self.dataset_watchers.keys():
-                            self.dataset_watchers[ffn].stop()
-                        self.dataset_watchers[ffn] =  \
-                            DatasetWatcher(path, btmd)
-                        self.dataset_watchers[ffn].start()
-                        logger.info('Starting %s' % ffn)
+                        if ffn not in self.dataset_watchers.keys():
+                            self.dataset_watchers[ffn] =  \
+                                DatasetWatcher(path, btmd)
+                            self.dataset_watchers[ffn].start()
+                            get_logger().info('Create DatasetWatcher %s' % ffn)
             except Exception as e:
-                logger.warn("%s cannot be watched: %s" % (ffn, str(e)))
+                get_logger().warn("%s cannot be watched: %s" % (ffn, str(e)))
 
     def stop(self):
         """ stop beamtime watcher
         """
-        logger.info('Cleaning up...')
+        get_logger().info('Cleaning up...')
+        self.running = False
         self._stop_notifier()
         for ffn, dsw in self.dataset_watchers.items():
-            logger.info('Stopping %s' % ffn)
+            get_logger().info('Stopping %s' % ffn)
             dsw.stop()
             dsw.join()
         sys.exit(0)
@@ -267,12 +281,46 @@ class BeamtimeWatcher:
         :param sig: signal name, i.e. 'SIGINT', 'SIGHUP', 'SIGALRM', 'SIGTERM'
         :type sig: :obj:`str`
         """
-        logger.warning('SIGTERM received...')
+        get_logger().warning('SIGTERM received...')
         self.stop()
 
 
 def main():
-    """ main function
+    """ the main program function
     """
-    bw = BeamtimeWatcher()
+
+    # #: pipe arguments
+    # pipe = []
+    # if not sys.stdin.isatty():
+    #     #: system pipe
+    #     pipe = sys.stdin.readlines()
+
+    description = "BeamtimeWatcher service SciCat Dataset ingestion"
+
+    epilog = "" \
+        " examples:\n" \
+        "       scicat_dataset_ingestor -l debug\n" \
+        "\n"
+    parser = argparse.ArgumentParser(
+        description=description, epilog=epilog,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    # parser.add_argument("-o", "--output", dest="output",
+    #                     help=("output scicat metadata file"))
+    parser.add_argument(
+        "-l", "--log", dest="log",
+        help="logging level, i.e. debug, info, warning, error, critical",
+        default="info")
+    try:
+        options = parser.parse_args()
+    except Exception as e:
+        sys.stderr.write("Error: %s\n" % str(e))
+        sys.stderr.flush()
+        parser.print_help()
+        print("")
+        sys.exit(255)
+
+    init_logger("SciCatDatasetIngestor", options.log)
+
+    bw = BeamtimeWatcher(options)
     bw.start()
+    sys.exit(0)

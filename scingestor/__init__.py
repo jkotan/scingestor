@@ -16,4 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with scingestor.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Authors:
+#     Jan Kotanski <jan.kotanski@desy.de>
+#
 __version__ = "0.0.1"

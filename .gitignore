@@ -1,0 +1,7 @@
+# Text editor files 
+*~
+\#*\#
+# Compiled Python files
+*.egg-info
+__pycache__
+.eggs
