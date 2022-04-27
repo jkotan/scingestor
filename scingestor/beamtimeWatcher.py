@@ -115,7 +115,7 @@ class BeamtimeWatcher:
                 inotifyx.IN_ALL_EVENTS |
                 inotifyx.IN_MOVED_TO | inotifyx.IN_MOVED_FROM)
             self.wd_to_path[watch_descriptor] = path
-            get_logger().info('Starting %s: %s'
+            get_logger().info('BeamtimeWatcher: Starting %s: %s'
                               % (str(watch_descriptor), path))
         except Exception as e:
             get_logger().warning('%s: %s' % (path, str(e)))
@@ -158,12 +158,14 @@ class BeamtimeWatcher:
         """
         for wd in list(self.wd_to_path.keys()):
             inotifyx.rm_watch(self.notifier, wd)
-            self.wd_to_path.pop(wd)
-            get_logger().info('Stoping notifier %s' % str(wd))
+            path = self.wd_to_path.pop(wd)
+            get_logger().info('BeamtimeWatcher: '
+                              'Stopping notifier %s: %s' % (str(wd), path))
         for wd in list(self.wd_to_bpath.keys()):
             inotifyx.rm_watch(self.notifier, wd)
-            self.wd_to_bpath.pop(wd)
-            get_logger().info('Stoping notifier %s' % str(wd))
+            path = self.wd_to_bpath.pop(wd)
+            get_logger().info('BeamtimeWatcher: '
+                              'Stopping notifier %s: %s' % (str(wd), path))
 
     def start(self):
         """ start beamtime watcher
@@ -223,7 +225,8 @@ class BeamtimeWatcher:
 
                                 self._lunch_dataset_watcher(path, files)
 
-                            get_logger().debug('Start beamtime %s' % event.name)
+                            get_logger().debug(
+                                'Start beamtime %s' % event.name)
                         # elif "IN_DELETE" in masks or \
                         #      "IN_MOVE_MOVE" in masks:
                         #     " remove dataset_watcher "
@@ -241,7 +244,8 @@ class BeamtimeWatcher:
                             inotifyx.rm_watch(self.notifier, event.wd)
                         path = self.wait_for_dirs.pop(bpath)
                         self._add_path(path)
-                get_logger().debug("Running: %s s" % (time.time() - self.__starttime))
+                get_logger().debug(
+                    "Running: %s s" % (time.time() - self.__starttime))
                 if self.__runtime and \
                    time.time() - self.__starttime > self.__runtime:
                     self.stop()
@@ -267,7 +271,8 @@ class BeamtimeWatcher:
                             self.dataset_watchers[ffn] =  \
                                 DatasetWatcher(path, btmd)
                             self.dataset_watchers[ffn].start()
-                            get_logger().debug('Create DatasetWatcher %s' % ffn)
+                            get_logger().debug(
+                                'Create DatasetWatcher %s' % ffn)
             except Exception as e:
                 get_logger().warn("%s cannot be watched: %s" % (ffn, str(e)))
 
@@ -278,7 +283,8 @@ class BeamtimeWatcher:
         self.running = False
         self._stop_notifier()
         for ffn, dsw in self.dataset_watchers.items():
-            get_logger().info('Stopping %s' % ffn)
+            get_logger().info('BeamtimeWatcher: '
+                              'Stopping %s' % ffn)
             dsw.stop()
             dsw.join()
         sys.exit(0)
@@ -312,8 +318,12 @@ def main():
     parser = argparse.ArgumentParser(
         description=description, epilog=epilog,
         formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("-r", "--runtime", dest="runtime",
-                        help=("stop program after runtime in seconds"))
+    parser.add_argument(
+        "-c", "--configuration", dest="config",
+        help="configuration file name")
+    parser.add_argument(
+        "-r", "--runtime", dest="runtime",
+        help=("stop program after runtime in seconds"))
     parser.add_argument(
         "-l", "--log", dest="log",
         help="logging level, i.e. debug, info, warning, error, critical",

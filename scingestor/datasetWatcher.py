@@ -82,7 +82,7 @@ class DatasetWatcher(threading.Thread):
                 inotifyx.IN_ALL_EVENTS |
                 inotifyx.IN_MOVED_TO | inotifyx.IN_MOVED_FROM)
             self.wd_to_path[watch_descriptor] = path
-            get_logger().info('Starting Dataset %s: %s'
+            get_logger().info('DatasetWatcher: Starting Dataset %s: %s'
                               % (str(watch_descriptor), path))
         except Exception as e:
             get_logger().warning('%s: %s' % (path, str(e)))
@@ -112,7 +112,7 @@ class DatasetWatcher(threading.Thread):
                 )
                 failing = False
                 self.wd_to_bpath[watch_descriptor] = bpath
-                get_logger().info('Starting base %s: %s'
+                get_logger().info('DatasetWatcher: Starting base %s: %s'
                                   % (str(watch_descriptor), bpath))
                 self.wait_for_dirs[bpath] = path
             except Exception as e:
@@ -125,12 +125,16 @@ class DatasetWatcher(threading.Thread):
         """
         for wd in list(self.wd_to_path.keys()):
             inotifyx.rm_watch(self.notifier, wd)
-            self.wd_to_path.pop(wd)
-            get_logger().info('Stoping notifier %s' % str(wd))
+            path = self.wd_to_path.pop(wd)
+            get_logger().info(
+                'DatasetWatcher: '
+                'Stopping notifier %s: %s' % (str(wd), path))
         for wd in list(self.wd_to_bpath.keys()):
             inotifyx.rm_watch(self.notifier, wd)
-            self.wd_to_bpath.pop(wd)
-            get_logger().info('Stoping notifier %s' % str(wd))
+            path = self.wd_to_bpath.pop(wd)
+            get_logger().info(
+                'DatasetWatcher: '
+                'Stopping notifier %s: %s' % (str(wd), path))
 
     def run(self):
         """ dataset watcher thread
@@ -146,7 +150,8 @@ class DatasetWatcher(threading.Thread):
                         self.scan_watchers[ffn] = ScanWatcher(
                             ffn, ifn, self.beamtimeId)
                         self.scan_watchers[ffn].start()
-                        get_logger().info('Starting %s' % ffn)
+                        get_logger().info(
+                            'DatasetWatcher: Starting %s' % ffn)
                         # get_logger().info(str(btmd))
             while self.running:
                 # time.sleep(self.delay)
@@ -170,6 +175,7 @@ class DatasetWatcher(threading.Thread):
         self.running = False
         self._stop_notifier()
         for ffn, scw in self.scan_watchers.items():
-            get_logger().info('Stopping %s' % ffn)
+            get_logger().info(
+                'DatasetWatcher: Stopping %s' % ffn)
             scw.running = False
             scw.join()

@@ -57,8 +57,10 @@ class ScanWatcher(threading.Thread):
         self.sc_waiting = [sc for sc in scans
                            if sc not in self.sc_ingested]
 
-        get_logger().info('Scans waiting: %s' % str(self.sc_waiting))
-        get_logger().info('Scans ingested: %s' % str(self.sc_ingested))
+        get_logger().info(
+            'ScanWatcher: Scans waiting: %s' % str(self.sc_waiting))
+        get_logger().info(
+            'ScanWatcher: Scans ingested: %s' % str(self.sc_ingested))
         while self.running:
             time.sleep(self.delay)
             get_logger().debug('Sc Talk')
