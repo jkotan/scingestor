@@ -138,7 +138,7 @@ class DatasetWatcher(threading.Thread):
         try:
             self._start_notifier(self.__path)
             files = glob.glob(self.glds_pattern, recursive=True)
-            get_logger().info("Dataset files: %s" % files)
+            get_logger().debug("Dataset files: %s" % files)
             for ffn in files:
                 with self.scan_lock:
                     if ffn not in self.scan_watchers.keys():
@@ -154,7 +154,7 @@ class DatasetWatcher(threading.Thread):
                 get_logger().debug('Dt Tac')
                 for event in events:
                     if event.wd in self.wd_to_path.keys():
-                        get_logger().info(
+                        get_logger().debug(
                             'Bt: %s %s %s' % (event.name,
                                               event.get_mask_description(),
                                               self.wd_to_path[event.wd]))

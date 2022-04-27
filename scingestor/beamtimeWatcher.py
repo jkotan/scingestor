@@ -16,7 +16,7 @@
 #    along with scingestor.  If not, see <http://www.gnu.org/licenses/>.
 #
 import os
-# import time
+import time
 import signal
 import sys
 import json
@@ -62,6 +62,11 @@ class BeamtimeWatcher:
         self.dataset_watchers = {}
         self.dataset_lock = threading.Lock()
         self.timeout = 1
+        try:
+            self.__runtime = float(options.runtime)
+        except Exception:
+            self.__runtime = 0
+        self.__starttime = time.time()
 
     def find_bt_files(self, path, prefix, postfix):
         """ find beamtime files
@@ -172,7 +177,7 @@ class BeamtimeWatcher:
                     path, self.bt_prefix, self.bt_postfix)
 
                 self._lunch_dataset_watcher(path, files)
-                get_logger().info('Files of %s: %s' % (path, files))
+                get_logger().debug('Files of %s: %s' % (path, files))
 
             while self.running:
                 # time.sleep(self.delay)
@@ -180,7 +185,7 @@ class BeamtimeWatcher:
                 get_logger().debug('Bt Tic')
                 for event in events:
                     if event.wd in self.wd_to_path.keys():
-                        get_logger().info(
+                        get_logger().debug(
                             'Bt: %s %s %s' % (event.name,
                                               event.get_mask_description(),
                                               self.wd_to_path[event.wd]))
@@ -191,7 +196,7 @@ class BeamtimeWatcher:
                            "IN_MOVE_SELF" in masks:
                             # path/file  does not exist anymore (moved/deleted)
                             path = self.wd_to_path.pop(event.wd)
-                            get_logger().info('Removed %s' % path)
+                            get_logger().debug('Removed %s' % path)
                             ffn = os.path.abspath(path)
                             with self.dataset_lock:
                                 if ffn in self.dataset_watchers.keys():
@@ -212,19 +217,19 @@ class BeamtimeWatcher:
                                     self.wd_to_path[event.wd], files)
                             else:
                                 path = self.wd_to_path.pop(event.wd)
-                                get_logger().info("POP path: %s" % path)
+                                get_logger().debug("POP path: %s" % path)
                                 files = self.find_bt_files(
                                     path, self.bt_prefix, self.bt_postfix)
 
                                 self._lunch_dataset_watcher(path, files)
 
-                            get_logger().info('Start beamtime %s' % event.name)
+                            get_logger().debug('Start beamtime %s' % event.name)
                         # elif "IN_DELETE" in masks or \
                         #      "IN_MOVE_MOVE" in masks:
                         #     " remove dataset_watcher "
 
                     if event.wd in self.wd_to_bpath.keys():
-                        get_logger().info(
+                        get_logger().debug(
                             'BB: %s %s %s' % (event.name,
                                               event.get_mask_description(),
                                               self.wd_to_bpath[event.wd]))
@@ -236,7 +241,10 @@ class BeamtimeWatcher:
                             inotifyx.rm_watch(self.notifier, event.wd)
                         path = self.wait_for_dirs.pop(bpath)
                         self._add_path(path)
-
+                get_logger().debug("Running: %s s" % (time.time() - self.__starttime))
+                if self.__runtime and \
+                   time.time() - self.__starttime > self.__runtime:
+                    self.stop()
         except KeyboardInterrupt:
             get_logger().warning('Keyboard interrupt (SIGINT) received...')
             self.stop()
@@ -259,14 +267,14 @@ class BeamtimeWatcher:
                             self.dataset_watchers[ffn] =  \
                                 DatasetWatcher(path, btmd)
                             self.dataset_watchers[ffn].start()
-                            get_logger().info('Create DatasetWatcher %s' % ffn)
+                            get_logger().debug('Create DatasetWatcher %s' % ffn)
             except Exception as e:
                 get_logger().warn("%s cannot be watched: %s" % (ffn, str(e)))
 
     def stop(self):
         """ stop beamtime watcher
         """
-        get_logger().info('Cleaning up...')
+        get_logger().debug('Cleaning up...')
         self.running = False
         self._stop_notifier()
         for ffn, dsw in self.dataset_watchers.items():
@@ -304,8 +312,8 @@ def main():
     parser = argparse.ArgumentParser(
         description=description, epilog=epilog,
         formatter_class=argparse.RawDescriptionHelpFormatter)
-    # parser.add_argument("-o", "--output", dest="output",
-    #                     help=("output scicat metadata file"))
+    parser.add_argument("-r", "--runtime", dest="runtime",
+                        help=("stop program after runtime in seconds"))
     parser.add_argument(
         "-l", "--log", dest="log",
         help="logging level, i.e. debug, info, warning, error, critical",

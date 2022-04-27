@@ -65,12 +65,14 @@ class BeamlineWatcherTest(unittest.TestCase):
 
         self.helperror = "Error: too few arguments\n"
 
-        self.helpinfo = """usage: scicat_dataset_ingestor [-h] [-l LOG]
+        self.helpinfo = """usage: scicat_dataset_ingestor [-h] [-r RUNTIME] [-l LOG]
 
 BeamtimeWatcher service SciCat Dataset ingestion
 
 optional arguments:
   -h, --help         show this help message and exit
+  -r RUNTIME, --runtime RUNTIME
+                        stop program after runtime in seconds
   -l LOG, --log LOG  logging level, i.e. debug, info, warning, error, critical
 
  examples:
