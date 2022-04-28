@@ -119,7 +119,7 @@ optional arguments:
         # print(er)
         if etxt:
             print(etxt)
-        self.assertTrue(etxt is None)
+        self.assertEqual(etxt, None)
         return vl, er
 
     def runtestexcept(self, argv, exception):
@@ -151,8 +151,8 @@ optional arguments:
         return vl, er, etxt
 
     def test_help(self):
-        fun = sys._getframe().f_code.co_name
-        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        # fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         helps = ['-h', '--help']
         for hl in helps:
@@ -163,6 +163,17 @@ optional arguments:
                     "optionalarguments:", "options:"),
                 "".join(vl.split()).replace("optionalarguments:", "options:"))
             self.assertEqual('', er)
+
+    def test_noconfig(self):
+        # fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        vl, er, et = self.runtestexcept(
+            ['scicat_dataset_ingestor'], SystemExit)
+        self.assertEqual(
+            'WARNING : BeamtimeWatcher: Beamtime directories not defined\n',
+            er)
+        self.assertEqual('', vl)
 
 
 if __name__ == '__main__':

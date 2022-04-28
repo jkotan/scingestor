@@ -22,11 +22,27 @@ import sys
 import json
 import threading
 import argparse
+import yaml
 
 from .datasetWatcher import DatasetWatcher
 from .logger import get_logger, init_logger
 
 import inotifyx
+
+
+def load_config(configfile):
+    """ load config file
+
+    :param configfile: configuration file name
+    :type configfile: :obj:`str`
+    """
+    config = {}
+    try:
+        with open(configfile, 'r') as f:
+            config = yaml.safe_load(f)
+    except Exception as e:
+        get_logger().warning(str(e))
+    return config
 
 
 class BeamtimeWatcher:
@@ -43,12 +59,20 @@ class BeamtimeWatcher:
         signal.signal(signal.SIGTERM, self._signal_handle)
 
         # self.delay = 5
+        self.__config = {}
         self.beamtime_dirs = [
-            "/home/jkotan/gpfs/current",
-            "/home/jkotan/gpfs/commissioning",
-            # "/home/jkotan/gpfs/comissioning/raw",
-            "/home/jkotan/gpfs/local",
+            # "/home/jkotan/gpfs/current",
+            # "/home/jkotan/gpfs/commissioning",
+            # # "/home/jkotan/gpfs/comissioning/raw",
+            # "/home/jkotan/gpfs/local",
         ]
+        if options.config:
+            self.__config = load_config(options.config)
+            # get_logger().info("CONFIGURATION: %s" % str(self.__config))
+            get_logger().debug("CONFIGURATION: %s" % str(self.__config))
+        if "beamtime_dirs" in self.__config.keys() \
+           and isinstance(self.__config["beamtime_dirs"], list):
+            self.beamtime_dirs = self.__config["beamtime_dirs"]
         self.wait_for_dirs = {}
 
         self.notifier = None
@@ -67,6 +91,11 @@ class BeamtimeWatcher:
         except Exception:
             self.__runtime = 0
         self.__starttime = time.time()
+        if not self.beamtime_dirs:
+            self.running = False
+            get_logger().warning(
+                'BeamtimeWatcher: '
+                'Beamtime directories not defined')
 
     def find_bt_files(self, path, prefix, postfix):
         """ find beamtime files
@@ -145,7 +174,8 @@ class BeamtimeWatcher:
                 )
                 failing = False
                 self.wd_to_bpath[watch_descriptor] = bpath
-                get_logger().info('Starting base %s: %s'
+                get_logger().info('BeamtimeWatcher: '
+                                  'Starting base %s: %s'
                                   % (str(watch_descriptor), bpath))
                 self.wait_for_dirs[bpath] = path
             except Exception as e:
@@ -170,7 +200,6 @@ class BeamtimeWatcher:
     def start(self):
         """ start beamtime watcher
         """
-        self.running = True
         try:
             self._start_notifier(self.beamtime_dirs)
 
@@ -274,7 +303,8 @@ class BeamtimeWatcher:
                             get_logger().debug(
                                 'Create DatasetWatcher %s' % ffn)
             except Exception as e:
-                get_logger().warn("%s cannot be watched: %s" % (ffn, str(e)))
+                get_logger().warning(
+                    "%s cannot be watched: %s" % (ffn, str(e)))
 
     def stop(self):
         """ stop beamtime watcher
