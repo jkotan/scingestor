@@ -67,9 +67,10 @@ class BeamtimeWatcher:
             # "/home/jkotan/gpfs/local",
         ]
         if options.config:
-            self.__config = load_config(options.config)
+            self.__config = load_config(options.config) or {}
             # get_logger().info("CONFIGURATION: %s" % str(self.__config))
             get_logger().debug("CONFIGURATION: %s" % str(self.__config))
+
         if "beamtime_dirs" in self.__config.keys() \
            and isinstance(self.__config["beamtime_dirs"], list):
             self.beamtime_dirs = self.__config["beamtime_dirs"]
