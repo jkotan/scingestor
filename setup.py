@@ -119,7 +119,7 @@ SETUPDATA = dict(
     ],
     packages=["scingestor"],
     scripts=[
-        'scingestor'
+        'scicat_dataset_ingestor'
     ],
     cmdclass={
         # 'test': TestCommand,
