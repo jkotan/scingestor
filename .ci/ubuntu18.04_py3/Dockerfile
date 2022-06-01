@@ -6,7 +6,7 @@ RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get -qq i
 RUN curl http://repos.pni-hdri.de/debian_repo.pub.gpg | apt-key add -
 RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian bionic main" -y
 RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get -qq dist-upgrade
-RUN apt-get -qq update && apt-get -qq install -y  apt-utils net-tools git python3-inotifyx
+RUN apt-get -qq update && apt-get -qq install -y  apt-utils net-tools git python3-inotifyx python3-setuptools
 
 RUN useradd -ms /bin/bash scuser
 USER scuser
