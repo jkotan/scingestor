@@ -1,0 +1,47 @@
+name: Test Package
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '30 0 23 * *'
+
+jobs:
+
+  flake8_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install flake8
+        run: pip install flake8
+      - name: Run flake8
+        run: flake8 .
+
+  python3_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [debian11, debian10, ubuntu22.04, ubuntu20.04]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+
+      - name: Build the docker
+        env:
+          OS: ${{ matrix.os }}
+        run: docker build -t ndts .ci/${OS}_py3
+
+      - name: Run the docker
+        run: docker run --name  ndts -d -it -v `pwd`:/home/tango  ndts
+
+      - name: install scicat-dataset-ingestor
+        run: .ci/install.sh 3
+
+      - name: run tests
+        run: .ci/run.sh 3
+
+      - name: Stop the docker
+        run: docker container stop ndts

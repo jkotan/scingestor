@@ -99,7 +99,7 @@ class BeamtimeWatcher:
                 'Beamtime directories not defined')
 
     def find_bt_files(self, path, prefix, postfix):
-        """ find beamtime files
+        """ find beamtime files with given prefix and postfix in the given path
 
         :param path: beamtime directory
         :type path: :obj:`str`
@@ -121,7 +121,7 @@ class BeamtimeWatcher:
         return files
 
     def _start_notifier(self, paths):
-        """ start notifier
+        """ start notifier for all given paths to look for beamtime files
 
         :param paths: beamtime file paths
         :type paths: :obj:`list` <:obj:`str`>
@@ -132,7 +132,7 @@ class BeamtimeWatcher:
             self._add_path(path)
 
     def _add_path(self, path):
-        """ add path to notifier
+        """ add path to beamtime notifier to look for beamtime files
 
         :param path: beamtime file path
         :type path: :obj:`str`
@@ -300,9 +300,10 @@ class BeamtimeWatcher:
                         if ffn not in self.dataset_watchers.keys():
                             self.dataset_watchers[ffn] =  \
                                 DatasetWatcher(path, btmd)
+                            get_logger().info(
+                                'BeamtimeWatcher: Create DatasetWatcher %s'
+                                % ffn)
                             self.dataset_watchers[ffn].start()
-                            get_logger().debug(
-                                'Create DatasetWatcher %s' % ffn)
             except Exception as e:
                 get_logger().warning(
                     "%s cannot be watched: %s" % (ffn, str(e)))
@@ -312,6 +313,7 @@ class BeamtimeWatcher:
         """
         get_logger().debug('Cleaning up...')
         self.running = False
+        time.sleep(0.2)
         self._stop_notifier()
         for ffn, dsw in self.dataset_watchers.items():
             get_logger().info('BeamtimeWatcher: '

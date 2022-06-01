@@ -16,7 +16,7 @@
 #    along with scingestor.  If not, see <http://www.gnu.org/licenses/>.
 #
 import os
-# import time
+import time
 import threading
 import glob
 
@@ -124,7 +124,12 @@ class DatasetWatcher(threading.Thread):
         """ start notifier
         """
         for wd in list(self.wd_to_path.keys()):
-            inotifyx.rm_watch(self.notifier, wd)
+            try:
+                inotifyx.rm_watch(self.notifier, wd)
+            except Exception as e:
+                get_logger().warning(
+                    'DatasetWatcher: %s' % str(e))
+
             path = self.wd_to_path.pop(wd)
             get_logger().info(
                 'DatasetWatcher: '
@@ -173,6 +178,7 @@ class DatasetWatcher(threading.Thread):
         """ stop the watcher
         """
         self.running = False
+        time.sleep(0.2)
         self._stop_notifier()
         for ffn, scw in self.scan_watchers.items():
             get_logger().info(

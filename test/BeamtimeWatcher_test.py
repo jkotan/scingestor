@@ -25,6 +25,7 @@ import os
 import sys
 import threading
 import shutil
+import time
 
 from scingestor import beamtimeWatcher
 
@@ -228,6 +229,99 @@ optional arguments:
                     'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Stopping notifier 1: '
                     '{basedir}\n'.format(basedir=fdirname), er)
+                self.assertEqual('', vl)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
+    def test_config_beamtime_metadata_exist(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        os.mkdir(fdirname)
+        btmeta = "beamtime-metadata-99001234.json"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        shutil.copy(source, fdirname)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"'.format(basedir=fdirname)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r3'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r3'
+                     % cfgfname).split()]
+        try:
+            for cmd in commands:
+                vl, er = self.runtest(cmd)
+                self.assertEqual(
+                    'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Create DatasetWatcher {btmeta}\n'
+                    'INFO : DatasetWatcher: Starting Dataset 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Stopping notifier 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Stopping {btmeta}\n'
+                    'INFO : DatasetWatcher: Stopping notifier 1: {basedir}\n'
+                    .format(basedir=fdirname, btmeta=fullbtmeta), er)
+                self.assertEqual('', vl)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
+    def test_config_beamtime_metadata_add(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        os.mkdir(fdirname)
+        btmeta = "beamtime-metadata-99001234.json"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"'.format(basedir=fdirname)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r3'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r3'
+                     % cfgfname).split()]
+
+        def test_thread():
+            time.sleep(1)
+            shutil.copy(source, fdirname)
+
+        try:
+            for cmd in commands:
+                th = threading.Thread(target=test_thread)
+                th.start()
+                vl, er = self.runtest(cmd)
+                th.join()
+                self.assertEqual(
+                    'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Create DatasetWatcher {btmeta}\n'
+                    'INFO : DatasetWatcher: Starting Dataset 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Stopping notifier 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Stopping {btmeta}\n'
+                    'INFO : DatasetWatcher: Stopping notifier 1: {basedir}\n'
+                    .format(basedir=fdirname, btmeta=fullbtmeta), er)
                 self.assertEqual('', vl)
         finally:
             if os.path.exists(cfgfname):

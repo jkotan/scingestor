@@ -1,0 +1,4 @@
+beamtime_dirs:
+  - /home/jkotan/gpfs/current
+  - /home/jkotan/gpfs/commissioning
+  
