@@ -119,7 +119,7 @@ SETUPDATA = dict(
     ],
     packages=["scingestor"],
     scripts=[
-        'scicatingestor'
+        'scingestor'
     ],
     cmdclass={
         # 'test': TestCommand,
