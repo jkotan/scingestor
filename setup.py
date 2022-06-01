@@ -87,7 +87,7 @@ release = IPKG.__version__
 version = ".".join(release.split(".")[:2])
 name = "Scingestor"
 author = "Jan Kotanski",
-glicense = "GNU GENERAL PUBLIC LICENSE, version 3",
+glicense = "GNU GENERAL PUBLIC LICENSE, version 3"
 
 #: metadata for distutils
 SETUPDATA = dict(
