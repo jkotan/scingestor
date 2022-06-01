@@ -35,7 +35,7 @@ jobs:
         run: docker build -t ndts .ci/${OS}_py3
 
       - name: Run the docker
-        run: docker run --name  ndts -d -it -v `pwd`:/home/tango  ndts
+        run: docker run --name  ndts -d -it -v `pwd`:/home/scuser  ndts
 
       - name: install scicat-dataset-ingestor
         run: .ci/install.sh 3
