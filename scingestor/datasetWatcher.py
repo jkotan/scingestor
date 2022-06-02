@@ -130,12 +130,16 @@ class DatasetWatcher(threading.Thread):
                 get_logger().warning(
                     'DatasetWatcher: %s' % str(e))
 
-            path = self.wd_to_path.pop(wd)
+            path = self.wd_to_path.pop(wd, None)
             get_logger().info(
                 'DatasetWatcher: '
                 'Stopping notifier %s: %s' % (str(wd), path))
         for wd in list(self.wd_to_bpath.keys()):
-            inotifyx.rm_watch(self.notifier, wd)
+            try:
+                inotifyx.rm_watch(self.notifier, wd)
+            except Exception as e:
+                get_logger().warning(
+                    'DatasetWatcher: %s' % str(e))
             path = self.wd_to_bpath.pop(wd)
             get_logger().info(
                 'DatasetWatcher: '

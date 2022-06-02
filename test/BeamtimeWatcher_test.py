@@ -299,12 +299,17 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r3'
+        commands = [('scicat_dataset_ingestor -c %s -r6'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r3'
+                    ('scicat_dataset_ingestor --config %s -r6'
                      % cfgfname).split()]
 
         def test_thread():
+            """ test thread which adds and removes beamtime metadata file """
+            time.sleep(1)
+            shutil.copy(source, fdirname)
+            time.sleep(1)
+            os.remove(fullbtmeta)
             time.sleep(1)
             shutil.copy(source, fdirname)
 
@@ -315,6 +320,10 @@ optional arguments:
                 vl, er = self.runtest(cmd)
                 th.join()
                 self.assertEqual(
+                    'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Create DatasetWatcher {btmeta}\n'
+                    'INFO : DatasetWatcher: Starting Dataset 1: {basedir}\n'
+                    'INFO : DatasetWatcher: Stopping notifier 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create DatasetWatcher {btmeta}\n'
                     'INFO : DatasetWatcher: Starting Dataset 1: {basedir}\n'

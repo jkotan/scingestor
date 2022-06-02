@@ -231,10 +231,14 @@ class BeamtimeWatcher:
                             get_logger().debug('Removed %s' % path)
                             ffn = os.path.abspath(path)
                             with self.dataset_lock:
-                                if ffn in self.dataset_watchers.keys():
-                                    # stop dataset watcher if running
-                                    ds = self.dataset_watchers.pop(ffn)
-                                    ds.stop()
+                                for ph, fl in \
+                                        list(self.dataset_watchers.keys()):
+                                    if ffn == fl or ph == ffn:
+                                        # stop dataset watcher if running
+                                        ds = self.dataset_watchers.pop(
+                                            (ph, fl))
+                                        ds.running = False
+                                        ds.join()
                             self._add_path(path)
 
                         elif "IN_CREATE" in masks or \
@@ -297,13 +301,15 @@ class BeamtimeWatcher:
                 with self.dataset_lock:
                     with open(ffn) as fl:
                         btmd = json.load(fl)
-                        if ffn not in self.dataset_watchers.keys():
-                            self.dataset_watchers[ffn] =  \
+                        if (path, ffn) not in self.dataset_watchers.keys():
+                            # self.dataset_watchers[ffn] =  \
+                            self.dataset_watchers[(path, ffn)] =  \
                                 DatasetWatcher(path, btmd)
                             get_logger().info(
                                 'BeamtimeWatcher: Create DatasetWatcher %s'
                                 % ffn)
-                            self.dataset_watchers[ffn].start()
+                            self.dataset_watchers[(path, ffn)].start()
+                            # self.dataset_watchers[ffn].start()
             except Exception as e:
                 get_logger().warning(
                     "%s cannot be watched: %s" % (ffn, str(e)))
@@ -315,10 +321,11 @@ class BeamtimeWatcher:
         self.running = False
         time.sleep(0.2)
         self._stop_notifier()
-        for ffn, dsw in self.dataset_watchers.items():
+        for pf, dsw in self.dataset_watchers.items():
+            path, ffn = pf
             get_logger().info('BeamtimeWatcher: '
                               'Stopping %s' % ffn)
-            dsw.stop()
+            dsw.running = False
             dsw.join()
         sys.exit(0)
 
