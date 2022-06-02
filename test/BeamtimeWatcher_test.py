@@ -266,11 +266,11 @@ optional arguments:
                 vl, er = self.runtest(cmd)
                 self.assertEqual(
                     'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Create DatasetWatcher {btmeta}\n'
-                    'INFO : DatasetWatcher: Starting Dataset 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Create ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Starting ScanDir 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Stopping notifier 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Stopping {btmeta}\n'
-                    'INFO : DatasetWatcher: Stopping notifier 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Stopping notifier 1: {basedir}\n'
                     .format(basedir=fdirname, btmeta=fullbtmeta), er)
                 self.assertEqual('', vl)
         finally:
@@ -321,15 +321,15 @@ optional arguments:
                 th.join()
                 self.assertEqual(
                     'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Create DatasetWatcher {btmeta}\n'
-                    'INFO : DatasetWatcher: Starting Dataset 1: {basedir}\n'
-                    'INFO : DatasetWatcher: Stopping notifier 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Create ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Starting ScanDir 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Stopping notifier 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Create DatasetWatcher {btmeta}\n'
-                    'INFO : DatasetWatcher: Starting Dataset 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Create ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Starting ScanDir 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Stopping notifier 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Stopping {btmeta}\n'
-                    'INFO : DatasetWatcher: Stopping notifier 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Stopping notifier 1: {basedir}\n'
                     .format(basedir=fdirname, btmeta=fullbtmeta), er)
                 self.assertEqual('', vl)
         finally:

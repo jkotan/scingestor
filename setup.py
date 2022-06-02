@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #   This file is part of scingestor - Scientific Catalog Dataset Ingestor
 #
 #    Copyright (C) 2021-2021 DESY, Jan Kotanski <jkotan@mail.desy.de>

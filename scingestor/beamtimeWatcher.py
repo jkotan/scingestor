@@ -24,7 +24,7 @@ import threading
 import argparse
 import yaml
 
-from .datasetWatcher import DatasetWatcher
+from .scanDirWatcher import ScanDirWatcher
 from .logger import get_logger, init_logger
 
 import inotifyx
@@ -84,8 +84,8 @@ class BeamtimeWatcher:
         self.bt_prefix = "beamtime-metadata-"
         self.bt_postfix = ".json"
 
-        self.dataset_watchers = {}
-        self.dataset_lock = threading.Lock()
+        self.scandir_watchers = {}
+        self.scandir_lock = threading.Lock()
         self.timeout = 1
         try:
             self.__runtime = float(options.runtime)
@@ -208,7 +208,7 @@ class BeamtimeWatcher:
                 files = self.find_bt_files(
                     path, self.bt_prefix, self.bt_postfix)
 
-                self._lunch_dataset_watcher(path, files)
+                self._lunch_scandir_watcher(path, files)
                 get_logger().debug('Files of %s: %s' % (path, files))
 
             while self.running:
@@ -230,12 +230,12 @@ class BeamtimeWatcher:
                             path = self.wd_to_path.pop(event.wd)
                             get_logger().debug('Removed %s' % path)
                             ffn = os.path.abspath(path)
-                            with self.dataset_lock:
+                            with self.scandir_lock:
                                 for ph, fl in \
-                                        list(self.dataset_watchers.keys()):
+                                        list(self.scandir_watchers.keys()):
                                     if ffn == fl or ph == ffn:
-                                        # stop dataset watcher if running
-                                        ds = self.dataset_watchers.pop(
+                                        # stop scandir watcher if running
+                                        ds = self.scandir_watchers.pop(
                                             (ph, fl))
                                         ds.running = False
                                         ds.join()
@@ -249,7 +249,7 @@ class BeamtimeWatcher:
                                          fl.endswith(self.bt_postfix))]
                             if files:
                                 # new beamtime file
-                                self._lunch_dataset_watcher(
+                                self._lunch_scandir_watcher(
                                     self.wd_to_path[event.wd], files)
                             else:
                                 path = self.wd_to_path.pop(event.wd)
@@ -257,13 +257,13 @@ class BeamtimeWatcher:
                                 files = self.find_bt_files(
                                     path, self.bt_prefix, self.bt_postfix)
 
-                                self._lunch_dataset_watcher(path, files)
+                                self._lunch_scandir_watcher(path, files)
 
                             get_logger().debug(
                                 'Start beamtime %s' % event.name)
                         # elif "IN_DELETE" in masks or \
                         #      "IN_MOVE_MOVE" in masks:
-                        #     " remove dataset_watcher "
+                        #     " remove scandir_watcher "
 
                     if event.wd in self.wd_to_bpath.keys():
                         get_logger().debug(
@@ -287,8 +287,8 @@ class BeamtimeWatcher:
             get_logger().warning('Keyboard interrupt (SIGINT) received...')
             self.stop()
 
-    def _lunch_dataset_watcher(self, path, files):
-        """ lunch dataset watcher
+    def _lunch_scandir_watcher(self, path, files):
+        """ lunch scandir watcher
 
         :param path: base file path
         :type path: :obj:`str`
@@ -298,18 +298,18 @@ class BeamtimeWatcher:
         for bt in files:
             ffn = os.path.abspath(os.path.join(path, bt))
             try:
-                with self.dataset_lock:
+                with self.scandir_lock:
                     with open(ffn) as fl:
                         btmd = json.load(fl)
-                        if (path, ffn) not in self.dataset_watchers.keys():
-                            # self.dataset_watchers[ffn] =  \
-                            self.dataset_watchers[(path, ffn)] =  \
-                                DatasetWatcher(path, btmd)
+                        if (path, ffn) not in self.scandir_watchers.keys():
+                            # self.scandir_watchers[ffn] =  \
+                            self.scandir_watchers[(path, ffn)] =  \
+                                ScanDirWatcher(path, btmd)
                             get_logger().info(
-                                'BeamtimeWatcher: Create DatasetWatcher %s'
+                                'BeamtimeWatcher: Create ScanDirWatcher %s'
                                 % ffn)
-                            self.dataset_watchers[(path, ffn)].start()
-                            # self.dataset_watchers[ffn].start()
+                            self.scandir_watchers[(path, ffn)].start()
+                            # self.scandir_watchers[ffn].start()
             except Exception as e:
                 get_logger().warning(
                     "%s cannot be watched: %s" % (ffn, str(e)))
@@ -321,7 +321,7 @@ class BeamtimeWatcher:
         self.running = False
         time.sleep(0.2)
         self._stop_notifier()
-        for pf, dsw in self.dataset_watchers.items():
+        for pf, dsw in self.scandir_watchers.items():
             path, ffn = pf
             get_logger().info('BeamtimeWatcher: '
                               'Stopping %s' % ffn)
