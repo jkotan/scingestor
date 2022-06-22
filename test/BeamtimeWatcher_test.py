@@ -58,7 +58,7 @@ class mytty(object):
 
 
 # test fixture
-class BeamlineWatcherTest(unittest.TestCase):
+class BeamtimeWatcherTest(unittest.TestCase):
 
     # constructor
     # \param methodName name of the test method
@@ -200,7 +200,7 @@ optional arguments:
                     er)
                 self.assertEqual('', vl)
         finally:
-            if os.path.isdir(cfgfname):
+            if os.path.isfile(cfgfname):
                 os.remove(cfgfname)
 
     def test_config_basedir(self):

@@ -59,7 +59,9 @@ class BeamtimeWatcher:
         signal.signal(signal.SIGTERM, self._signal_handle)
 
         # self.delay = 5
+        # (:obj:`dict` <:obj:`str`, `any`>) beamtime configuration
         self.__config = {}
+        # (:obj:`list` <:obj:`str`>) beamtime directories
         self.beamtime_dirs = [
             # "/home/jkotan/gpfs/current",
             # "/home/jkotan/gpfs/commissioning",
@@ -74,23 +76,39 @@ class BeamtimeWatcher:
         if "beamtime_dirs" in self.__config.keys() \
            and isinstance(self.__config["beamtime_dirs"], list):
             self.beamtime_dirs = self.__config["beamtime_dirs"]
+        # (:obj:`dict` <:obj:`str`, :obj:`str`>)
+        #                             beamtime path to watcher path map
         self.wait_for_dirs = {}
 
+        # (:obj:`int`) notifier id
         self.notifier = None
+        # (:obj:`bool`) running loop flag
         self.running = True
+        # (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
         self.wd_to_path = {}
+        # (:obj:`dict` <:obj:`int`, :obj:`str`>)
+        #                               beamtime watch description paths
         self.wd_to_bpath = {}
 
+        # (:obj:`str`) beamtime file prefix
         self.bt_prefix = "beamtime-metadata-"
+        # (:obj:`str`) beamtime file postfix
         self.bt_postfix = ".json"
 
+        # (:obj:`dict` <(:obj:`str`, :obj:`str`),
+        #                :class:`scanDirWatcher.ScanDirWatcher`>)
+        #        scandir wachers instances for given path and beamtime file
         self.scandir_watchers = {}
+        # (:class:`threading.Lock`) scandir watcher dictionary lock
         self.scandir_lock = threading.Lock()
+        # (:obj:`float`) timeout value for inotifyx get events
         self.timeout = 1
         try:
+            # (:obj:`float`) run time in s
             self.__runtime = float(options.runtime)
         except Exception:
             self.__runtime = 0
+        # (:obj:`float`) start time in s
         self.__starttime = time.time()
         if not self.beamtime_dirs:
             self.running = False
@@ -300,16 +318,14 @@ class BeamtimeWatcher:
             try:
                 with self.scandir_lock:
                     with open(ffn) as fl:
-                        btmd = json.load(fl)
-                        if (path, ffn) not in self.scandir_watchers.keys():
-                            # self.scandir_watchers[ffn] =  \
-                            self.scandir_watchers[(path, ffn)] =  \
-                                ScanDirWatcher(path, btmd)
-                            get_logger().info(
-                                'BeamtimeWatcher: Create ScanDirWatcher %s'
-                                % ffn)
-                            self.scandir_watchers[(path, ffn)].start()
-                            # self.scandir_watchers[ffn].start()
+                        btmd = json.loads(fl.read())
+                    if (path, ffn) not in self.scandir_watchers.keys():
+                        self.scandir_watchers[(path, ffn)] =  \
+                            ScanDirWatcher(path, btmd)
+                        get_logger().info(
+                            'BeamtimeWatcher: Create ScanDirWatcher %s'
+                            % ffn)
+                        self.scandir_watchers[(path, ffn)].start()
             except Exception as e:
                 get_logger().warning(
                     "%s cannot be watched: %s" % (ffn, str(e)))
