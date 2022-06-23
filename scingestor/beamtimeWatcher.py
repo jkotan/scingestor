@@ -58,7 +58,6 @@ class BeamtimeWatcher:
 
         signal.signal(signal.SIGTERM, self._signal_handle)
 
-        # self.delay = 5
         # (:obj:`dict` <:obj:`str`, `any`>) beamtime configuration
         self.__config = {}
         # (:obj:`list` <:obj:`str`>) beamtime directories
@@ -97,7 +96,7 @@ class BeamtimeWatcher:
 
         # (:obj:`dict` <(:obj:`str`, :obj:`str`),
         #                :class:`scanDirWatcher.ScanDirWatcher`>)
-        #        scandir wachers instances for given path and beamtime file
+        #        scandir watchers instances for given path and beamtime file
         self.scandir_watchers = {}
         # (:class:`threading.Lock`) scandir watcher dictionary lock
         self.scandir_lock = threading.Lock()
@@ -317,14 +316,19 @@ class BeamtimeWatcher:
             ffn = os.path.abspath(os.path.join(path, bt))
             try:
                 with self.scandir_lock:
-                    with open(ffn) as fl:
-                        btmd = json.loads(fl.read())
+                    try:
+                        with open(ffn) as fl:
+                            btmd = json.loads(fl.read())
+                    except Exception:
+                        time.sleep(0.1)
+                        with open(ffn) as fl:
+                            btmd = json.loads(fl.read())
                     if (path, ffn) not in self.scandir_watchers.keys():
                         self.scandir_watchers[(path, ffn)] =  \
-                            ScanDirWatcher(path, btmd)
+                            ScanDirWatcher(path, btmd, ffn)
                         get_logger().info(
-                            'BeamtimeWatcher: Create ScanDirWatcher %s'
-                            % ffn)
+                            'BeamtimeWatcher: Create ScanDirWatcher %s %s'
+                            % (path, ffn))
                         self.scandir_watchers[(path, ffn)].start()
             except Exception as e:
                 get_logger().warning(

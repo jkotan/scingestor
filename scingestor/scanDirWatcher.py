@@ -18,7 +18,6 @@
 import os
 import time
 import threading
-import glob
 
 from .datasetWatcher import DatasetWatcher
 from .logger import get_logger
@@ -30,33 +29,61 @@ class ScanDirWatcher(threading.Thread):
     """ Beamtime Watcher
     """
 
-    def __init__(self, path, meta, delay=5):
+    def __init__(self, path, meta, bpath, delay=5):
         """ constructor
 
+        :param path: scan dir path
+        :type path: :obj:`str`
+        :param meta: beamtime configuration
+        :type meta: :obj:`dict` <:obj:`str`,`any`>
         :param delay: time delay
-        :type delay: :obj:`str`
+        :type delay: :obj:`int`
         """
         threading.Thread.__init__(self)
+        # (:obj:`str`) scan dir path
         self.__path = path
+        # (:obj:`str`) beamtime path and file name
+        self.__bpath = bpath
+        # (:obj:`dict` <:obj:`str`,`any`>) beamtime configuration
         self.__meta = meta
+        # (:obj:`str`) beamtime id
         self.beamtimeId = meta["beamtimeId"]
+        # (:obj:`float`) delay time for ingestion in s
         self.delay = delay
+        # (:obj:`bool`) running loop flag
         self.running = True
+        # (:obj:`str`) scicat dataset file pattern
         self.ds_pattern = "scicat-datasets-{bt}.lst"
+        # (:obj:`str`) indested scicat dataset file pattern
         self.ids_pattern = "scicat-ingested-datasets-{bt}.lst"
 
+        # (:obj:`int`) notifier ID
         self.notifier = None
+        # (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
         self.wd_to_path = {}
-        self.wd_to_bpath = {}
 
+        # (:obj:`dict` <(:obj:`str`, :obj:`str`),
+        #                :class:`scanDirWatcher.ScanDirWatcher`>)
+        #        dataset watchers instances for given path and beamtime file
         self.dataset_watchers = {}
+        # (:class:`threading.Lock`) dataset watcher dictionary lock
         self.dataset_lock = threading.Lock()
+        # (:obj:`float`) timeout value for inotifyx get events
         self.timeout = 1
 
-        self.datasets = self.ds_pattern.format(bt=self.beamtimeId)
-        self.idatasets = self.ids_pattern.format(bt=self.beamtimeId)
-        self.glds_pattern = os.path.join(
-            self.__path, "**", self.datasets)
+        # (:obj:`dict` <(:obj:`str`, :obj:`str`),
+        #                :class:`scanDirWatcher.ScanDirWatcher`>)
+        #        scandir watchers instances for given path and beamtime file
+        self.scandir_watchers = {}
+        # (:class:`threading.Lock`) scandir watcher dictionary lock
+        self.scandir_lock = threading.Lock()
+
+        # (:obj:`str`) datasets file name
+        self.dslist_filename = self.ds_pattern.format(bt=self.beamtimeId)
+        # (:obj:`str`) ingescted datasets file name
+        self.idslist_filename = self.ids_pattern.format(bt=self.beamtimeId)
+        # (:obj:`str`) datasets file name
+        self.dslist_fullname = os.path.join(self.__path, self.dslist_filename)
 
     def _start_notifier(self, path):
         """ start notifier
@@ -86,39 +113,6 @@ class ScanDirWatcher(threading.Thread):
                               % (str(watch_descriptor), path))
         except Exception as e:
             get_logger().warning('%s: %s' % (path, str(e)))
-            # self._add_base_path(path)
-
-    def _add_base_path(self, path):
-        """ add base path to notifier
-
-        :param path: base file path
-        :type path: :obj:`str`
-        """
-        failing = True
-        bpath = path
-        while failing:
-            try:
-                bpath, _ = os.path.split(bpath)
-
-                if not bpath:
-                    bpath = os.path.abspath()
-                watch_descriptor = inotifyx.add_watch(
-                    self.notifier, bpath,
-                    inotifyx.IN_CREATE | inotifyx.IN_CLOSE_WRITE
-                    | inotifyx.IN_MOVED_TO
-                    | inotifyx.IN_MOVE_SELF
-                    | inotifyx.IN_DELETE
-                    | inotifyx.IN_ALL_EVENTS
-                )
-                failing = False
-                self.wd_to_bpath[watch_descriptor] = bpath
-                get_logger().info('ScanDirWatcher: Starting base %s: %s'
-                                  % (str(watch_descriptor), bpath))
-                self.wait_for_dirs[bpath] = path
-            except Exception as e:
-                get_logger().warning('%s: %s' % (bpath, str(e)))
-                if bpath == '/':
-                    failing = False
 
     def _stop_notifier(self):
         """ start notifier
@@ -134,34 +128,52 @@ class ScanDirWatcher(threading.Thread):
             get_logger().info(
                 'ScanDirWatcher: '
                 'Stopping notifier %s: %s' % (str(wd), path))
-        for wd in list(self.wd_to_bpath.keys()):
+
+    def _lunch_scandir_watcher(self, paths):
+        """ lunch scandir watcher
+
+        :param path: list of subdirectories
+        :type path: :obj:`list`<:obj:`str`>
+        """
+        for path in paths:
             try:
-                inotifyx.rm_watch(self.notifier, wd)
+                with self.scandir_lock:
+                    if (path, self.__bpath) \
+                       not in self.scandir_watchers.keys():
+                        self.scandir_watchers[(path, self.__bpath)] =  \
+                            ScanDirWatcher(
+                                path, self.__meta, self.__bpath)
+                        get_logger().info(
+                            'ScanDirWatcher: Create ScanDirWatcher %s %s'
+                            % (path, self.__bpath))
+                        self.scandir_watchers[(path, self.__bpath)].start()
             except Exception as e:
                 get_logger().warning(
-                    'ScanDirWatcher: %s' % str(e))
-            path = self.wd_to_bpath.pop(wd)
-            get_logger().info(
-                'ScanDirWatcher: '
-                'Stopping notifier %s: %s' % (str(wd), path))
+                    "%s cannot be watched: %s" % (path, str(e)))
 
     def run(self):
         """ scandir watcher thread
         """
         try:
             self._start_notifier(self.__path)
-            files = glob.glob(self.glds_pattern, recursive=True)
-            get_logger().debug("ScanDir files: %s" % files)
-            for ffn in files:
+            get_logger().debug("ScanDir file:  %s " % (self.dslist_fullname))
+            if os.path.isfile(self.dslist_fullname):
                 with self.dataset_lock:
-                    if ffn not in self.dataset_watchers.keys():
-                        ifn = ffn[:-(len(self.datasets))] + self.idatasets
-                        self.dataset_watchers[ffn] = DatasetWatcher(
-                            ffn, ifn, self.beamtimeId)
-                        self.dataset_watchers[ffn].start()
+                    fn = self.dslist_fullname
+                    if fn not in self.dataset_watchers.keys():
+                        ifn = fn[:-(len(self.dslist_filename))] + \
+                            self.idslist_filename
+                        self.dataset_watchers[fn] = DatasetWatcher(
+                            fn, ifn, self.beamtimeId)
+                        self.dataset_watchers[fn].start()
                         get_logger().info(
-                            'ScanDirWatcher: Starting %s' % ffn)
+                            'ScanDirWatcher: Starting %s' % fn)
                         # get_logger().info(str(btmd))
+
+            subdirs = [it.path for it in os.scandir(self.__path)
+                       if it.is_dir()]
+            self._lunch_scandir_watcher(subdirs)
+
             while self.running:
                 # time.sleep(self.delay)
                 events = inotifyx.get_events(self.notifier, self.timeout)
@@ -169,9 +181,33 @@ class ScanDirWatcher(threading.Thread):
                 for event in events:
                     if event.wd in self.wd_to_path.keys():
                         get_logger().debug(
-                            'Bt: %s %s %s' % (event.name,
+                            'Sd: %s %s %s' % (event.name,
                                               event.get_mask_description(),
                                               self.wd_to_path[event.wd]))
+                        masks = event.get_mask_description().split("|")
+                        if "IN_ISDIR" in masks and (
+                                "IN_CREATE" in masks or "IN_MOVE_TO" in masks):
+                            npath = os.path.join(
+                                self.wd_to_path[event.wd], event.name)
+                            self._lunch_scandir_watcher([npath])
+                        elif "IN_CREATE" in masks or "IN_MOVE_TO" in masks:
+                            fn = os.path.join(
+                                self.wd_to_path[event.wd], event.name)
+                            with self.dataset_lock:
+                                if fn not in self.dataset_watchers.keys() and \
+                                   fn == self.dslist_fullname:
+                                    ifn = fn[:-(len(self.dslist_filename))] + \
+                                        self.idslist_filename
+                                    self.dataset_watchers[fn] = DatasetWatcher(
+                                        fn, ifn, self.beamtimeId)
+                                    self.dataset_watchers[fn].start()
+                                    get_logger().info(
+                                        'ScanDirWatcher: Starting %s' % fn)
+
+                        # elif "IN_DELETE_SELF" in masks:
+                        #     "remove scandir watcher"
+                        #     # self.wd_to_path[event.wd]
+
         # except Exception as e:
         #     get_logger().warn(str(e))
         #     raise
@@ -184,8 +220,14 @@ class ScanDirWatcher(threading.Thread):
         self.running = False
         time.sleep(0.2)
         self._stop_notifier()
-        for ffn, scw in self.dataset_watchers.items():
+        for fn, scw in self.dataset_watchers.items():
             get_logger().info(
-                'ScanDirWatcher: Stopping %s' % ffn)
+                'ScanDirWatcher: Stopping %s' % fn)
             scw.running = False
             scw.join()
+        for pf, dsw in self.scandir_watchers.items():
+            path, fn = pf
+            get_logger().info('ScanDirWatcher: '
+                              'Stopping %s' % fn)
+            dsw.running = False
+            dsw.join()

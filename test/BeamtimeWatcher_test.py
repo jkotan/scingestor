@@ -266,7 +266,8 @@ optional arguments:
                 vl, er = self.runtest(cmd)
                 self.assertEqual(
                     'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Create ScanDirWatcher {btmeta}\n'
+                    'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                    '{basedir} {btmeta}\n'
                     'INFO : ScanDirWatcher: Starting ScanDir 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Stopping notifier 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Stopping {btmeta}\n'
@@ -321,11 +322,13 @@ optional arguments:
                 th.join()
                 self.assertEqual(
                     'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Create ScanDirWatcher {btmeta}\n'
+                    'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                    '{basedir} {btmeta}\n'
                     'INFO : ScanDirWatcher: Starting ScanDir 1: {basedir}\n'
                     'INFO : ScanDirWatcher: Stopping notifier 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Create ScanDirWatcher {btmeta}\n'
+                    'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                    '{basedir} {btmeta}\n'
                     'INFO : ScanDirWatcher: Starting ScanDir 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Stopping notifier 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Stopping {btmeta}\n'
