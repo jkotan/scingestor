@@ -122,11 +122,12 @@ class DatasetWatcher(threading.Thread):
         for scan in self.sc_waiting:
 
             get_logger().info(
-                'DatasetWatcher: Changed: %s %s %s ' % (
-                    self.__dsfile, self.__idsfile, scan))
+                'DatasetWatcher: Ingesting: %s %s' % (
+                            self.__dsfile, scan))
             self.sc_ingested.append(scan)
             with open(self.__idsfile, 'a+') as f:
                 f.write("%s\n" % scan)
+
         try:
             while self.running:
                 events = inotifyx.get_events(self.notifier, self.timeout)
@@ -169,7 +170,7 @@ class DatasetWatcher(threading.Thread):
                 for scan in self.sc_waiting:
 
                     get_logger().info(
-                        'DatasetWatcher: Ingesting: %s %s ' % (
+                        'DatasetWatcher: Ingesting: %s %s' % (
                             self.__dsfile, scan))
                     self.sc_ingested.append(scan)
                     with open(self.__idsfile, 'a+') as f:
