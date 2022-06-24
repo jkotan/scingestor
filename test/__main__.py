@@ -24,6 +24,7 @@ import sys
 import unittest
 
 import BeamtimeWatcher_test
+import ScanDirWatcher_test
 
 
 # main function
