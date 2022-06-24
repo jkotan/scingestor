@@ -33,6 +33,9 @@ def main():
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             BeamtimeWatcher_test))
+    basicsuite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(
+            ScanDirWatcher_test))
 
     # test runner
     runner = unittest.TextTestRunner()
