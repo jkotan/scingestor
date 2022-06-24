@@ -202,7 +202,7 @@ class BeamtimeWatcher:
                     failing = False
 
     def _stop_notifier(self):
-        """ start notifier
+        """ stop notifier
         """
         for wd in list(self.wd_to_path.keys()):
             inotifyx.rm_watch(self.notifier, wd)

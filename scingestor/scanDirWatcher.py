@@ -16,8 +16,8 @@
 #    along with scingestor.  If not, see <http://www.gnu.org/licenses/>.
 #
 import os
-import time
 import threading
+# import time
 
 from .datasetWatcher import DatasetWatcher
 from .logger import get_logger
@@ -111,17 +111,22 @@ class ScanDirWatcher(threading.Thread):
             self.wd_to_path[watch_descriptor] = path
             get_logger().info('ScanDirWatcher: Starting ScanDir %s: %s'
                               % (str(watch_descriptor), path))
+            # get_logger().info('ScanDirWatcher START %s: %s'
+            #                   % (self.notifier, path))
         except Exception as e:
             get_logger().warning('%s: %s' % (path, str(e)))
 
     def _stop_notifier(self):
-        """ start notifier
+        """ stop notifier
         """
         for wd in list(self.wd_to_path.keys()):
             try:
+                # get_logger().info( "IN %s %s:" %
+                # (self.notifier, wd))
                 inotifyx.rm_watch(self.notifier, wd)
             except Exception as e:
-                get_logger().warning(
+                # it looks like from time to time watch is removed by system
+                get_logger().debug(
                     'ScanDirWatcher: %s' % str(e))
 
             path = self.wd_to_path.pop(wd, None)
@@ -156,6 +161,8 @@ class ScanDirWatcher(threading.Thread):
         """
         try:
             self._start_notifier(self.__path)
+            # get_logger().info("START %s " % (self.notifier))
+
             get_logger().debug("ScanDir file:  %s " % (self.dslist_fullname))
             if os.path.isfile(self.dslist_fullname):
                 with self.dataset_lock:
@@ -218,16 +225,16 @@ class ScanDirWatcher(threading.Thread):
         """ stop the watcher
         """
         self.running = False
-        time.sleep(0.2)
+        # time.sleep(0.2)
         self._stop_notifier()
         for fn, scw in self.dataset_watchers.items():
             get_logger().info(
-                'ScanDirWatcher: Stopping %s' % fn)
+                'ScanDirWatcher: Stopping %s' % (fn))
             scw.running = False
             scw.join()
         for pf, dsw in self.scandir_watchers.items():
             path, fn = pf
             get_logger().info('ScanDirWatcher: '
-                              'Stopping %s' % fn)
+                              'Stopping %s' % (fn))
             dsw.running = False
             dsw.join()

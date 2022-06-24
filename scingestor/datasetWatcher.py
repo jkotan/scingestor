@@ -86,7 +86,7 @@ class DatasetWatcher(threading.Thread):
             get_logger().warning('%s: %s' % (path, str(e)))
 
     def _stop_notifier(self):
-        """ start notifier
+        """ stop notifier
         """
         for wd in list(self.wd_to_path.keys()):
             try:
