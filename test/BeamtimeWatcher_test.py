@@ -226,8 +226,8 @@ optional arguments:
             for cmd in commands:
                 vl, er = self.runtest(cmd)
                 self.assertEqual(
-                    'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Stopping notifier 1: '
+                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch 1: '
                     '{basedir}\n'.format(basedir=fdirname), er)
                 self.assertEqual('', vl)
         finally:
@@ -265,13 +265,14 @@ optional arguments:
             for cmd in commands:
                 vl, er = self.runtest(cmd)
                 self.assertEqual(
-                    'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Starting ScanDir 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Stopping notifier 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Stopping {btmeta}\n'
-                    'INFO : ScanDirWatcher: Stopping notifier 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: '
+                    'Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
                     .format(basedir=fdirname, btmeta=fullbtmeta), er)
                 self.assertEqual('', vl)
         finally:
@@ -321,18 +322,19 @@ optional arguments:
                 vl, er = self.runtest(cmd)
                 th.join()
                 self.assertEqual(
-                    'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Starting ScanDir 1: {basedir}\n'
-                    'INFO : ScanDirWatcher: Stopping notifier 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Starting ScanDir 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Stopping notifier 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Stopping {btmeta}\n'
-                    'INFO : ScanDirWatcher: Stopping notifier 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: '
+                    'Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
                     .format(basedir=fdirname, btmeta=fullbtmeta), er)
                 self.assertEqual('', vl)
         finally:

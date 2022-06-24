@@ -201,33 +201,34 @@ optional arguments:
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
                 self.assertEqual(
-                    'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Starting ScanDir 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
                     'INFO : ScanDirWatcher: Create ScanDirWatcher '
                     '{subdir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Starting ScanDir 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Adding watch 1: {subdir}\n'
                     'INFO : ScanDirWatcher: Create ScanDirWatcher '
                     '{subdir2} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Starting ScanDir 1: {subdir2}\n'
-                    'INFO : ScanDirWatcher: Starting {dslist}\n'
-                    'INFO : DatasetWatcher: Starting Dataset: '
+                    'INFO : ScanDirWatcher: Adding watch 1: {subdir2}\n'
+                    'INFO : ScanDirWatcher: Creating DatasetWatcher {dslist}\n'
+                    'INFO : DatasetWatcher: Adding watch: '
                     '{dslist} {idslist}\n'
                     'INFO : DatasetWatcher: Scans waiting: '
                     '[\'{sc1}\', \'{sc2}\']\n'
                     'INFO : DatasetWatcher: Scans ingested: []\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc2}\n'
-                    'INFO : BeamtimeWatcher: Stopping notifier 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Stopping {btmeta}\n'
-                    'INFO : ScanDirWatcher: Stopping notifier 1: {basedir}\n'
-                    'INFO : ScanDirWatcher: Stopping {btmeta}\n'
-                    'INFO : ScanDirWatcher: Stopping notifier 1: {subdir}\n'
-                    'INFO : ScanDirWatcher: Stopping {btmeta}\n'
-                    'INFO : ScanDirWatcher: Stopping notifier 1: {subdir2}\n'
-                    'INFO : ScanDirWatcher: Stopping {dslist}\n'
-                    'INFO : ScanDirWatcher: Stopping notifier 1: {dslist}\n'
+                    'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: '
+                    'Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {subdir2}\n'
+                    'INFO : ScanDirWatcher: Stopping DatasetWatcher {dslist}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {dslist}\n'
                     .format(basedir=fdirname, btmeta=fullbtmeta,
                             subdir=fsubdirname, subdir2=fsubdirname2,
                             dslist=fdslist, idslist=fidslist,
@@ -274,9 +275,9 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r8'
+        commands = [('scicat_dataset_ingestor -c %s -r9'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r8'
+                    ('scicat_dataset_ingestor --config %s -r9'
                      % cfgfname).split()]
 
         def test_thread():
@@ -288,6 +289,7 @@ optional arguments:
                 fds.write("myscan_00003\n")
                 fds.write("myscan_00004\n")
 
+        #        commands.pop()
         try:
             for cmd in commands:
                 # print(cmd)
@@ -299,37 +301,36 @@ optional arguments:
                 vl, er = self.runtest(cmd)
                 th.join()
                 self.assertEqual(
-                    'INFO : BeamtimeWatcher: Starting 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Starting ScanDir 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
                     'INFO : ScanDirWatcher: Create ScanDirWatcher '
                     '{subdir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Starting ScanDir 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Adding watch 1: {subdir}\n'
                     'INFO : ScanDirWatcher: Create ScanDirWatcher '
                     '{subdir2} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Starting ScanDir 1: {subdir2}\n'
-                    'INFO : ScanDirWatcher: Starting {dslist}\n'
-                    'INFO : DatasetWatcher: Starting Dataset: '
+                    'INFO : ScanDirWatcher: Adding watch 1: {subdir2}\n'
+                    'INFO : ScanDirWatcher: Creating DatasetWatcher {dslist}\n'
+                    'INFO : DatasetWatcher: Adding watch: '
                     '{dslist} {idslist}\n'
                     'INFO : DatasetWatcher: Scans waiting: '
                     '[\'{sc1}\', \'{sc2}\']\n'
                     'INFO : DatasetWatcher: Scans ingested: []\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc2}\n'
-                    'INFO : DatasetWatcher: Changed {dslist}\n'
-                    'INFO : DatasetWatcher: Changed {dslist}\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc3}\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc4}\n'
-                    'INFO : BeamtimeWatcher: Stopping notifier 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Stopping {btmeta}\n'
-                    'INFO : ScanDirWatcher: Stopping notifier 1: {basedir}\n'
-                    'INFO : ScanDirWatcher: Stopping {btmeta}\n'
-                    'INFO : ScanDirWatcher: Stopping notifier 1: {subdir}\n'
-                    'INFO : ScanDirWatcher: Stopping {btmeta}\n'
-                    'INFO : ScanDirWatcher: Stopping notifier 1: {subdir2}\n'
-                    'INFO : ScanDirWatcher: Stopping {dslist}\n'
-                    'INFO : ScanDirWatcher: Stopping notifier 1: {dslist}\n'
+                    'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: '
+                    'Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {subdir2}\n'
+                    'INFO : ScanDirWatcher: Stopping DatasetWatcher {dslist}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {dslist}\n'
                     .format(basedir=fdirname, btmeta=fullbtmeta,
                             subdir=fsubdirname, subdir2=fsubdirname2,
                             dslist=fdslist, idslist=fidslist,

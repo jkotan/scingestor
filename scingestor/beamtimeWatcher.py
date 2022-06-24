@@ -162,7 +162,7 @@ class BeamtimeWatcher:
                 inotifyx.IN_ALL_EVENTS |
                 inotifyx.IN_MOVED_TO | inotifyx.IN_MOVED_FROM)
             self.wd_to_path[watch_descriptor] = path
-            get_logger().info('BeamtimeWatcher: Starting %s: %s'
+            get_logger().info('BeamtimeWatcher: Adding watch %s: %s'
                               % (str(watch_descriptor), path))
         except Exception as e:
             get_logger().warning('%s: %s' % (path, str(e)))
@@ -192,10 +192,10 @@ class BeamtimeWatcher:
                 )
                 failing = False
                 self.wd_to_bpath[watch_descriptor] = bpath
-                get_logger().info('BeamtimeWatcher: '
-                                  'Starting base %s: %s'
-                                  % (str(watch_descriptor), bpath))
                 self.wait_for_dirs[bpath] = path
+                get_logger().info('BeamtimeWatcher: '
+                                  'Adding base watch %s: %s'
+                                  % (str(watch_descriptor), bpath))
             except Exception as e:
                 get_logger().warning('%s: %s' % (bpath, str(e)))
                 if bpath == '/':
@@ -208,12 +208,12 @@ class BeamtimeWatcher:
             inotifyx.rm_watch(self.notifier, wd)
             path = self.wd_to_path.pop(wd)
             get_logger().info('BeamtimeWatcher: '
-                              'Stopping notifier %s: %s' % (str(wd), path))
+                              'Removing watch %s: %s' % (str(wd), path))
         for wd in list(self.wd_to_bpath.keys()):
             inotifyx.rm_watch(self.notifier, wd)
             path = self.wd_to_bpath.pop(wd)
             get_logger().info('BeamtimeWatcher: '
-                              'Stopping notifier %s: %s' % (str(wd), path))
+                              'Removing base watch %s: %s' % (str(wd), path))
 
     def start(self):
         """ start beamtime watcher
@@ -324,11 +324,11 @@ class BeamtimeWatcher:
                         with open(ffn) as fl:
                             btmd = json.loads(fl.read())
                     if (path, ffn) not in self.scandir_watchers.keys():
-                        self.scandir_watchers[(path, ffn)] =  \
-                            ScanDirWatcher(path, btmd, ffn)
                         get_logger().info(
                             'BeamtimeWatcher: Create ScanDirWatcher %s %s'
                             % (path, ffn))
+                        self.scandir_watchers[(path, ffn)] =  \
+                            ScanDirWatcher(path, btmd, ffn)
                         self.scandir_watchers[(path, ffn)].start()
             except Exception as e:
                 get_logger().warning(
@@ -344,7 +344,7 @@ class BeamtimeWatcher:
         for pf, dsw in self.scandir_watchers.items():
             path, ffn = pf
             get_logger().info('BeamtimeWatcher: '
-                              'Stopping %s' % ffn)
+                              'Stopping ScanDirWatcher %s' % ffn)
             dsw.running = False
             dsw.join()
         sys.exit(0)

@@ -109,7 +109,7 @@ class ScanDirWatcher(threading.Thread):
                 inotifyx.IN_ALL_EVENTS |
                 inotifyx.IN_MOVED_TO | inotifyx.IN_MOVED_FROM)
             self.wd_to_path[watch_descriptor] = path
-            get_logger().info('ScanDirWatcher: Starting ScanDir %s: %s'
+            get_logger().info('ScanDirWatcher: Adding watch %s: %s'
                               % (str(watch_descriptor), path))
             # get_logger().info('ScanDirWatcher START %s: %s'
             #                   % (self.notifier, path))
@@ -132,7 +132,7 @@ class ScanDirWatcher(threading.Thread):
             path = self.wd_to_path.pop(wd, None)
             get_logger().info(
                 'ScanDirWatcher: '
-                'Stopping notifier %s: %s' % (str(wd), path))
+                'Removing watch %s: %s' % (str(wd), path))
 
     def _lunch_scandir_watcher(self, paths):
         """ lunch scandir watcher
@@ -174,7 +174,7 @@ class ScanDirWatcher(threading.Thread):
                             fn, ifn, self.beamtimeId)
                         self.dataset_watchers[fn].start()
                         get_logger().info(
-                            'ScanDirWatcher: Starting %s' % fn)
+                            'ScanDirWatcher: Creating DatasetWatcher %s' % fn)
                         # get_logger().info(str(btmd))
 
             subdirs = [it.path for it in os.scandir(self.__path)
@@ -209,7 +209,8 @@ class ScanDirWatcher(threading.Thread):
                                         fn, ifn, self.beamtimeId)
                                     self.dataset_watchers[fn].start()
                                     get_logger().info(
-                                        'ScanDirWatcher: Starting %s' % fn)
+                                        'ScanDirWatcher: Creating '
+                                        'DatasetWatcher %s' % fn)
 
                         # elif "IN_DELETE_SELF" in masks:
                         #     "remove scandir watcher"
@@ -229,12 +230,12 @@ class ScanDirWatcher(threading.Thread):
         self._stop_notifier()
         for fn, scw in self.dataset_watchers.items():
             get_logger().info(
-                'ScanDirWatcher: Stopping %s' % (fn))
+                'ScanDirWatcher: Stopping DatasetWatcher %s' % (fn))
             scw.running = False
             scw.join()
         for pf, dsw in self.scandir_watchers.items():
             path, fn = pf
             get_logger().info('ScanDirWatcher: '
-                              'Stopping %s' % (fn))
+                              'Stopping ScanDirWatcher %s' % (fn))
             dsw.running = False
             dsw.join()
