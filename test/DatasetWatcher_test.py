@@ -254,16 +254,13 @@ optional arguments:
         btmeta = "beamtime-metadata-99001234.json"
         dslist = "scicat-datasets-99001234.lst"
         idslist = "scicat-ingested-datasets-99001234.lst"
-        wrongdslist = "scicat-datasets-99001235.lst"
+        # wrongdslist = "scicat-datasets-99001235.lst"
         source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                               "config",
                               btmeta)
         lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                "config",
                                dslist)
-        wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                                "config",
-                                wrongdslist)
         shutil.copy(source, fdirname)
         # shutil.copy(lsource, fsubdirname2)
         # shutil.copy(wlsource, fsubdirname)
