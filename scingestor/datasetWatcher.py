@@ -80,7 +80,7 @@ class DatasetWatcher(threading.Thread):
                 inotifyx.IN_ALL_EVENTS |
                 inotifyx.IN_MOVED_TO | inotifyx.IN_MOVED_FROM)
             self.wd_to_path[watch_descriptor] = path
-            get_logger().info('DatasetWatcher: Starting Dataset: %s %s' % (
+            get_logger().info('DatasetWatcher: Adding watch: %s %s' % (
                 self.__dsfile, self.__idsfile))
         except Exception as e:
             get_logger().warning('%s: %s' % (path, str(e)))
@@ -98,7 +98,7 @@ class DatasetWatcher(threading.Thread):
             path = self.wd_to_path.pop(wd, None)
             get_logger().info(
                 'ScanDirWatcher: '
-                'Stopping notifier %s: %s' % (str(wd), path))
+                'Removing watch %s: %s' % (str(wd), path))
 
     def run(self):
         """ scandir watcher thread
@@ -122,11 +122,12 @@ class DatasetWatcher(threading.Thread):
         for scan in self.sc_waiting:
 
             get_logger().info(
-                'DatasetWatcher: Changed: %s %s %s ' % (
-                    self.__dsfile, self.__idsfile, scan))
+                'DatasetWatcher: Ingesting: %s %s' % (
+                            self.__dsfile, scan))
             self.sc_ingested.append(scan)
             with open(self.__idsfile, 'a+') as f:
                 f.write("%s\n" % scan)
+
         try:
             while self.running:
                 events = inotifyx.get_events(self.notifier, self.timeout)
@@ -149,7 +150,7 @@ class DatasetWatcher(threading.Thread):
                             else:
                                 ffn = self.wd_to_path[event.wd]
                             if ffn is not None and ffn == self.__dsfile:
-                                get_logger().info(
+                                get_logger().debug(
                                     'DatasetWatcher: Changed %s' % ffn)
                                 with open(self.__dsfile, "r") as dsf:
                                     scans = [sc.strip()
@@ -169,7 +170,7 @@ class DatasetWatcher(threading.Thread):
                 for scan in self.sc_waiting:
 
                     get_logger().info(
-                        'DatasetWatcher: Ingesting: %s %s ' % (
+                        'DatasetWatcher: Ingesting: %s %s' % (
                             self.__dsfile, scan))
                     self.sc_ingested.append(scan)
                     with open(self.__idsfile, 'a+') as f:

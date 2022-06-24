@@ -25,6 +25,7 @@ import unittest
 
 import BeamtimeWatcher_test
 import ScanDirWatcher_test
+import DatasetWatcher_test
 
 
 # main function
@@ -37,6 +38,9 @@ def main():
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             ScanDirWatcher_test))
+    basicsuite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(
+            DatasetWatcher_test))
 
     # test runner
     runner = unittest.TextTestRunner()

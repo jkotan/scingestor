@@ -58,7 +58,7 @@ class mytty(object):
 
 
 # test fixture
-class BeamtimeWatcherTest(unittest.TestCase):
+class DatasetWatcherTest(unittest.TestCase):
 
     # constructor
     # \param methodName name of the test method
@@ -153,103 +153,37 @@ optional arguments:
         er = mystderr.getvalue()
         return vl, er, etxt
 
-    def test_help(self):
-        # fun = sys._getframe().f_code.co_name
-        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
-
-        helps = ['-h', '--help']
-        for hl in helps:
-            vl, er, et = self.runtestexcept(
-                ['scicat_dataset_ingestor', hl], SystemExit)
-            self.assertEqual(
-                "".join(self.helpinfo.split()).replace(
-                    "optionalarguments:", "options:"),
-                "".join(vl.split()).replace("optionalarguments:", "options:"))
-            self.assertEqual('', er)
-
-    def test_noconfig(self):
-        # fun = sys._getframe().f_code.co_name
-        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
-
-        vl, er, et = self.runtestexcept(
-            ['scicat_dataset_ingestor'], SystemExit)
-        self.assertEqual(
-            'WARNING : BeamtimeWatcher: Beamtime directories not defined\n',
-            er)
-        self.assertEqual('', vl)
-
-    def test_config_empty(self):
-        fun = sys._getframe().f_code.co_name
-        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
-
-        cfg = '\n'
-        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
-        with open(cfgfname, "w+") as cf:
-            cf.write(cfg)
-        try:
-            commands = [('scicat_dataset_ingestor -c %s'
-                         % cfgfname).split(),
-                        ('scicat_dataset_ingestor --config %s'
-                         % cfgfname).split()]
-            for cmd in commands:
-                vl, er, et = self.runtestexcept(
-                    cmd, SystemExit)
-                self.assertEqual(
-                    'WARNING : BeamtimeWatcher: '
-                    'Beamtime directories not defined\n',
-                    er)
-                self.assertEqual('', vl)
-        finally:
-            if os.path.isfile(cfgfname):
-                os.remove(cfgfname)
-
-    def test_config_basedir(self):
+    def test_datasetfile_exist(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dirname = "test_current"
         while os.path.exists(dirname):
             dirname = dirname + '_1'
         fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
         os.mkdir(fdirname)
-
-        cfg = 'beamtime_dirs:\n' \
-            '  - "{basedir}"'.format(basedir=fdirname)
-
-        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
-        with open(cfgfname, "w+") as cf:
-            cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r3'
-                     % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r3'
-                     % cfgfname).split()]
-        try:
-            for cmd in commands:
-                vl, er = self.runtest(cmd)
-                self.assertEqual(
-                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Removing watch 1: '
-                    '{basedir}\n'.format(basedir=fdirname), er)
-                self.assertEqual('', vl)
-        finally:
-            if os.path.exists(cfgfname):
-                os.remove(cfgfname)
-            if os.path.isdir(fdirname):
-                shutil.rmtree(fdirname)
-
-    def test_config_beamtime_metadata_exist(self):
-        fun = sys._getframe().f_code.co_name
-        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        dirname = "test_current"
-        while os.path.exists(dirname):
-            dirname = dirname + '_1'
-        fdirname = os.path.abspath(dirname)
-        os.mkdir(fdirname)
+        os.mkdir(fsubdirname)
+        os.mkdir(fsubdirname2)
         btmeta = "beamtime-metadata-99001234.json"
+        dslist = "scicat-datasets-99001234.lst"
+        idslist = "scicat-ingested-datasets-99001234.lst"
+        wrongdslist = "scicat-datasets-99001235.lst"
         source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                               "config",
                               btmeta)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                "config",
+                                wrongdslist)
         shutil.copy(source, fdirname)
+        shutil.copy(lsource, fsubdirname2)
+        shutil.copy(wlsource, fsubdirname)
         fullbtmeta = os.path.join(fdirname, btmeta)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fidslist = os.path.join(fsubdirname2, idslist)
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"'.format(basedir=fdirname)
@@ -263,17 +197,42 @@ optional arguments:
                      % cfgfname).split()]
         try:
             for cmd in commands:
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
                 vl, er = self.runtest(cmd)
                 self.assertEqual(
                     'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
                     'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                    '{subdir} {btmeta}\n'
+                    'INFO : ScanDirWatcher: Adding watch 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                    '{subdir2} {btmeta}\n'
+                    'INFO : ScanDirWatcher: Adding watch 1: {subdir2}\n'
+                    'INFO : ScanDirWatcher: Creating DatasetWatcher {dslist}\n'
+                    'INFO : DatasetWatcher: Adding watch: '
+                    '{dslist} {idslist}\n'
+                    'INFO : DatasetWatcher: Scans waiting: '
+                    '[\'{sc1}\', \'{sc2}\']\n'
+                    'INFO : DatasetWatcher: Scans ingested: []\n'
+                    'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
+                    'INFO : DatasetWatcher: Ingesting: {dslist} {sc2}\n'
                     'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: '
                     'Stopping ScanDirWatcher {btmeta}\n'
                     'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
-                    .format(basedir=fdirname, btmeta=fullbtmeta), er)
+                    'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {subdir2}\n'
+                    'INFO : ScanDirWatcher: Stopping DatasetWatcher {dslist}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {dslist}\n'
+                    .format(basedir=fdirname, btmeta=fullbtmeta,
+                            subdir=fsubdirname, subdir2=fsubdirname2,
+                            dslist=fdslist, idslist=fidslist,
+                            sc1='myscan_00001', sc2='myscan_00002'), er)
                 self.assertEqual('', vl)
         finally:
             if os.path.exists(cfgfname):
@@ -281,19 +240,34 @@ optional arguments:
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
-    def test_config_beamtime_metadata_add(self):
+    def test_datasetfile_add(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dirname = "test_current"
         while os.path.exists(dirname):
             dirname = dirname + '_1'
         fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
         os.mkdir(fdirname)
+        os.mkdir(fsubdirname)
+        os.mkdir(fsubdirname2)
         btmeta = "beamtime-metadata-99001234.json"
+        dslist = "scicat-datasets-99001234.lst"
+        idslist = "scicat-ingested-datasets-99001234.lst"
+        # wrongdslist = "scicat-datasets-99001235.lst"
         source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                               "config",
                               btmeta)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        shutil.copy(source, fdirname)
+        # shutil.copy(lsource, fsubdirname2)
+        # shutil.copy(wlsource, fsubdirname)
         fullbtmeta = os.path.join(fdirname, btmeta)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fidslist = os.path.join(fsubdirname2, idslist)
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"'.format(basedir=fdirname)
@@ -301,22 +275,27 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r6'
+        commands = [('scicat_dataset_ingestor -c %s -r9'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r6'
+                    ('scicat_dataset_ingestor --config %s -r9'
                      % cfgfname).split()]
 
         def test_thread():
             """ test thread which adds and removes beamtime metadata file """
-            time.sleep(1)
-            shutil.copy(source, fdirname)
-            time.sleep(1)
-            os.remove(fullbtmeta)
-            time.sleep(1)
-            shutil.copy(source, fdirname)
+            time.sleep(3)
+            shutil.copy(lsource, fsubdirname2)
+            time.sleep(4)
+            with open(fdslist, "a+") as fds:
+                fds.write("myscan_00003\n")
+                fds.write("myscan_00004\n")
 
+        #        commands.pop()
         try:
             for cmd in commands:
+                # print(cmd)
+                shutil.copy(lsource, fsubdirname2)
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
                 th = threading.Thread(target=test_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
@@ -326,16 +305,37 @@ optional arguments:
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
                     'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Create ScanDirWatcher '
-                    '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                    '{subdir} {btmeta}\n'
+                    'INFO : ScanDirWatcher: Adding watch 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                    '{subdir2} {btmeta}\n'
+                    'INFO : ScanDirWatcher: Adding watch 1: {subdir2}\n'
+                    'INFO : ScanDirWatcher: Creating DatasetWatcher {dslist}\n'
+                    'INFO : DatasetWatcher: Adding watch: '
+                    '{dslist} {idslist}\n'
+                    'INFO : DatasetWatcher: Scans waiting: '
+                    '[\'{sc1}\', \'{sc2}\']\n'
+                    'INFO : DatasetWatcher: Scans ingested: []\n'
+                    'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
+                    'INFO : DatasetWatcher: Ingesting: {dslist} {sc2}\n'
+                    'INFO : DatasetWatcher: Ingesting: {dslist} {sc3}\n'
+                    'INFO : DatasetWatcher: Ingesting: {dslist} {sc4}\n'
                     'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: '
                     'Stopping ScanDirWatcher {btmeta}\n'
                     'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
-                    .format(basedir=fdirname, btmeta=fullbtmeta), er)
+                    'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {subdir2}\n'
+                    'INFO : ScanDirWatcher: Stopping DatasetWatcher {dslist}\n'
+                    'INFO : ScanDirWatcher: Removing watch 1: {dslist}\n'
+                    .format(basedir=fdirname, btmeta=fullbtmeta,
+                            subdir=fsubdirname, subdir2=fsubdirname2,
+                            dslist=fdslist, idslist=fidslist,
+                            sc1='myscan_00001', sc2='myscan_00002',
+                            sc3='myscan_00003', sc4='myscan_00004'), er)
                 self.assertEqual('', vl)
         finally:
             if os.path.exists(cfgfname):
