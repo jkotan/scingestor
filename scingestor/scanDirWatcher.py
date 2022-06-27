@@ -171,7 +171,7 @@ class ScanDirWatcher(threading.Thread):
                         ifn = fn[:-(len(self.dslist_filename))] + \
                             self.idslist_filename
                         self.dataset_watchers[fn] = DatasetWatcher(
-                            fn, ifn, self.beamtimeId)
+                            fn, ifn, self.beamtimeId, self.__path)
                         self.dataset_watchers[fn].start()
                         get_logger().info(
                             'ScanDirWatcher: Creating DatasetWatcher %s' % fn)
@@ -206,7 +206,7 @@ class ScanDirWatcher(threading.Thread):
                                     ifn = fn[:-(len(self.dslist_filename))] + \
                                         self.idslist_filename
                                     self.dataset_watchers[fn] = DatasetWatcher(
-                                        fn, ifn, self.beamtimeId)
+                                        fn, ifn, self.beamtimeId, self.__path)
                                     self.dataset_watchers[fn].start()
                                     get_logger().info(
                                         'ScanDirWatcher: Creating '

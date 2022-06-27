@@ -20,6 +20,7 @@
 import os
 import time
 import threading
+import glob
 import inotifyx
 
 from .logger import get_logger
@@ -29,15 +30,27 @@ class DatasetWatcher(threading.Thread):
     """ Beamtime Watcher
     """
 
-    def __init__(self, dsfile, idsfile, beamtimeId, delay=5):
+    def __init__(self, path, dsfile, idsfile, beamtimeId, delay=5):
         """ constructor
 
+        :param path: scan dir path
+        :type path: :obj:`str`
+        :param dsfile: file with a dataset list
+        :type dsfile: :obj:`str`
+        :param dsfile: file with a ingester dataset list
+        :type dsfile: :obj:`str`
+        :param beamtimeId: beamtime id
+        :type beamtimeId: :obj:`str`
         :param delay: time delay
         :type delay: :obj:`str`
         """
         threading.Thread.__init__(self)
+        # (:obj:`str`) file with a dataset list
         self.__dsfile = dsfile
+        # (:obj:`str`) file with a ingested dataset list
         self.__idsfile = idsfile
+        # (:obj:`str`) scan path dir
+        self.__path = path
         # (:obj:`str`) beamtime id
         self.__bid = beamtimeId
         # (:obj:`float`) delay time for ingestion in s
@@ -52,6 +65,11 @@ class DatasetWatcher(threading.Thread):
         self.notifier = None
         # (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
         self.wd_to_path = {}
+
+        # (:obj:`str`) raw dataset scan postfix
+        self.__scanpostfix = ".scan*"
+        # (:obj:`str`) origin datablock scan postfix
+        self.__datablockpostfix = ".origindatablock*"
 
         # (:obj:`float`) timeout value for inotifyx get events
         self.timeout = 1
@@ -100,12 +118,71 @@ class DatasetWatcher(threading.Thread):
                 'ScanDirWatcher: '
                 'Removing watch %s: %s' % (str(wd), path))
 
+    def _generate_rawdataset_metadata(self, scan):
+        """ generate raw dataset metadata
+
+        :param scan: scan name
+        :type scan: :obj:`str
+        :returns: a file name of generate file
+        :rtype: :obj:`str
+        """
+        return ""
+
+    def _generate_origdatablock_metadata(self, scan):
+        """ generate origdatablock metadata
+
+        :param scan: scan name
+        :type scan: :obj:`str
+        :returns: a file name of generate file
+        :rtype: :obj:`str
+        """
+        return ""
+
+    def _ingest_rawdataset_metadata(self, metafile):
+        """ ingest raw dataset metadata
+
+        :param metafile: metadata file name
+        :type metafile: :obj:`str
+        """
+        return ""
+
+    def _ingest_origdatablock_metadata(self, metafile):
+        """ ingest origdatablock metadata
+
+        :param metafile: metadata file name
+        :type metafile: :obj:`str
+        """
+        return ""
+
     def ingest(self, scan):
         """ ingest scan
+
+        :param scan: scan name
+        :type scan: :obj:`str
         """
         get_logger().info(
             'DatasetWatcher: Ingesting: %s %s' % (
                 self.__dsfile, scan))
+
+        rdss = glob.glob(
+            "{scan}{postfix}.json".format(
+                scan=scan, postfix=self.__scanpostfix))
+        if rdss:
+            rds = rdss[0]
+        else:
+            rds = self._generate_rawdataset_metadata(scan)
+
+        odbs = glob.glob(
+            "{scan}{postfix}.json".format(
+                scan=scan, postfix=self.__datablockpostfix))
+        if odbs:
+            odb = odbs[0]
+        else:
+            odb = self._generate_origdatablock_metadata(scan)
+        if rds:
+            self._ingest_raw(rds)
+        if odb:
+            self._ingest_datablock(odb)
 
         self.sc_ingested.append(scan)
         with open(self.__idsfile, 'a+') as f:
