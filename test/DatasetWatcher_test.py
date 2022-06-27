@@ -258,16 +258,16 @@ class DatasetWatcherTest(unittest.TestCase):
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r19'
+        commands = [('scicat_dataset_ingestor -c %s -r21'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r19'
+                    ('scicat_dataset_ingestor --config %s -r21'
                      % cfgfname).split()]
 
         def test_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
-            time.sleep(11)
+            time.sleep(12)
             with open(fdslist, "a+") as fds:
                 fds.write("myscan_00003\n")
                 fds.write("myscan_00004\n")
