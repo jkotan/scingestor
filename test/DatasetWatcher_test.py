@@ -267,7 +267,7 @@ class DatasetWatcherTest(unittest.TestCase):
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
-            time.sleep(10)
+            time.sleep(11)
             with open(fdslist, "a+") as fds:
                 fds.write("myscan_00003\n")
                 fds.write("myscan_00004\n")
