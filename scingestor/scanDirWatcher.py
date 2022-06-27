@@ -172,9 +172,9 @@ class ScanDirWatcher(threading.Thread):
                             self.idslist_filename
                         self.dataset_watchers[fn] = DatasetWatcher(
                             self.__path, fn, ifn, self.beamtimeId)
-                        self.dataset_watchers[fn].start()
                         get_logger().info(
                             'ScanDirWatcher: Creating DatasetWatcher %s' % fn)
+                        self.dataset_watchers[fn].start()
                         # get_logger().info(str(btmd))
 
             subdirs = [it.path for it in os.scandir(self.__path)
