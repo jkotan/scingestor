@@ -65,23 +65,6 @@ class ScanDirWatcherTest(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
-        self.helperror = "Error: too few arguments\n"
-
-        self.helpinfo = """usage: scicat_dataset_ingestor [-h] [-c CONFIG] [-r RUNTIME] [-l LOG]
-
-BeamtimeWatcher service SciCat Dataset ingestion
-
-optional arguments:
-  -h, --help         show this help message and exit
-  -c CONFIG, --configuration CONFIG
-                        configuration file name
-  -r RUNTIME, --runtime RUNTIME
-                        stop program after runtime in seconds
-  -l LOG, --log LOG  logging level, i.e. debug, info, warning, error, critical
-
- examples:
-       scicat_dataset_ingestor -l debug"""
-
         self.maxDiff = None
 
     def runtest(self, argv, pipeinput=None):
@@ -185,15 +168,15 @@ optional arguments:
                 vl, er = self.runtest(cmd)
                 self.assertEqual(
                     'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Create ScanDirWatcher '
-                    '{basedir} {btmeta}\n'
+                    'INFO : BeamtimeWatcher: Create ScanDirWatcher {basedir}'
+                    ' {btmeta}\n'
                     'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
-                    'INFO : ScanDirWatcher: Create ScanDirWatcher '
-                    '{subdir} {btmeta}\n'
+                    'INFO : ScanDirWatcher: Create ScanDirWatcher {subdir}'
+                    ' {btmeta}\n'
                     'INFO : ScanDirWatcher: Adding watch 1: {subdir}\n'
                     'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: '
-                    'Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : BeamtimeWatcher: Stopping ScanDirWatcher {btmeta}'
+                    '\n'
                     'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
                     'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
                     'INFO : ScanDirWatcher: Removing watch 1: {subdir}\n'

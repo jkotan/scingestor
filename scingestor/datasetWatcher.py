@@ -100,6 +100,17 @@ class DatasetWatcher(threading.Thread):
                 'ScanDirWatcher: '
                 'Removing watch %s: %s' % (str(wd), path))
 
+    def ingest(self, scan):
+        """ ingest scan
+        """
+        get_logger().info(
+            'DatasetWatcher: Ingesting: %s %s' % (
+                self.__dsfile, scan))
+
+        self.sc_ingested.append(scan)
+        with open(self.__idsfile, 'a+') as f:
+            f.write("%s\n" % scan)
+
     def run(self):
         """ scandir watcher thread
         """
@@ -119,14 +130,10 @@ class DatasetWatcher(threading.Thread):
             'DatasetWatcher: Scans waiting: %s' % str(self.sc_waiting))
         get_logger().info(
             'DatasetWatcher: Scans ingested: %s' % str(self.sc_ingested))
+        if self.sc_waiting:
+            time.sleep(self.delay)
         for scan in self.sc_waiting:
-
-            get_logger().info(
-                'DatasetWatcher: Ingesting: %s %s' % (
-                            self.__dsfile, scan))
-            self.sc_ingested.append(scan)
-            with open(self.__idsfile, 'a+') as f:
-                f.write("%s\n" % scan)
+            self.ingest(scan)
 
         try:
             while self.running:
@@ -165,16 +172,12 @@ class DatasetWatcher(threading.Thread):
                                 self.sc_waiting = [
                                     sc for sc in scans
                                     if sc not in self.sc_ingested]
-                # time.sleep(self.delay)
+
+                if self.sc_waiting:
+                    time.sleep(self.delay)
 
                 for scan in self.sc_waiting:
-
-                    get_logger().info(
-                        'DatasetWatcher: Ingesting: %s %s' % (
-                            self.__dsfile, scan))
-                    self.sc_ingested.append(scan)
-                    with open(self.__idsfile, 'a+') as f:
-                        f.write("%s\n" % scan)
+                    self.ingest(scan)
 
         finally:
             self.stop()

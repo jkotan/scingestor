@@ -65,23 +65,6 @@ class DatasetWatcherTest(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
-        self.helperror = "Error: too few arguments\n"
-
-        self.helpinfo = """usage: scicat_dataset_ingestor [-h] [-c CONFIG] [-r RUNTIME] [-l LOG]
-
-BeamtimeWatcher service SciCat Dataset ingestion
-
-optional arguments:
-  -h, --help         show this help message and exit
-  -c CONFIG, --configuration CONFIG
-                        configuration file name
-  -r RUNTIME, --runtime RUNTIME
-                        stop program after runtime in seconds
-  -l LOG, --log LOG  logging level, i.e. debug, info, warning, error, critical
-
- examples:
-       scicat_dataset_ingestor -l debug"""
-
         self.maxDiff = None
 
     def runtest(self, argv, pipeinput=None):
@@ -191,9 +174,9 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r3'
+        commands = [('scicat_dataset_ingestor -c %s -r8'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r3'
+                    ('scicat_dataset_ingestor --config %s -r8'
                      % cfgfname).split()]
         try:
             for cmd in commands:
@@ -275,16 +258,16 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r9'
+        commands = [('scicat_dataset_ingestor -c %s -r19'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r9'
+                    ('scicat_dataset_ingestor --config %s -r19'
                      % cfgfname).split()]
 
         def test_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
-            time.sleep(4)
+            time.sleep(10)
             with open(fdslist, "a+") as fds:
                 fds.write("myscan_00003\n")
                 fds.write("myscan_00004\n")
