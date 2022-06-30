@@ -21,8 +21,10 @@ import os
 import time
 import threading
 import glob
+import json
 import inotifyx
 import subprocess
+import requests
 from .logger import get_logger
 
 
@@ -111,6 +113,19 @@ class DatasetWatcher(threading.Thread):
 
         # (:obj:`float`) timeout value for inotifyx get events
         self.timeout = 1
+
+        # (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
+        self.__headers = {'Content-Type': 'application/json',
+                          'Accept': 'application/json'}
+
+        # (:obj:`str`) token url
+        self.__tokenurl = "http://www-science3d.desy.de:3000/api/v3/" \
+            "Users/login"
+        # (:obj:`str`) dataset url
+        self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/Datasets"
+        # (:obj:`str`) origdatablock url
+        self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
+            "OrigDatablock"
 
     def _start_notifier(self, path):
         """ start notifier
@@ -220,24 +235,107 @@ class DatasetWatcher(threading.Thread):
             return odbs[0]
         return ""
 
-    def _ingest_rawdataset_metadata(self, metafile):
+    def _get_token(self):
+        """ provides ingestor token
+        """
+        try:
+            token = requests.post(
+                self.__tokenurl, headers=self.__headers,
+                json={"username": "ingestor", "password": self.__incd})
+            return json.loads(token)[id]
+        except Exception as e:
+            get_logger().error(
+                'DatasetWatcher: %s' % (str(e)))
+        return ""
+
+    def _ingest_dataset(self, metadata, token):
+        """ ingests dataset
+        """
+        try:
+            respond = requests.post(
+                "%s?access_token=%s" % (self.__dataseturl, token),
+                headers=self.__headers,
+                data=metadata)
+            return respond
+        except Exception as e:
+            get_logger().error(
+                'DatasetWatcher: %s' % (str(e)))
+        return ""
+
+    def _ingest_datablock(self, metadata, token):
+        """ ingets origdatablock
+        """
+        try:
+            respond = requests.post(
+                "%s?access_token=%s" % (self.__datablockurl, token),
+                headers=self.__headers,
+                data=metadata)
+            return respond
+        except Exception as e:
+            get_logger().error(
+                'DatasetWatcher: %s' % (str(e)))
+        return ""
+
+    def _ingest_rawdataset_metadata(self, metafile, token):
         """ ingest raw dataset metadata
 
         :param metafile: metadata file name
         :type metafile: :obj:`str
+        :returns: dataset id
+        :rtype: :obj:`str
         """
+        try:
+            with open(metafile) as fl:
+                smt = fl.read()
+                mt = json.loads(smt)
+            if mt["proposalId"] != self.__bid:
+                raise Exception(
+                    "Wrong SC proposalId %s for DESY beamtimeId %s in %s"
+                    % (mt["pid"], self.__bid, metafile))
+            if not mt["pid"].startswith("%s/" % self.__bid):
+                raise Exception(
+                    "Wrong pid %s for DESY beamtimeId %s in  %s"
+                    % (mt["pid"], self.__bid, metafile))
+            status = self._ingest_dataset(token, smt)
+            if status:
+                return mt["pid"]
+        except Exception as e:
+            get_logger().error(
+                'DatasetWatcher: %s' % (str(e)))
+        return None
 
-        return ""
-
-    def _ingest_origdatablock_metadata(self, metafile):
+    def _ingest_origdatablock_metadata(self, metafile, pid, token):
         """ ingest origdatablock metadata
 
         :param metafile: metadata file name
         :type metafile: :obj:`str
+        :param pid: dataset id
+        :type pid: :obj:`str
+        :returns: dataset id
+        :rtype: :obj:`str
         """
+        try:
+            with open(metafile) as fl:
+                smt = fl.read()
+                mt = json.loads(smt)
+            if not mt["datasetId"].startswith("%s/" % self.__bid):
+                raise Exception(
+                    "Wrong datasetId %s for DESY beamtimeId %s in  %s"
+                    % (mt["pid"], self.__bid, metafile))
+            if mt["datasetId"] != pid:
+                raise Exception(
+                    "Wrong datasetId %s for DESY beamtimeId %s in %s"
+                    % (mt["pid"], self.__bid, metafile))
+            token = self._get_token()
+            status = self._ingest_origdatablock(token, smt)
+            if status:
+                return mt["datasetId"]
+        except Exception as e:
+            get_logger().error(
+                'DatasetWatcher: %s' % (str(e)))
         return ""
 
-    def ingest(self, scan):
+    def ingest(self, scan, token):
         """ ingest scan
 
         :param scan: scan name
@@ -268,9 +366,10 @@ class DatasetWatcher(threading.Thread):
         dbstatus = None
         if rds and odb:
             if rds and rds[0]:
-                scstatus = self._ingest_rawdataset_metadata(rds)
-            if odb and odb[0]:
-                dbstatus = self._ingest_origdatablock_metadata(odb)
+                pid = self._ingest_rawdataset_metadata(rds, token)
+            if odb and odb[0] and pid:
+                dbstatus = self._ingest_origdatablock_metadata(
+                    odb, pid, token)
 
         if scstatus and dbstatus:
             ctime = time.time()
@@ -302,8 +401,10 @@ class DatasetWatcher(threading.Thread):
             'DatasetWatcher: Scans ingested: %s' % str(self.sc_ingested))
         if self.sc_waiting:
             time.sleep(self.delay)
-        for scan in self.sc_waiting:
-            self.ingest(scan)
+        if self.sc_waiting:
+            token = self._get_token()
+            for scan in self.sc_waiting:
+                self.ingest(scan, token)
 
         try:
             while self.running:
@@ -345,9 +446,9 @@ class DatasetWatcher(threading.Thread):
 
                 if self.sc_waiting:
                     time.sleep(self.delay)
-
-                for scan in self.sc_waiting:
-                    self.ingest(scan)
+                    token = self._get_token()
+                    for scan in self.sc_waiting:
+                        self.ingest(scan, token)
 
         finally:
             self.stop()
