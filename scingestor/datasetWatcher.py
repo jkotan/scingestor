@@ -22,7 +22,7 @@ import time
 import threading
 import glob
 import inotifyx
-
+import subprocess
 from .logger import get_logger
 
 
@@ -30,7 +30,8 @@ class DatasetWatcher(threading.Thread):
     """ Beamtime Watcher
     """
 
-    def __init__(self, path, dsfile, idsfile, beamtimeId, delay=5):
+    def __init__(self, path, dsfile, idsfile, beamtimeId, beamtimefile,
+                 ingestorcred, delay=5):
         """ constructor
 
         :param path: scan dir path
@@ -41,6 +42,10 @@ class DatasetWatcher(threading.Thread):
         :type dsfile: :obj:`str`
         :param beamtimeId: beamtime id
         :type beamtimeId: :obj:`str`
+        :param beamtimefile: beamtime filename
+        :type beamtimefile: :obj:`str`
+        :param ingestorcred: ingestor credential
+        :type ingestorcred: :obj:`str`
         :param delay: time delay
         :type delay: :obj:`str`
         """
@@ -53,6 +58,10 @@ class DatasetWatcher(threading.Thread):
         self.__path = path
         # (:obj:`str`) beamtime id
         self.__bid = beamtimeId
+        # (:obj:`str`) beamtime id
+        self.__bfile = beamtimefile
+        # (:obj:`str`) beamtime id
+        self.__incd = ingestorcred
         # (:obj:`float`) delay time for ingestion in s
         self.delay = delay
         # (:obj:`bool`) running loop flag
@@ -65,11 +74,40 @@ class DatasetWatcher(threading.Thread):
         self.notifier = None
         # (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
         self.wd_to_path = {}
+        # (:obj:`str`) http icat
+        self.http = "https://icat-science3d.desy.de/"
 
         # (:obj:`str`) raw dataset scan postfix
         self.__scanpostfix = ".scan*"
         # (:obj:`str`) origin datablock scan postfix
-        self.__datablockpostfix = ".origindatablock*"
+        self.__datablockpostfix = ".origdatablock*"
+
+        # (:obj:`str`) nexus dataset shell command
+        self.__datasetcommandnxs = "nxsfileinfo metadata " \
+            " -o {scanpath}/{scanname}{scpostfix}.json " \
+            " -b {beamtimefile} -p {beamtimeid} " \
+            "{scanpath}/{scanname}.nxs"
+        # (:obj:`str`) datablock shell command
+        self.__datasetcommand = "nxsfileinfo metadata " \
+            " -o {scanpath}/{scanname}{scpostfix}.json " \
+            " -b {beamtimefile} -p {beamtimeid}"
+        # (:obj:`str`) datablock shell command
+        self.__datablockcommand = "nxsfileinfo origdatablock " \
+            " -p {beamtimeid}/{scanname} " \
+            " -o {scanpath}/{scanname}{dbpostfix}.json " \
+            " {scanpath}/{scanname}"
+
+        # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
+        self.__dctfmt = {
+            "scanname": None,
+            "scanpath": self.__path,
+            "beamtimeid": self.__bid,
+            "beamtimefile": self.__bfile,
+            "scpostfix": self.__scanpostfix.replace("*", ""),
+            "dbpostfix": self.__datablockpostfix.replace("*", ""),
+        }
+        get_logger().debug(
+            'DatasetWatcher: Parameters: %s' % str(self.__dctfmt))
 
         # (:obj:`float`) timeout value for inotifyx get events
         self.timeout = 1
@@ -126,6 +164,35 @@ class DatasetWatcher(threading.Thread):
         :returns: a file name of generate file
         :rtype: :obj:`str
         """
+        nxsmasterfile = "{scanpath}/{scanname}.nxs".format(**self.__dctfmt)
+        if os.path.isfile(nxsmasterfile):
+            get_logger().info(
+                'DatasetWatcher: Generating nxs metadata: %s %s' % (
+                    scan,
+                    "{scanpath}/{scanname}{scpostfix}.json".format(
+                        **self.__dctfmt)))
+            get_logger().debug(
+                'DatasetWatcher: Generating datablock command: %s ' % (
+                    self.__datasetcommandnxs.format(**self.__dctfmt)))
+            subprocess.run(
+                self.__datasetcommandnxs.format(**self.__dctfmt).split())
+        else:
+            get_logger().info(
+                'DatasetWatcher: Generating metadata: %s %s' % (
+                    scan,
+                    "{scanpath}/{scanname}{scpostfix}.json".format(
+                        **self.__dctfmt)))
+            get_logger().debug(
+                'DatasetWatcher: Generating datablock command: %s ' % (
+                    self.__datasetcommand.format(**self.__dctfmt)))
+            subprocess.run(
+                self.__datasetcommand.format(**self.__dctfmt).split())
+
+        rdss = glob.glob(
+            "{scan}{postfix}.json".format(
+                scan=scan, postfix=self.__scanpostfix))
+        if rdss and rdss[0]:
+            return rdss[0]
         return ""
 
     def _generate_origdatablock_metadata(self, scan):
@@ -136,6 +203,21 @@ class DatasetWatcher(threading.Thread):
         :returns: a file name of generate file
         :rtype: :obj:`str
         """
+        get_logger().info(
+            'DatasetWatcher: Generating origdatablock metadata: %s %s' % (
+                scan,
+                "{scanpath}/{scanname}{dbpostfix}.json".format(
+                    **self.__dctfmt)))
+        get_logger().debug(
+            'DatasetWatcher: Generating origdatablock command: %s ' % (
+                self.__datablockcommand.format(**self.__dctfmt)))
+        subprocess.run(
+            self.__datablockcommand.format(**self.__dctfmt).split())
+        odbs = glob.glob(
+            "{scan}{postfix}.json".format(
+                scan=scan, postfix=self.__datablockpostfix))
+        if odbs and odbs[0]:
+            return odbs[0]
         return ""
 
     def _ingest_rawdataset_metadata(self, metafile):
@@ -144,6 +226,7 @@ class DatasetWatcher(threading.Thread):
         :param metafile: metadata file name
         :type metafile: :obj:`str
         """
+
         return ""
 
     def _ingest_origdatablock_metadata(self, metafile):
@@ -164,10 +247,12 @@ class DatasetWatcher(threading.Thread):
             'DatasetWatcher: Ingesting: %s %s' % (
                 self.__dsfile, scan))
 
+        self.__dctfmt["scanname"] = scan
+
         rdss = glob.glob(
             "{scan}{postfix}.json".format(
                 scan=scan, postfix=self.__scanpostfix))
-        if rdss:
+        if rdss and rdss[0]:
             rds = rdss[0]
         else:
             rds = self._generate_rawdataset_metadata(scan)
@@ -175,18 +260,25 @@ class DatasetWatcher(threading.Thread):
         odbs = glob.glob(
             "{scan}{postfix}.json".format(
                 scan=scan, postfix=self.__datablockpostfix))
-        if odbs:
+        if odbs and odbs[0]:
             odb = odbs[0]
         else:
             odb = self._generate_origdatablock_metadata(scan)
-        if rds:
-            self._ingest_raw(rds)
-        if odb:
-            self._ingest_datablock(odb)
+        scstatus = None
+        dbstatus = None
+        if rds and odb:
+            if rds and rds[0]:
+                scstatus = self._ingest_rawdataset_metadata(rds)
+            if odb and odb[0]:
+                dbstatus = self._ingest_origdatablock_metadata(odb)
 
-        self.sc_ingested.append(scan)
+        if scstatus and dbstatus:
+            ctime = time.time()
+        else:
+            ctime = 0
+        self.sc_ingested.append([scan, str(ctime)])
         with open(self.__idsfile, 'a+') as f:
-            f.write("%s\n" % scan)
+            f.write("%s %s\n" % (scan, ctime))
 
     def run(self):
         """ scandir watcher thread
@@ -198,10 +290,11 @@ class DatasetWatcher(threading.Thread):
         if os.path.isfile(self.__idsfile):
             with open(self.__idsfile, "r") as idsf:
                 self.sc_ingested = [
-                    sc.strip() for sc in idsf.read().split("\n")
+                    sc.strip().split(" ") for sc in idsf.read().split("\n")
                     if sc.strip()]
+        ingested = [sc[0] for sc in self.sc_ingested]
         self.sc_waiting = [sc for sc in scans
-                           if sc not in self.sc_ingested]
+                           if sc not in ingested]
 
         get_logger().info(
             'DatasetWatcher: Scans waiting: %s' % str(self.sc_waiting))
@@ -243,12 +336,12 @@ class DatasetWatcher(threading.Thread):
                                 if os.path.isfile(self.__idsfile):
                                     with open(self.__idsfile, "r") as idsf:
                                         self.sc_ingested = [
-                                            sc.strip()
+                                            sc.strip().split(" ")
                                             for sc in idsf.read().split("\n")
                                             if sc.strip()]
+                                ingested = [sc[0] for sc in self.sc_ingested]
                                 self.sc_waiting = [
-                                    sc for sc in scans
-                                    if sc not in self.sc_ingested]
+                                    sc for sc in scans if sc not in ingested]
 
                 if self.sc_waiting:
                     time.sleep(self.delay)

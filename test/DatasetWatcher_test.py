@@ -201,7 +201,15 @@ class DatasetWatcherTest(unittest.TestCase):
                     '[\'{sc1}\', \'{sc2}\']\n'
                     'INFO : DatasetWatcher: Scans ingested: []\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
+                    'INFO : DatasetWatcher: Generating metadata: '
+                    '{sc1} {subdir2}/{sc1}.scan.json\n'
+                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc2}\n'
+                    'INFO : DatasetWatcher: Generating metadata: '
+                    '{sc2} {subdir2}/{sc2}.scan.json\n'
+                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                     'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: '
                     'Stopping ScanDirWatcher {btmeta}\n'
@@ -258,9 +266,9 @@ class DatasetWatcherTest(unittest.TestCase):
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r21'
+        commands = [('scicat_dataset_ingestor -c %s -r22'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r21'
+                    ('scicat_dataset_ingestor --config %s -r22'
                      % cfgfname).split()]
 
         def test_thread():
@@ -301,9 +309,25 @@ class DatasetWatcherTest(unittest.TestCase):
                     '[\'{sc1}\', \'{sc2}\']\n'
                     'INFO : DatasetWatcher: Scans ingested: []\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
+                    'INFO : DatasetWatcher: Generating metadata: '
+                    '{sc1} {subdir2}/{sc1}.scan.json\n'
+                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc2}\n'
+                    'INFO : DatasetWatcher: Generating metadata: '
+                    '{sc2} {subdir2}/{sc2}.scan.json\n'
+                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc3}\n'
+                    'INFO : DatasetWatcher: Generating metadata: '
+                    '{sc3} {subdir2}/{sc3}.scan.json\n'
+                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    ' {sc3} {subdir2}/{sc3}.origdatablock.json\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc4}\n'
+                    'INFO : DatasetWatcher: Generating metadata: '
+                    '{sc4} {subdir2}/{sc4}.scan.json\n'
+                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    ' {sc4} {subdir2}/{sc4}.origdatablock.json\n'
                     'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: '
                     'Stopping ScanDirWatcher {btmeta}\n'
