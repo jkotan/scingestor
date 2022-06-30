@@ -237,12 +237,18 @@ class DatasetWatcher(threading.Thread):
 
     def _get_token(self):
         """ provides ingestor token
+
+        :returns: ingestor token
+        :rtype: :obj:`str
         """
         try:
-            token = requests.post(
+            response = requests.post(
                 self.__tokenurl, headers=self.__headers,
                 json={"username": "ingestor", "password": self.__incd})
-            return json.loads(token)[id]
+            if response.ok:
+                return json.loads(response.content)[id]
+            else:
+                raise Exception("%s" % response.text)
         except Exception as e:
             get_logger().error(
                 'DatasetWatcher: %s' % (str(e)))
@@ -250,31 +256,45 @@ class DatasetWatcher(threading.Thread):
 
     def _ingest_dataset(self, metadata, token):
         """ ingests dataset
+
+        :param metadata: metadata in json string
+        :type metadata: :obj:`str
+        :param token: ingestor token
+        :type token: :obj:`str
+        :returns: a file name of generate file
+        :rtype: :obj:`str
         """
         try:
-            respond = requests.post(
+            response = requests.post(
                 "%s?access_token=%s" % (self.__dataseturl, token),
                 headers=self.__headers,
                 data=metadata)
-            return respond
+            if response.ok:
+                return True
+            else:
+                raise Exception("%s" % response.text)
+
         except Exception as e:
             get_logger().error(
                 'DatasetWatcher: %s' % (str(e)))
-        return ""
+        return False
 
     def _ingest_datablock(self, metadata, token):
         """ ingets origdatablock
         """
         try:
-            respond = requests.post(
+            response = requests.post(
                 "%s?access_token=%s" % (self.__datablockurl, token),
                 headers=self.__headers,
                 data=metadata)
-            return respond
+            if response.ok:
+                return True
+            else:
+                raise Exception("%s" % response.text)
         except Exception as e:
             get_logger().error(
                 'DatasetWatcher: %s' % (str(e)))
-        return ""
+        return False
 
     def _ingest_rawdataset_metadata(self, metafile, token):
         """ ingest raw dataset metadata
