@@ -29,13 +29,17 @@ class ScanDirWatcher(threading.Thread):
     """ Beamtime Watcher
     """
 
-    def __init__(self, path, meta, bpath, delay=5):
+    def __init__(self, path, meta, bpath, ingestorcred, delay=5):
         """ constructor
 
         :param path: scan dir path
         :type path: :obj:`str`
         :param meta: beamtime configuration
         :type meta: :obj:`dict` <:obj:`str`,`any`>
+        :param bpath: beamtime file
+        :type bpath: :obj:`str`
+        :param ingestorcred: ingestor credential
+        :type ingestorcred: :obj:`str`
         :param delay: time delay
         :type delay: :obj:`int`
         """
@@ -48,6 +52,8 @@ class ScanDirWatcher(threading.Thread):
         self.__meta = meta
         # (:obj:`str`) beamtime id
         self.beamtimeId = meta["beamtimeId"]
+        # (:obj:`str`) beamtime id
+        self.__incd = ingestorcred
         # (:obj:`float`) delay time for ingestion in s
         self.delay = delay
         # (:obj:`bool`) running loop flag
@@ -147,7 +153,7 @@ class ScanDirWatcher(threading.Thread):
                        not in self.scandir_watchers.keys():
                         self.scandir_watchers[(path, self.__bpath)] =  \
                             ScanDirWatcher(
-                                path, self.__meta, self.__bpath)
+                                path, self.__meta, self.__bpath, self.__incd)
                         get_logger().info(
                             'ScanDirWatcher: Create ScanDirWatcher %s %s'
                             % (path, self.__bpath))
@@ -171,10 +177,11 @@ class ScanDirWatcher(threading.Thread):
                         ifn = fn[:-(len(self.dslist_filename))] + \
                             self.idslist_filename
                         self.dataset_watchers[fn] = DatasetWatcher(
-                            fn, ifn, self.beamtimeId)
-                        self.dataset_watchers[fn].start()
+                            self.__path, fn, ifn, self.beamtimeId,
+                            self.__bpath, self.__incd)
                         get_logger().info(
                             'ScanDirWatcher: Creating DatasetWatcher %s' % fn)
+                        self.dataset_watchers[fn].start()
                         # get_logger().info(str(btmd))
 
             subdirs = [it.path for it in os.scandir(self.__path)
@@ -206,7 +213,8 @@ class ScanDirWatcher(threading.Thread):
                                     ifn = fn[:-(len(self.dslist_filename))] + \
                                         self.idslist_filename
                                     self.dataset_watchers[fn] = DatasetWatcher(
-                                        fn, ifn, self.beamtimeId)
+                                        self.__path, fn, ifn, self.beamtimeId,
+                                        self.__bpath, self.__incd)
                                     self.dataset_watchers[fn].start()
                                     get_logger().info(
                                         'ScanDirWatcher: Creating '

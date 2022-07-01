@@ -65,23 +65,6 @@ class DatasetWatcherTest(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
-        self.helperror = "Error: too few arguments\n"
-
-        self.helpinfo = """usage: scicat_dataset_ingestor [-h] [-c CONFIG] [-r RUNTIME] [-l LOG]
-
-BeamtimeWatcher service SciCat Dataset ingestion
-
-optional arguments:
-  -h, --help         show this help message and exit
-  -c CONFIG, --configuration CONFIG
-                        configuration file name
-  -r RUNTIME, --runtime RUNTIME
-                        stop program after runtime in seconds
-  -l LOG, --log LOG  logging level, i.e. debug, info, warning, error, critical
-
- examples:
-       scicat_dataset_ingestor -l debug"""
-
         self.maxDiff = None
 
     def runtest(self, argv, pipeinput=None):
@@ -191,9 +174,9 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r3'
+        commands = [('scicat_dataset_ingestor -c %s -r8'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r3'
+                    ('scicat_dataset_ingestor --config %s -r8'
                      % cfgfname).split()]
         try:
             for cmd in commands:
@@ -217,8 +200,19 @@ optional arguments:
                     'INFO : DatasetWatcher: Scans waiting: '
                     '[\'{sc1}\', \'{sc2}\']\n'
                     'INFO : DatasetWatcher: Scans ingested: []\n'
+                    'ERROR : DatasetWatcher: Invalid URL \'Users/login\': '
+                    'No schema supplied. Perhaps you meant '
+                    'http://Users/login?\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
+                    'INFO : DatasetWatcher: Generating metadata: '
+                    '{sc1} {subdir2}/{sc1}.scan.json\n'
+                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc2}\n'
+                    'INFO : DatasetWatcher: Generating metadata: '
+                    '{sc2} {subdir2}/{sc2}.scan.json\n'
+                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                     'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: '
                     'Stopping ScanDirWatcher {btmeta}\n'
@@ -275,16 +269,16 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r9'
+        commands = [('scicat_dataset_ingestor -c %s -r24'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r9'
+                    ('scicat_dataset_ingestor --config %s -r24'
                      % cfgfname).split()]
 
         def test_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
-            time.sleep(4)
+            time.sleep(12)
             with open(fdslist, "a+") as fds:
                 fds.write("myscan_00003\n")
                 fds.write("myscan_00004\n")
@@ -317,10 +311,32 @@ optional arguments:
                     'INFO : DatasetWatcher: Scans waiting: '
                     '[\'{sc1}\', \'{sc2}\']\n'
                     'INFO : DatasetWatcher: Scans ingested: []\n'
+                    'ERROR : DatasetWatcher: Invalid URL \'Users/login\': '
+                    'No schema supplied. Perhaps you meant '
+                    'http://Users/login?\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
+                    'INFO : DatasetWatcher: Generating metadata: '
+                    '{sc1} {subdir2}/{sc1}.scan.json\n'
+                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc2}\n'
+                    'INFO : DatasetWatcher: Generating metadata: '
+                    '{sc2} {subdir2}/{sc2}.scan.json\n'
+                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'ERROR : DatasetWatcher: Invalid URL \'Users/login\': '
+                    'No schema supplied. Perhaps you meant '
+                    'http://Users/login?\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc3}\n'
+                    'INFO : DatasetWatcher: Generating metadata: '
+                    '{sc3} {subdir2}/{sc3}.scan.json\n'
+                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    ' {sc3} {subdir2}/{sc3}.origdatablock.json\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc4}\n'
+                    'INFO : DatasetWatcher: Generating metadata: '
+                    '{sc4} {subdir2}/{sc4}.scan.json\n'
+                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    ' {sc4} {subdir2}/{sc4}.origdatablock.json\n'
                     'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: '
                     'Stopping ScanDirWatcher {btmeta}\n'

@@ -102,6 +102,11 @@ class BeamtimeWatcher:
         self.scandir_lock = threading.Lock()
         # (:obj:`float`) timeout value for inotifyx get events
         self.timeout = 1
+        # (:obj:`str`) beamtime id
+        self.__incd = None
+        if "ingestor_credential" in self.__config.keys():
+            with open(self.__incd) as fl:
+                self.__incd = fl.read().strip()
         try:
             # (:obj:`float`) run time in s
             self.__runtime = float(options.runtime)
@@ -328,7 +333,7 @@ class BeamtimeWatcher:
                             'BeamtimeWatcher: Create ScanDirWatcher %s %s'
                             % (path, ffn))
                         self.scandir_watchers[(path, ffn)] =  \
-                            ScanDirWatcher(path, btmd, ffn)
+                            ScanDirWatcher(path, btmd, ffn, self.__incd)
                         self.scandir_watchers[(path, ffn)].start()
             except Exception as e:
                 get_logger().warning(
