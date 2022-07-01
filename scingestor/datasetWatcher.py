@@ -119,13 +119,17 @@ class DatasetWatcher(threading.Thread):
                           'Accept': 'application/json'}
 
         # (:obj:`str`) token url
-        self.__tokenurl = "http://www-science3d.desy.de:3000/api/v3/" \
-            "Users/login"
+        # self.__tokenurl = "http://www-science3d.desy.de:3000/api/v3/" \
+        #       "Users/login"
+        self.__tokenurl = "Users/login"
         # (:obj:`str`) dataset url
-        self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/Datasets"
+        # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
+        #    "Datasets"
+        self.__dataseturl = "Datasets"
         # (:obj:`str`) origdatablock url
-        self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
-            "OrigDatablock"
+        # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
+        #     "OrigDatablock"
+        self.__dataseturl = "OrigDatablock"
 
     def _start_notifier(self, path):
         """ start notifier
@@ -246,7 +250,7 @@ class DatasetWatcher(threading.Thread):
                 self.__tokenurl, headers=self.__headers,
                 json={"username": "ingestor", "password": self.__incd})
             if response.ok:
-                return json.loads(response.content)[id]
+                return json.loads(response.content)["id"]
             else:
                 raise Exception("%s" % response.text)
         except Exception as e:
