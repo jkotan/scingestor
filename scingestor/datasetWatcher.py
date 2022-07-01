@@ -128,8 +128,8 @@ class DatasetWatcher(threading.Thread):
         self.__dataseturl = "Datasets"
         # (:obj:`str`) origdatablock url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
-        #     "OrigDatablock"
-        self.__dataseturl = "OrigDatablock"
+        #     "OrigDatablocks"
+        self.__dataseturl = "OrigDatablocks"
 
     def _start_notifier(self, path):
         """ start notifier
