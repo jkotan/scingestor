@@ -1,3 +1,27 @@
+#!/usr/bin/env python
+#   This file is part of scingestor - Scientific Catalog Dataset Ingestor
+#
+#    Copyright (C) 2021-2021 DESY, Jan Kotanski <jkotan@mail.desy.de>
+#
+#    nexdatas is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    nexdatas is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with scingestor.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Authors:
+#     Jan Kotanski <jan.kotanski@desy.de>
+#
+
+""" SciCat  Mock Test Server """
+
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
@@ -64,9 +88,9 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytes(message, "utf8"))
 
 
-class TestSciCatServer(HTTPServer):
+class SciCatTestServer(HTTPServer):
 
-    """ test scicat mock server """
+    """ scicat test server """
 
     stopped = False
     allow_reuse_address = True
@@ -93,12 +117,12 @@ class TestSciCatServer(HTTPServer):
 
 
 def main():
-    ts = TestSciCatServer(('', 8000), SciCatMockHandler)
+    ts = SciCatTestServer(('', 8000), SciCatMockHandler)
     ts.run()
-    print(ts.userslogin)
-    print(ts.datasets)
-    print(ts.origdatablocks)
-    print(ts.others)
+    print("\nLogins:", ts.userslogin)
+    print("Datasets:", ts.datasets)
+    print("OrigDatablocks:", ts.origdatablocks)
+    print("Others:", ts.others)
 
 
 if __name__ == "__main__":
