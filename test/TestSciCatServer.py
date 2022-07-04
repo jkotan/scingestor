@@ -88,16 +88,17 @@ class TestSciCatServer(HTTPServer):
             self.serve_forever()
         except KeyboardInterrupt:
             pass
-            # print(self.userslogin)
-            # print(self.datasets)
-            # print(self.origdatablocks)
-            # print(self.others)
         finally:
             self.server_close()
 
 
 def main():
-    TestSciCatServer(('', 8000), SciCatMockHandler).run()
+    ts = TestSciCatServer(('', 8000), SciCatMockHandler)
+    ts.run()
+    print(ts.userslogin)
+    print(ts.datasets)
+    print(ts.origdatablocks)
+    print(ts.others)
 
 
 if __name__ == "__main__":
