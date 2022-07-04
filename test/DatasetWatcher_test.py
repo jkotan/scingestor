@@ -219,8 +219,8 @@ class DatasetWatcherTest(unittest.TestCase):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
                 ser = er.split("\n")
-                seri = [ln for ln in ser  if not ln.startswith("127.0.0.1")]
-                sero = [ln for ln in ser  if ln.startswith("127.0.0.1")]
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
                 self.assertEqual(
                     'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
@@ -342,8 +342,8 @@ class DatasetWatcherTest(unittest.TestCase):
                 vl, er = self.runtest(cmd)
                 th.join()
                 ser = er.split("\n")
-                seri = [ln for ln in ser  if not ln.startswith("127.0.0.1")]
-                sero = [ln for ln in ser  if ln.startswith("127.0.0.1")]
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
                 self.assertEqual(
                     'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '

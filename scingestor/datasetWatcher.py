@@ -127,7 +127,7 @@ class DatasetWatcher(threading.Thread):
         #       "Users/login"
         if not self.__scicat_url.endswith("/"):
             self.__scicat_url = self.__scicat_url + "/"
-        self.__tokenurl = self.__scicat_url +  "Users/login"
+        self.__tokenurl = self.__scicat_url + "Users/login"
         # get_logger().info(
         #     'DatasetWatcher: LOGIN %s' % self.__tokenurl)
         # (:obj:`str`) dataset url
