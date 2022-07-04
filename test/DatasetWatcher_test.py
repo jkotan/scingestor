@@ -29,6 +29,13 @@ import time
 
 from scingestor import beamtimeWatcher
 
+
+try:
+    from .SciCatTestServer import SciCatTestServer, SciCatMockHandler
+except Exception:
+    from SciCatTestServer import SciCatTestServer, SciCatMockHandler
+
+
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -66,6 +73,24 @@ class DatasetWatcherTest(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
 
         self.maxDiff = None
+
+    def setUp(self):
+        self.starthttpserver()
+
+    def starthttpserver(self):
+        self.__server = SciCatTestServer(('', 8881), SciCatMockHandler)
+
+        self.__thread = threading.Thread(None, self.__server.run)
+        self.__thread.start()
+
+    def stophttpserver(self):
+        if self.__server is not None:
+            self.__server.shutdown()
+        if self.__thread is not None:
+            self.__thread.join()
+
+    def tearDown(self):
+        self.stophttpserver()
 
     def runtest(self, argv, pipeinput=None):
         old_stdout = sys.stdout
@@ -167,9 +192,19 @@ class DatasetWatcherTest(unittest.TestCase):
         fullbtmeta = os.path.join(fdirname, btmeta)
         fdslist = os.path.join(fsubdirname2, dslist)
         fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        logdir = "/"
+        cred = "12342345"
+        with open(credfile, "w") as cf:
+            cf.write(cred)
 
         cfg = 'beamtime_dirs:\n' \
-            '  - "{basedir}"'.format(basedir=fdirname)
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -183,6 +218,9 @@ class DatasetWatcherTest(unittest.TestCase):
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
+                ser = er.split("\n")
+                seri = [ln for ln in ser  if not ln.startswith("127.0.0.1")]
+                sero = [ln for ln in ser  if ln.startswith("127.0.0.1")]
                 self.assertEqual(
                     'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
@@ -200,9 +238,6 @@ class DatasetWatcherTest(unittest.TestCase):
                     'INFO : DatasetWatcher: Scans waiting: '
                     '[\'{sc1}\', \'{sc2}\']\n'
                     'INFO : DatasetWatcher: Scans ingested: []\n'
-                    'ERROR : DatasetWatcher: Invalid URL \'Users/login\': '
-                    'No schema supplied. Perhaps you meant '
-                    'http://Users/login?\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
                     'INFO : DatasetWatcher: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
@@ -226,8 +261,9 @@ class DatasetWatcherTest(unittest.TestCase):
                     .format(basedir=fdirname, btmeta=fullbtmeta,
                             subdir=fsubdirname, subdir2=fsubdirname2,
                             dslist=fdslist, idslist=fidslist,
-                            sc1='myscan_00001', sc2='myscan_00002'), er)
-                self.assertEqual('', vl)
+                            sc1='myscan_00001', sc2='myscan_00002'),
+                    "\n".join(seri))
+                self.assertEqual('Login: ingestor\n', vl)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
@@ -262,13 +298,24 @@ class DatasetWatcherTest(unittest.TestCase):
         fullbtmeta = os.path.join(fdirname, btmeta)
         fdslist = os.path.join(fsubdirname2, dslist)
         fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        logdir = "/"
+        cred = "12342345"
+        with open(credfile, "w") as cf:
+            cf.write(cred)
 
         cfg = 'beamtime_dirs:\n' \
-            '  - "{basedir}"'.format(basedir=fdirname)
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
+
         commands = [('scicat_dataset_ingestor -c %s -r24'
                      % cfgfname).split(),
                     ('scicat_dataset_ingestor --config %s -r24'
@@ -294,6 +341,9 @@ class DatasetWatcherTest(unittest.TestCase):
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
+                ser = er.split("\n")
+                seri = [ln for ln in ser  if not ln.startswith("127.0.0.1")]
+                sero = [ln for ln in ser  if ln.startswith("127.0.0.1")]
                 self.assertEqual(
                     'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
@@ -311,9 +361,6 @@ class DatasetWatcherTest(unittest.TestCase):
                     'INFO : DatasetWatcher: Scans waiting: '
                     '[\'{sc1}\', \'{sc2}\']\n'
                     'INFO : DatasetWatcher: Scans ingested: []\n'
-                    'ERROR : DatasetWatcher: Invalid URL \'Users/login\': '
-                    'No schema supplied. Perhaps you meant '
-                    'http://Users/login?\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
                     'INFO : DatasetWatcher: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
@@ -324,9 +371,6 @@ class DatasetWatcherTest(unittest.TestCase):
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetWatcher: Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
-                    'ERROR : DatasetWatcher: Invalid URL \'Users/login\': '
-                    'No schema supplied. Perhaps you meant '
-                    'http://Users/login?\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc3}\n'
                     'INFO : DatasetWatcher: Generating metadata: '
                     '{sc3} {subdir2}/{sc3}.scan.json\n'
@@ -351,8 +395,10 @@ class DatasetWatcherTest(unittest.TestCase):
                             subdir=fsubdirname, subdir2=fsubdirname2,
                             dslist=fdslist, idslist=fidslist,
                             sc1='myscan_00001', sc2='myscan_00002',
-                            sc3='myscan_00003', sc4='myscan_00004'), er)
-                self.assertEqual('', vl)
+                            sc3='myscan_00003', sc4='myscan_00004'),
+                    "\n".join(seri))
+                self.assertEqual('Login: ingestor\n'
+                                 'Login: ingestor\n', vl)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)

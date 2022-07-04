@@ -29,7 +29,7 @@ class ScanDirWatcher(threading.Thread):
     """ Beamtime Watcher
     """
 
-    def __init__(self, path, meta, bpath, ingestorcred, delay=5):
+    def __init__(self, path, meta, bpath, ingestorcred, scicat_url, delay=5):
         """ constructor
 
         :param path: scan dir path
@@ -40,6 +40,8 @@ class ScanDirWatcher(threading.Thread):
         :type bpath: :obj:`str`
         :param ingestorcred: ingestor credential
         :type ingestorcred: :obj:`str`
+        :param scicat_url: scicat_url
+        :type scicat_url: :obj:`str`
         :param delay: time delay
         :type delay: :obj:`int`
         """
@@ -54,6 +56,8 @@ class ScanDirWatcher(threading.Thread):
         self.beamtimeId = meta["beamtimeId"]
         # (:obj:`str`) beamtime id
         self.__incd = ingestorcred
+        # (:obj:`str`) scicat_url
+        self.__scicat_url = scicat_url
         # (:obj:`float`) delay time for ingestion in s
         self.delay = delay
         # (:obj:`bool`) running loop flag
@@ -153,7 +157,8 @@ class ScanDirWatcher(threading.Thread):
                        not in self.scandir_watchers.keys():
                         self.scandir_watchers[(path, self.__bpath)] =  \
                             ScanDirWatcher(
-                                path, self.__meta, self.__bpath, self.__incd)
+                                path, self.__meta, self.__bpath,
+                                self.__incd, self.__scicat_url)
                         get_logger().info(
                             'ScanDirWatcher: Create ScanDirWatcher %s %s'
                             % (path, self.__bpath))
@@ -178,7 +183,7 @@ class ScanDirWatcher(threading.Thread):
                             self.idslist_filename
                         self.dataset_watchers[fn] = DatasetWatcher(
                             self.__path, fn, ifn, self.beamtimeId,
-                            self.__bpath, self.__incd)
+                            self.__bpath, self.__incd, self.__scicat_url)
                         get_logger().info(
                             'ScanDirWatcher: Creating DatasetWatcher %s' % fn)
                         self.dataset_watchers[fn].start()

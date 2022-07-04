@@ -117,7 +117,7 @@ class SciCatTestServer(HTTPServer):
 
 
 def main():
-    ts = SciCatTestServer(('', 8000), SciCatMockHandler)
+    ts = SciCatTestServer(('', 8881), SciCatMockHandler)
     ts.run()
     print("\nLogins:", ts.userslogin)
     print("Datasets:", ts.datasets)

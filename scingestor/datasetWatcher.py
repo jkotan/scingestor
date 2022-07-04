@@ -33,7 +33,7 @@ class DatasetWatcher(threading.Thread):
     """
 
     def __init__(self, path, dsfile, idsfile, beamtimeId, beamtimefile,
-                 ingestorcred, delay=5):
+                 ingestorcred, scicat_url, delay=5):
         """ constructor
 
         :param path: scan dir path
@@ -48,6 +48,8 @@ class DatasetWatcher(threading.Thread):
         :type beamtimefile: :obj:`str`
         :param ingestorcred: ingestor credential
         :type ingestorcred: :obj:`str`
+        :param scicat_url: scicat_url
+        :type scicat_url: :obj:`str`
         :param delay: time delay
         :type delay: :obj:`str`
         """
@@ -64,6 +66,8 @@ class DatasetWatcher(threading.Thread):
         self.__bfile = beamtimefile
         # (:obj:`str`) beamtime id
         self.__incd = ingestorcred
+        # (:obj:`str`) scicat_url
+        self.__scicat_url = scicat_url
         # (:obj:`float`) delay time for ingestion in s
         self.delay = delay
         # (:obj:`bool`) running loop flag
@@ -121,15 +125,19 @@ class DatasetWatcher(threading.Thread):
         # (:obj:`str`) token url
         # self.__tokenurl = "http://www-science3d.desy.de:3000/api/v3/" \
         #       "Users/login"
-        self.__tokenurl = "Users/login"
+        if not self.__scicat_url.endswith("/"):
+            self.__scicat_url = self.__scicat_url + "/"
+        self.__tokenurl = self.__scicat_url +  "Users/login"
+        # get_logger().info(
+        #     'DatasetWatcher: LOGIN %s' % self.__tokenurl)
         # (:obj:`str`) dataset url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #    "Datasets"
-        self.__dataseturl = "Datasets"
+        self.__dataseturl = self.__scicat_url + "Datasets"
         # (:obj:`str`) origdatablock url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #     "OrigDatablocks"
-        self.__dataseturl = "OrigDatablocks"
+        self.__dataseturl = self.__scicat_url + "OrigDatablocks"
 
     def _start_notifier(self, path):
         """ start notifier
