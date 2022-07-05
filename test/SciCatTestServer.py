@@ -111,6 +111,12 @@ class SciCatTestServer(HTTPServer):
         # (:obj:`list`<:obj:`str`>) other ingestions
         self.others = []
 
+    def reset(self):
+        self.datasets = []
+        self.origdatablocks = []
+        self.userslogin = []
+        self.others = []
+
     def run(self):
         try:
             self.serve_forever()

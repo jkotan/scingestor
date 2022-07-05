@@ -26,6 +26,7 @@ import sys
 import threading
 import shutil
 import time
+import json
 
 from scingestor import beamtimeWatcher
 
@@ -73,6 +74,29 @@ class DatasetWatcherTest(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
 
         self.maxDiff = None
+
+    def myAssertDict(self, dct, dct2, skip=None, parent=None):
+        parent = parent or ""
+        self.assertTrue(isinstance(dct, dict))
+        self.assertTrue(isinstance(dct2, dict))
+        if len(list(dct.keys())) != len(list(dct2.keys())):
+            print(list(dct.keys()))
+            print(list(dct2.keys()))
+        self.assertEqual(
+            len(list(dct.keys())), len(list(dct2.keys())))
+        for k, v in dct.items():
+            if parent:
+                node = "%s.%s" % (parent, k)
+            else:
+                node = k
+            if k not in dct2.keys():
+                print("%s not in %s" % (k, dct2))
+            self.assertTrue(k in dct2.keys())
+            if not skip or node not in skip:
+                if isinstance(v, dict):
+                    self.myAssertDict(v, dct2[k], skip, node)
+                else:
+                    self.assertEqual(v, dct2[k])
 
     def setUp(self):
         self.starthttpserver()
@@ -215,6 +239,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      % cfgfname).split()]
         try:
             for cmd in commands:
+                self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
@@ -269,6 +294,74 @@ class DatasetWatcherTest(unittest.TestCase):
                     "OrigDatablocks: 99001234/myscan_00001\n"
                     "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 1)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 2)
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[0]),
+                    {'contactEmail': 'BSName',
+                     'createdAt': '2022-05-14 11:54:29',
+                     'creationLocation': '/DESY/PETRA III/p00',
+                     'description': 'H20 distribution',
+                     'endTime': '2022-05-19 09:00:00',
+                     'isPublished': False,
+                     'owner': 'Ouruser',
+                     'ownerEmail': 'appuser@fake.com',
+                     'pid': '99001234/myscan_00001',
+                     'principalInvestigator': 'appuser@fake.com',
+                     'proposalId': '99001234',
+                     'scientificMetadata': {
+                         'DOOR_proposalId': '99991173',
+                         'beamtimeId': '99001234'},
+                     'sourceFolder':
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'})
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[1]),
+                    {'contactEmail': 'BSName',
+                     'createdAt': '2022-05-14 11:54:29',
+                     'creationLocation': '/DESY/PETRA III/p00',
+                     'description': 'H20 distribution',
+                     'endTime': '2022-05-19 09:00:00',
+                     'isPublished': False,
+                     'owner': 'Ouruser',
+                     'ownerEmail': 'appuser@fake.com',
+                     'pid': '99001234/myscan_00002',
+                     'principalInvestigator': 'appuser@fake.com',
+                     'proposalId': '99001234',
+                     'scientificMetadata': {
+                         'DOOR_proposalId': '99991173',
+                         'beamtimeId': '99001234'},
+                     'sourceFolder':
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'})
+                self.assertEqual(len(self.__server.origdatablocks), 2)
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[0]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'datasetId': '99001234/myscan_00001',
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[1]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'datasetId': '99001234/myscan_00002',
+                     'size': 629}, skip=["dataFileList", "size"])
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
@@ -321,9 +414,9 @@ class DatasetWatcherTest(unittest.TestCase):
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
 
-        commands = [('scicat_dataset_ingestor -c %s -r25'
+        commands = [('scicat_dataset_ingestor -c %s -r26'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r25'
+                    ('scicat_dataset_ingestor --config %s -r26'
                      % cfgfname).split()]
 
         def test_thread():
@@ -339,6 +432,7 @@ class DatasetWatcherTest(unittest.TestCase):
         try:
             for cmd in commands:
                 # print(cmd)
+                self.__server.reset()
                 shutil.copy(lsource, fsubdirname2)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -413,6 +507,48 @@ class DatasetWatcherTest(unittest.TestCase):
                     "OrigDatablocks: 99001234/myscan_00003\n"
                     "Datasets: 99001234/myscan_00004\n"
                     "OrigDatablocks: 99001234/myscan_00004\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 2)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[1],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 4)
+                for i in range(4):
+                    self.myAssertDict(
+                        json.loads(self.__server.datasets[i]),
+                        {'contactEmail': 'BSName',
+                         'createdAt': '2022-05-14 11:54:29',
+                         'creationLocation': '/DESY/PETRA III/p00',
+                         'description': 'H20 distribution',
+                         'endTime': '2022-05-19 09:00:00',
+                         'isPublished': False,
+                         'owner': 'Ouruser',
+                         'ownerEmail': 'appuser@fake.com',
+                         'pid': '99001234/myscan_%05i' % (i + 1),
+                         'principalInvestigator': 'appuser@fake.com',
+                         'proposalId': '99001234',
+                         'scientificMetadata': {'DOOR_proposalId': '99991173',
+                                                'beamtimeId': '99001234'},
+                         'sourceFolder':
+                         '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                         'type': 'raw',
+                         'updatedAt': '2022-05-14 11:54:29'})
+
+                self.assertEqual(len(self.__server.origdatablocks), 4)
+                for i in range(4):
+                    self.myAssertDict(
+                        json.loads(self.__server.origdatablocks[i]),
+                        {'dataFileList': [
+                            {'gid': 'jkotan',
+                             'path': 'myscan_00001.scan.json',
+                             'perm': '-rw-r--r--',
+                             'size': 629,
+                             'time': '2022-07-05T19:07:16.683673+0200',
+                             'uid': 'jkotan'}],
+                         'datasetId': '99001234/myscan_%05i' % (i + 1),
+                         'size': 629}, skip=["dataFileList", "size"])
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
