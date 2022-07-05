@@ -235,6 +235,8 @@ class ScanDirWatcherTest(unittest.TestCase):
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
                     'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
+                    # 'INFO : BeamtimeWatcher: Removing watch on a '
+                    # 'CM event 1: {basedir}\n'
                     'INFO : ScanDirWatcher: Create ScanDirWatcher '
                     '{subdir} {btmeta}\n'
                     'INFO : ScanDirWatcher: Adding watch 1: {subdir}\n'
