@@ -258,6 +258,10 @@ class BeamtimeWatcher:
                            "IN_MOVE_SELF" in masks:
                             # path/file  does not exist anymore (moved/deleted)
                             path = self.wd_to_path.pop(event.wd)
+                            get_logger().info(
+                                'BeamtimeWatcher: '
+                                'Removing watch on a IMDM event %s: %s'
+                                % (str(event.wd), path))
                             get_logger().debug('Removed %s' % path)
                             ffn = os.path.abspath(path)
                             with self.scandir_lock:
@@ -284,6 +288,10 @@ class BeamtimeWatcher:
                             else:
                                 path = self.wd_to_path.pop(event.wd)
                                 get_logger().debug("POP path: %s" % path)
+                                get_logger().info(
+                                    'BeamtimeWatcher: '
+                                    'Removing watch on a CM event %s: %s'
+                                    % (str(event.wd), path))
                                 files = self.find_bt_files(
                                     path, self.bt_prefix, self.bt_postfix)
 
