@@ -56,24 +56,28 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                 {"id": "H3BxDGwgvnGbp5ZlhdksDKdIpljtEm8"
                  "yilq1B7s7CygIaxbQRAMmZBgJ6JW2GjnX"})
 
-        elif self.path.lower() == '/datasets' and \
+        elif self.path.lower().startswith(
+                '/datasets?access_token=') and \
                 contenttype == 'application/json':
             self.server.datasets.append(in_data)
+            # print(in_data)
+            # print(type(in_data))
             dt = json.loads(in_data)
             # print("Datasets: %s" % dt)
             print("Datasets: %s" % dt["pid"])
             message = "{}"
 
-        elif self.path.lower() == '/origdatablocks' and \
+        elif self.path.lower().startswith(
+                '/origdatablocks?access_token=') and \
                 contenttype == 'application/json':
             self.server.origdatablocks.append(in_data)
             dt = json.loads(in_data)
-            print("OrigDatablocks: %s" % dt)
+            print("OrigDatablocks: %s" % dt['datasetId'])
             message = "{}"
 
         else:
             self.server.others.append(in_data)
-            print(in_data)
+            print("Others: %s" % str(in_data))
 
         self.wfile.write(bytes(message, "utf8"))
 

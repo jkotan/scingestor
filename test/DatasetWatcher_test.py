@@ -263,7 +263,12 @@ class DatasetWatcherTest(unittest.TestCase):
                             dslist=fdslist, idslist=fidslist,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
-                self.assertEqual('Login: ingestor\n', vl)
+                self.assertEqual(
+                    "Login: ingestor\n"
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
@@ -397,8 +402,17 @@ class DatasetWatcherTest(unittest.TestCase):
                             sc1='myscan_00001', sc2='myscan_00002',
                             sc3='myscan_00003', sc4='myscan_00004'),
                     "\n".join(seri))
-                self.assertEqual('Login: ingestor\n'
-                                 'Login: ingestor\n', vl)
+                self.assertEqual(
+                    'Login: ingestor\n'
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n"
+                    'Login: ingestor\n'
+                    "Datasets: 99001234/myscan_00003\n"
+                    "OrigDatablocks: 99001234/myscan_00003\n"
+                    "Datasets: 99001234/myscan_00004\n"
+                    "OrigDatablocks: 99001234/myscan_00004\n", vl)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
