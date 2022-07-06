@@ -115,8 +115,10 @@ class DatasetWatcher(threading.Thread):
         get_logger().debug(
             'DatasetWatcher: Parameters: %s' % str(self.__dctfmt))
 
-        # (:obj:`float`) timeout value for inotifyx get events
+        # (:obj:`float`) timeout value for inotifyx get events in s
         self.timeout = 1
+        # (:obj:`float`) time to recheck the dataset list
+        self.checktime = 100
 
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
         self.__headers = {'Content-Type': 'application/json',
@@ -158,6 +160,8 @@ class DatasetWatcher(threading.Thread):
             watch_descriptor = inotifyx.add_watch(
                 self.notifier, path,
                 inotifyx.IN_ALL_EVENTS |
+                inotifyx.IN_MODIFY |
+                inotifyx.IN_OPEN |
                 inotifyx.IN_CLOSE_WRITE | inotifyx.IN_DELETE |
                 inotifyx.IN_MOVE_SELF |
                 inotifyx.IN_ALL_EVENTS |
@@ -393,7 +397,6 @@ class DatasetWatcher(threading.Thread):
             odb = odbs[0]
         else:
             odb = self._generate_origdatablock_metadata(scan)
-        scstatus = None
         dbstatus = None
 
         if rds and odb:
@@ -402,8 +405,7 @@ class DatasetWatcher(threading.Thread):
             if odb and odb[0] and pid:
                 dbstatus = self._ingest_origdatablock_metadata(
                     odb, pid, token)
-
-        if scstatus and dbstatus:
+        if pid and dbstatus:
             ctime = time.time()
         else:
             ctime = 0
@@ -415,17 +417,7 @@ class DatasetWatcher(threading.Thread):
         """ scandir watcher thread
         """
         self._start_notifier(self.__dsfile)
-        with open(self.__dsfile, "r") as dsf:
-            scans = [sc.strip() for sc in dsf.read().split("\n")
-                     if sc.strip()]
-        if os.path.isfile(self.__idsfile):
-            with open(self.__idsfile, "r") as idsf:
-                self.sc_ingested = [
-                    sc.strip().split(" ") for sc in idsf.read().split("\n")
-                    if sc.strip()]
-        ingested = [sc[0] for sc in self.sc_ingested]
-        self.sc_waiting = [sc for sc in scans
-                           if sc not in ingested]
+        self._check_list()
 
         get_logger().info(
             'DatasetWatcher: Scans waiting: %s' % str(self.sc_waiting))
@@ -438,6 +430,7 @@ class DatasetWatcher(threading.Thread):
             for scan in self.sc_waiting:
                 self.ingest(scan, token)
 
+        counter = 0
         try:
             while self.running:
                 events = inotifyx.get_events(self.notifier, self.timeout)
@@ -448,6 +441,10 @@ class DatasetWatcher(threading.Thread):
                 for event in events:
 
                     if event.wd in self.wd_to_path.keys():
+                        # get_logger().info(
+                        #     'Ds: %s %s %s' % (event.name,
+                        #                       event.get_mask_description(),
+                        #                       self.wd_to_path[event.wd]))
                         get_logger().debug(
                             'Ds: %s %s %s' % (event.name,
                                               event.get_mask_description(),
@@ -455,26 +452,43 @@ class DatasetWatcher(threading.Thread):
                         masks = event.get_mask_description().split("|")
                         if "IN_CLOSE_WRITE" in masks:
                             if event.name:
-                                ffn = os.path.join(
-                                    self.wd_to_path[event.wd], event.name)
+                                fdir, fname = os.path.split(
+                                    self.wd_to_path[event.wd])
+                                ffn = os.path.join(fdir, event.name)
                             else:
                                 ffn = self.wd_to_path[event.wd]
                             if ffn is not None and ffn == self.__dsfile:
                                 get_logger().debug(
                                     'DatasetWatcher: Changed %s' % ffn)
-                                with open(self.__dsfile, "r") as dsf:
-                                    scans = [sc.strip()
-                                             for sc in dsf.read().split("\n")
-                                             if sc.strip()]
-                                if os.path.isfile(self.__idsfile):
-                                    with open(self.__idsfile, "r") as idsf:
-                                        self.sc_ingested = [
-                                            sc.strip().split(" ")
-                                            for sc in idsf.read().split("\n")
-                                            if sc.strip()]
-                                ingested = [sc[0] for sc in self.sc_ingested]
-                                self.sc_waiting = [
-                                    sc for sc in scans if sc not in ingested]
+                                self._check_list()
+                        elif "IN_MODIFY" in masks or "IN_OPEN" in masks:
+                            if event.name:
+                                fdir, fname = os.path.split(
+                                    self.wd_to_path[event.wd])
+                                ffn = os.path.join(fdir, event.name)
+                                if ffn is not None and ffn == self.__dsfile:
+                                    get_logger().debug(
+                                        'DatasetWatcher: Changed %s' % ffn)
+                                    self._check_list()
+
+                if counter == self.checktime:
+                    # if inotify does not work
+                    counter = 0
+                    # get_logger().info(
+                    #     'DatasetWatcher: Re-check dataset list after %s s'
+                    #     % self.checktime)
+                    get_logger().debug(
+                        'DatasetWatcher: Re-check dataset list after %s s'
+                        % self.checktime)
+                    self._check_list()
+                elif self.checktime > counter:
+                    get_logger().debug(
+                        'DatasetWatcher: increase counter %s/%s ' %
+                        (counter, self.checktime))
+                    # get_logger().info(
+                    #     'DatasetWatcher: increase counter %s/%s ' %
+                    #     (counter, self.checktime))
+                    counter += 1
 
                 if self.sc_waiting:
                     time.sleep(self.delay)
@@ -484,6 +498,21 @@ class DatasetWatcher(threading.Thread):
 
         finally:
             self.stop()
+
+    def _check_list(self):
+        with open(self.__dsfile, "r") as dsf:
+            scans = [sc.strip()
+                     for sc in dsf.read().split("\n")
+                     if sc.strip()]
+        if os.path.isfile(self.__idsfile):
+            with open(self.__idsfile, "r") as idsf:
+                self.sc_ingested = [
+                    sc.strip().split(" ")
+                    for sc in idsf.read().split("\n")
+                    if sc.strip()]
+        ingested = [sc[0] for sc in self.sc_ingested]
+        self.sc_waiting = [
+            sc for sc in scans if sc not in ingested]
 
     def stop(self):
         """ stop the watcher
