@@ -104,9 +104,17 @@ class BeamtimeWatcher:
         self.timeout = 1
         # (:obj:`str`) beamtime id
         self.__incd = None
-        if "ingestor_credential" in self.__config.keys():
-            with open(self.__incd) as fl:
+        # (:obj:`str`) scicat url
+        self.__scicat_url = "http://localhost:8881"
+        # (:obj:`str`) ingestor log dir
+        self.__inlogdir = ""
+        if "ingestor_credential_file" in self.__config.keys():
+            with open(self.__config["ingestor_credential_file"]) as fl:
                 self.__incd = fl.read().strip()
+        if "ingestor_log_dir" in self.__config.keys():
+            self.__inlogdir = self.__config["ingestor_log_dir"]
+        if "scicat_url" in self.__config.keys():
+            self.__scicat_url = self.__config["scicat_url"]
         try:
             # (:obj:`float`) run time in s
             self.__runtime = float(options.runtime)
@@ -250,6 +258,10 @@ class BeamtimeWatcher:
                            "IN_MOVE_SELF" in masks:
                             # path/file  does not exist anymore (moved/deleted)
                             path = self.wd_to_path.pop(event.wd)
+                            # get_logger().info(
+                            #     'BeamtimeWatcher: '
+                            #     'Removing watch on a IMDM event %s: %s'
+                            #     % (str(event.wd), path))
                             get_logger().debug('Removed %s' % path)
                             ffn = os.path.abspath(path)
                             with self.scandir_lock:
@@ -276,6 +288,10 @@ class BeamtimeWatcher:
                             else:
                                 path = self.wd_to_path.pop(event.wd)
                                 get_logger().debug("POP path: %s" % path)
+                                # get_logger().info(
+                                #     'BeamtimeWatcher: '
+                                #     'Removing watch on a CM event %s: %s'
+                                #     % (str(event.wd), path))
                                 files = self.find_bt_files(
                                     path, self.bt_prefix, self.bt_postfix)
 
@@ -333,7 +349,8 @@ class BeamtimeWatcher:
                             'BeamtimeWatcher: Create ScanDirWatcher %s %s'
                             % (path, ffn))
                         self.scandir_watchers[(path, ffn)] =  \
-                            ScanDirWatcher(path, btmd, ffn, self.__incd)
+                            ScanDirWatcher(path, btmd, ffn, self.__incd,
+                                           self.__scicat_url)
                         self.scandir_watchers[(path, ffn)].start()
             except Exception as e:
                 get_logger().warning(

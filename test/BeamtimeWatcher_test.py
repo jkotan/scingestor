@@ -326,6 +326,8 @@ optional arguments:
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
                     'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
+                    # 'INFO : BeamtimeWatcher: Removing watch on a '
+                    # 'IMDM event 1: {basedir}\n'
                     'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '

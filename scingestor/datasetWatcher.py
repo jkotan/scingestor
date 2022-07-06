@@ -33,7 +33,7 @@ class DatasetWatcher(threading.Thread):
     """
 
     def __init__(self, path, dsfile, idsfile, beamtimeId, beamtimefile,
-                 ingestorcred, delay=5):
+                 ingestorcred, scicat_url, delay=5):
         """ constructor
 
         :param path: scan dir path
@@ -48,6 +48,8 @@ class DatasetWatcher(threading.Thread):
         :type beamtimefile: :obj:`str`
         :param ingestorcred: ingestor credential
         :type ingestorcred: :obj:`str`
+        :param scicat_url: scicat_url
+        :type scicat_url: :obj:`str`
         :param delay: time delay
         :type delay: :obj:`str`
         """
@@ -64,6 +66,8 @@ class DatasetWatcher(threading.Thread):
         self.__bfile = beamtimefile
         # (:obj:`str`) beamtime id
         self.__incd = ingestorcred
+        # (:obj:`str`) scicat_url
+        self.__scicat_url = scicat_url
         # (:obj:`float`) delay time for ingestion in s
         self.delay = delay
         # (:obj:`bool`) running loop flag
@@ -87,12 +91,12 @@ class DatasetWatcher(threading.Thread):
         # (:obj:`str`) nexus dataset shell command
         self.__datasetcommandnxs = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix}.json " \
-            " -b {beamtimefile} -p {beamtimeid} " \
+            " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             "{scanpath}/{scanname}.nxs"
         # (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix}.json " \
-            " -b {beamtimefile} -p {beamtimeid}"
+            " -b {beamtimefile} -p {beamtimeid}/{scanname}"
         # (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
             " -p {beamtimeid}/{scanname} " \
@@ -121,15 +125,19 @@ class DatasetWatcher(threading.Thread):
         # (:obj:`str`) token url
         # self.__tokenurl = "http://www-science3d.desy.de:3000/api/v3/" \
         #       "Users/login"
-        self.__tokenurl = "Users/login"
+        if not self.__scicat_url.endswith("/"):
+            self.__scicat_url = self.__scicat_url + "/"
+        self.__tokenurl = self.__scicat_url + "Users/login"
+        # get_logger().info(
+        #     'DatasetWatcher: LOGIN %s' % self.__tokenurl)
         # (:obj:`str`) dataset url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #    "Datasets"
-        self.__dataseturl = "Datasets"
+        self.__dataseturl = self.__scicat_url + "Datasets"
         # (:obj:`str`) origdatablock url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #     "OrigDatablocks"
-        self.__dataseturl = "OrigDatablocks"
+        self.__datablockurl = self.__scicat_url + "OrigDatablocks"
 
     def _start_notifier(self, path):
         """ start notifier
@@ -191,7 +199,7 @@ class DatasetWatcher(threading.Thread):
                     "{scanpath}/{scanname}{scpostfix}.json".format(
                         **self.__dctfmt)))
             get_logger().debug(
-                'DatasetWatcher: Generating datablock command: %s ' % (
+                'DatasetWatcher: Generating dataset command: %s ' % (
                     self.__datasetcommandnxs.format(**self.__dctfmt)))
             subprocess.run(
                 self.__datasetcommandnxs.format(**self.__dctfmt).split())
@@ -202,14 +210,14 @@ class DatasetWatcher(threading.Thread):
                     "{scanpath}/{scanname}{scpostfix}.json".format(
                         **self.__dctfmt)))
             get_logger().debug(
-                'DatasetWatcher: Generating datablock command: %s ' % (
+                'DatasetWatcher: Generating dataset command: %s ' % (
                     self.__datasetcommand.format(**self.__dctfmt)))
             subprocess.run(
                 self.__datasetcommand.format(**self.__dctfmt).split())
 
         rdss = glob.glob(
-            "{scan}{postfix}.json".format(
-                scan=scan, postfix=self.__scanpostfix))
+            "{scanpath}/{scanname}{scpostfix}.json".format(
+                        **self.__dctfmt))
         if rdss and rdss[0]:
             return rdss[0]
         return ""
@@ -233,8 +241,8 @@ class DatasetWatcher(threading.Thread):
         subprocess.run(
             self.__datablockcommand.format(**self.__dctfmt).split())
         odbs = glob.glob(
-            "{scan}{postfix}.json".format(
-                scan=scan, postfix=self.__datablockpostfix))
+            "{scanpath}/{scanname}{dbpostfix}.json".format(
+                    **self.__dctfmt))
         if odbs and odbs[0]:
             return odbs[0]
         return ""
@@ -283,7 +291,7 @@ class DatasetWatcher(threading.Thread):
                 'DatasetWatcher: %s' % (str(e)))
         return False
 
-    def _ingest_datablock(self, metadata, token):
+    def _ingest_origdatablock(self, metadata, token):
         """ ingets origdatablock
         """
         try:
@@ -315,12 +323,12 @@ class DatasetWatcher(threading.Thread):
             if mt["proposalId"] != self.__bid:
                 raise Exception(
                     "Wrong SC proposalId %s for DESY beamtimeId %s in %s"
-                    % (mt["pid"], self.__bid, metafile))
+                    % (mt["proposalId"], self.__bid, metafile))
             if not mt["pid"].startswith("%s/" % self.__bid):
                 raise Exception(
                     "Wrong pid %s for DESY beamtimeId %s in  %s"
                     % (mt["pid"], self.__bid, metafile))
-            status = self._ingest_dataset(token, smt)
+            status = self._ingest_dataset(smt, token)
             if status:
                 return mt["pid"]
         except Exception as e:
@@ -350,8 +358,7 @@ class DatasetWatcher(threading.Thread):
                 raise Exception(
                     "Wrong datasetId %s for DESY beamtimeId %s in %s"
                     % (mt["pid"], self.__bid, metafile))
-            token = self._get_token()
-            status = self._ingest_origdatablock(token, smt)
+            status = self._ingest_origdatablock(smt, token)
             if status:
                 return mt["datasetId"]
         except Exception as e:
@@ -388,6 +395,7 @@ class DatasetWatcher(threading.Thread):
             odb = self._generate_origdatablock_metadata(scan)
         scstatus = None
         dbstatus = None
+
         if rds and odb:
             if rds and rds[0]:
                 pid = self._ingest_rawdataset_metadata(rds, token)
