@@ -393,7 +393,6 @@ class DatasetWatcher(threading.Thread):
             odb = odbs[0]
         else:
             odb = self._generate_origdatablock_metadata(scan)
-        scstatus = None
         dbstatus = None
 
         if rds and odb:
@@ -402,8 +401,7 @@ class DatasetWatcher(threading.Thread):
             if odb and odb[0] and pid:
                 dbstatus = self._ingest_origdatablock_metadata(
                     odb, pid, token)
-
-        if scstatus and dbstatus:
+        if pid and dbstatus:
             ctime = time.time()
         else:
             ctime = 0
