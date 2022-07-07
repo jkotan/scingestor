@@ -60,14 +60,11 @@ class SafeINotifier(threading.Thread):
     def __new__(cls, *args, **kwargs):
         """ create a new object if it is the first one
         """
-        if not cls._notifier:
-            with cls._lock:
-                if not cls._notifier:
-                    cls._notifier = super(SafeINotifier, cls).__new__(cls)
-                    cls._notifier.init()
+        with cls._lock:
+            if not cls._notifier or not cls._notifier.running:
+                cls._notifier = super(SafeINotifier, cls).__new__(cls)
+                cls._notifier.init()
 
-                if not cls._notifier.running:
-                    cls._notifier.init()
         return cls._notifier
 
     def init(self):

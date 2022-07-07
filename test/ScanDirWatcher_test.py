@@ -167,6 +167,7 @@ class ScanDirWatcherTest(unittest.TestCase):
                      % cfgfname).split()]
         try:
             for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
                 vl, er = self.runtest(cmd)
                 self.assertEqual(
@@ -231,6 +232,7 @@ class ScanDirWatcherTest(unittest.TestCase):
 
         try:
             for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
                 th = threading.Thread(target=test_thread)
                 th.start()

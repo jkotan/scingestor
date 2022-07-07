@@ -241,6 +241,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      % cfgfname).split()]
         try:
             for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
                 if os.path.exists(fidslist):
@@ -438,6 +439,7 @@ class DatasetWatcherTest(unittest.TestCase):
         try:
             for cmd in commands:
                 # print(cmd)
+                self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
                 shutil.copy(lsource, fsubdirname2)

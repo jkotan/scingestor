@@ -226,6 +226,7 @@ optional arguments:
                      % cfgfname).split()]
         try:
             for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
                 vl, er = self.runtest(cmd)
                 self.assertEqual(
@@ -259,13 +260,14 @@ optional arguments:
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
-            cf.write(cfg)
+           cf.write(cfg)
         commands = [('scicat_dataset_ingestor -c %s -r3'
                      % cfgfname).split(),
                     ('scicat_dataset_ingestor --config %s -r3'
                      % cfgfname).split()]
         try:
             for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
                 vl, er = self.runtest(cmd)
                 self.assertEqual(
@@ -322,8 +324,8 @@ optional arguments:
             shutil.copy(source, fdirname)
 
         try:
-            commands.pop()
             for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
                 th = threading.Thread(target=test_thread)
                 th.start()
