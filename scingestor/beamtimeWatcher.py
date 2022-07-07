@@ -109,7 +109,7 @@ class BeamtimeWatcher:
         # (:class:`threading.Lock`) scandir watcher dictionary lock
         self.scandir_lock = threading.Lock()
         # (:obj:`float`) timeout value for inotifyx get events
-        self.timeout = 1
+        self.timeout = 0.1
         # (:obj:`str`) beamtime id
         self.__incd = None
         # (:obj:`str`) scicat url

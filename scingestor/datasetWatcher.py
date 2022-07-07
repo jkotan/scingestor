@@ -122,7 +122,7 @@ class DatasetWatcher(threading.Thread):
             'DatasetWatcher: Parameters: %s' % str(self.__dctfmt))
 
         # (:obj:`float`) timeout value for inotifyx get events in s
-        self.timeout = 1
+        self.timeout = 0.1
         # (:obj:`float`) time to recheck the dataset list
         self.checktime = 100
 

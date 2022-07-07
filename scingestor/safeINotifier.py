@@ -77,7 +77,7 @@ class SafeINotifier(threading.Thread):
         threading.Thread.__init__(self)
 
         # (:obj:`float`) timeout value for inotifyx get events
-        self.timeout = 1
+        self.timeout = 0.01
         # (:obj:`bool`) running loop flag
         self.running = True
         # (:obj:`int`) notifier ID
@@ -133,7 +133,7 @@ class SafeINotifier(threading.Thread):
         with self.id_queue_lock:
             self.wd_to_rm.append(qid)
             self.id_queue.pop(qid)
-            
+
     def run(self):
         """ scandir watcher thread
         """
