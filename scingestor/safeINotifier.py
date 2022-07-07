@@ -82,9 +82,6 @@ class SafeINotifier(threading.Thread):
         # (:obj:`dict` <:obj:`int`, :obj:`queue.Queue`>)
         # watch description queues
         self.id_queue = {}
-        # (:obj:`dict` <:obj:`int`, :obj:`list` <:obj:`int`> >)
-        # watch description queue ids
-        self.wd_qid = {}
         # (:obj:`dict` <:obj:`int`, :obj:`int`>)  queue ids watch description
         self.qid_wd = {}
         # (:obj:`int`) watch description queue counter
@@ -143,10 +140,6 @@ class SafeINotifier(threading.Thread):
                     for qid, path, masks in self.wd_to_add:
                         try:
                             wd = inotifyx.add_watch(self.notifier, path, masks)
-                            if wd in self.wd_qid.keys():
-                                self.wd_qid[wd].append(qid)
-                            else:
-                                self.wd_qid[wd] = [qid]
                             self.qid_wd[qid] = wd
 
                         except Exception as e:
@@ -158,17 +151,12 @@ class SafeINotifier(threading.Thread):
                     for qid in self.wd_to_rm:
                         if qid in self.qid_wd:
                             wd = self.qid_wd.pop(qid)
-                            if wd in self.wd_qid:
-                                if qid in self.wd_qid[wd]:
-                                    self.wd_qid[wd] = \
-                                        [qi for qi in self.wd_qid[wd]
-                                         if qi != qid]
-                                if len(self.wd_qid[wd]) == 0:
-                                    try:
-                                        inotifyx.rm_watch(self.notifier, wd)
-                                    except Exception as e:
-                                        get_logger().debug(
-                                            'SafeINotifier: %s' % str(e))
+                            if wd not in self.qid_wd.values():
+                                try:
+                                    inotifyx.rm_watch(self.notifier, wd)
+                                except Exception as e:
+                                    get_logger().debug(
+                                        'SafeINotifier: %s' % str(e))
                     self.wd_to_rm = []
                     qlen = len(self.id_queue)
 
@@ -184,19 +172,17 @@ class SafeINotifier(threading.Thread):
                                 'SN: %s %s %s' % (event.name,
                                                   event.get_mask_description(),
                                                   event.wd))
-                            if wd in self.wd_qid.keys():
-                                qids = self.wd_qid[wd]
-                                for qid in qids:
-                                    if qid in self.id_queue.keys():
-                                        wqueue = self.id_queue[qid]
-                                        wqueue.put(
-                                            EventData(
-                                                event.name,
-                                                wd,
-                                                event.get_mask_description()))
+                            for qid, wd in self.qid_wd.items():
+                                if qid in self.id_queue.keys():
+                                    wqueue = self.id_queue[qid]
+                                    wqueue.put(
+                                        EventData(
+                                            event.name,
+                                            wd,
+                                            event.get_mask_description()))
 
         finally:
-            for wd in self.wd_qid.keys():
+            for wd in self.qid_wd.values():
                 try:
                     inotifyx.rm_watch(self.notifier, wd)
                 except Exception as e:
