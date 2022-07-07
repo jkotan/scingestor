@@ -260,7 +260,7 @@ optional arguments:
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
-           cf.write(cfg)
+            cf.write(cfg)
         commands = [('scicat_dataset_ingestor -c %s -r3'
                      % cfgfname).split(),
                     ('scicat_dataset_ingestor --config %s -r3'
