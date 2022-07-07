@@ -167,7 +167,7 @@ class SafeINotifier(threading.Thread):
                                     try:
                                         inotifyx.rm_watch(self.notifier, wd)
                                     except Exception as e:
-                                        get_logger().warning(
+                                        get_logger().debug(
                                             'SafeINotifier: %s' % str(e))
                     self.wd_to_rm = []
                     qlen = len(self.id_queue)
@@ -200,7 +200,7 @@ class SafeINotifier(threading.Thread):
                 try:
                     inotifyx.rm_watch(self.notifier, wd)
                 except Exception as e:
-                    get_logger().warning(
+                    get_logger().debug(
                         'SafeINotifier: %s' % str(e))
 
     def stop(self):
