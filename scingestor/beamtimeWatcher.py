@@ -23,8 +23,10 @@ import json
 import threading
 import argparse
 import yaml
+import queue
 
 from .scanDirWatcher import ScanDirWatcher
+from .safeINotifier import SafeINotifier
 from .logger import get_logger, init_logger
 
 import inotifyx
@@ -87,7 +89,13 @@ class BeamtimeWatcher:
         self.wd_to_path = {}
         # (:obj:`dict` <:obj:`int`, :obj:`str`>)
         #                               beamtime watch description paths
+        self.wd_to_queue = {}
+        # (:obj:`dict` <:obj:`int`, :class:`queue.Queue`>)
+        #                               beamtime watch description paths
         self.wd_to_bpath = {}
+        # (:obj:`dict` <:obj:`int`, :class:`queue.Queue`>)
+        #                               beamtime watch description paths
+        self.wd_to_bqueue = {}
 
         # (:obj:`str`) beamtime file prefix
         self.bt_prefix = "beamtime-metadata-"
@@ -101,7 +109,7 @@ class BeamtimeWatcher:
         # (:class:`threading.Lock`) scandir watcher dictionary lock
         self.scandir_lock = threading.Lock()
         # (:obj:`float`) timeout value for inotifyx get events
-        self.timeout = 1
+        self.timeout = 0.1
         # (:obj:`str`) beamtime id
         self.__incd = None
         # (:obj:`str`) scicat url
@@ -156,7 +164,7 @@ class BeamtimeWatcher:
         :param paths: beamtime file paths
         :type paths: :obj:`list` <:obj:`str`>
         """
-        self.notifier = inotifyx.init()
+        self.notifier = SafeINotifier()
 
         for path in paths:
             self._add_path(path)
@@ -168,13 +176,14 @@ class BeamtimeWatcher:
         :type path: :obj:`str`
         """
         try:
-            watch_descriptor = inotifyx.add_watch(
-                self.notifier, path,
+            wqueue, watch_descriptor = self.notifier.add_watch(
+                path,
                 inotifyx.IN_CLOSE_WRITE | inotifyx.IN_DELETE |
                 inotifyx.IN_MOVE_SELF |
                 inotifyx.IN_ALL_EVENTS |
                 inotifyx.IN_MOVED_TO | inotifyx.IN_MOVED_FROM)
             self.wd_to_path[watch_descriptor] = path
+            self.wd_to_queue[watch_descriptor] = wqueue
             get_logger().info('BeamtimeWatcher: Adding watch %s: %s'
                               % (str(watch_descriptor), path))
         except Exception as e:
@@ -195,8 +204,8 @@ class BeamtimeWatcher:
 
                 if not bpath:
                     bpath = os.path.abspath()
-                watch_descriptor = inotifyx.add_watch(
-                    self.notifier, bpath,
+                bqueue, watch_descriptor = self.notifier.add_watch(
+                    bpath,
                     inotifyx.IN_CREATE | inotifyx.IN_CLOSE_WRITE
                     | inotifyx.IN_MOVED_TO
                     | inotifyx.IN_MOVE_SELF
@@ -205,6 +214,7 @@ class BeamtimeWatcher:
                 )
                 failing = False
                 self.wd_to_bpath[watch_descriptor] = bpath
+                self.wd_to_bqueue[watch_descriptor] = bqueue
                 self.wait_for_dirs[bpath] = path
                 get_logger().info('BeamtimeWatcher: '
                                   'Adding base watch %s: %s'
@@ -218,13 +228,15 @@ class BeamtimeWatcher:
         """ stop notifier
         """
         for wd in list(self.wd_to_path.keys()):
-            inotifyx.rm_watch(self.notifier, wd)
+            self.notifier.rm_watch(wd)
             path = self.wd_to_path.pop(wd)
+            self.wd_to_queue.pop(wd)
             get_logger().info('BeamtimeWatcher: '
                               'Removing watch %s: %s' % (str(wd), path))
         for wd in list(self.wd_to_bpath.keys()):
-            inotifyx.rm_watch(self.notifier, wd)
+            self.notifier.rm_watch(wd)
             path = self.wd_to_bpath.pop(wd)
+            self.wd_to_bqueue.pop(wd)
             get_logger().info('BeamtimeWatcher: '
                               'Removing base watch %s: %s' % (str(wd), path))
 
@@ -243,79 +255,96 @@ class BeamtimeWatcher:
 
             while self.running:
                 # time.sleep(self.delay)
-                events = inotifyx.get_events(self.notifier, self.timeout)
+                # events = inotifyx.get_events(self.notifier, self.timeout)
                 get_logger().debug('Bt Tic')
-                for event in events:
-                    if event.wd in self.wd_to_path.keys():
-                        get_logger().debug(
-                            'Bt: %s %s %s' % (event.name,
-                                              event.get_mask_description(),
-                                              self.wd_to_path[event.wd]))
-                        masks = event.get_mask_description().split("|")
-                        if "IN_IGNORED" in masks or \
-                           "IN_MOVE_FROM" in masks or \
-                           "IN_DELETE" in masks or \
-                           "IN_MOVE_SELF" in masks:
-                            # path/file  does not exist anymore (moved/deleted)
-                            path = self.wd_to_path.pop(event.wd)
-                            # get_logger().info(
-                            #     'BeamtimeWatcher: '
-                            #     'Removing watch on a IMDM event %s: %s'
-                            #     % (str(event.wd), path))
-                            get_logger().debug('Removed %s' % path)
-                            ffn = os.path.abspath(path)
-                            with self.scandir_lock:
-                                for ph, fl in \
-                                        list(self.scandir_watchers.keys()):
-                                    if ffn == fl or ph == ffn:
-                                        # stop scandir watcher if running
-                                        ds = self.scandir_watchers.pop(
-                                            (ph, fl))
-                                        ds.running = False
-                                        ds.join()
-                            self._add_path(path)
-
-                        elif "IN_CREATE" in masks or \
-                             "IN_MOVE_TO" in masks:
-
-                            files = [fl for fl in [event.name]
-                                     if (fl.startswith(self.bt_prefix) and
-                                         fl.endswith(self.bt_postfix))]
-                            if files:
-                                # new beamtime file
-                                self._lunch_scandir_watcher(
-                                    self.wd_to_path[event.wd], files)
-                            else:
-                                path = self.wd_to_path.pop(event.wd)
-                                get_logger().debug("POP path: %s" % path)
+                for qid in list(self.wd_to_queue.keys()):
+                    wqueue = self.wd_to_queue[qid]
+                    while not wqueue.empty():
+                        try:
+                            event = wqueue.get(block=False)
+                        except queue.Empty:
+                            break
+                        if qid in self.wd_to_path.keys():
+                            get_logger().debug(
+                                'Bt: %s %s %s' % (event.name,
+                                                  event.masks,
+                                                  self.wd_to_path[qid]))
+                            masks = event.masks.split("|")
+                            if "IN_IGNORED" in masks or \
+                               "IN_MOVE_FROM" in masks or \
+                               "IN_DELETE" in masks or \
+                               "IN_MOVE_SELF" in masks:
+                                # path/file does not exist anymore
+                                #     (moved/deleted)
+                                path = self.wd_to_path.pop(qid)
+                                self.wd_to_queue.pop(qid)
                                 # get_logger().info(
                                 #     'BeamtimeWatcher: '
-                                #     'Removing watch on a CM event %s: %s'
+                                #     'Removing watch on a IMDM event %s: %s'
                                 #     % (str(event.wd), path))
-                                files = self.find_bt_files(
-                                    path, self.bt_prefix, self.bt_postfix)
+                                get_logger().debug('Removed %s' % path)
+                                ffn = os.path.abspath(path)
+                                with self.scandir_lock:
+                                    for ph, fl in \
+                                            list(self.scandir_watchers.keys()):
+                                        if ffn == fl or ph == ffn:
+                                            # stop scandir watcher if running
+                                            ds = self.scandir_watchers.pop(
+                                                (ph, fl))
+                                            ds.running = False
+                                            ds.join()
+                                self._add_path(path)
 
-                                self._lunch_scandir_watcher(path, files)
+                            elif "IN_CREATE" in masks or \
+                                 "IN_MOVE_TO" in masks:
 
+                                files = [fl for fl in [event.name]
+                                         if (fl.startswith(self.bt_prefix) and
+                                             fl.endswith(self.bt_postfix))]
+                                if files:
+                                    # new beamtime file
+                                    self._lunch_scandir_watcher(
+                                        self.wd_to_path[qid], files)
+                                else:
+                                    path = self.wd_to_path.pop(qid)
+                                    self.wd_to_queue.pop(qid)
+                                    get_logger().debug("POP path: %s" % path)
+                                    # get_logger().info(
+                                    #     'BeamtimeWatcher: '
+                                    #     'Removing watch on a CM event %s: %s'
+                                    #     % (str(event.wd), path))
+                                    files = self.find_bt_files(
+                                        path, self.bt_prefix, self.bt_postfix)
+
+                                    self._lunch_scandir_watcher(path, files)
+
+                                get_logger().debug(
+                                    'Start beamtime %s' % event.name)
+                            # elif "IN_DELETE" in masks or \
+                            #      "IN_MOVE_MOVE" in masks:
+                            #     " remove scandir_watcher "
+
+                for qid in list(self.wd_to_queue.keys()):
+                    wqueue = self.wd_to_queue[qid]
+                    while not wqueue.empty():
+                        try:
+                            event = wqueue.get(block=False)
+                        except queue.Empty:
+                            break
+                        if event.wd in self.wd_to_bpath.keys():
                             get_logger().debug(
-                                'Start beamtime %s' % event.name)
-                        # elif "IN_DELETE" in masks or \
-                        #      "IN_MOVE_MOVE" in masks:
-                        #     " remove scandir_watcher "
-
-                    if event.wd in self.wd_to_bpath.keys():
-                        get_logger().debug(
-                            'BB: %s %s %s' % (event.name,
-                                              event.get_mask_description(),
-                                              self.wd_to_bpath[event.wd]))
-                        # if event.name is not None:
-                        bpath = self.wd_to_bpath.pop(event.wd)
-                        # npath = os.path.join(bpath, event.name)
-                        if "IN_IGNORED" not in \
-                           event.get_mask_description().split():
-                            inotifyx.rm_watch(self.notifier, event.wd)
-                        path = self.wait_for_dirs.pop(bpath)
-                        self._add_path(path)
+                                'BB: %s %s %s' % (event.name,
+                                                  event.masks,
+                                                  self.wd_to_bpath[event.wd]))
+                            # if event.name is not None:
+                            bpath = self.wd_to_bpath.pop(event.wd)
+                            # npath = os.path.join(bpath, event.name)
+                            if "IN_IGNORED" not in \
+                               event.masks.split():
+                                self.notifier.rm_watch(event.wd)
+                            path = self.wait_for_dirs.pop(bpath)
+                            self._add_path(path)
+                time.sleep(self.timeout)
                 get_logger().debug(
                     "Running: %s s" % (time.time() - self.__starttime))
                 if self.__runtime and \
@@ -369,7 +398,7 @@ class BeamtimeWatcher:
                               'Stopping ScanDirWatcher %s' % ffn)
             dsw.running = False
             dsw.join()
-        sys.exit(0)
+        #     sys.exit(0)
 
     def _signal_handle(self, sig, _):
         """ handle SIGTERM
@@ -423,4 +452,5 @@ def main():
 
     bw = BeamtimeWatcher(options)
     bw.start()
+    bw.notifier.running = False
     sys.exit(0)

@@ -28,6 +28,7 @@ import shutil
 import time
 
 from scingestor import beamtimeWatcher
+from scingestor import safeINotifier
 
 try:
     from cStringIO import StringIO
@@ -83,6 +84,7 @@ optional arguments:
        scicat_dataset_ingestor -l debug"""
 
         self.maxDiff = None
+        self.notifier = safeINotifier.SafeINotifier()
 
     def runtest(self, argv, pipeinput=None):
         old_stdout = sys.stdout
@@ -224,11 +226,13 @@ optional arguments:
                      % cfgfname).split()]
         try:
             for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
                 vl, er = self.runtest(cmd)
                 self.assertEqual(
-                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Removing watch 1: '
-                    '{basedir}\n'.format(basedir=fdirname), er)
+                    'INFO : BeamtimeWatcher: Adding watch {cnt}: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch {cnt}: '
+                    '{basedir}\n'.format(basedir=fdirname, cnt=cnt), er)
                 self.assertEqual('', vl)
         finally:
             if os.path.exists(cfgfname):
@@ -263,17 +267,21 @@ optional arguments:
                      % cfgfname).split()]
         try:
             for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
                 vl, er = self.runtest(cmd)
                 self.assertEqual(
-                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt2}: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                    '{basedir}\n'
                     'INFO : BeamtimeWatcher: '
                     'Stopping ScanDirWatcher {btmeta}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
-                    .format(basedir=fdirname, btmeta=fullbtmeta), er)
+                    'INFO : ScanDirWatcher: Removing watch {cnt2}: {basedir}\n'
+                    .format(basedir=fdirname, btmeta=fullbtmeta,
+                            cnt1=cnt, cnt2=(cnt + 1)), er)
                 self.assertEqual('', vl)
         finally:
             if os.path.exists(cfgfname):
@@ -301,9 +309,9 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r6'
+        commands = [('scicat_dataset_ingestor -c %s -r16'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r6'
+                    ('scicat_dataset_ingestor --config %s -r16'
                      % cfgfname).split()]
 
         def test_thread():
@@ -317,27 +325,32 @@ optional arguments:
 
         try:
             for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
                 th = threading.Thread(target=test_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
                 self.assertEqual(
-                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt2}: {basedir}\n'
                     # 'INFO : BeamtimeWatcher: Removing watch on a '
                     # 'IMDM event 1: {basedir}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt2}: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Adding watch {cnt3}: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt4}: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch {cnt3}: '
+                    '{basedir}\n'
                     'INFO : BeamtimeWatcher: '
                     'Stopping ScanDirWatcher {btmeta}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
-                    .format(basedir=fdirname, btmeta=fullbtmeta), er)
+                    'INFO : ScanDirWatcher: Removing watch {cnt4}: {basedir}\n'
+                    .format(basedir=fdirname, btmeta=fullbtmeta,
+                            cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                            cnt4=(cnt + 3)), er)
                 self.assertEqual('', vl)
         finally:
             if os.path.exists(cfgfname):

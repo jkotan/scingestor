@@ -29,6 +29,7 @@ import time
 import json
 
 from scingestor import beamtimeWatcher
+from scingestor import safeINotifier
 
 
 try:
@@ -74,6 +75,7 @@ class DatasetWatcherTest(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
 
         self.maxDiff = None
+        self.notifier = safeINotifier.SafeINotifier()
 
     def myAssertDict(self, dct, dct2, skip=None, parent=None):
         parent = parent or ""
@@ -239,6 +241,8 @@ class DatasetWatcherTest(unittest.TestCase):
                      % cfgfname).split()]
         try:
             for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -247,18 +251,18 @@ class DatasetWatcherTest(unittest.TestCase):
                 seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
                 # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
                 self.assertEqual(
-                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt2}: {basedir}\n'
                     'INFO : ScanDirWatcher: Create ScanDirWatcher '
                     '{subdir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt3}: {subdir}\n'
                     'INFO : ScanDirWatcher: Create ScanDirWatcher '
                     '{subdir2} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {subdir2}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt4}: {subdir2}\n'
                     'INFO : ScanDirWatcher: Creating DatasetWatcher {dslist}\n'
-                    'INFO : DatasetWatcher: Adding watch: '
+                    'INFO : DatasetWatcher: Adding watch {cnt5}: '
                     '{dslist} {idslist}\n'
                     'INFO : DatasetWatcher: Scans waiting: '
                     '[\'{sc1}\', \'{sc2}\']\n'
@@ -273,19 +277,22 @@ class DatasetWatcherTest(unittest.TestCase):
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetWatcher: Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
-                    'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                    '{basedir}\n'
                     'INFO : BeamtimeWatcher: '
                     'Stopping ScanDirWatcher {btmeta}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt2}: {basedir}\n'
                     'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt3}: {subdir}\n'
                     'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {subdir2}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt4}: {subdir2}\n'
                     'INFO : ScanDirWatcher: Stopping DatasetWatcher {dslist}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {dslist}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt5}: {dslist}\n'
                     .format(basedir=fdirname, btmeta=fullbtmeta,
                             subdir=fsubdirname, subdir2=fsubdirname2,
                             dslist=fdslist, idslist=fidslist,
+                            cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                            cnt4=(cnt + 3), cnt5=(cnt + 4),
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
                 self.assertEqual(
@@ -432,6 +439,8 @@ class DatasetWatcherTest(unittest.TestCase):
         try:
             for cmd in commands:
                 # print(cmd)
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
                 shutil.copy(lsource, fsubdirname2)
                 if os.path.exists(fidslist):
@@ -444,18 +453,18 @@ class DatasetWatcherTest(unittest.TestCase):
                 seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
                 # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
                 self.assertEqual(
-                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt2}: {basedir}\n'
                     'INFO : ScanDirWatcher: Create ScanDirWatcher '
                     '{subdir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt3}: {subdir}\n'
                     'INFO : ScanDirWatcher: Create ScanDirWatcher '
                     '{subdir2} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {subdir2}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt4}: {subdir2}\n'
                     'INFO : ScanDirWatcher: Creating DatasetWatcher {dslist}\n'
-                    'INFO : DatasetWatcher: Adding watch: '
+                    'INFO : DatasetWatcher: Adding watch {cnt5}: '
                     '{dslist} {idslist}\n'
                     'INFO : DatasetWatcher: Scans waiting: '
                     '[\'{sc1}\', \'{sc2}\']\n'
@@ -480,19 +489,22 @@ class DatasetWatcherTest(unittest.TestCase):
                     '{sc4} {subdir2}/{sc4}.scan.json\n'
                     'INFO : DatasetWatcher: Generating origdatablock metadata:'
                     ' {sc4} {subdir2}/{sc4}.origdatablock.json\n'
-                    'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                    '{basedir}\n'
                     'INFO : BeamtimeWatcher: '
                     'Stopping ScanDirWatcher {btmeta}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt2}: {basedir}\n'
                     'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt3}: {subdir}\n'
                     'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {subdir2}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt4}: {subdir2}\n'
                     'INFO : ScanDirWatcher: Stopping DatasetWatcher {dslist}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {dslist}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt5}: {dslist}\n'
                     .format(basedir=fdirname, btmeta=fullbtmeta,
                             subdir=fsubdirname, subdir2=fsubdirname2,
                             dslist=fdslist, idslist=fidslist,
+                            cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                            cnt4=(cnt + 3), cnt5=(cnt + 4),
                             sc1='myscan_00001', sc2='myscan_00002',
                             sc3='myscan_00003', sc4='myscan_00004'),
                     "\n".join(seri))

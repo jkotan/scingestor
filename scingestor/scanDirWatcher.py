@@ -17,16 +17,19 @@
 #
 import os
 import threading
-# import time
+import time
+import queue
+
 
 from .datasetWatcher import DatasetWatcher
+from .safeINotifier import SafeINotifier
 from .logger import get_logger
 
 import inotifyx
 
 
 class ScanDirWatcher(threading.Thread):
-    """ Beamtime Watcher
+    """ ScanDir Watcher
     """
 
     def __init__(self, path, meta, bpath, ingestorcred, scicat_url, delay=5):
@@ -71,6 +74,9 @@ class ScanDirWatcher(threading.Thread):
         self.notifier = None
         # (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
         self.wd_to_path = {}
+        # (:obj:`dict` <:obj:`int`, :obj:`str`>)
+        #                               beamtime watch description paths
+        self.wd_to_queue = {}
 
         # (:obj:`dict` <(:obj:`str`, :obj:`str`),
         #                :class:`scanDirWatcher.ScanDirWatcher`>)
@@ -79,7 +85,7 @@ class ScanDirWatcher(threading.Thread):
         # (:class:`threading.Lock`) dataset watcher dictionary lock
         self.dataset_lock = threading.Lock()
         # (:obj:`float`) timeout value for inotifyx get events
-        self.timeout = 1
+        self.timeout = 0.1
 
         # (:obj:`dict` <(:obj:`str`, :obj:`str`),
         #                :class:`scanDirWatcher.ScanDirWatcher`>)
@@ -101,7 +107,7 @@ class ScanDirWatcher(threading.Thread):
         :param path: beamtime file subpath
         :type path: :obj:`str
         """
-        self.notifier = inotifyx.init()
+        self.notifier = SafeINotifier()
         self._add_path(path)
 
     def _add_path(self, path):
@@ -111,14 +117,15 @@ class ScanDirWatcher(threading.Thread):
         :type path: :obj:`str`
         """
         try:
-            watch_descriptor = inotifyx.add_watch(
-                self.notifier, path,
+            wqueue, watch_descriptor = self.notifier.add_watch(
+                path,
                 inotifyx.IN_ALL_EVENTS |
                 inotifyx.IN_CLOSE_WRITE | inotifyx.IN_DELETE |
                 inotifyx.IN_MOVE_SELF |
                 inotifyx.IN_ALL_EVENTS |
                 inotifyx.IN_MOVED_TO | inotifyx.IN_MOVED_FROM)
             self.wd_to_path[watch_descriptor] = path
+            self.wd_to_queue[watch_descriptor] = wqueue
             get_logger().info('ScanDirWatcher: Adding watch %s: %s'
                               % (str(watch_descriptor), path))
             # get_logger().info('ScanDirWatcher START %s: %s'
@@ -130,16 +137,8 @@ class ScanDirWatcher(threading.Thread):
         """ stop notifier
         """
         for wd in list(self.wd_to_path.keys()):
-            try:
-                # get_logger().info( "IN %s %s:" %
-                # (self.notifier, wd))
-                inotifyx.rm_watch(self.notifier, wd)
-            except Exception as e:
-                # it looks like from time to time watch is removed by system
-                get_logger().debug(
-                    'ScanDirWatcher: %s' % str(e))
-
             path = self.wd_to_path.pop(wd, None)
+            self.wd_to_queue.pop(wd, None)
             get_logger().info(
                 'ScanDirWatcher: '
                 'Removing watch %s: %s' % (str(wd), path))
@@ -195,43 +194,50 @@ class ScanDirWatcher(threading.Thread):
 
             while self.running:
                 # time.sleep(self.delay)
-                events = inotifyx.get_events(self.notifier, self.timeout)
                 get_logger().debug('Dt Tac')
-                for event in events:
-                    if event.wd in self.wd_to_path.keys():
-                        get_logger().debug(
-                            'Sd: %s %s %s' % (event.name,
-                                              event.get_mask_description(),
-                                              self.wd_to_path[event.wd]))
-                        masks = event.get_mask_description().split("|")
-                        if "IN_ISDIR" in masks and (
-                                "IN_CREATE" in masks or "IN_MOVE_TO" in masks):
-                            npath = os.path.join(
-                                self.wd_to_path[event.wd], event.name)
-                            self._lunch_scandir_watcher([npath])
-                        elif "IN_CREATE" in masks or "IN_MOVE_TO" in masks:
-                            fn = os.path.join(
-                                self.wd_to_path[event.wd], event.name)
-                            with self.dataset_lock:
-                                if fn not in self.dataset_watchers.keys() and \
-                                   fn == self.dslist_fullname:
-                                    ifn = fn[:-(len(self.dslist_filename))] + \
-                                        self.idslist_filename
-                                    self.dataset_watchers[fn] = DatasetWatcher(
-                                        self.__path, fn, ifn, self.beamtimeId,
-                                        self.__bpath, self.__incd)
-                                    self.dataset_watchers[fn].start()
-                                    get_logger().info(
-                                        'ScanDirWatcher: Creating '
-                                        'DatasetWatcher %s' % fn)
+                for qid in list(self.wd_to_queue.keys()):
+                    wqueue = self.wd_to_queue[qid]
+                    while not wqueue.empty():
+                        try:
+                            event = wqueue.get(block=False)
+                        except queue.Empty:
+                            break
+                        if qid in self.wd_to_path.keys():
+                            get_logger().debug(
+                                'Sd: %s %s %s' % (event.name,
+                                                  event.masks,
+                                                  self.wd_to_path[qid]))
+                            masks = event.masks.split("|")
+                            if "IN_ISDIR" in masks and (
+                                    "IN_CREATE" in masks
+                                    or "IN_MOVE_TO" in masks):
+                                npath = os.path.join(
+                                    self.wd_to_path[qid], event.name)
+                                self._lunch_scandir_watcher([npath])
+                            elif "IN_CREATE" in masks or "IN_MOVE_TO" in masks:
+                                fn = os.path.join(
+                                    self.wd_to_path[qid], event.name)
+                                with self.dataset_lock:
+                                    if fn not in self.dataset_watchers.keys() \
+                                       and fn == self.dslist_fullname:
+                                        ifn = \
+                                            fn[:-(len(self.dslist_filename))] \
+                                            + self.idslist_filename
+                                        self.dataset_watchers[fn] = \
+                                            DatasetWatcher(
+                                            self.__path, fn, ifn,
+                                                self.beamtimeId,
+                                            self.__bpath, self.__incd)
+                                        self.dataset_watchers[fn].start()
+                                        get_logger().info(
+                                            'ScanDirWatcher: Creating '
+                                            'DatasetWatcher %s' % fn)
 
-                        # elif "IN_DELETE_SELF" in masks:
-                        #     "remove scandir watcher"
-                        #     # self.wd_to_path[event.wd]
+                            # elif "IN_DELETE_SELF" in masks:
+                            #     "remove scandir watcher"
+                            #     # self.wd_to_path[qid]
 
-        # except Exception as e:
-        #     get_logger().warn(str(e))
-        #     raise
+                time.sleep(self.timeout)
         finally:
             self.stop()
 
