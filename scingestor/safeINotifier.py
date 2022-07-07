@@ -66,6 +66,8 @@ class SafeINotifier(threading.Thread):
                     cls._notifier = super(SafeINotifier, cls).__new__(cls)
                     cls._notifier.init()
 
+                if not cls._notifier.running:
+                    cls._notifier.init()
         return cls._notifier
 
     def init(self):
@@ -131,7 +133,7 @@ class SafeINotifier(threading.Thread):
         with self.id_queue_lock:
             self.wd_to_rm.append(qid)
             self.id_queue.pop(qid)
-
+            
     def run(self):
         """ scandir watcher thread
         """

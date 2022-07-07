@@ -390,6 +390,7 @@ class BeamtimeWatcher:
         """
         get_logger().debug('Cleaning up...')
         self.running = False
+        # self.notifier.running = False
         time.sleep(0.2)
         self._stop_notifier()
         for pf, dsw in self.scandir_watchers.items():
