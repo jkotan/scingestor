@@ -28,6 +28,7 @@ import shutil
 import time
 
 from scingestor import beamtimeWatcher
+from scingestor import safeINotifier
 
 try:
     from cStringIO import StringIO
@@ -66,6 +67,7 @@ class ScanDirWatcherTest(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
 
         self.maxDiff = None
+        self.notifier = safeINotifier.SafeINotifier()
 
     def runtest(self, argv, pipeinput=None):
         old_stdout = sys.stdout
@@ -165,22 +167,25 @@ class ScanDirWatcherTest(unittest.TestCase):
                      % cfgfname).split()]
         try:
             for cmd in commands:
+                cnt = self.notifier.id_queue_counter + 1
                 vl, er = self.runtest(cmd)
                 self.assertEqual(
-                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher {basedir}'
                     ' {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt2}: {basedir}\n'
                     'INFO : ScanDirWatcher: Create ScanDirWatcher {subdir}'
                     ' {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {subdir}\n'
-                    'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt3}: {subdir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                    '{basedir}\n'
                     'INFO : BeamtimeWatcher: Stopping ScanDirWatcher {btmeta}'
                     '\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt2}: {basedir}\n'
                     'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt3}: {subdir}\n'
                     .format(basedir=fdirname, btmeta=fullbtmeta,
+                            cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
                             subdir=fsubdirname), er)
                 self.assertEqual('', vl)
         finally:
@@ -226,26 +231,28 @@ class ScanDirWatcherTest(unittest.TestCase):
 
         try:
             for cmd in commands:
+                cnt = self.notifier.id_queue_counter + 1
                 th = threading.Thread(target=test_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
                 self.assertEqual(
-                    'INFO : BeamtimeWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
                     '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt2}: {basedir}\n'
                     # 'INFO : BeamtimeWatcher: Removing watch on a '
                     # 'CM event 1: {basedir}\n'
                     'INFO : ScanDirWatcher: Create ScanDirWatcher '
                     '{subdir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt3}: {subdir}\n'
                     'INFO : BeamtimeWatcher: '
                     'Stopping ScanDirWatcher {btmeta}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {basedir}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt2}: {basedir}\n'
                     'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
-                    'INFO : ScanDirWatcher: Removing watch 1: {subdir}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt3}: {subdir}\n'
                     .format(basedir=fdirname, btmeta=fullbtmeta,
+                            cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
                             subdir=fsubdirname), er)
                 self.assertEqual('', vl)
         finally:
