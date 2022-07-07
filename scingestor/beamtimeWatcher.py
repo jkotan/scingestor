@@ -390,7 +390,6 @@ class BeamtimeWatcher:
         """
         get_logger().debug('Cleaning up...')
         self.running = False
-        # self.notifier.running = False
         time.sleep(0.2)
         self._stop_notifier()
         for pf, dsw in self.scandir_watchers.items():
@@ -399,7 +398,7 @@ class BeamtimeWatcher:
                               'Stopping ScanDirWatcher %s' % ffn)
             dsw.running = False
             dsw.join()
-        sys.exit(0)
+        #     sys.exit(0)
 
     def _signal_handle(self, sig, _):
         """ handle SIGTERM
@@ -453,4 +452,5 @@ def main():
 
     bw = BeamtimeWatcher(options)
     bw.start()
+    bw.notifier.running = False
     sys.exit(0)
