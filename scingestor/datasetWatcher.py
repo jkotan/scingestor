@@ -451,7 +451,7 @@ class DatasetWatcher(threading.Thread):
                             # get_logger().info(
                             #     'Ds: %s %s %s' % (event.name,
                             #                       event.masks,
-                            #                       self.wd_to_path[event.wd]))
+                            #                       self.wd_to_path[qid]))
                             get_logger().debug(
                                 'Ds: %s %s %s' % (event.name,
                                                   event.masks,

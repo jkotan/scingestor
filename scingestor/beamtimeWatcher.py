@@ -281,7 +281,7 @@ class BeamtimeWatcher:
                                 # get_logger().info(
                                 #     'BeamtimeWatcher: '
                                 #     'Removing watch on a IMDM event %s: %s'
-                                #     % (str(event.wd), path))
+                                #     % (str(qid), path))
                                 get_logger().debug('Removed %s' % path)
                                 ffn = os.path.abspath(path)
                                 with self.scandir_lock:
@@ -312,7 +312,7 @@ class BeamtimeWatcher:
                                     # get_logger().info(
                                     #     'BeamtimeWatcher: '
                                     #     'Removing watch on a CM event %s: %s'
-                                    #     % (str(event.wd), path))
+                                    #     % (str(qid), path))
                                     files = self.find_bt_files(
                                         path, self.bt_prefix, self.bt_postfix)
 
@@ -331,17 +331,17 @@ class BeamtimeWatcher:
                             event = wqueue.get(block=False)
                         except queue.Empty:
                             break
-                        if event.wd in self.wd_to_bpath.keys():
+                        if qid in self.wd_to_bpath.keys():
                             get_logger().debug(
                                 'BB: %s %s %s' % (event.name,
                                                   event.masks,
-                                                  self.wd_to_bpath[event.wd]))
+                                                  self.wd_to_bpath[qid]))
                             # if event.name is not None:
-                            bpath = self.wd_to_bpath.pop(event.wd)
+                            bpath = self.wd_to_bpath.pop(qid)
                             # npath = os.path.join(bpath, event.name)
                             if "IN_IGNORED" not in \
                                event.masks.split():
-                                self.notifier.rm_watch(event.wd)
+                                self.notifier.rm_watch(qid)
                             path = self.wait_for_dirs.pop(bpath)
                             self._add_path(path)
                 time.sleep(self.timeout)

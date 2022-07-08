@@ -421,9 +421,9 @@ class DatasetWatcherTest(unittest.TestCase):
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
 
-        commands = [('scicat_dataset_ingestor -c %s -r26'
+        commands = [('scicat_dataset_ingestor -c %s -r36'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r26'
+                    ('scicat_dataset_ingestor --config %s -r36'
                      % cfgfname).split()]
 
         def test_thread():
@@ -435,7 +435,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 fds.write("myscan_00003\n")
                 fds.write("myscan_00004\n")
 
-        #        commands.pop()
+        # commands.pop()
         try:
             for cmd in commands:
                 # print(cmd)
@@ -452,6 +452,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 ser = er.split("\n")
                 seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
                 # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                # print(er)
                 self.assertEqual(
                     'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
                     'INFO : BeamtimeWatcher: Create ScanDirWatcher '
