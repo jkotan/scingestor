@@ -38,6 +38,8 @@ def init_logger(name=__name__, level='debug'):
     stdout_handler.setLevel(ll)
     stdout_handler.setFormatter(
         logging.Formatter('%(levelname)s : %(message)s'))
+    # logging.Formatter("%(created)s : %(levelname)s : %(message)s",
+    #                   "%Y-%m-%d %H:%M:%S"))
     _logger.addHandler(stdout_handler)
 
 
