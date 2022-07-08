@@ -235,9 +235,9 @@ class DatasetWatcherTest(unittest.TestCase):
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r8'
+        commands = [('scicat_dataset_ingestor -c %s -r18'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r8'
+                    ('scicat_dataset_ingestor --config %s -r18'
                      % cfgfname).split()]
         try:
             for cmd in commands:
@@ -264,9 +264,9 @@ class DatasetWatcherTest(unittest.TestCase):
                     'INFO : ScanDirWatcher: Creating DatasetWatcher {dslist}\n'
                     'INFO : DatasetWatcher: Adding watch {cnt5}: '
                     '{dslist} {idslist}\n'
-                    'INFO : DatasetWatcher: Scans waiting: '
+                    'INFO : DatasetWatcher: Waiting datasets: '
                     '[\'{sc1}\', \'{sc2}\']\n'
-                    'INFO : DatasetWatcher: Scans ingested: []\n'
+                    'INFO : DatasetWatcher: Ingested datasets: []\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
                     'INFO : DatasetWatcher: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
@@ -467,9 +467,9 @@ class DatasetWatcherTest(unittest.TestCase):
                     'INFO : ScanDirWatcher: Creating DatasetWatcher {dslist}\n'
                     'INFO : DatasetWatcher: Adding watch {cnt5}: '
                     '{dslist} {idslist}\n'
-                    'INFO : DatasetWatcher: Scans waiting: '
+                    'INFO : DatasetWatcher: Waiting datasets: '
                     '[\'{sc1}\', \'{sc2}\']\n'
-                    'INFO : DatasetWatcher: Scans ingested: []\n'
+                    'INFO : DatasetWatcher: Ingested datasets: []\n'
                     'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
                     'INFO : DatasetWatcher: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
