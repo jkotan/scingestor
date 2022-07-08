@@ -114,11 +114,11 @@ class DatasetIngestor:
         self.__headers = {'Content-Type': 'application/json',
                           'Accept': 'application/json'}
 
-        # (:obj:`str`) token url
         # self.__tokenurl = "http://www-science3d.desy.de:3000/api/v3/" \
         #       "Users/login"
         if not self.__scicat_url.endswith("/"):
             self.__scicat_url = self.__scicat_url + "/"
+        # (:obj:`str`) token url
         self.__tokenurl = self.__scicat_url + "Users/login"
         # get_logger().info(
         #     'DatasetWatcher: LOGIN %s' % self.__tokenurl)
@@ -385,7 +385,7 @@ class DatasetIngestor:
     def clear_waiting_datasets(self):
         """ clear waitings datasets
         """
-        self.sc_waiting = []
+        self.__sc_waiting = []
 
     def ingested_datasets(self):
         """ provides ingested datasets

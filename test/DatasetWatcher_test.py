@@ -239,6 +239,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      % cfgfname).split(),
                     ('scicat_dataset_ingestor --config %s -r18'
                      % cfgfname).split()]
+        # commands.pop()
         try:
             for cmd in commands:
                 self.notifier = safeINotifier.SafeINotifier()
@@ -249,6 +250,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 vl, er = self.runtest(cmd)
                 ser = er.split("\n")
                 seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                # print(er)
                 # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
                 self.assertEqual(
                     'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'

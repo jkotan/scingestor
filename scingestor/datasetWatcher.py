@@ -142,6 +142,7 @@ class DatasetWatcher(threading.Thread):
             token = self.ingestor.get_token()
             for scan in self.ingestor.waiting_datasets():
                 self.ingestor.ingest(scan, token)
+            self.ingestor.clear_waiting_datasets()
 
         counter = 0
         try:
@@ -149,7 +150,6 @@ class DatasetWatcher(threading.Thread):
 
                 get_logger().debug('Sc Talk')
 
-                self.ingestor.clear_waiting_datasets()
                 for qid in list(self.wd_to_queue.keys()):
                     wqueue = self.wd_to_queue[qid]
                     while not wqueue.empty():
@@ -213,6 +213,7 @@ class DatasetWatcher(threading.Thread):
                     token = self.ingestor.get_token()
                     for scan in self.ingestor.waiting_datasets():
                         self.ingestor.ingest(scan, token)
+                    self.ingestor.clear_waiting_datasets()
 
                 time.sleep(self.timeout)
         finally:
