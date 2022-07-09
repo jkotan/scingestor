@@ -71,7 +71,7 @@ class DatasetWatcher(threading.Thread):
         self.wd_to_queue = {}
 
         # (:obj:`float`) timeout value for inotifyx get events in s
-        self.timeout = 0.1
+        self.timeout = 1.0
         # (:obj:`float`) time to recheck the dataset list
         self.checktime = 100
 
@@ -152,42 +152,41 @@ class DatasetWatcher(threading.Thread):
 
                 for qid in list(self.wd_to_queue.keys()):
                     wqueue = self.wd_to_queue[qid]
-                    while not wqueue.empty():
-                        try:
-                            event = wqueue.get(block=False)
-                        except queue.Empty:
-                            break
-                        if qid in self.wd_to_path.keys():
-                            # get_logger().info(
-                            #     'Ds: %s %s %s' % (event.name,
-                            #                       event.masks,
-                            #                       self.wd_to_path[qid]))
-                            get_logger().debug(
-                                'Ds: %s %s %s' % (event.name,
-                                                  event.masks,
-                                                  self.wd_to_path[qid]))
-                            masks = event.masks.split("|")
-                            if "IN_CLOSE_WRITE" in masks:
-                                if event.name:
-                                    fdir, fname = os.path.split(
-                                        self.wd_to_path[qid])
-                                    ffn = os.path.join(fdir, event.name)
-                                else:
-                                    ffn = self.wd_to_path[qid]
-                                if ffn is not None and ffn == self.__dsfile:
+                    try:
+                        event = wqueue.get(block=True, timeout=self.timeout)
+                    except queue.Empty:
+                        break
+                    if qid in self.wd_to_path.keys():
+                        # get_logger().info(
+                        #     'Ds: %s %s %s' % (event.name,
+                        #                       event.masks,
+                        #                       self.wd_to_path[qid]))
+                        get_logger().debug(
+                            'Ds: %s %s %s' % (event.name,
+                                              event.masks,
+                                              self.wd_to_path[qid]))
+                        masks = event.masks.split("|")
+                        if "IN_CLOSE_WRITE" in masks:
+                            if event.name:
+                                fdir, fname = os.path.split(
+                                    self.wd_to_path[qid])
+                                ffn = os.path.join(fdir, event.name)
+                            else:
+                                ffn = self.wd_to_path[qid]
+                            if ffn is not None and ffn == self.__dsfile:
+                                get_logger().debug(
+                                    'DatasetWatcher: Changed %s' % ffn)
+                                self.ingestor.check_list()
+                        elif "IN_MODIFY" in masks or "IN_OPEN" in masks:
+                            if event.name:
+                                fdir, fname = os.path.split(
+                                    self.wd_to_path[qid])
+                                ffn = os.path.join(fdir, event.name)
+                                if ffn is not None and \
+                                   ffn == self.__dsfile:
                                     get_logger().debug(
                                         'DatasetWatcher: Changed %s' % ffn)
                                     self.ingestor.check_list()
-                            elif "IN_MODIFY" in masks or "IN_OPEN" in masks:
-                                if event.name:
-                                    fdir, fname = os.path.split(
-                                        self.wd_to_path[qid])
-                                    ffn = os.path.join(fdir, event.name)
-                                    if ffn is not None and \
-                                       ffn == self.__dsfile:
-                                        get_logger().debug(
-                                            'DatasetWatcher: Changed %s' % ffn)
-                                        self.ingestor.check_list()
 
                 if counter == self.checktime:
                     # if inotify does not work
@@ -214,8 +213,8 @@ class DatasetWatcher(threading.Thread):
                     for scan in self.ingestor.waiting_datasets():
                         self.ingestor.ingest(scan, token)
                     self.ingestor.clear_waiting_datasets()
-
-                time.sleep(self.timeout)
+                # else:
+                #     time.sleep(self.timeout)
         finally:
             self.stop()
 
