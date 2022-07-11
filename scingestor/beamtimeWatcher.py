@@ -261,7 +261,12 @@ class BeamtimeWatcher:
                     wqueue = self.wd_to_queue[qid]
                     while not wqueue.empty():
                         try:
-                            event = wqueue.get(block=False)
+                            try:
+                                timeout = self.timeout \
+                                    / len(list(self.wd_to_queue.keys()))
+                            except Exception:
+                                timeout = self.timeout
+                            event = wqueue.get(block=True, timeout=timeout)
                         except queue.Empty:
                             break
                         if qid in self.wd_to_path.keys():
@@ -324,14 +329,7 @@ class BeamtimeWatcher:
                             #      "IN_MOVE_MOVE" in masks:
                             #     " remove scandir_watcher "
 
-                for qid in list(self.wd_to_queue.keys()):
-                    wqueue = self.wd_to_queue[qid]
-                    while not wqueue.empty():
-                        try:
-                            event = wqueue.get(block=False)
-                        except queue.Empty:
-                            break
-                        if qid in self.wd_to_bpath.keys():
+                        elif qid in self.wd_to_bpath.keys():
                             get_logger().debug(
                                 'BB: %s %s %s' % (event.name,
                                                   event.masks,
@@ -344,7 +342,6 @@ class BeamtimeWatcher:
                                 self.notifier.rm_watch(qid)
                             path = self.wait_for_dirs.pop(bpath)
                             self._add_path(path)
-                time.sleep(self.timeout)
                 get_logger().debug(
                     "Running: %s s" % (time.time() - self.__starttime))
                 if self.__runtime and \
