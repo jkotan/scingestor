@@ -17,7 +17,7 @@
 #
 import os
 import threading
-# import time
+import time
 import queue
 
 
@@ -195,6 +195,8 @@ class ScanDirWatcher(threading.Thread):
             while self.running:
                 # time.sleep(self.delay)
                 get_logger().debug('Dt Tac')
+                if not self.wd_to_queue:
+                    time.sleep(self.timeout/10.)
                 for qid in list(self.wd_to_queue.keys()):
                     wqueue = self.wd_to_queue[qid]
                     try:
