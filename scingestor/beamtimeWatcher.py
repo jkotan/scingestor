@@ -22,29 +22,13 @@ import sys
 import json
 import threading
 import argparse
-import yaml
 import queue
+import inotifyx
 
 from .scanDirWatcher import ScanDirWatcher
 from .safeINotifier import SafeINotifier
+from .configuration import load_config
 from .logger import get_logger, init_logger
-
-import inotifyx
-
-
-def load_config(configfile):
-    """ load config file
-
-    :param configfile: configuration file name
-    :type configfile: :obj:`str`
-    """
-    config = {}
-    try:
-        with open(configfile, 'r') as f:
-            config = yaml.safe_load(f)
-    except Exception as e:
-        get_logger().warning(str(e))
-    return config
 
 
 class BeamtimeWatcher:

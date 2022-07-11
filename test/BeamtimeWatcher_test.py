@@ -309,9 +309,9 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r16'
+        commands = [('scicat_dataset_ingestor -c %s -r20'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r16'
+                    ('scicat_dataset_ingestor --config %s -r20'
                      % cfgfname).split()]
 
         def test_thread():

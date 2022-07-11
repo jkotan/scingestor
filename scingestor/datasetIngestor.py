@@ -72,6 +72,9 @@ class DatasetIngestor:
         self.__sc_ingested = []
         # (:obj:`list`<:obj:`str`>) waiting scan names
         self.__sc_waiting = []
+        # (:obj:`dict`<:obj:`str`, :obj:`list`<:obj:`str`>>)
+        #   ingested scan names
+        self.__sc_ingested_map = {}
 
         # (:obj:`str`) raw dataset scan postfix
         self.__scanpostfix = ".scan*"
@@ -318,7 +321,9 @@ class DatasetIngestor:
         """ ingest scan
 
         :param scan: scan name
-        :type scan: :obj:`str
+        :type scan: :obj:`str`
+        :param token: access token
+        :type token: :obj:`str`
         """
         get_logger().info(
             'DatasetWatcher: Ingesting: %s %s' % (
@@ -357,7 +362,55 @@ class DatasetIngestor:
         with open(self.__idsfile, 'a+') as f:
             f.write("%s %s\n" % (scan, ctime))
 
-    def check_list(self):
+    def reingest(self, scan, token):
+        """ ingest scan
+
+        :param scan: scan name
+        :type scan: :obj:`str`
+        :param token: access token
+        :type token: :obj:`str`
+        """
+        get_logger().info(
+            'DatasetWatcher: Reingesting: %s %s' % (
+                self.__dsfile, scan))
+
+        self.__dctfmt["scanname"] = scan
+
+        rdss = glob.glob(
+            "{scan}{postfix}.json".format(
+                scan=scan, postfix=self.__scanpostfix))
+        
+        if rdss and rdss[0]:
+            rds = rdss[0]
+            
+            mtm = os.path.getmtime(rds)
+        else:
+            rds = self._generate_rawdataset_metadata(scan)
+
+        odbs = glob.glob(
+            "{scan}{postfix}.json".format(
+                scan=scan, postfix=self.__datablockpostfix))
+        if odbs and odbs[0]:
+            odb = odbs[0]
+        else:
+            odb = self._generate_origdatablock_metadata(scan)
+        dbstatus = None
+
+        if rds and odb:
+            if rds and rds[0]:
+                pid = self._ingest_rawdataset_metadata(rds, token)
+            if odb and odb[0] and pid:
+                dbstatus = self._ingest_origdatablock_metadata(
+                    odb, pid, token)
+        if pid and dbstatus:
+            ctime = time.time()
+        else:
+            ctime = 0
+        self.__sc_ingested.append([scan, str(ctime)])
+        with open(self.__idsfile, 'a+') as f:
+            f.write("%s %s\n" % (scan, ctime))
+
+    def check_list(self, reingest=False):
         """ update waiting and ingested datasets
         """
         with open(self.__dsfile, "r") as dsf:
@@ -370,9 +423,19 @@ class DatasetIngestor:
                     sc.strip().split(" ")
                     for sc in idsf.read().split("\n")
                     if sc.strip()]
-        ingested = [sc[0] for sc in self.__sc_ingested]
-        self.__sc_waiting = [
-            sc for sc in scans if sc not in ingested]
+        if not reingest:
+            ingested = [sc[0] for sc in self.__sc_ingested]
+            self.__sc_waiting = [
+                sc for sc in scans if sc not in ingested]
+        else:
+            self.__sc_waiting = [sc for sc in scans]
+            self.__sc_ingested_map = {}
+            for sc in self.__sc_ingested:
+                try:
+                    if len(sc) > 1 and sc[-1] > 0:
+                        self.__sc_ingested_map[sc[0]] = sc
+                except Exception:
+                    pass            
 
     def waiting_datasets(self):
         """ provides waitings datasets
