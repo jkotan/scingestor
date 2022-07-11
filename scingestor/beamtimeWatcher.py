@@ -254,15 +254,15 @@ class BeamtimeWatcher:
                 get_logger().debug('Files of %s: %s' % (path, files))
 
             while self.running:
-                # time.sleep(self.delay)
-                # events = inotifyx.get_events(self.notifier, self.timeout)
                 get_logger().debug('Bt Tic')
+                if not self.wd_to_queue:
+                    time.sleep(self.timeout/10.)
                 for qid in list(self.wd_to_queue.keys()):
                     wqueue = self.wd_to_queue[qid]
                     try:
                         try:
                             timeout = self.timeout \
-                                / len(list(self.wd_to_queue.keys()))
+                                / len(self.wd_to_queue)
                         except Exception:
                             timeout = self.timeout
                         event = wqueue.get(block=True, timeout=timeout)

@@ -150,6 +150,8 @@ class DatasetWatcher(threading.Thread):
 
                 get_logger().debug('Sc Talk')
 
+                if not self.wd_to_queue:
+                    time.sleep(self.timeout/10.)
                 for qid in list(self.wd_to_queue.keys()):
                     wqueue = self.wd_to_queue[qid]
                     try:
