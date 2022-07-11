@@ -19,7 +19,6 @@
 #
 import time
 import sys
-import signal
 import argparse
 import os
 import glob
@@ -41,9 +40,6 @@ class DatasetIngest:
         :param options: time delay
         :type options: :obj:`str`
         """
-
-        signal.signal(signal.SIGTERM, self._signal_handle)
-
         # (:obj:`dict` <:obj:`str`, `any`>) beamtime configuration
         self.__config = {}
         # (:obj:`list` <:obj:`str`>) beamtime directories
@@ -85,7 +81,7 @@ class DatasetIngest:
 
         if not self.beamtime_dirs:
             get_logger().warning(
-                'BeamtimeWatcher: '
+                'DatasetIngest: '
                 'Beamtime directories not defined')
         else:
             self.start()
@@ -148,14 +144,17 @@ class DatasetIngest:
             "%s/**/%s" % (path, dslist_filename), recursive=True)
         for fn in dslfiles:
             ifn = fn[:-(len(dslist_filename))] + idslist_filename
+            scpath, pfn = os.path.split(fn)
             ingestor = DatasetIngestor(
-                path, fn, ifn, beamtimeId, bpath,
+                scpath, fn, ifn, beamtimeId, bpath,
                 ingestorcred, scicat_url, 0)
             ingestor.check_list(reingest=True)
+            ingestor.clear_tmpfile()
             if ingestor.waiting_datasets():
                 token = ingestor.get_token()
                 for scan in ingestor.waiting_datasets():
-                    ingestor.reingest(scan, token, reingest=True)
+                    ingestor.reingest(scan, token)
+            ingestor.update_from_tmpfile()
 
     def find_bt_files(self, path, prefix, postfix):
         """ find beamtime files with given prefix and postfix in the given path

@@ -57,6 +57,8 @@ class DatasetIngestor:
         self.__dsfile = dsfile
         # (:obj:`str`) file with a ingested dataset list
         self.__idsfile = idsfile
+        # (:obj:`str`) file with a ingested dataset list
+        self.__idsfiletmp = "%s%s" % (idsfile, ".tmp")
         # (:obj:`str`) scan path dir
         self.__path = path
         # (:obj:`str`) beamtime id
@@ -95,6 +97,10 @@ class DatasetIngestor:
             " -p {beamtimeid}/{scanname} " \
             " -o {scanpath}/{scanname}{dbpostfix}.json " \
             " {scanpath}/{scanname}"
+        # (:obj:`str`) datablock shell command
+        self.__datablockmemcommand = "nxsfileinfo origdatablock " \
+            " -p {beamtimeid}/{scanname} " \
+            " {scanpath}/{scanname}"
 
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
         self.__dctfmt = {
@@ -106,7 +112,7 @@ class DatasetIngestor:
             "dbpostfix": self.__datablockpostfix.replace("*", ""),
         }
         get_logger().debug(
-            'DatasetWatcher: Parameters: %s' % str(self.__dctfmt))
+            'DatasetIngestor: Parameters: %s' % str(self.__dctfmt))
 
         # (:obj:`float`) timeout value for inotifyx get events in s
         self.timeout = 0.1
@@ -124,7 +130,7 @@ class DatasetIngestor:
         # (:obj:`str`) token url
         self.__tokenurl = self.__scicat_url + "Users/login"
         # get_logger().info(
-        #     'DatasetWatcher: LOGIN %s' % self.__tokenurl)
+        #     'DatasetIngestor: LOGIN %s' % self.__tokenurl)
         # (:obj:`str`) dataset url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #    "Datasets"
@@ -145,23 +151,23 @@ class DatasetIngestor:
         nxsmasterfile = "{scanpath}/{scanname}.nxs".format(**self.__dctfmt)
         if os.path.isfile(nxsmasterfile):
             get_logger().info(
-                'DatasetWatcher: Generating nxs metadata: %s %s' % (
+                'DatasetIngestor: Generating nxs metadata: %s %s' % (
                     scan,
                     "{scanpath}/{scanname}{scpostfix}.json".format(
                         **self.__dctfmt)))
             get_logger().debug(
-                'DatasetWatcher: Generating dataset command: %s ' % (
+                'DatasetIngestor: Generating dataset command: %s ' % (
                     self.__datasetcommandnxs.format(**self.__dctfmt)))
             subprocess.run(
                 self.__datasetcommandnxs.format(**self.__dctfmt).split())
         else:
             get_logger().info(
-                'DatasetWatcher: Generating metadata: %s %s' % (
+                'DatasetIngestor: Generating metadata: %s %s' % (
                     scan,
                     "{scanpath}/{scanname}{scpostfix}.json".format(
                         **self.__dctfmt)))
             get_logger().debug(
-                'DatasetWatcher: Generating dataset command: %s ' % (
+                'DatasetIngestor: Generating dataset command: %s ' % (
                     self.__datasetcommand.format(**self.__dctfmt)))
             subprocess.run(
                 self.__datasetcommand.format(**self.__dctfmt).split())
@@ -182,12 +188,12 @@ class DatasetIngestor:
         :rtype: :obj:`str
         """
         get_logger().info(
-            'DatasetWatcher: Generating origdatablock metadata: %s %s' % (
+            'DatasetIngestor: Generating origdatablock metadata: %s %s' % (
                 scan,
                 "{scanpath}/{scanname}{dbpostfix}.json".format(
                     **self.__dctfmt)))
         get_logger().debug(
-            'DatasetWatcher: Generating origdatablock command: %s ' % (
+            'DatasetIngestor: Generating origdatablock command: %s ' % (
                 self.__datablockcommand.format(**self.__dctfmt)))
         subprocess.run(
             self.__datablockcommand.format(**self.__dctfmt).split())
@@ -197,6 +203,84 @@ class DatasetIngestor:
         if odbs and odbs[0]:
             return odbs[0]
         return ""
+
+    def _regenerate_origdatablock_metadata(self, scan):
+        """o generate origdatablock metadata
+
+        :param scan: scan name
+        :type scan: :obj:`str
+        :returns: a file name of generate file
+        :rtype: :obj:`str
+        """
+        mfilename = "{scanpath}/{scanname}{dbpostfix}.json".format(
+            **self.__dctfmt)
+        get_logger().info(
+            'DatasetIngestor: Checking origdatablock metadata: %s %s' % (
+                scan, mfilename))
+        get_logger().debug(
+            'DatasetIngestor: Checking origdatablock command: %s ' % (
+                self.__datablockcommand.format(**self.__dctfmt)))
+        dmeta = None
+        try:
+            with open(mfilename, "r") as mf:
+                meta = mf.read()
+                dmeta = json.loads(meta)
+        except Exception as e:
+            get_logger().warning('%s: %s' % (scan, str(e)))
+
+        if dmeta is None:
+            subprocess.run(
+                self.__datablockcommand.format(**self.__dctfmt).split())
+        else:
+            result = subprocess.run(
+                self.__datablockmemcommand.format(**self.__dctfmt).split(),
+                text=True, capture_output=True)
+            nwmeta = str(result.stdout)
+            try:
+                dnwmeta = json.loads(nwmeta)
+            except Exception as e:
+                get_logger().warning('%s: %s' % (scan, str(e)))
+                dnwmeta = None
+            if dnwmeta is not None:
+                if self._metadataEqual(dmeta, dnwmeta):
+                    with open(mfilename, "w") as mf:
+                        mf.write()
+                        dmeta = json.loads(meta)
+
+        odbs = glob.glob(
+            "{scanpath}/{scanname}{dbpostfix}.json".format(
+                    **self.__dctfmt))
+        if odbs and odbs[0]:
+            return odbs[0]
+        return ""
+
+    def _metadataEqual(self, dct, dct2, skip=None, parent=None):
+        parent = parent or ""
+        if len(list(dct.keys())) != len(list(dct2.keys())):
+            return False
+        status = True
+        for k, v in dct.items():
+            if parent:
+                node = "%s.%s" % (parent, k)
+            else:
+                node = k
+
+            if k not in dct2.keys():
+                status = False
+                break
+
+            if not skip or node not in skip:
+
+                if isinstance(v, dict):
+                    if not self._areMetadataEqual(v, dct2[k], skip, node):
+                        status = False
+                        break
+                else:
+                    if v != dct2[k]:
+                        status = False
+                        break
+
+        return status
 
     def get_token(self):
         """ provides ingestor token
@@ -214,7 +298,7 @@ class DatasetIngestor:
                 raise Exception("%s" % response.text)
         except Exception as e:
             get_logger().error(
-                'DatasetWatcher: %s' % (str(e)))
+                'DatasetIngestor: %s' % (str(e)))
         return ""
 
     def _ingest_dataset(self, metadata, token):
@@ -239,7 +323,7 @@ class DatasetIngestor:
 
         except Exception as e:
             get_logger().error(
-                'DatasetWatcher: %s' % (str(e)))
+                'DatasetIngestor: %s' % (str(e)))
         return False
 
     def _ingest_origdatablock(self, metadata, token):
@@ -256,7 +340,7 @@ class DatasetIngestor:
                 raise Exception("%s" % response.text)
         except Exception as e:
             get_logger().error(
-                'DatasetWatcher: %s' % (str(e)))
+                'DatasetIngestor: %s' % (str(e)))
         return False
 
     def _ingest_rawdataset_metadata(self, metafile, token):
@@ -284,7 +368,7 @@ class DatasetIngestor:
                 return mt["pid"]
         except Exception as e:
             get_logger().error(
-                'DatasetWatcher: %s' % (str(e)))
+                'DatasetIngestor: %s' % (str(e)))
         return None
 
     def _ingest_origdatablock_metadata(self, metafile, pid, token):
@@ -314,7 +398,7 @@ class DatasetIngestor:
                 return mt["datasetId"]
         except Exception as e:
             get_logger().error(
-                'DatasetWatcher: %s' % (str(e)))
+                'DatasetIngestor: %s' % (str(e)))
         return ""
 
     def ingest(self, scan, token):
@@ -326,22 +410,24 @@ class DatasetIngestor:
         :type token: :obj:`str`
         """
         get_logger().info(
-            'DatasetWatcher: Ingesting: %s %s' % (
+            'DatasetIngestor: Ingesting: %s %s' % (
                 self.__dsfile, scan))
 
         self.__dctfmt["scanname"] = scan
 
         rdss = glob.glob(
-            "{scan}{postfix}.json".format(
-                scan=scan, postfix=self.__scanpostfix))
+            "{scanpath}/{scan}{postfix}.json".format(
+                scan=scan, postfix=self.__scanpostfix,
+                scanpath=self.__dctfmt["scanpath"]))
         if rdss and rdss[0]:
             rds = rdss[0]
         else:
             rds = self._generate_rawdataset_metadata(scan)
 
         odbs = glob.glob(
-            "{scan}{postfix}.json".format(
-                scan=scan, postfix=self.__datablockpostfix))
+            "{scanpath}/{scan}{postfix}.json".format(
+                scan=scan, postfix=self.__datablockpostfix,
+                scanpath=self.__dctfmt["scanpath"]))
         if odbs and odbs[0]:
             odb = odbs[0]
         else:
@@ -371,43 +457,80 @@ class DatasetIngestor:
         :type token: :obj:`str`
         """
         get_logger().info(
-            'DatasetWatcher: Reingesting: %s %s' % (
+            'DatasetIngestor: Checking: %s %s' % (
                 self.__dsfile, scan))
 
+        reingest_dataset = False
+        reingest_origdatablock = False
         self.__dctfmt["scanname"] = scan
-
         rdss = glob.glob(
-            "{scan}{postfix}.json".format(
-                scan=scan, postfix=self.__scanpostfix))
-        
+            "{scanpath}/{scan}{postfix}.json".format(
+                scan=scan, postfix=self.__scanpostfix,
+                scanpath=self.__dctfmt["scanpath"]))
+
         if rdss and rdss[0]:
             rds = rdss[0]
-            
             mtm = os.path.getmtime(rds)
+            # print(self.__sc_ingested_map.keys())
+
+            if scan in self.__sc_ingested_map.keys():
+                get_logger().debug("DS Timestamps: %s %s %s %s" % (
+                    scan,
+                    mtm, self.__sc_ingested_map[scan][-1],
+                    mtm > self.__sc_ingested_map[scan][-1]))
+
+            if scan not in self.__sc_ingested_map.keys() \
+               or mtm > self.__sc_ingested_map[scan][-1]:
+                reingest_dataset = True
         else:
             rds = self._generate_rawdataset_metadata(scan)
+            get_logger().debug("DS No File: %s True" % (scan))
+            reingest_dataset = True
 
         odbs = glob.glob(
-            "{scan}{postfix}.json".format(
-                scan=scan, postfix=self.__datablockpostfix))
+            "{scanpath}/{scan}{postfix}.json".format(
+                scan=scan, postfix=self.__datablockpostfix,
+                scanpath=self.__dctfmt["scanpath"]))
         if odbs and odbs[0]:
             odb = odbs[0]
+            mtm = os.path.getmtime(odb)
+            self._regenerate_origdatablock_metadata(scan)
+
+            if scan in self.__sc_ingested_map.keys():
+                get_logger().debug("DB Timestamps: %s %s %s %s" % (
+                    scan,
+                    mtm, self.__sc_ingested_map[scan][-1],
+                    mtm > self.__sc_ingested_map[scan][-1]))
+
+            if scan not in self.__sc_ingested_map.keys() \
+               or mtm > self.__sc_ingested_map[scan][-1]:
+                reingest_origdatablock = True
         else:
             odb = self._generate_origdatablock_metadata(scan)
+            get_logger().debug("DB No File: %s True" % (scan))
+            reingest_origdatablock = True
         dbstatus = None
 
+        pid = None
         if rds and odb:
-            if rds and rds[0]:
+            if rds and rds[0] and reingest_dataset:
                 pid = self._ingest_rawdataset_metadata(rds, token)
-            if odb and odb[0] and pid:
+                # get_logger().debug(
+                # "DATASET ING %s %s %s" % (rds, pid, reingest_dataset) )
+            if odb and odb[0] and pid and reingest_origdatablock:
                 dbstatus = self._ingest_origdatablock_metadata(
                     odb, pid, token)
-        if pid and dbstatus:
+        if (pid and reingest_dataset) or (dbstatus and reingest_origdatablock):
             ctime = time.time()
+            # get_logger().debug("Ingest TS New")
+        elif scan in self.__sc_ingested_map.keys():
+            ctime = self.__sc_ingested_map[scan][-1]
+            # get_logger().debug("Ingest TS Old")
         else:
             ctime = 0
+            # get_logger().debug("Ingest TS 0")
         self.__sc_ingested.append([scan, str(ctime)])
-        with open(self.__idsfile, 'a+') as f:
+        with open(self.__idsfiletmp, 'a+') as f:
             f.write("%s %s\n" % (scan, ctime))
 
     def check_list(self, reingest=False):
@@ -432,10 +555,11 @@ class DatasetIngestor:
             self.__sc_ingested_map = {}
             for sc in self.__sc_ingested:
                 try:
-                    if len(sc) > 1 and sc[-1] > 0:
+                    if len(sc) > 1 and float(sc[-1]) > 0:
+                        sc[-1] = float(sc[-1])
                         self.__sc_ingested_map[sc[0]] = sc
                 except Exception:
-                    pass            
+                    pass
 
     def waiting_datasets(self):
         """ provides waitings datasets
@@ -449,6 +573,17 @@ class DatasetIngestor:
         """ clear waitings datasets
         """
         self.__sc_waiting = []
+
+    def clear_tmpfile(self):
+        """ clear waitings datasets
+        """
+        if os.path.exists(self.__idsfiletmp):
+            os.remove(self.__idsfiletmp)
+
+    def update_from_tmpfile(self):
+        """ clear waitings datasets
+        """
+        os.rename(self.__idsfiletmp, self.__idsfile)
 
     def ingested_datasets(self):
         """ provides ingested datasets
