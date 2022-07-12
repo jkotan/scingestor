@@ -196,9 +196,6 @@ class DatasetWatcherTest(unittest.TestCase):
         fdirname = os.path.abspath(dirname)
         fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
         fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
-        os.mkdir(fdirname)
-        os.mkdir(fsubdirname)
-        os.mkdir(fsubdirname2)
         btmeta = "beamtime-metadata-99001234.json"
         dslist = "scicat-datasets-99001234.lst"
         idslist = "scicat-ingested-datasets-99001234.lst"
@@ -212,9 +209,6 @@ class DatasetWatcherTest(unittest.TestCase):
         wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                 "config",
                                 wrongdslist)
-        shutil.copy(source, fdirname)
-        shutil.copy(lsource, fsubdirname2)
-        shutil.copy(wlsource, fsubdirname)
         fullbtmeta = os.path.join(fdirname, btmeta)
         fdslist = os.path.join(fsubdirname2, dslist)
         fidslist = os.path.join(fsubdirname2, idslist)
@@ -222,6 +216,7 @@ class DatasetWatcherTest(unittest.TestCase):
         url = 'http://localhost:8881'
         logdir = "/"
         cred = "12342345"
+        os.mkdir(fdirname)
         with open(credfile, "w") as cf:
             cf.write(cred)
 
@@ -242,6 +237,11 @@ class DatasetWatcherTest(unittest.TestCase):
         # commands.pop()
         try:
             for cmd in commands:
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                shutil.copy(source, fdirname)
+                shutil.copy(lsource, fsubdirname2)
+                shutil.copy(wlsource, fsubdirname)
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
@@ -269,15 +269,17 @@ class DatasetWatcherTest(unittest.TestCase):
                     'INFO : DatasetWatcher: Waiting datasets: '
                     '[\'{sc1}\', \'{sc2}\']\n'
                     'INFO : DatasetWatcher: Ingested datasets: []\n'
-                    'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
-                    'INFO : DatasetWatcher: Generating metadata: '
+                    'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
+                    'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
-                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
-                    'INFO : DatasetWatcher: Ingesting: {dslist} {sc2}\n'
-                    'INFO : DatasetWatcher: Generating metadata: '
+                    'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
+                    'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
-                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                     # 'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                     # '{basedir}\n'
@@ -371,6 +373,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'uid': 'jkotan'}],
                      'datasetId': '99001234/myscan_00002',
                      'size': 629}, skip=["dataFileList", "size"])
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
@@ -387,8 +391,6 @@ class DatasetWatcherTest(unittest.TestCase):
         fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
         fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
         os.mkdir(fdirname)
-        os.mkdir(fsubdirname)
-        os.mkdir(fsubdirname2)
         btmeta = "beamtime-metadata-99001234.json"
         dslist = "scicat-datasets-99001234.lst"
         idslist = "scicat-ingested-datasets-99001234.lst"
@@ -440,6 +442,8 @@ class DatasetWatcherTest(unittest.TestCase):
         # commands.pop()
         try:
             for cmd in commands:
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
                 # print(cmd)
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
@@ -472,25 +476,29 @@ class DatasetWatcherTest(unittest.TestCase):
                     'INFO : DatasetWatcher: Waiting datasets: '
                     '[\'{sc1}\', \'{sc2}\']\n'
                     'INFO : DatasetWatcher: Ingested datasets: []\n'
-                    'INFO : DatasetWatcher: Ingesting: {dslist} {sc1}\n'
-                    'INFO : DatasetWatcher: Generating metadata: '
+                    'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
+                    'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
-                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
-                    'INFO : DatasetWatcher: Ingesting: {dslist} {sc2}\n'
-                    'INFO : DatasetWatcher: Generating metadata: '
+                    'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
+                    'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
-                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
-                    'INFO : DatasetWatcher: Ingesting: {dslist} {sc3}\n'
-                    'INFO : DatasetWatcher: Generating metadata: '
+                    'INFO : DatasetIngestor: Ingesting: {dslist} {sc3}\n'
+                    'INFO : DatasetIngestor: Generating metadata: '
                     '{sc3} {subdir2}/{sc3}.scan.json\n'
-                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock metadata:'
                     ' {sc3} {subdir2}/{sc3}.origdatablock.json\n'
-                    'INFO : DatasetWatcher: Ingesting: {dslist} {sc4}\n'
-                    'INFO : DatasetWatcher: Generating metadata: '
+                    'INFO : DatasetIngestor: Ingesting: {dslist} {sc4}\n'
+                    'INFO : DatasetIngestor: Generating metadata: '
                     '{sc4} {subdir2}/{sc4}.scan.json\n'
-                    'INFO : DatasetWatcher: Generating origdatablock metadata:'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock metadata:'
                     ' {sc4} {subdir2}/{sc4}.origdatablock.json\n'
                     # 'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                     # '{basedir}\n'
@@ -564,6 +572,8 @@ class DatasetWatcherTest(unittest.TestCase):
                              'uid': 'jkotan'}],
                          'datasetId': '99001234/myscan_%05i' % (i + 1),
                          'size': 629}, skip=["dataFileList", "size"])
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
