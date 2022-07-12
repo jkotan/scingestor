@@ -83,17 +83,18 @@ class DatasetIngest:
             get_logger().warning(
                 'DatasetIngest: '
                 'Beamtime directories not defined')
-        else:
-            self.start()
 
     def start(self):
         """ start ingestion """
 
         for path in self.beamtime_dirs:
+            get_logger().info("DatasetIngest: beamtime path: %s" % str(path))
             files = self.find_bt_files(
                 path, self.bt_prefix, self.bt_postfix)
 
             for bt in files:
+                get_logger().info("DatasetIngest: beamtime file: %s" % str(bt))
+
                 ffn = os.path.abspath(os.path.join(path, bt))
                 try:
                     try:
@@ -143,6 +144,7 @@ class DatasetIngest:
         dslfiles = glob.glob(
             "%s/**/%s" % (path, dslist_filename), recursive=True)
         for fn in dslfiles:
+            get_logger().info("DatasetIngest: dataset list: %s" % str(fn))
             ifn = fn[:-(len(dslist_filename))] + idslist_filename
             scpath, pfn = os.path.split(fn)
             ingestor = DatasetIngestor(

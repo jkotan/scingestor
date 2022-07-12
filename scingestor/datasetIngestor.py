@@ -515,11 +515,13 @@ class DatasetIngestor:
         if rds and odb:
             if rds and rds[0] and reingest_dataset:
                 pid = self._ingest_rawdataset_metadata(rds, token)
-                # get_logger().debug(
-                # "DATASET ING %s %s %s" % (rds, pid, reingest_dataset) )
+                get_logger().info(
+                    "DatasetIngestor: Ingest dataset: %s" % (rds))
             if odb and odb[0] and pid and reingest_origdatablock:
                 dbstatus = self._ingest_origdatablock_metadata(
                     odb, pid, token)
+                get_logger().info(
+                    "DatasetIngestor: Ingest origdatablock: %s" % (odb))
         if (pid and reingest_dataset) or (dbstatus and reingest_origdatablock):
             ctime = time.time()
             # get_logger().debug("Ingest TS New")
