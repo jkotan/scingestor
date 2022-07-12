@@ -33,7 +33,7 @@ class DatasetIngestor:
     """
 
     def __init__(self, path, dsfile, idsfile, beamtimeId, beamtimefile,
-                 ingestorcred, scicat_url, delay=5):
+                 doiprefix, ingestorcred, scicat_url, delay=5):
         """ constructor
 
         :param path: scan dir path
@@ -46,6 +46,8 @@ class DatasetIngestor:
         :type beamtimeId: :obj:`str`
         :param beamtimefile: beamtime filename
         :type beamtimefile: :obj:`str`
+        :param doiprefix: doiprefix
+        :type doiprefix: :obj:`str`
         :param ingestorcred: ingestor credential
         :type ingestorcred: :obj:`str`
         :param scicat_url: scicat_url
@@ -63,6 +65,8 @@ class DatasetIngestor:
         self.__path = path
         # (:obj:`str`) beamtime id
         self.__bid = beamtimeId
+        # (:obj:`str`) doiprefix
+        self.__doiprefix = doiprefix
         # (:obj:`str`) beamtime id
         self.__bfile = beamtimefile
         # (:obj:`str`) beamtime id
@@ -86,22 +90,22 @@ class DatasetIngestor:
         # (:obj:`str`) nexus dataset shell command
         self.__datasetcommandnxs = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix}.json " \
-            " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
+            " -b {beamtimefile} -p {doiprefix}/{beamtimeid}/{scanname} " \
             "{scanpath}/{scanname}.nxs"
         # (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix}.json " \
-            " -b {beamtimefile} -p {beamtimeid}/{scanname}"
+            " -b {beamtimefile} -p {doiprefix}/{beamtimeid}/{scanname}"
         # (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*.origdatablock.json,*.scan.json,*~ " \
-            " -p {beamtimeid}/{scanname} " \
+            " -p {doiprefix}/{beamtimeid}/{scanname} " \
             " -o {scanpath}/{scanname}{dbpostfix}.json " \
             " {scanpath}/{scanname}"
         # (:obj:`str`) datablock shell command
         self.__datablockmemcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*.origdatablock.json,*.scan.json,*~ " \
-            " -p {beamtimeid}/{scanname} " \
+            " -p {doiprefix}/{beamtimeid}/{scanname} " \
             " {scanpath}/{scanname}"
 
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
@@ -109,6 +113,7 @@ class DatasetIngestor:
             "scanname": None,
             "scanpath": self.__path,
             "beamtimeid": self.__bid,
+            "doiprefix": self.__doiprefix,
             "beamtimefile": self.__bfile,
             "scpostfix": self.__scanpostfix.replace("*", ""),
             "dbpostfix": self.__datablockpostfix.replace("*", ""),
@@ -379,7 +384,8 @@ class DatasetIngestor:
                 raise Exception(
                     "Wrong SC proposalId %s for DESY beamtimeId %s in %s"
                     % (mt["proposalId"], self.__bid, metafile))
-            if not mt["pid"].startswith("%s/" % self.__bid):
+            if not mt["pid"].startswith(
+                    "%s/%s/" % (self.__doiprefix, self.__bid)):
                 raise Exception(
                     "Wrong pid %s for DESY beamtimeId %s in  %s"
                     % (mt["pid"], self.__bid, metafile))
@@ -405,7 +411,8 @@ class DatasetIngestor:
             with open(metafile) as fl:
                 smt = fl.read()
                 mt = json.loads(smt)
-            if not mt["datasetId"].startswith("%s/" % self.__bid):
+            if not mt["datasetId"].startswith(
+                    "%s/%s/" % (self.__doiprefix, self.__bid)):
                 raise Exception(
                     "Wrong datasetId %s for DESY beamtimeId %s in  %s"
                     % (mt["pid"], self.__bid, metafile))

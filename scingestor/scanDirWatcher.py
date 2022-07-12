@@ -32,7 +32,8 @@ class ScanDirWatcher(threading.Thread):
     """ ScanDir Watcher
     """
 
-    def __init__(self, path, meta, bpath, ingestorcred, scicat_url, delay=5):
+    def __init__(self, path, meta, bpath, doiprefix, ingestorcred,
+                 scicat_url, delay=5):
         """ constructor
 
         :param path: scan dir path
@@ -41,6 +42,8 @@ class ScanDirWatcher(threading.Thread):
         :type meta: :obj:`dict` <:obj:`str`,`any`>
         :param bpath: beamtime file
         :type bpath: :obj:`str`
+        :param doiprefix: doiprefix
+        :type doiprefix: :obj:`str`
         :param ingestorcred: ingestor credential
         :type ingestorcred: :obj:`str`
         :param scicat_url: scicat_url
@@ -59,6 +62,8 @@ class ScanDirWatcher(threading.Thread):
         self.beamtimeId = meta["beamtimeId"]
         # (:obj:`str`) beamtime id
         self.__incd = ingestorcred
+        # (:obj:`str`) doiprefix
+        self.__doiprefix = doiprefix
         # (:obj:`str`) scicat_url
         self.__scicat_url = scicat_url
         # (:obj:`float`) delay time for ingestion in s
@@ -157,7 +162,8 @@ class ScanDirWatcher(threading.Thread):
                         self.scandir_watchers[(path, self.__bpath)] =  \
                             ScanDirWatcher(
                                 path, self.__meta, self.__bpath,
-                                self.__incd, self.__scicat_url)
+                                self.__doiprefix, self.__incd,
+                                self.__scicat_url)
                         get_logger().info(
                             'ScanDirWatcher: Create ScanDirWatcher %s %s'
                             % (path, self.__bpath))
@@ -182,7 +188,8 @@ class ScanDirWatcher(threading.Thread):
                             self.idslist_filename
                         self.dataset_watchers[fn] = DatasetWatcher(
                             self.__path, fn, ifn, self.beamtimeId,
-                            self.__bpath, self.__incd, self.__scicat_url)
+                            self.__bpath, self.__doiprefix,
+                            self.__incd, self.__scicat_url)
                         get_logger().info(
                             'ScanDirWatcher: Creating DatasetWatcher %s' % fn)
                         self.dataset_watchers[fn].start()
@@ -228,7 +235,8 @@ class ScanDirWatcher(threading.Thread):
                                         DatasetWatcher(
                                         self.__path, fn, ifn,
                                             self.beamtimeId,
-                                        self.__bpath, self.__incd)
+                                            self.__bpath, self.__doiprefix,
+                                            self.__incd)
                                     self.dataset_watchers[fn].start()
                                     get_logger().info(
                                         'ScanDirWatcher: Creating '

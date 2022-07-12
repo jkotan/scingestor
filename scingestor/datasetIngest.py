@@ -65,12 +65,16 @@ class DatasetIngest:
 
         # (:obj:`float`) timeout value for inotifyx get events
         self.timeout = 0.1
+        # (:obj:`str`) doi prefix
+        self.__doiprefix = "10.3204"
         # (:obj:`str`) beamtime id
         self.__incd = None
         # (:obj:`str`) scicat url
         self.__scicat_url = "http://localhost:8881"
         # (:obj:`str`) ingestor log dir
         self.__inlogdir = ""
+        if "doiprefix" in self.__config.keys():
+            self.__doiprefix = self.__config["doi_prefix"]
         if "ingestor_credential_file" in self.__config.keys():
             with open(self.__config["ingestor_credential_file"]) as fl:
                 self.__incd = fl.read().strip()
@@ -104,13 +108,15 @@ class DatasetIngest:
                         time.sleep(0.1)
                         with open(ffn) as fl:
                             btmd = json.loads(fl.read())
-                    self.ingest_scandir(path, btmd, ffn, self.__incd,
-                                        self.__scicat_url)
+                    self.ingest_scandir(
+                        path, btmd, ffn, self.__doiprefix, self.__incd,
+                        self.__scicat_url)
                 except Exception as e:
                     get_logger().warning(
                         "%s cannot be ingested: %s" % (ffn, str(e)))
 
-    def ingest_scandir(self, path, meta, bpath, ingestorcred, scicat_url):
+    def ingest_scandir(self, path, meta, bpath, doiprefix, ingestorcred,
+                       scicat_url):
         """ constructor
 
         :param path: scan dir path
@@ -149,7 +155,7 @@ class DatasetIngest:
             scpath, pfn = os.path.split(fn)
             ingestor = DatasetIngestor(
                 scpath, fn, ifn, beamtimeId, bpath,
-                ingestorcred, scicat_url, 0)
+                doiprefix, ingestorcred, scicat_url, 0)
             ingestor.check_list(reingest=True)
             ingestor.clear_tmpfile()
             if ingestor.waiting_datasets():

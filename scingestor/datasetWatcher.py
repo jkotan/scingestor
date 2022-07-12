@@ -33,7 +33,7 @@ class DatasetWatcher(threading.Thread):
     """
 
     def __init__(self, path, dsfile, idsfile, beamtimeId, beamtimefile,
-                 ingestorcred, scicat_url, delay=5):
+                 doiprefix, ingestorcred, scicat_url, delay=5):
         """ constructor
 
         :param path: scan dir path
@@ -46,6 +46,8 @@ class DatasetWatcher(threading.Thread):
         :type beamtimeId: :obj:`str`
         :param beamtimefile: beamtime filename
         :type beamtimefile: :obj:`str`
+        :param doiprefix: doiprefix
+        :type doiprefix: :obj:`str`
         :param ingestorcred: ingestor credential
         :type ingestorcred: :obj:`str`
         :param scicat_url: scicat_url
@@ -79,7 +81,7 @@ class DatasetWatcher(threading.Thread):
         # dataset ingestor
         self.ingestor = DatasetIngestor(
             path, dsfile, idsfile, beamtimeId, beamtimefile,
-            ingestorcred, scicat_url, delay)
+            doiprefix, ingestorcred, scicat_url, delay)
 
     def _start_notifier(self, path):
         """ start notifier

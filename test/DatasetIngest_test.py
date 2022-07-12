@@ -283,10 +283,10 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
+                    "RawDatasets: 10.3204/99001234/myscan_00001\n"
+                    "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
+                    "RawDatasets: 10.3204/99001234/myscan_00002\n"
+                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -302,7 +302,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'owner': 'Ouruser',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '99001234/myscan_00001',
+                     'pid': '10.3204/99001234/myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -322,7 +322,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'owner': 'Ouruser',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '99001234/myscan_00002',
+                     'pid': '10.3204/99001234/myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -342,7 +342,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00001',
+                     'datasetId': '10.3204/99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -353,7 +353,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
+                     'datasetId': '10.3204/99001234/myscan_00002',
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -464,7 +464,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'owner': 'Ouruser',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '99001234/myscan_00001',
+                     'pid': '10.3204/99001234/myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -484,7 +484,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'owner': 'Ouruser',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '99001234/myscan_00002',
+                     'pid': '10.3204/99001234/myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -504,7 +504,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00001',
+                     'datasetId': '10.3204/99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -515,7 +515,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
+                     'datasetId': '10.3204/99001234/myscan_00002',
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -613,8 +613,9 @@ class DatasetIngestTest(unittest.TestCase):
                             dslist=fdslist,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
-                self.assertEqual("Login: ingestor\n"
-                                 "RawDatasets: 99001234/myscan_00001\n", vl)
+                self.assertEqual(
+                    "Login: ingestor\n"
+                    "RawDatasets: 10.3204/99001234/myscan_00001\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -636,7 +637,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'owner': 'Ouruser',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '99001234/myscan_00001',
+                     'pid': '10.3204/99001234/myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -656,7 +657,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'owner': 'Ouruser',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '99001234/myscan_00002',
+                     'pid': '10.3204/99001234/myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -676,7 +677,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'owner': 'Ouruser',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '99001234/myscan_00001',
+                     'pid': '10.3204/99001234/myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -696,7 +697,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00001',
+                     'datasetId': '10.3204/99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -707,7 +708,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
+                     'datasetId': '10.3204/99001234/myscan_00002',
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -827,10 +828,11 @@ class DatasetIngestTest(unittest.TestCase):
                             dslist=fdslist,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
-                self.assertEqual("Login: ingestor\n"
-                                 "RawDatasets: 99001234/myscan_00001\n"
-                                 "OrigDatablocks: 99001234/myscan_00002\n",
-                                 vl)
+                self.assertEqual(
+                    "Login: ingestor\n"
+                    "RawDatasets: 10.3204/99001234/myscan_00001\n"
+                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
+                    vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -852,7 +854,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'owner': 'Ouruser',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '99001234/myscan_00001',
+                     'pid': '10.3204/99001234/myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -872,7 +874,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'owner': 'Ouruser',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '99001234/myscan_00002',
+                     'pid': '10.3204/99001234/myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -892,7 +894,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'owner': 'NewOwner',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '99001234/myscan_00001',
+                     'pid': '10.3204/99001234/myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -912,7 +914,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00001',
+                     'datasetId': '10.3204/99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -923,7 +925,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
+                     'datasetId': '10.3204/99001234/myscan_00002',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[2]),
@@ -934,7 +936,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
+                     'datasetId': '10.3204/99001234/myscan_00002',
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -1064,10 +1066,11 @@ class DatasetIngestTest(unittest.TestCase):
                             dslist=fdslist,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
-                self.assertEqual("Login: ingestor\n"
-                                 "OrigDatablocks: 99001234/myscan_00002\n",
-                                 # "RawDatasets: 99001234/myscan_00001\n",
-                                 vl)
+                self.assertEqual(
+                    "Login: ingestor\n"
+                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
+                    # "RawDatasets: 99001234/myscan_00001\n",
+                    vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1089,7 +1092,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'owner': 'Ouruser',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '99001234/myscan_00001',
+                     'pid': '10.3204/99001234/myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -1109,7 +1112,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'owner': 'Ouruser',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '99001234/myscan_00002',
+                     'pid': '10.3204/99001234/myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -1129,7 +1132,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00001',
+                     'datasetId': '10.3204/99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -1140,7 +1143,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
+                     'datasetId': '10.3204/99001234/myscan_00002',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -1151,7 +1154,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
+                     'datasetId': '10.3204/99001234/myscan_00002',
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
