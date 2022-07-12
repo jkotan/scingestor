@@ -57,14 +57,14 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                  "yilq1B7s7CygIaxbQRAMmZBgJ6JW2GjnX"})
 
         elif self.path.lower().startswith(
-                '/datasets?access_token=') and \
+                '/rawdatasets?access_token=') and \
                 contenttype == 'application/json':
             self.server.datasets.append(in_data)
             # print(in_data)
             # print(type(in_data))
             dt = json.loads(in_data)
             # print("Datasets: %s" % dt)
-            print("Datasets: %s" % dt["pid"])
+            print("RawDatasets: %s" % dt["pid"])
             message = "{}"
 
         elif self.path.lower().startswith(

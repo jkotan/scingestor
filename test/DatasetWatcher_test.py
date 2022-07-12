@@ -301,9 +301,9 @@ class DatasetWatcherTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "Datasets: 99001234/myscan_00001\n"
+                    "RawDatasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 99001234/myscan_00001\n"
-                    "Datasets: 99001234/myscan_00002\n"
+                    "RawDatasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
@@ -521,14 +521,14 @@ class DatasetWatcherTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     'Login: ingestor\n'
-                    "Datasets: 99001234/myscan_00001\n"
+                    "RawDatasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 99001234/myscan_00001\n"
-                    "Datasets: 99001234/myscan_00002\n"
+                    "RawDatasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n"
                     'Login: ingestor\n'
-                    "Datasets: 99001234/myscan_00003\n"
+                    "RawDatasets: 99001234/myscan_00003\n"
                     "OrigDatablocks: 99001234/myscan_00003\n"
-                    "Datasets: 99001234/myscan_00004\n"
+                    "RawDatasets: 99001234/myscan_00004\n"
                     "OrigDatablocks: 99001234/myscan_00004\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(

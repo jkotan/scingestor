@@ -135,8 +135,8 @@ class DatasetIngestor:
         #     'DatasetIngestor: LOGIN %s' % self.__tokenurl)
         # (:obj:`str`) dataset url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
-        #    "Datasets"
-        self.__dataseturl = self.__scicat_url + "Datasets"
+        #    "RawDatasets"
+        self.__dataseturl = self.__scicat_url + "RawDatasets"
         # (:obj:`str`) origdatablock url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #     "OrigDatablocks"

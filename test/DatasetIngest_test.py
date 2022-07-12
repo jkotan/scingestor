@@ -283,9 +283,9 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "Datasets: 99001234/myscan_00001\n"
+                    "RawDatasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 99001234/myscan_00001\n"
-                    "Datasets: 99001234/myscan_00002\n"
+                    "RawDatasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
@@ -614,7 +614,7 @@ class DatasetIngestTest(unittest.TestCase):
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
                 self.assertEqual("Login: ingestor\n"
-                                 "Datasets: 99001234/myscan_00001\n", vl)
+                                 "RawDatasets: 99001234/myscan_00001\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -828,7 +828,7 @@ class DatasetIngestTest(unittest.TestCase):
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
                 self.assertEqual("Login: ingestor\n"
-                                 "Datasets: 99001234/myscan_00001\n"
+                                 "RawDatasets: 99001234/myscan_00001\n"
                                  "OrigDatablocks: 99001234/myscan_00002\n",
                                  vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -1066,7 +1066,7 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual("Login: ingestor\n"
                                  "OrigDatablocks: 99001234/myscan_00002\n",
-                                 # "Datasets: 99001234/myscan_00001\n",
+                                 # "RawDatasets: 99001234/myscan_00001\n",
                                  vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
