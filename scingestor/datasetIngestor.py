@@ -94,11 +94,13 @@ class DatasetIngestor:
             " -b {beamtimefile} -p {beamtimeid}/{scanname}"
         # (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
+            " -s *.pyc,*.origdatablock.json,*.scan.json,*~ " \
             " -p {beamtimeid}/{scanname} " \
             " -o {scanpath}/{scanname}{dbpostfix}.json " \
             " {scanpath}/{scanname}"
         # (:obj:`str`) datablock shell command
         self.__datablockmemcommand = "nxsfileinfo origdatablock " \
+            " -s *.pyc,*.origdatablock.json,*.scan.json,*~ " \
             " -p {beamtimeid}/{scanname} " \
             " {scanpath}/{scanname}"
 
@@ -227,7 +229,7 @@ class DatasetIngestor:
                 dmeta = json.loads(meta)
         except Exception as e:
             get_logger().warning('%s: %s' % (scan, str(e)))
-
+        # print("M1", dmeta)
         if dmeta is None:
             subprocess.run(
                 self.__datablockcommand.format(**self.__dctfmt).split())
@@ -241,11 +243,11 @@ class DatasetIngestor:
             except Exception as e:
                 get_logger().warning('%s: %s' % (scan, str(e)))
                 dnwmeta = None
+            # print("M2", dnwmeta)
             if dnwmeta is not None:
-                if self._metadataEqual(dmeta, dnwmeta):
+                if not self._metadataEqual(dmeta, dnwmeta):
                     with open(mfilename, "w") as mf:
-                        mf.write()
-                        dmeta = json.loads(meta)
+                        mf.write(nwmeta)
 
         odbs = glob.glob(
             "{scanpath}/{scanname}{dbpostfix}.json".format(
@@ -342,6 +344,24 @@ class DatasetIngestor:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
         return False
+
+    def _get_pid(self, metafile):
+        """ ingest raw dataset metadata
+
+        :param metafile: metadata file name
+        :type metafile: :obj:`str
+        """
+        pid = None
+        try:
+            with open(metafile) as fl:
+                smt = fl.read()
+                mt = json.loads(smt)
+                pid = mt["pid"]
+        except Exception as e:
+            get_logger().error(
+                'DatasetIngestor: %s' % (str(e)))
+
+        return pid
 
     def _ingest_rawdataset_metadata(self, metafile, token):
         """ ingest raw dataset metadata
@@ -467,7 +487,7 @@ class DatasetIngestor:
             "{scanpath}/{scan}{postfix}.json".format(
                 scan=scan, postfix=self.__scanpostfix,
                 scanpath=self.__dctfmt["scanpath"]))
-
+        # print("RE")
         if rdss and rdss[0]:
             rds = rdss[0]
             mtm = os.path.getmtime(rds)
@@ -493,8 +513,8 @@ class DatasetIngestor:
                 scanpath=self.__dctfmt["scanpath"]))
         if odbs and odbs[0]:
             odb = odbs[0]
-            mtm = os.path.getmtime(odb)
             self._regenerate_origdatablock_metadata(scan)
+            mtm = os.path.getmtime(odb)
 
             if scan in self.__sc_ingested_map.keys():
                 get_logger().debug("DB Timestamps: %s %s %s %s" % (
@@ -510,14 +530,15 @@ class DatasetIngestor:
             get_logger().debug("DB No File: %s True" % (scan))
             reingest_origdatablock = True
         dbstatus = None
-
         pid = None
         if rds and odb:
             if rds and rds[0] and reingest_dataset:
                 pid = self._ingest_rawdataset_metadata(rds, token)
                 get_logger().info(
                     "DatasetIngestor: Ingest dataset: %s" % (rds))
-            if odb and odb[0] and pid and reingest_origdatablock:
+            if odb and odb[0] and reingest_origdatablock:
+                if pid is None and rdss and rdss[0]:
+                    pid = self._get_pid(rdss[0])
                 dbstatus = self._ingest_origdatablock_metadata(
                     odb, pid, token)
                 get_logger().info(
