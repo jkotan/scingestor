@@ -276,11 +276,9 @@ class DatasetIngestTest(unittest.TestCase):
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
                     '{subdir2}/{sc2}.origdatablock.json\n'
-                    .format(basedir=fdirname, btmeta=fullbtmeta,
-                            subdir=fsubdirname, subdir2=fsubdirname2,
-                            dslist=fdslist, idslist=fidslist,
-                            cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
-                            cnt4=(cnt + 3), cnt5=(cnt + 4),
+                    .format(basedir=fdirname,
+                            subdir2=fsubdirname2,
+                            dslist=fdslist,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
                 self.assertEqual(
