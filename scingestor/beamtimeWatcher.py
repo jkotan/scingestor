@@ -38,7 +38,7 @@ class BeamtimeWatcher:
     def __init__(self, options):
         """ constructor
 
-        :param options: time delay
+        :param options: dictionary with options
         :type options: :obj:`str`
         """
 

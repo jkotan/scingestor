@@ -764,7 +764,7 @@ class DatasetIngestTest(unittest.TestCase):
                      % cfgfname).split(),
                     ('scicat_dataset_ingest --config %s'
                      % cfgfname).split()]
-        commands.pop()
+        # commands.pop()
         try:
             for cmd in commands:
                 os.mkdir(fsubdirname)
@@ -992,7 +992,7 @@ class DatasetIngestTest(unittest.TestCase):
                      % cfgfname).split(),
                     ('scicat_dataset_ingest --config %s'
                      % cfgfname).split()]
-        commands.pop()
+        # commands.pop()
         try:
             for cmd in commands:
                 os.mkdir(fsubdirname)
