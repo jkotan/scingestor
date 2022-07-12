@@ -208,7 +208,7 @@ class DatasetIngestTest(unittest.TestCase):
         wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                 "config",
                                 wrongdslist)
-        fullbtmeta = os.path.join(fdirname, btmeta)
+        # fullbtmeta = os.path.join(fdirname, btmeta)
         fdslist = os.path.join(fsubdirname2, dslist)
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
@@ -242,7 +242,7 @@ class DatasetIngestTest(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
                 self.notifier = safeINotifier.SafeINotifier()
-                cnt = self.notifier.id_queue_counter + 1
+                # cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
