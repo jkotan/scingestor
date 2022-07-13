@@ -281,8 +281,8 @@ class DatasetWatcherTest(unittest.TestCase):
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
-                    # 'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
-                    # '{basedir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                    '{basedir}\n'
                     'INFO : BeamtimeWatcher: '
                     'Stopping ScanDirWatcher {btmeta}\n'
                     'INFO : ScanDirWatcher: Removing watch {cnt2}: {basedir}\n'
@@ -301,9 +301,9 @@ class DatasetWatcherTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 10.3204/99001234/myscan_00001\n"
+                    "RawDatasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "RawDatasets: 10.3204/99001234/myscan_00002\n"
+                    "RawDatasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
@@ -319,8 +319,12 @@ class DatasetWatcherTest(unittest.TestCase):
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'owner': 'Ouruser',
+                     'ownerGroup': '99001234-part',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '10.3204/99001234/myscan_00001',
+                     'pid': '99001234/myscan_00001',
+                     'accessGroups': [
+                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                     'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -339,8 +343,12 @@ class DatasetWatcherTest(unittest.TestCase):
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'owner': 'Ouruser',
+                     'ownerGroup': '99001234-part',
                      'ownerEmail': 'appuser@fake.com',
-                     'pid': '10.3204/99001234/myscan_00002',
+                     'pid': '99001234/myscan_00002',
+                     'accessGroups': [
+                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                     'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -360,7 +368,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
+                     'ownerGroup': '99001234-part',
                      'datasetId': '10.3204/99001234/myscan_00001',
+                     'accessGroups': [
+                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -371,7 +382,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
+                     'ownerGroup': '99001234-part',
                      'datasetId': '10.3204/99001234/myscan_00002',
+                     'accessGroups': [
+                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -500,8 +514,8 @@ class DatasetWatcherTest(unittest.TestCase):
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc4} {subdir2}/{sc4}.origdatablock.json\n'
-                    # 'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
-                    # '{basedir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                    '{basedir}\n'
                     'INFO : BeamtimeWatcher: '
                     'Stopping ScanDirWatcher {btmeta}\n'
                     'INFO : ScanDirWatcher: Removing watch {cnt2}: {basedir}\n'
@@ -521,14 +535,14 @@ class DatasetWatcherTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     'Login: ingestor\n'
-                    "RawDatasets: 10.3204/99001234/myscan_00001\n"
+                    "RawDatasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "RawDatasets: 10.3204/99001234/myscan_00002\n"
+                    "RawDatasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n"
                     'Login: ingestor\n'
-                    "RawDatasets: 10.3204/99001234/myscan_00003\n"
+                    "RawDatasets: 99001234/myscan_00003\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00003\n"
-                    "RawDatasets: 10.3204/99001234/myscan_00004\n"
+                    "RawDatasets: 99001234/myscan_00004\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00004\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -549,8 +563,12 @@ class DatasetWatcherTest(unittest.TestCase):
                          'isPublished': False,
                          'owner': 'Ouruser',
                          'ownerEmail': 'appuser@fake.com',
-                         'pid': '10.3204/99001234/myscan_%05i' % (i + 1),
+                         'pid': '99001234/myscan_%05i' % (i + 1),
+                         'datasetName': 'myscan_%05i' % (i + 1),
+                         'accessGroups': [
+                             '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                          'principalInvestigator': 'appuser@fake.com',
+                         'ownerGroup': '99001234-part',
                          'proposalId': '99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
@@ -571,8 +589,11 @@ class DatasetWatcherTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
+                         'ownerGroup': '99001234-part',
                          'datasetId':
                          '10.3204/99001234/myscan_%05i' % (i + 1),
+                         'accessGroups': [
+                             '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                          'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)

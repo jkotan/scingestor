@@ -60,6 +60,8 @@ class ScanDirWatcher(threading.Thread):
         self.__meta = meta
         # (:obj:`str`) beamtime id
         self.beamtimeId = meta["beamtimeId"]
+        # (:obj:`str`) beamline name
+        self.__bl = meta["beamline"]
         # (:obj:`str`) beamtime id
         self.__incd = ingestorcred
         # (:obj:`str`) doiprefix
@@ -188,16 +190,17 @@ class ScanDirWatcher(threading.Thread):
                             self.idslist_filename
                         self.dataset_watchers[fn] = DatasetWatcher(
                             self.__path, fn, ifn, self.beamtimeId,
-                            self.__bpath, self.__doiprefix,
+                            self.__bpath, self.__bl, self.__doiprefix,
                             self.__incd, self.__scicat_url)
                         get_logger().info(
                             'ScanDirWatcher: Creating DatasetWatcher %s' % fn)
                         self.dataset_watchers[fn].start()
                         # get_logger().info(str(btmd))
 
-            subdirs = [it.path for it in os.scandir(self.__path)
-                       if it.is_dir()]
-            self._lunch_scandir_watcher(subdirs)
+            if os.path.isdir(self.__path):
+                subdirs = [it.path for it in os.scandir(self.__path)
+                           if it.is_dir()]
+                self._lunch_scandir_watcher(subdirs)
 
             while self.running:
                 # time.sleep(self.delay)
@@ -212,9 +215,10 @@ class ScanDirWatcher(threading.Thread):
                         break
                     if qid in self.wd_to_path.keys():
                         get_logger().debug(
-                            'Sd: %s %s %s' % (event.name,
-                                              event.masks,
-                                              self.wd_to_path[qid]))
+                            'Sd: %s %s %s %s' % (qid,
+                                                 event.name,
+                                                 event.masks,
+                                                 self.wd_to_path[qid]))
                         masks = event.masks.split("|")
                         if "IN_ISDIR" in masks and (
                                 "IN_CREATE" in masks
@@ -235,7 +239,8 @@ class ScanDirWatcher(threading.Thread):
                                         DatasetWatcher(
                                         self.__path, fn, ifn,
                                             self.beamtimeId,
-                                            self.__bpath, self.__doiprefix,
+                                            self.__bpath, self.__bl,
+                                            self.__doiprefix,
                                             self.__incd)
                                     self.dataset_watchers[fn].start()
                                     get_logger().info(

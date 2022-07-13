@@ -33,7 +33,7 @@ class DatasetIngestor:
     """
 
     def __init__(self, path, dsfile, idsfile, beamtimeId, beamtimefile,
-                 doiprefix, ingestorcred, scicat_url, delay=5):
+                 beamline, doiprefix, ingestorcred, scicat_url, delay=5):
         """ constructor
 
         :param path: scan dir path
@@ -46,6 +46,8 @@ class DatasetIngestor:
         :type beamtimeId: :obj:`str`
         :param beamtimefile: beamtime filename
         :type beamtimefile: :obj:`str`
+        :param beamline: beamline name
+        :type beamline: :obj:`str`
         :param doiprefix: doiprefix
         :type doiprefix: :obj:`str`
         :param ingestorcred: ingestor credential
@@ -65,6 +67,8 @@ class DatasetIngestor:
         self.__path = path
         # (:obj:`str`) beamtime id
         self.__bid = beamtimeId
+        # (:obj:`str`) beamline name
+        self.__bl = beamline
         # (:obj:`str`) doiprefix
         self.__doiprefix = doiprefix
         # (:obj:`str`) beamtime id
@@ -90,21 +94,23 @@ class DatasetIngestor:
         # (:obj:`str`) nexus dataset shell command
         self.__datasetcommandnxs = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix}.json " \
-            " -b {beamtimefile} -p {doiprefix}/{beamtimeid}/{scanname} " \
+            " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             "{scanpath}/{scanname}.nxs"
         # (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix}.json " \
-            " -b {beamtimefile} -p {doiprefix}/{beamtimeid}/{scanname}"
+            " -b {beamtimefile} -p {beamtimeid}/{scanname}"
         # (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*.origdatablock.json,*.scan.json,*~ " \
             " -p {doiprefix}/{beamtimeid}/{scanname} " \
+            " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
             " -o {scanpath}/{scanname}{dbpostfix}.json " \
             " {scanpath}/{scanname}"
         # (:obj:`str`) datablock shell command
         self.__datablockmemcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*.origdatablock.json,*.scan.json,*~ " \
+            " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
             " -p {doiprefix}/{beamtimeid}/{scanname} " \
             " {scanpath}/{scanname}"
 
@@ -113,6 +119,7 @@ class DatasetIngestor:
             "scanname": None,
             "scanpath": self.__path,
             "beamtimeid": self.__bid,
+            "beamline": self.__bl,
             "doiprefix": self.__doiprefix,
             "beamtimefile": self.__bfile,
             "scpostfix": self.__scanpostfix.replace("*", ""),
@@ -384,8 +391,7 @@ class DatasetIngestor:
                 raise Exception(
                     "Wrong SC proposalId %s for DESY beamtimeId %s in %s"
                     % (mt["proposalId"], self.__bid, metafile))
-            if not mt["pid"].startswith(
-                    "%s/%s/" % (self.__doiprefix, self.__bid)):
+            if not mt["pid"].startswith("%s/" % (self.__bid)):
                 raise Exception(
                     "Wrong pid %s for DESY beamtimeId %s in  %s"
                     % (mt["pid"], self.__bid, metafile))
@@ -416,7 +422,7 @@ class DatasetIngestor:
                 raise Exception(
                     "Wrong datasetId %s for DESY beamtimeId %s in  %s"
                     % (mt["pid"], self.__bid, metafile))
-            if mt["datasetId"] != pid:
+            if mt["datasetId"] != "%s/%s" % (self.__doiprefix, pid):
                 raise Exception(
                     "Wrong datasetId %s for DESY beamtimeId %s in %s"
                     % (mt["pid"], self.__bid, metafile))
@@ -461,10 +467,13 @@ class DatasetIngestor:
             odb = self._generate_origdatablock_metadata(scan)
         dbstatus = None
 
+        pid = None
         if rds and odb:
             if rds and rds[0]:
                 pid = self._ingest_rawdataset_metadata(rds, token)
             if odb and odb[0] and pid:
+                if pid is None and rdss and rdss[0]:
+                    pid = self._get_pid(rdss[0])
                 dbstatus = self._ingest_origdatablock_metadata(
                     odb, pid, token)
         if pid and dbstatus:

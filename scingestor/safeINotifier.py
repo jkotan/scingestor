@@ -111,6 +111,8 @@ class SafeINotifier(threading.Thread):
             self.id_queue_counter += 1
             qid = self.id_queue_counter
             self.id_queue[qid] = wqueue
+            get_logger().debug(
+                "ADD WATCH: %s %s %s" % (qid, path, masks))
             self.wd_to_add.append((qid, path, masks))
         return [wqueue, qid]
 
@@ -121,6 +123,8 @@ class SafeINotifier(threading.Thread):
         :type qid: :obj:`int`
         """
         with self.id_queue_lock:
+            get_logger().debug(
+                "REMOVE WATCH: %s" % (qid))
             self.wd_to_rm.append(qid)
             self.id_queue.pop(qid)
 
@@ -134,7 +138,7 @@ class SafeINotifier(threading.Thread):
 
             except Exception as e:
                 get_logger().warning(
-                    'SafeINotifier: %s: %s' % (path, str(e)))
+                    'SafeINotifier: append  %s: %s' % (path, str(e)))
         self.wd_to_add = []
 
     def _remove(self):
@@ -148,7 +152,7 @@ class SafeINotifier(threading.Thread):
                         inotifyx.rm_watch(self.notifier, wd)
                     except Exception as e:
                         get_logger().debug(
-                            'SafeINotifier: %s' % str(e))
+                            'SafeINotifier: remove %s' % str(e))
         self.wd_to_rm = []
 
     def run(self):
@@ -175,17 +179,27 @@ class SafeINotifier(threading.Thread):
                         wd = event.wd
                         with self.id_queue_lock:
                             get_logger().debug(
-                                'SN: %s %s %s' % (
+                                'SN: %s %s %s %s' % (
                                     event.name,
                                     event.get_mask_description(),
-                                    event.wd))
+                                    event.wd,
+                                    self.qid_wd
+                                ))
+
                             for qid, wd in self.qid_wd.items():
-                                if qid in self.id_queue.keys():
+                                if event.wd == wd and \
+                                   qid in self.id_queue.keys():
                                     wqueue = self.id_queue[qid]
                                     wqueue.put(
                                         EventData(
                                             event.name,
                                             event.get_mask_description()))
+                                    get_logger().debug(
+                                        'PUT EVENT: %s %s %s %s' % (
+                                            event.name,
+                                            event.get_mask_description(),
+                                            event.wd, qid
+                                        ))
 
                 with self.id_queue_lock:
                     self._remove()
@@ -195,7 +209,7 @@ class SafeINotifier(threading.Thread):
                     inotifyx.rm_watch(self.notifier, wd)
                 except Exception as e:
                     get_logger().debug(
-                        'SafeINotifier: %s' % str(e))
+                        'SafeINotifier: finally %s' % str(e))
 
     def stop(self):
         """ stop the watcher
