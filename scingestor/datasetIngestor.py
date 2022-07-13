@@ -73,10 +73,13 @@ class DatasetIngestor:
         self.__doiprefix = doiprefix
         # (:obj:`str`) beamtime id
         self.__bfile = beamtimefile
-        # (:obj:`str`) beamtime id
+        # (:obj:`str`) ingestor credential
         self.__incd = ingestorcred
         # (:obj:`str`) scicat_url
         self.__scicat_url = scicat_url
+        bpath, _ = os.path.split(beamtimefile) 
+        # (:obj:`str`) relative scan path to beamtime path
+        self.__relpath = os.path.relpath(path, bpath)
 
         # (:obj:`list`<:obj:`str`>) ingested scan names
         self.__sc_ingested = []
@@ -95,10 +98,12 @@ class DatasetIngestor:
         self.__datasetcommandnxs = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix}.json " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
+            " -r {relpath} " \
             "{scanpath}/{scanname}.nxs"
         # (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix}.json " \
+            " -r {relpath} " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname}"
         # (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
@@ -118,6 +123,7 @@ class DatasetIngestor:
         self.__dctfmt = {
             "scanname": None,
             "scanpath": self.__path,
+            "relpath": self.__relpath,
             "beamtimeid": self.__bid,
             "beamline": self.__bl,
             "doiprefix": self.__doiprefix,

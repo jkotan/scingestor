@@ -331,7 +331,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
@@ -355,7 +355,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
@@ -574,7 +574,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
                          'sourceFolder':
-                         '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                         '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                          'type': 'raw',
                          'updatedAt': '2022-05-14 11:54:29'})
 

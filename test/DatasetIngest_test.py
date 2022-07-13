@@ -113,6 +113,8 @@ class DatasetIngestTest(unittest.TestCase):
             self.__server.shutdown()
         if self.__thread is not None:
             self.__thread.join()
+        self.__thread = None
+        self.__server = None
 
     def tearDown(self):
         self.stophttpserver()
@@ -129,8 +131,8 @@ class DatasetIngestTest(unittest.TestCase):
             r, w = os.pipe()
             new_stdin = mytty(os.fdopen(r, 'r'))
             old_stdin, sys.stdin = sys.stdin, new_stdin
-            tm = threading.Timer(1., myinput, [w, pipeinput])
-            tm.start()
+            # tm = threading.Timer(1., myinput, [w, pipeinput])
+            # tm.start()
         else:
             old_stdin = sys.stdin
             sys.stdin = StringIO()
@@ -313,7 +315,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
@@ -337,7 +339,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
@@ -489,7 +491,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
@@ -513,7 +515,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
@@ -676,7 +678,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
@@ -700,7 +702,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
@@ -724,7 +726,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
@@ -911,7 +913,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
@@ -935,7 +937,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
@@ -959,7 +961,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.assertEqual(len(self.__server.origdatablocks), 3)
@@ -1170,7 +1172,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
@@ -1194,7 +1196,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901234',
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.assertEqual(len(self.__server.origdatablocks), 3)
