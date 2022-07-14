@@ -33,8 +33,8 @@ class DatasetIngestor:
     """
 
     def __init__(self, configuration,
-                 path, dsfile, idsfile, beamtimeId, beamtimefile,
-                 beamline, delay=5):
+                 path, dsfile, idsfile, meta, beamtimefile,
+                 delay=5):
         """ constructor
 
         :param configuration: dictionary with the ingestor configuration
@@ -45,12 +45,10 @@ class DatasetIngestor:
         :type dsfile: :obj:`str`
         :param dsfile: file with a ingester dataset list
         :type dsfile: :obj:`str`
-        :param beamtimeId: beamtime id
-        :type beamtimeId: :obj:`str`
+        :param meta: beamtime configuration
+        :type meta: :obj:`dict` <:obj:`str`,`any`>
         :param beamtimefile: beamtime filename
         :type beamtimefile: :obj:`str`
-        :param beamline: beamline name
-        :type beamline: :obj:`str`
         :param doiprefix: doiprefix
         :type doiprefix: :obj:`str`
         :param ingestorcred: ingestor credential
@@ -71,9 +69,9 @@ class DatasetIngestor:
         # (:obj:`str`) scan path dir
         self.__path = path
         # (:obj:`str`) beamtime id
-        self.__bid = beamtimeId
+        self.__bid = meta["beamtimeId"]
         # (:obj:`str`) beamline name
-        self.__bl = beamline
+        self.__bl = meta["beamline"]
         # (:obj:`str`) beamtime id
         self.__bfile = beamtimefile
 

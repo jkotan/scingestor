@@ -139,8 +139,6 @@ class DatasetIngest:
         # (:obj:`str`) beamtime id
         beamtimeId = meta["beamtimeId"]
         # (:obj:`str`) beamline
-        beamline = meta["beamline"]
-        # (:obj:`str`) beamline
         ds_pattern = "scicat-datasets-{bt}.lst"
         # (:obj:`str`) indested scicat dataset file pattern
         ids_pattern = "scicat-ingested-datasets-{bt}.lst"
@@ -157,7 +155,7 @@ class DatasetIngest:
             scpath, pfn = os.path.split(fn)
             ingestor = DatasetIngestor(
                 self.__config,
-                scpath, fn, ifn, beamtimeId, bpath, beamline, 0)
+                scpath, fn, ifn, meta, bpath, 0)
             ingestor.check_list(reingest=True)
             ingestor.clear_tmpfile()
             if ingestor.waiting_datasets():

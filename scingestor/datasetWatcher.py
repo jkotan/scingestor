@@ -33,8 +33,8 @@ class DatasetWatcher(threading.Thread):
     """
 
     def __init__(self, configuration,
-                 path, dsfile, idsfile, beamtimeId, beamtimefile,
-                 beamline, delay=5):
+                 path, dsfile, idsfile, meta, beamtimefile,
+                 delay=5):
         """ constructor
 
         :param configuration: dictionary with the ingestor configuration
@@ -45,12 +45,10 @@ class DatasetWatcher(threading.Thread):
         :type dsfile: :obj:`str`
         :param dsfile: file with a ingester dataset list
         :type dsfile: :obj:`str`
-        :param beamtimeId: beamtime id
-        :type beamtimeId: :obj:`str`
+        :param meta: beamtime configuration
+        :type meta: :obj:`dict` <:obj:`str`,`any`>
         :param beamtimefile: beamtime filename
         :type beamtimefile: :obj:`str`
-        :param beamline: beamline name
-        :type beamline: :obj:`str`
         :param delay: time delay
         :type delay: :obj:`str`
         """
@@ -80,7 +78,7 @@ class DatasetWatcher(threading.Thread):
         # dataset ingestor
         self.ingestor = DatasetIngestor(
             configuration,
-            path, dsfile, idsfile, beamtimeId, beamtimefile, beamline, delay)
+            path, dsfile, idsfile, meta, beamtimefile, delay)
 
     def _start_notifier(self, path):
         """ start notifier

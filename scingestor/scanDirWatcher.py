@@ -59,8 +59,8 @@ class ScanDirWatcher(threading.Thread):
         self.__meta = meta
         # (:obj:`str`) beamtime id
         self.beamtimeId = meta["beamtimeId"]
-        # (:obj:`str`) beamline name
-        self.__bl = meta["beamline"]
+        # (:obj:`str`) beamline metadata
+        self.__meta = meta
         # (:obj:`float`) delay time for ingestion in s
         self.delay = delay
         # (:obj:`bool`) running loop flag
@@ -181,8 +181,7 @@ class ScanDirWatcher(threading.Thread):
                             self.idslist_filename
                         self.dataset_watchers[fn] = DatasetWatcher(
                             self.__config,
-                            self.__path, fn, ifn, self.beamtimeId,
-                            self.__bpath, self.__bl)
+                            self.__path, fn, ifn, self.__meta, self.__bpath)
                         get_logger().info(
                             'ScanDirWatcher: Creating DatasetWatcher %s' % fn)
                         self.dataset_watchers[fn].start()
@@ -228,10 +227,9 @@ class ScanDirWatcher(threading.Thread):
                                         + self.idslist_filename
                                     self.dataset_watchers[fn] = \
                                         DatasetWatcher(
-                                            self.__config,
-                                            self.__path, fn, ifn,
-                                            self.beamtimeId,
-                                            self.__bpath, self.__bl)
+                                            self.__config, self.__path,
+                                            fn, ifn,
+                                            self.__meta, self.__bpath)
                                     self.dataset_watchers[fn].start()
                                     get_logger().info(
                                         'ScanDirWatcher: Creating '
