@@ -288,7 +288,8 @@ class BeamtimeWatcher:
                             self._add_path(path)
 
                         elif "IN_CREATE" in masks or \
-                             "IN_MOVE_TO" in masks:
+                             "IN_MOVE_TO" in masks or \
+                             "IN_CLOSE_WRITE" in masks:
 
                             files = [fl for fl in [event.name]
                                      if (fl.startswith(self.bt_prefix) and
