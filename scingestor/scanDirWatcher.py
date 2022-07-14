@@ -150,17 +150,20 @@ class ScanDirWatcher(threading.Thread):
         :type path: :obj:`list`<:obj:`str`>
         """
         for path in paths:
+            sdw = None
             try:
                 with self.scandir_lock:
                     if (path, self.__bpath) \
                        not in self.scandir_watchers.keys():
-                        self.scandir_watchers[(path, self.__bpath)] =  \
+                        sdw = \
+                            self.scandir_watchers[(path, self.__bpath)] =  \
                             ScanDirWatcher(self.__config,
                                            path, self.__meta, self.__bpath)
                         get_logger().info(
                             'ScanDirWatcher: Create ScanDirWatcher %s %s'
                             % (path, self.__bpath))
-                        self.scandir_watchers[(path, self.__bpath)].start()
+                if sdw is not None:
+                    sdw.start()
             except Exception as e:
                 get_logger().warning(
                     "%s cannot be watched: %s" % (path, str(e)))
@@ -174,18 +177,20 @@ class ScanDirWatcher(threading.Thread):
 
             get_logger().debug("ScanDir file:  %s " % (self.dslist_fullname))
             if os.path.isfile(self.dslist_fullname):
+                dw = None
                 with self.dataset_lock:
                     fn = self.dslist_fullname
                     if fn not in self.dataset_watchers.keys():
                         ifn = fn[:-(len(self.dslist_filename))] + \
                             self.idslist_filename
-                        self.dataset_watchers[fn] = DatasetWatcher(
+                        dw = self.dataset_watchers[fn] = DatasetWatcher(
                             self.__config,
                             self.__path, fn, ifn, self.__meta, self.__bpath)
                         get_logger().info(
                             'ScanDirWatcher: Creating DatasetWatcher %s' % fn)
-                        self.dataset_watchers[fn].start()
-                        # get_logger().info(str(btmd))
+                if dw is not None:
+                    dw.start()
+                    # get_logger().info(str(btmd))
 
             if os.path.isdir(self.__path):
                 subdirs = [it.path for it in os.scandir(self.__path)
@@ -219,21 +224,23 @@ class ScanDirWatcher(threading.Thread):
                         elif "IN_CREATE" in masks or "IN_MOVE_TO" in masks:
                             fn = os.path.join(
                                 self.wd_to_path[qid], event.name)
+                            dw = None
                             with self.dataset_lock:
                                 if fn not in self.dataset_watchers.keys() \
                                    and fn == self.dslist_fullname:
                                     ifn = \
                                         fn[:-(len(self.dslist_filename))] \
                                         + self.idslist_filename
-                                    self.dataset_watchers[fn] = \
+                                    dw = self.dataset_watchers[fn] = \
                                         DatasetWatcher(
                                             self.__config, self.__path,
                                             fn, ifn,
                                             self.__meta, self.__bpath)
-                                    self.dataset_watchers[fn].start()
-                                    get_logger().info(
-                                        'ScanDirWatcher: Creating '
-                                        'DatasetWatcher %s' % fn)
+                            if dw is not None:
+                                dw.start()
+                                get_logger().info(
+                                    'ScanDirWatcher: Creating '
+                                    'DatasetWatcher %s' % fn)
 
                         # elif "IN_DELETE_SELF" in masks:
                         #     "remove scandir watcher"

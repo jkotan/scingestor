@@ -263,6 +263,7 @@ class BeamtimeWatcher:
                             #     % (str(qid), path))
                             get_logger().debug('Removed %s' % path)
                             ffn = os.path.abspath(path)
+                            dds = []
                             with self.scandir_lock:
                                 for ph, fl in \
                                         list(self.scandir_watchers.keys()):
@@ -271,7 +272,11 @@ class BeamtimeWatcher:
                                         ds = self.scandir_watchers.pop(
                                             (ph, fl))
                                         ds.running = False
-                                        ds.join()
+                                        dds.append(ds)
+                            while len(dds):
+                                ds = dds.pop()
+                                ds.join()
+
                             self._add_path(path)
 
                         elif "IN_CREATE" in masks or \
@@ -337,6 +342,7 @@ class BeamtimeWatcher:
         for bt in files:
             ffn = os.path.abspath(os.path.join(path, bt))
             try:
+                sdw = None
                 with self.scandir_lock:
                     try:
                         with open(ffn) as fl:
@@ -349,9 +355,10 @@ class BeamtimeWatcher:
                         get_logger().info(
                             'BeamtimeWatcher: Create ScanDirWatcher %s %s'
                             % (path, ffn))
-                        self.scandir_watchers[(path, ffn)] =  \
+                        sdw = self.scandir_watchers[(path, ffn)] =  \
                             ScanDirWatcher(self.__config, path, btmd, ffn)
-                        self.scandir_watchers[(path, ffn)].start()
+                if sdw is not None:
+                    sdw.start()
             except Exception as e:
                 get_logger().warning(
                     "%s cannot be watched: %s" % (ffn, str(e)))
