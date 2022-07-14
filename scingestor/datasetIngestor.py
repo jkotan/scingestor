@@ -33,7 +33,7 @@ class DatasetIngestor:
     """
 
     def __init__(self, path, dsfile, idsfile, beamtimeId, beamtimefile,
-                 ingestorcred, scicat_url, delay=5):
+                 beamline, doiprefix, ingestorcred, scicat_url, delay=5):
         """ constructor
 
         :param path: scan dir path
@@ -46,6 +46,10 @@ class DatasetIngestor:
         :type beamtimeId: :obj:`str`
         :param beamtimefile: beamtime filename
         :type beamtimefile: :obj:`str`
+        :param beamline: beamline name
+        :type beamline: :obj:`str`
+        :param doiprefix: doiprefix
+        :type doiprefix: :obj:`str`
         :param ingestorcred: ingestor credential
         :type ingestorcred: :obj:`str`
         :param scicat_url: scicat_url
@@ -63,12 +67,19 @@ class DatasetIngestor:
         self.__path = path
         # (:obj:`str`) beamtime id
         self.__bid = beamtimeId
+        # (:obj:`str`) beamline name
+        self.__bl = beamline
+        # (:obj:`str`) doiprefix
+        self.__doiprefix = doiprefix
         # (:obj:`str`) beamtime id
         self.__bfile = beamtimefile
-        # (:obj:`str`) beamtime id
+        # (:obj:`str`) ingestor credential
         self.__incd = ingestorcred
         # (:obj:`str`) scicat_url
         self.__scicat_url = scicat_url
+        bpath, _ = os.path.split(beamtimefile)
+        # (:obj:`str`) relative scan path to beamtime path
+        self.__relpath = os.path.relpath(path, bpath)
 
         # (:obj:`list`<:obj:`str`>) ingested scan names
         self.__sc_ingested = []
@@ -87,28 +98,35 @@ class DatasetIngestor:
         self.__datasetcommandnxs = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix}.json " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
+            " -r {relpath} " \
             "{scanpath}/{scanname}.nxs"
         # (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix}.json " \
+            " -r {relpath} " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname}"
         # (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*.origdatablock.json,*.scan.json,*~ " \
-            " -p {beamtimeid}/{scanname} " \
+            " -p {doiprefix}/{beamtimeid}/{scanname} " \
+            " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
             " -o {scanpath}/{scanname}{dbpostfix}.json " \
             " {scanpath}/{scanname}"
         # (:obj:`str`) datablock shell command
         self.__datablockmemcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*.origdatablock.json,*.scan.json,*~ " \
-            " -p {beamtimeid}/{scanname} " \
+            " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
+            " -p {doiprefix}/{beamtimeid}/{scanname} " \
             " {scanpath}/{scanname}"
 
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
         self.__dctfmt = {
             "scanname": None,
             "scanpath": self.__path,
+            "relpath": self.__relpath,
             "beamtimeid": self.__bid,
+            "beamline": self.__bl,
+            "doiprefix": self.__doiprefix,
             "beamtimefile": self.__bfile,
             "scpostfix": self.__scanpostfix.replace("*", ""),
             "dbpostfix": self.__datablockpostfix.replace("*", ""),
@@ -135,8 +153,8 @@ class DatasetIngestor:
         #     'DatasetIngestor: LOGIN %s' % self.__tokenurl)
         # (:obj:`str`) dataset url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
-        #    "Datasets"
-        self.__dataseturl = self.__scicat_url + "Datasets"
+        #    "RawDatasets"
+        self.__dataseturl = self.__scicat_url + "RawDatasets"
         # (:obj:`str`) origdatablock url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #     "OrigDatablocks"
@@ -379,7 +397,7 @@ class DatasetIngestor:
                 raise Exception(
                     "Wrong SC proposalId %s for DESY beamtimeId %s in %s"
                     % (mt["proposalId"], self.__bid, metafile))
-            if not mt["pid"].startswith("%s/" % self.__bid):
+            if not mt["pid"].startswith("%s/" % (self.__bid)):
                 raise Exception(
                     "Wrong pid %s for DESY beamtimeId %s in  %s"
                     % (mt["pid"], self.__bid, metafile))
@@ -405,11 +423,12 @@ class DatasetIngestor:
             with open(metafile) as fl:
                 smt = fl.read()
                 mt = json.loads(smt)
-            if not mt["datasetId"].startswith("%s/" % self.__bid):
+            if not mt["datasetId"].startswith(
+                    "%s/%s/" % (self.__doiprefix, self.__bid)):
                 raise Exception(
                     "Wrong datasetId %s for DESY beamtimeId %s in  %s"
                     % (mt["pid"], self.__bid, metafile))
-            if mt["datasetId"] != pid:
+            if mt["datasetId"] != "%s/%s" % (self.__doiprefix, pid):
                 raise Exception(
                     "Wrong datasetId %s for DESY beamtimeId %s in %s"
                     % (mt["pid"], self.__bid, metafile))
@@ -454,10 +473,13 @@ class DatasetIngestor:
             odb = self._generate_origdatablock_metadata(scan)
         dbstatus = None
 
+        pid = None
         if rds and odb:
             if rds and rds[0]:
                 pid = self._ingest_rawdataset_metadata(rds, token)
             if odb and odb[0] and pid:
+                if pid is None and rdss and rdss[0]:
+                    pid = self._get_pid(rdss[0])
                 dbstatus = self._ingest_origdatablock_metadata(
                     odb, pid, token)
         if pid and dbstatus:

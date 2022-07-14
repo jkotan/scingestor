@@ -38,7 +38,7 @@ class BeamtimeWatcher:
     def __init__(self, options):
         """ constructor
 
-        :param options: time delay
+        :param options: dictionary with options
         :type options: :obj:`str`
         """
 
@@ -94,12 +94,16 @@ class BeamtimeWatcher:
         self.scandir_lock = threading.Lock()
         # (:obj:`float`) timeout value for inotifyx get events
         self.timeout = 0.1
+        # (:obj:`str`) doi prefix
+        self.__doiprefix = "10.3204"
         # (:obj:`str`) beamtime id
         self.__incd = None
         # (:obj:`str`) scicat url
         self.__scicat_url = "http://localhost:8881"
         # (:obj:`str`) ingestor log dir
         self.__inlogdir = ""
+        if "doiprefix" in self.__config.keys():
+            self.__doiprefix = self.__config["doi_prefix"]
         if "ingestor_credential_file" in self.__config.keys():
             with open(self.__config["ingestor_credential_file"]) as fl:
                 self.__incd = fl.read().strip()
@@ -358,8 +362,9 @@ class BeamtimeWatcher:
                             'BeamtimeWatcher: Create ScanDirWatcher %s %s'
                             % (path, ffn))
                         self.scandir_watchers[(path, ffn)] =  \
-                            ScanDirWatcher(path, btmd, ffn, self.__incd,
-                                           self.__scicat_url)
+                            ScanDirWatcher(
+                                path, btmd, ffn, self.__doiprefix, self.__incd,
+                                self.__scicat_url)
                         self.scandir_watchers[(path, ffn)].start()
             except Exception as e:
                 get_logger().warning(

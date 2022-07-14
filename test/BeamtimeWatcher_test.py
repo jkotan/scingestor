@@ -309,9 +309,9 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r20'
+        commands = [('scicat_dataset_ingestor -c %s -r10 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r20'
+                    ('scicat_dataset_ingestor --config %s -r10 -l debug'
                      % cfgfname).split()]
 
         def test_thread():
@@ -331,26 +331,39 @@ optional arguments:
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
-                self.assertEqual(
-                    'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Create ScanDirWatcher '
-                    '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch {cnt2}: {basedir}\n'
-                    # 'INFO : BeamtimeWatcher: Removing watch on a '
-                    # 'IMDM event 1: {basedir}\n'
-                    'INFO : ScanDirWatcher: Removing watch {cnt2}: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Adding watch {cnt3}: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Create ScanDirWatcher '
-                    '{basedir} {btmeta}\n'
-                    'INFO : ScanDirWatcher: Adding watch {cnt4}: {basedir}\n'
-                    'INFO : BeamtimeWatcher: Removing watch {cnt3}: '
-                    '{basedir}\n'
-                    'INFO : BeamtimeWatcher: '
-                    'Stopping ScanDirWatcher {btmeta}\n'
-                    'INFO : ScanDirWatcher: Removing watch {cnt4}: {basedir}\n'
-                    .format(basedir=fdirname, btmeta=fullbtmeta,
-                            cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
-                            cnt4=(cnt + 3)), er)
+                nodebug = "\n".join([ee for ee in er.split("\n")
+                                     if "DEBUG :" not in ee])
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                        '{basedir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        # 'INFO : BeamtimeWatcher: Removing watch on a '
+                        # 'IMDM event 1: {basedir}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Adding watch {cnt3}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                        '{basedir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt4}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Removing watch {cnt3}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: '
+                        'Stopping ScanDirWatcher {btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt4}: '
+                        '{basedir}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                                cnt4=(cnt + 3)), nodebug)
+                except Exception:
+                    print(er)
+                    raise
+
                 self.assertEqual('', vl)
         finally:
             if os.path.exists(cfgfname):
