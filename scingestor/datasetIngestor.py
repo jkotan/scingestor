@@ -32,10 +32,13 @@ class DatasetIngestor:
     """ Dataset Ingestor
     """
 
-    def __init__(self, path, dsfile, idsfile, beamtimeId, beamtimefile,
-                 beamline, doiprefix, ingestorcred, scicat_url, delay=5):
+    def __init__(self, configuration,
+                 path, dsfile, idsfile, beamtimeId, beamtimefile,
+                 beamline, delay=5):
         """ constructor
 
+        :param configuration: dictionary with the ingestor configuration
+        :type configuration: :obj:`dict` <:obj:`str`, `any`>
         :param path: scan dir path
         :type path: :obj:`str`
         :param dsfile: file with a dataset list
@@ -57,6 +60,8 @@ class DatasetIngestor:
         :param delay: time delay
         :type delay: :obj:`str`
         """
+        # (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
+        self.__config = configuration or {}
         # (:obj:`str`) file with a dataset list
         self.__dsfile = dsfile
         # (:obj:`str`) file with a ingested dataset list
@@ -69,17 +74,27 @@ class DatasetIngestor:
         self.__bid = beamtimeId
         # (:obj:`str`) beamline name
         self.__bl = beamline
-        # (:obj:`str`) doiprefix
-        self.__doiprefix = doiprefix
         # (:obj:`str`) beamtime id
         self.__bfile = beamtimefile
-        # (:obj:`str`) ingestor credential
-        self.__incd = ingestorcred
-        # (:obj:`str`) scicat_url
-        self.__scicat_url = scicat_url
+
         bpath, _ = os.path.split(beamtimefile)
         # (:obj:`str`) relative scan path to beamtime path
         self.__relpath = os.path.relpath(path, bpath)
+
+        # (:obj:`str`) doi prefix
+        self.__doiprefix = "10.3204"
+        # (:obj:`str`) beamtime id
+        self.__incd = None
+        # (:obj:`str`) scicat url
+        self.__scicat_url = "http://localhost:8881"
+
+        if "doiprefix" in self.__config.keys():
+            self.__doiprefix = self.__config["doi_prefix"]
+        if "ingestor_credential_file" in self.__config.keys():
+            with open(self.__config["ingestor_credential_file"]) as fl:
+                self.__incd = fl.read().strip()
+        if "scicat_url" in self.__config.keys():
+            self.__scicat_url = self.__config["scicat_url"]
 
         # (:obj:`list`<:obj:`str`>) ingested scan names
         self.__sc_ingested = []
