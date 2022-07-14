@@ -77,7 +77,7 @@ class DatasetIngestor:
         self.__incd = ingestorcred
         # (:obj:`str`) scicat_url
         self.__scicat_url = scicat_url
-        bpath, _ = os.path.split(beamtimefile) 
+        bpath, _ = os.path.split(beamtimefile)
         # (:obj:`str`) relative scan path to beamtime path
         self.__relpath = os.path.relpath(path, bpath)
 
