@@ -31,27 +31,26 @@ import inotifyx
 class ScanDirWatcher(threading.Thread):
     """ ScanDir Watcher
     """
-
-    def __init__(self, path, meta, bpath, doiprefix, ingestorcred,
-                 scicat_url, delay=5):
+    def __init__(self,
+                 configuration,
+                 path, meta, bpath,
+                 delay=5):
         """ constructor
 
+        :param configuration: dictionary with the ingestor configuration
+        :type configuration: :obj:`dict` <:obj:`str`, `any`>
         :param path: scan dir path
         :type path: :obj:`str`
         :param meta: beamtime configuration
         :type meta: :obj:`dict` <:obj:`str`,`any`>
         :param bpath: beamtime file
         :type bpath: :obj:`str`
-        :param doiprefix: doiprefix
-        :type doiprefix: :obj:`str`
-        :param ingestorcred: ingestor credential
-        :type ingestorcred: :obj:`str`
-        :param scicat_url: scicat_url
-        :type scicat_url: :obj:`str`
         :param delay: time delay
         :type delay: :obj:`int`
         """
         threading.Thread.__init__(self)
+        # (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
+        self.__config = configuration or {}
         # (:obj:`str`) scan dir path
         self.__path = path
         # (:obj:`str`) beamtime path and file name
@@ -60,14 +59,8 @@ class ScanDirWatcher(threading.Thread):
         self.__meta = meta
         # (:obj:`str`) beamtime id
         self.beamtimeId = meta["beamtimeId"]
-        # (:obj:`str`) beamline name
-        self.__bl = meta["beamline"]
-        # (:obj:`str`) beamtime id
-        self.__incd = ingestorcred
-        # (:obj:`str`) doiprefix
-        self.__doiprefix = doiprefix
-        # (:obj:`str`) scicat_url
-        self.__scicat_url = scicat_url
+        # (:obj:`str`) beamline metadata
+        self.__meta = meta
         # (:obj:`float`) delay time for ingestion in s
         self.delay = delay
         # (:obj:`bool`) running loop flag
@@ -157,19 +150,20 @@ class ScanDirWatcher(threading.Thread):
         :type path: :obj:`list`<:obj:`str`>
         """
         for path in paths:
+            sdw = None
             try:
                 with self.scandir_lock:
                     if (path, self.__bpath) \
                        not in self.scandir_watchers.keys():
-                        self.scandir_watchers[(path, self.__bpath)] =  \
-                            ScanDirWatcher(
-                                path, self.__meta, self.__bpath,
-                                self.__doiprefix, self.__incd,
-                                self.__scicat_url)
+                        sdw = \
+                            self.scandir_watchers[(path, self.__bpath)] =  \
+                            ScanDirWatcher(self.__config,
+                                           path, self.__meta, self.__bpath)
                         get_logger().info(
                             'ScanDirWatcher: Create ScanDirWatcher %s %s'
                             % (path, self.__bpath))
-                        self.scandir_watchers[(path, self.__bpath)].start()
+                if sdw is not None:
+                    sdw.start()
             except Exception as e:
                 get_logger().warning(
                     "%s cannot be watched: %s" % (path, str(e)))
@@ -183,19 +177,20 @@ class ScanDirWatcher(threading.Thread):
 
             get_logger().debug("ScanDir file:  %s " % (self.dslist_fullname))
             if os.path.isfile(self.dslist_fullname):
+                dw = None
                 with self.dataset_lock:
                     fn = self.dslist_fullname
                     if fn not in self.dataset_watchers.keys():
                         ifn = fn[:-(len(self.dslist_filename))] + \
                             self.idslist_filename
-                        self.dataset_watchers[fn] = DatasetWatcher(
-                            self.__path, fn, ifn, self.beamtimeId,
-                            self.__bpath, self.__bl, self.__doiprefix,
-                            self.__incd, self.__scicat_url)
+                        dw = self.dataset_watchers[fn] = DatasetWatcher(
+                            self.__config,
+                            self.__path, fn, ifn, self.__meta, self.__bpath)
                         get_logger().info(
                             'ScanDirWatcher: Creating DatasetWatcher %s' % fn)
-                        self.dataset_watchers[fn].start()
-                        # get_logger().info(str(btmd))
+                if dw is not None:
+                    dw.start()
+                    # get_logger().info(str(btmd))
 
             if os.path.isdir(self.__path):
                 subdirs = [it.path for it in os.scandir(self.__path)
@@ -229,23 +224,23 @@ class ScanDirWatcher(threading.Thread):
                         elif "IN_CREATE" in masks or "IN_MOVE_TO" in masks:
                             fn = os.path.join(
                                 self.wd_to_path[qid], event.name)
+                            dw = None
                             with self.dataset_lock:
                                 if fn not in self.dataset_watchers.keys() \
                                    and fn == self.dslist_fullname:
                                     ifn = \
                                         fn[:-(len(self.dslist_filename))] \
                                         + self.idslist_filename
-                                    self.dataset_watchers[fn] = \
+                                    dw = self.dataset_watchers[fn] = \
                                         DatasetWatcher(
-                                        self.__path, fn, ifn,
-                                            self.beamtimeId,
-                                            self.__bpath, self.__bl,
-                                            self.__doiprefix,
-                                            self.__incd)
-                                    self.dataset_watchers[fn].start()
-                                    get_logger().info(
-                                        'ScanDirWatcher: Creating '
-                                        'DatasetWatcher %s' % fn)
+                                            self.__config, self.__path,
+                                            fn, ifn,
+                                            self.__meta, self.__bpath)
+                            if dw is not None:
+                                dw.start()
+                                get_logger().info(
+                                    'ScanDirWatcher: Creating '
+                                    'DatasetWatcher %s' % fn)
 
                         # elif "IN_DELETE_SELF" in masks:
                         #     "remove scandir watcher"

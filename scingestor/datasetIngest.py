@@ -40,8 +40,13 @@ class DatasetIngest:
         :param options: time delay
         :type options: :obj:`str`
         """
-        # (:obj:`dict` <:obj:`str`, `any`>) beamtime configuration
+        # (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
         self.__config = {}
+        if options.config:
+            self.__config = load_config(options.config) or {}
+            # get_logger().info("CONFIGURATION: %s" % str(self.__config))
+            get_logger().debug("CONFIGURATION: %s" % str(self.__config))
+
         # (:obj:`list` <:obj:`str`>) beamtime directories
         self.beamtime_dirs = [
             # "/home/jkotan/gpfs/current",
@@ -49,11 +54,6 @@ class DatasetIngest:
             # # "/home/jkotan/gpfs/comissioning/raw",
             # "/home/jkotan/gpfs/local",
         ]
-        if options.config:
-            self.__config = load_config(options.config) or {}
-            # get_logger().info("CONFIGURATION: %s" % str(self.__config))
-            get_logger().debug("CONFIGURATION: %s" % str(self.__config))
-
         if "beamtime_dirs" in self.__config.keys() \
            and isinstance(self.__config["beamtime_dirs"], list):
             self.beamtime_dirs = self.__config["beamtime_dirs"]
@@ -139,8 +139,6 @@ class DatasetIngest:
         # (:obj:`str`) beamtime id
         beamtimeId = meta["beamtimeId"]
         # (:obj:`str`) beamline
-        beamline = meta["beamline"]
-        # (:obj:`str`) beamline
         ds_pattern = "scicat-datasets-{bt}.lst"
         # (:obj:`str`) indested scicat dataset file pattern
         ids_pattern = "scicat-ingested-datasets-{bt}.lst"
@@ -156,8 +154,8 @@ class DatasetIngest:
             ifn = fn[:-(len(dslist_filename))] + idslist_filename
             scpath, pfn = os.path.split(fn)
             ingestor = DatasetIngestor(
-                scpath, fn, ifn, beamtimeId, bpath, beamline,
-                doiprefix, ingestorcred, scicat_url, 0)
+                self.__config,
+                scpath, fn, ifn, meta, bpath, 0)
             ingestor.check_list(reingest=True)
             ingestor.clear_tmpfile()
             if ingestor.waiting_datasets():

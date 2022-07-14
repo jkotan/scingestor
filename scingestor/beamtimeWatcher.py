@@ -44,8 +44,13 @@ class BeamtimeWatcher:
 
         signal.signal(signal.SIGTERM, self._signal_handle)
 
-        # (:obj:`dict` <:obj:`str`, `any`>) beamtime configuration
+        # (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
         self.__config = {}
+        if options.config:
+            self.__config = load_config(options.config) or {}
+            # get_logger().info("CONFIGURATION: %s" % str(self.__config))
+            get_logger().debug("CONFIGURATION: %s" % str(self.__config))
+
         # (:obj:`list` <:obj:`str`>) beamtime directories
         self.beamtime_dirs = [
             # "/home/jkotan/gpfs/current",
@@ -53,11 +58,6 @@ class BeamtimeWatcher:
             # # "/home/jkotan/gpfs/comissioning/raw",
             # "/home/jkotan/gpfs/local",
         ]
-        if options.config:
-            self.__config = load_config(options.config) or {}
-            # get_logger().info("CONFIGURATION: %s" % str(self.__config))
-            get_logger().debug("CONFIGURATION: %s" % str(self.__config))
-
         if "beamtime_dirs" in self.__config.keys() \
            and isinstance(self.__config["beamtime_dirs"], list):
             self.beamtime_dirs = self.__config["beamtime_dirs"]
@@ -94,23 +94,10 @@ class BeamtimeWatcher:
         self.scandir_lock = threading.Lock()
         # (:obj:`float`) timeout value for inotifyx get events
         self.timeout = 0.1
-        # (:obj:`str`) doi prefix
-        self.__doiprefix = "10.3204"
-        # (:obj:`str`) beamtime id
-        self.__incd = None
-        # (:obj:`str`) scicat url
-        self.__scicat_url = "http://localhost:8881"
         # (:obj:`str`) ingestor log dir
         self.__inlogdir = ""
-        if "doiprefix" in self.__config.keys():
-            self.__doiprefix = self.__config["doi_prefix"]
-        if "ingestor_credential_file" in self.__config.keys():
-            with open(self.__config["ingestor_credential_file"]) as fl:
-                self.__incd = fl.read().strip()
         if "ingestor_log_dir" in self.__config.keys():
             self.__inlogdir = self.__config["ingestor_log_dir"]
-        if "scicat_url" in self.__config.keys():
-            self.__scicat_url = self.__config["scicat_url"]
         try:
             # (:obj:`float`) run time in s
             self.__runtime = float(options.runtime)
@@ -276,6 +263,7 @@ class BeamtimeWatcher:
                             #     % (str(qid), path))
                             get_logger().debug('Removed %s' % path)
                             ffn = os.path.abspath(path)
+                            dds = []
                             with self.scandir_lock:
                                 for ph, fl in \
                                         list(self.scandir_watchers.keys()):
@@ -284,11 +272,16 @@ class BeamtimeWatcher:
                                         ds = self.scandir_watchers.pop(
                                             (ph, fl))
                                         ds.running = False
-                                        ds.join()
+                                        dds.append(ds)
+                            while len(dds):
+                                ds = dds.pop()
+                                ds.join()
+
                             self._add_path(path)
 
                         elif "IN_CREATE" in masks or \
-                             "IN_MOVE_TO" in masks:
+                             "IN_MOVE_TO" in masks or \
+                             "IN_CLOSE_WRITE" in masks:
 
                             files = [fl for fl in [event.name]
                                      if (fl.startswith(self.bt_prefix) and
@@ -349,6 +342,7 @@ class BeamtimeWatcher:
         for bt in files:
             ffn = os.path.abspath(os.path.join(path, bt))
             try:
+                sdw = None
                 with self.scandir_lock:
                     try:
                         with open(ffn) as fl:
@@ -361,11 +355,10 @@ class BeamtimeWatcher:
                         get_logger().info(
                             'BeamtimeWatcher: Create ScanDirWatcher %s %s'
                             % (path, ffn))
-                        self.scandir_watchers[(path, ffn)] =  \
-                            ScanDirWatcher(
-                                path, btmd, ffn, self.__doiprefix, self.__incd,
-                                self.__scicat_url)
-                        self.scandir_watchers[(path, ffn)].start()
+                        sdw = self.scandir_watchers[(path, ffn)] =  \
+                            ScanDirWatcher(self.__config, path, btmd, ffn)
+                if sdw is not None:
+                    sdw.start()
             except Exception as e:
                 get_logger().warning(
                     "%s cannot be watched: %s" % (ffn, str(e)))
