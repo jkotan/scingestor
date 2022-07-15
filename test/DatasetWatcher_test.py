@@ -196,6 +196,7 @@ class DatasetWatcherTest(unittest.TestCase):
         fdirname = os.path.abspath(dirname)
         fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
         fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
         btmeta = "beamtime-metadata-99001234.json"
         dslist = "scicat-datasets-99001234.lst"
         idslist = "scicat-ingested-datasets-99001234.lst"
@@ -239,6 +240,7 @@ class DatasetWatcherTest(unittest.TestCase):
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
+                os.mkdir(fsubdirname3)
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
@@ -404,6 +406,7 @@ class DatasetWatcherTest(unittest.TestCase):
         fdirname = os.path.abspath(dirname)
         fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
         fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
         os.mkdir(fdirname)
         btmeta = "beamtime-metadata-99001234.json"
         dslist = "scicat-datasets-99001234.lst"
@@ -448,6 +451,8 @@ class DatasetWatcherTest(unittest.TestCase):
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
+            time.sleep(5)
+            os.mkdir(fsubdirname3)
             time.sleep(12)
             with open(fdslist, "a+") as fds:
                 fds.write("myscan_00003\n")

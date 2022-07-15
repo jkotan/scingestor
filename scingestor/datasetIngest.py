@@ -44,15 +44,12 @@ class DatasetIngest:
         self.__config = {}
         if options.config:
             self.__config = load_config(options.config) or {}
-            # get_logger().info("CONFIGURATION: %s" % str(self.__config))
             get_logger().debug("CONFIGURATION: %s" % str(self.__config))
 
         # (:obj:`list` <:obj:`str`>) beamtime directories
         self.beamtime_dirs = [
-            # "/home/jkotan/gpfs/current",
-            # "/home/jkotan/gpfs/commissioning",
-            # # "/home/jkotan/gpfs/comissioning/raw",
-            # "/home/jkotan/gpfs/local",
+            # "/gpfs/current",
+            # "/gpfs/commissioning",
         ]
         if "beamtime_dirs" in self.__config.keys() \
            and isinstance(self.__config["beamtime_dirs"], list):
@@ -65,28 +62,10 @@ class DatasetIngest:
 
         # (:obj:`float`) timeout value for inotifyx get events
         self.timeout = 0.1
-        # (:obj:`str`) doi prefix
-        self.__doiprefix = "10.3204"
-        # (:obj:`str`) beamtime id
-        self.__incd = None
-        # (:obj:`str`) scicat url
-        self.__scicat_url = "http://localhost:8881"
-        # (:obj:`str`) ingestor log dir
-        self.__inlogdir = ""
-        if "doiprefix" in self.__config.keys():
-            self.__doiprefix = self.__config["doi_prefix"]
-        if "ingestor_credential_file" in self.__config.keys():
-            with open(self.__config["ingestor_credential_file"]) as fl:
-                self.__incd = fl.read().strip()
-        if "ingestor_log_dir" in self.__config.keys():
-            self.__inlogdir = self.__config["ingestor_log_dir"]
-        if "scicat_url" in self.__config.keys():
-            self.__scicat_url = self.__config["scicat_url"]
 
         if not self.beamtime_dirs:
             get_logger().warning(
-                'DatasetIngest: '
-                'Beamtime directories not defined')
+                'DatasetIngest: Beamtime directories not defined')
 
     def start(self):
         """ start ingestion """
@@ -108,15 +87,12 @@ class DatasetIngest:
                         time.sleep(0.1)
                         with open(ffn) as fl:
                             btmd = json.loads(fl.read())
-                    self.ingest_scandir(
-                        path, btmd, ffn, self.__doiprefix, self.__incd,
-                        self.__scicat_url)
+                    self.ingest_scandir(path, btmd, ffn)
                 except Exception as e:
                     get_logger().warning(
                         "%s cannot be ingested: %s" % (ffn, str(e)))
 
-    def ingest_scandir(self, path, meta, bpath, doiprefix, ingestorcred,
-                       scicat_url):
+    def ingest_scandir(self, path, meta, bpath):
         """ constructor
 
         :param path: scan dir path
@@ -125,10 +101,6 @@ class DatasetIngest:
         :type meta: :obj:`dict` <:obj:`str`,`any`>
         :param bpath: beamtime file
         :type bpath: :obj:`str`
-        :param ingestorcred: ingestor credential
-        :type ingestorcred: :obj:`str`
-        :param scicat_url: scicat_url
-        :type scicat_url: :obj:`str`
         """
         # # (:obj:`str`) scan dir path
         # self.__path = path
@@ -190,12 +162,6 @@ class DatasetIngest:
 def main():
     """ the main program function
     """
-
-    # #: pipe arguments
-    # pipe = []
-    # if not sys.stdin.isatty():
-    #     #: system pipe
-    #     pipe = sys.stdin.readlines()
 
     description = "SciCat Dataset ingestion"
 

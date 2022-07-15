@@ -48,15 +48,12 @@ class BeamtimeWatcher:
         self.__config = {}
         if options.config:
             self.__config = load_config(options.config) or {}
-            # get_logger().info("CONFIGURATION: %s" % str(self.__config))
             get_logger().debug("CONFIGURATION: %s" % str(self.__config))
 
         # (:obj:`list` <:obj:`str`>) beamtime directories
         self.beamtime_dirs = [
-            # "/home/jkotan/gpfs/current",
-            # "/home/jkotan/gpfs/commissioning",
-            # # "/home/jkotan/gpfs/comissioning/raw",
-            # "/home/jkotan/gpfs/local",
+            # "/gpfs/current",
+            # "/gpfs/commissioning",
         ]
         if "beamtime_dirs" in self.__config.keys() \
            and isinstance(self.__config["beamtime_dirs"], list):
@@ -94,10 +91,6 @@ class BeamtimeWatcher:
         self.scandir_lock = threading.Lock()
         # (:obj:`float`) timeout value for inotifyx get events
         self.timeout = 0.1
-        # (:obj:`str`) ingestor log dir
-        self.__inlogdir = ""
-        if "ingestor_log_dir" in self.__config.keys():
-            self.__inlogdir = self.__config["ingestor_log_dir"]
         try:
             # (:obj:`float`) run time in s
             self.__runtime = float(options.runtime)
@@ -108,8 +101,7 @@ class BeamtimeWatcher:
         if not self.beamtime_dirs:
             self.running = False
             get_logger().warning(
-                'BeamtimeWatcher: '
-                'Beamtime directories not defined')
+                'BeamtimeWatcher: Beamtime directories not defined')
 
     def find_bt_files(self, path, prefix, postfix):
         """ find beamtime files with given prefix and postfix in the given path
@@ -377,6 +369,7 @@ class BeamtimeWatcher:
             dsw.running = False
             dsw.join()
         #     sys.exit(0)
+        self.scandir_watchers = []
 
     def _signal_handle(self, sig, _):
         """ handle SIGTERM
@@ -391,12 +384,6 @@ class BeamtimeWatcher:
 def main():
     """ the main program function
     """
-
-    # #: pipe arguments
-    # pipe = []
-    # if not sys.stdin.isatty():
-    #     #: system pipe
-    #     pipe = sys.stdin.readlines()
 
     description = "BeamtimeWatcher service SciCat Dataset ingestion"
 
