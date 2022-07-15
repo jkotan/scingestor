@@ -192,7 +192,7 @@ class ScanDirWatcher(threading.Thread):
                     dw.start()
                     # get_logger().info(str(btmd))
 
-            if os.path.isdir(self.__path):
+            elif os.path.isdir(self.__path):
                 subdirs = [it.path for it in os.scandir(self.__path)
                            if it.is_dir()]
                 self._lunch_scandir_watcher(subdirs)
@@ -215,13 +215,26 @@ class ScanDirWatcher(threading.Thread):
                                                  event.masks,
                                                  self.wd_to_path[qid]))
                         masks = event.masks.split("|")
-                        if "IN_ISDIR" in masks and (
-                                "IN_CREATE" in masks
-                                or "IN_MOVE_TO" in masks):
-                            npath = os.path.join(
-                                self.wd_to_path[qid], event.name)
-                            self._lunch_scandir_watcher([npath])
-                        elif "IN_CREATE" in masks or "IN_MOVE_TO" in masks:
+                        if "IN_IGNORED" in masks or \
+                           "IN_MOVE_FROM" in masks or \
+                           "IN_DELETE" in masks or \
+                           "IN_MOVE_SELF" in masks:
+                            # path/file does not exist anymore
+                            #     (moved/deleted)
+                            if event.name is not None:
+                                npath = os.path.join(
+                                    self.wd_to_path[qid], event.name)
+                                if self.dslist_fullname == npath and \
+                                   not os.path.isfile(self.dslist_fullname) \
+                                   and os.path.isdir(self.__path):
+                                    subdirs = [
+                                        it.path
+                                        for it in os.scandir(self.__path)
+                                        if it.is_dir()]
+                                    self._lunch_scandir_watcher(subdirs)
+
+                        elif "IN_ISDIR" not in masks and (
+                                "IN_CREATE" in masks or "IN_MOVE_TO" in masks):
                             fn = os.path.join(
                                 self.wd_to_path[qid], event.name)
                             dw = None
@@ -241,7 +254,27 @@ class ScanDirWatcher(threading.Thread):
                                 get_logger().info(
                                     'ScanDirWatcher: Creating '
                                     'DatasetWatcher %s' % fn)
+                            dds = []
+                            with self.dataset_lock:
+                                for path, fn in \
+                                        list(self.scandir_watchers.keys()):
+                                    ds = self.scandir_watchers.pop((path, fn))
+                                    get_logger().info(
+                                        'ScanDirWatcher: '
+                                        'Stopping ScanDirWatcher %s' % (fn))
+                                    ds.running = False
+                                    dds.append(ds)
+                            while len(dds):
+                                ds = dds.pop()
+                                ds.join()
 
+                        elif "IN_ISDIR" in masks and (
+                                "IN_CREATE" in masks
+                                or "IN_MOVE_TO" in masks):
+                            if not os.path.isfile(self.dslist_fullname):
+                                npath = os.path.join(
+                                    self.wd_to_path[qid], event.name)
+                                self._lunch_scandir_watcher([npath])
                         # elif "IN_DELETE_SELF" in masks:
                         #     "remove scandir watcher"
                         #     # self.wd_to_path[qid]
@@ -261,9 +294,12 @@ class ScanDirWatcher(threading.Thread):
                 'ScanDirWatcher: Stopping DatasetWatcher %s' % (fn))
             scw.running = False
             scw.join()
+        # self.dataset_watchers = []
+
         for pf, dsw in self.scandir_watchers.items():
             path, fn = pf
             get_logger().info('ScanDirWatcher: '
                               'Stopping ScanDirWatcher %s' % (fn))
             dsw.running = False
             dsw.join()
+        # self.scandir_watchers = []
