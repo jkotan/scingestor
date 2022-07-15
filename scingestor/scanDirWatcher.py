@@ -221,15 +221,17 @@ class ScanDirWatcher(threading.Thread):
                            "IN_MOVE_SELF" in masks:
                             # path/file does not exist anymore
                             #     (moved/deleted)
-                            npath = os.path.join(
-                                self.wd_to_path[qid], event.name)
-                            if self.dslist_fullname == npath and \
-                               not os.path.isfile(self.dslist_fullname) and \
-                               os.path.isdir(self.__path):
-                                subdirs = [
-                                    it.path for it in os.scandir(self.__path)
-                                    if it.is_dir()]
-                                self._lunch_scandir_watcher(subdirs)
+                            if event.name is not None:
+                                npath = os.path.join(
+                                    self.wd_to_path[qid], event.name)
+                                if self.dslist_fullname == npath and \
+                                   not os.path.isfile(self.dslist_fullname) \
+                                   and os.path.isdir(self.__path):
+                                    subdirs = [
+                                        it.path
+                                        for it in os.scandir(self.__path)
+                                        if it.is_dir()]
+                                    self._lunch_scandir_watcher(subdirs)
 
                         elif "IN_ISDIR" not in masks and (
                                 "IN_CREATE" in masks or "IN_MOVE_TO" in masks):
@@ -292,7 +294,7 @@ class ScanDirWatcher(threading.Thread):
                 'ScanDirWatcher: Stopping DatasetWatcher %s' % (fn))
             scw.running = False
             scw.join()
-        self.dataset_watchers = []
+        # self.dataset_watchers = []
 
         for pf, dsw in self.scandir_watchers.items():
             path, fn = pf
@@ -300,4 +302,4 @@ class ScanDirWatcher(threading.Thread):
                               'Stopping ScanDirWatcher %s' % (fn))
             dsw.running = False
             dsw.join()
-        self.scandir_watchers = []
+        # self.scandir_watchers = []
