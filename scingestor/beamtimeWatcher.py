@@ -256,6 +256,9 @@ class BeamtimeWatcher:
                             get_logger().debug('Removed %s' % path)
                             ffn = os.path.abspath(path)
                             dds = []
+                            get_logger().debug(
+                                'ScanDirs watchers: %s' %
+                                (str(list(self.scandir_watchers.keys()))))
                             with self.scandir_lock:
                                 for ph, fl in \
                                         list(self.scandir_watchers.keys()):
