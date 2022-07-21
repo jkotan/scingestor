@@ -28,7 +28,6 @@ import shutil
 import json
 
 from scingestor import datasetIngest
-from scingestor import safeINotifier
 
 
 try:
@@ -74,7 +73,6 @@ class DatasetIngestTest(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
 
         self.maxDiff = None
-        self.notifier = safeINotifier.SafeINotifier()
 
     def myAssertDict(self, dct, dct2, skip=None, parent=None):
         parent = parent or ""
@@ -243,8 +241,6 @@ class DatasetIngestTest(unittest.TestCase):
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
-                self.notifier = safeINotifier.SafeINotifier()
-                # cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -434,8 +430,6 @@ class DatasetIngestTest(unittest.TestCase):
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
-                self.notifier = safeINotifier.SafeINotifier()
-                # cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -610,8 +604,6 @@ class DatasetIngestTest(unittest.TestCase):
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
-                self.notifier = safeINotifier.SafeINotifier()
-                # cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -821,8 +813,6 @@ class DatasetIngestTest(unittest.TestCase):
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
-                self.notifier = safeINotifier.SafeINotifier()
-                # cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -1075,8 +1065,6 @@ class DatasetIngestTest(unittest.TestCase):
                 with open(dfname, "w") as fl:
                     fl.write("sdfsdfs\n")
 
-                self.notifier = safeINotifier.SafeINotifier()
-                # cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
