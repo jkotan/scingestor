@@ -536,7 +536,7 @@ class DatasetIngestor:
                     mtm > self.__sc_ingested_map[scan][-1]))
 
             if scan not in self.__sc_ingested_map.keys() \
-               or mtm  > self.__sc_ingested_map[scan][-1]:
+               or mtm > self.__sc_ingested_map[scan][-1]:
                 reingest_dataset = True
         else:
             rds = self._generate_rawdataset_metadata(scan)
