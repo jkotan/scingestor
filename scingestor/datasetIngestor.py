@@ -538,7 +538,7 @@ class DatasetIngestor:
                     mtm + self.__timeeps > self.__sc_ingested_map[scan][-1]))
 
             if scan not in self.__sc_ingested_map.keys() \
-               or mtm  + self.__timeeps > self.__sc_ingested_map[scan][-1]:
+               or mtm + self.__timeeps > self.__sc_ingested_map[scan][-1]:
                 reingest_dataset = True
         else:
             rds = self._generate_rawdataset_metadata(scan)
@@ -558,10 +558,10 @@ class DatasetIngestor:
                 get_logger().debug("DB Timestamps: %s %s %s %s" % (
                     scan,
                     mtm, self.__sc_ingested_map[scan][-1],
-                    mtm  + self.__timeeps > self.__sc_ingested_map[scan][-1]))
+                    mtm + self.__timeeps > self.__sc_ingested_map[scan][-1]))
 
             if scan not in self.__sc_ingested_map.keys() \
-               or mtm  + self.__timeeps > self.__sc_ingested_map[scan][-1]:
+               or mtm + self.__timeeps > self.__sc_ingested_map[scan][-1]:
                 reingest_origdatablock = True
         else:
             odb = self._generate_origdatablock_metadata(scan)
