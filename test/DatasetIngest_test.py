@@ -1080,9 +1080,10 @@ class DatasetIngestTest(unittest.TestCase):
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
-
                 vl, er = self.runtest(cmd)
 
+                # import time
+                # time.sleep(0.1)
                 scfname2 = "%s/%s.scan.json" % (fsubdirname2, 'myscan_00002')
                 odbfname2 = "%s/%s.origdatablock.json" \
                     % (fsubdirname2, 'myscan_00002')
@@ -1128,6 +1129,8 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: Ingest dataset: '
+                    '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock:'
                     ' {subdir2}/{sc2}.origdatablock.json\n'
                     .format(basedir=fdirname,
@@ -1137,8 +1140,8 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
+                    "RawDatasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
-                    # "RawDatasets: 99001234/myscan_00001\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -1150,7 +1153,7 @@ class DatasetIngestTest(unittest.TestCase):
                 # self.assertEqual(
                 #     self.__server.userslogin[2],
                 #     b'{"username": "ingestor", "password": "12342345"}')
-                self.assertEqual(len(self.__server.datasets), 2)
+                self.assertEqual(len(self.__server.datasets), 3)
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'BSName',
@@ -1185,6 +1188,30 @@ class DatasetIngestTest(unittest.TestCase):
                      'ownerGroup': '99001234-part',
                      'isPublished': False,
                      'owner': 'Ouruser',
+                     'ownerEmail': 'appuser@fake.com',
+                     'pid': '99001234/myscan_00002',
+                     'datasetName': 'myscan_00002',
+                     'accessGroups': [
+                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                     'principalInvestigator': 'appuser@fake.com',
+                     'proposalId': '99001234',
+                     'scientificMetadata': {
+                         'DOOR_proposalId': '99991173',
+                         'beamtimeId': '99001234'},
+                     'sourceFolder':
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'})
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[2]),
+                    {'contactEmail': 'new.owner@ggg.gg',
+                     'createdAt': '2022-05-14 11:54:29',
+                     'creationLocation': '/DESY/PETRA III/p00',
+                     'description': 'H20 distribution',
+                     'endTime': '2022-05-19 09:00:00',
+                     'ownerGroup': '99001234-part',
+                     'isPublished': False,
+                     'owner': 'NewOwner',
                      'ownerEmail': 'appuser@fake.com',
                      'pid': '99001234/myscan_00002',
                      'datasetName': 'myscan_00002',

@@ -151,6 +151,8 @@ class DatasetIngestor:
         self.timeout = 0.1
         # (:obj:`float`) time to recheck the dataset list
         self.checktime = 100
+        # (:obj:`float`) accuracy of time in s
+        self.__timeeps = 0.01
 
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
         self.__headers = {'Content-Type': 'application/json',
@@ -527,15 +529,16 @@ class DatasetIngestor:
             rds = rdss[0]
             mtm = os.path.getmtime(rds)
             # print(self.__sc_ingested_map.keys())
+            get_logger().debug("MAP: %s" % (self.__sc_ingested_map))
 
             if scan in self.__sc_ingested_map.keys():
                 get_logger().debug("DS Timestamps: %s %s %s %s" % (
                     scan,
                     mtm, self.__sc_ingested_map[scan][-1],
-                    mtm > self.__sc_ingested_map[scan][-1]))
+                    mtm + self.__timeeps > self.__sc_ingested_map[scan][-1]))
 
             if scan not in self.__sc_ingested_map.keys() \
-               or mtm > self.__sc_ingested_map[scan][-1]:
+               or mtm  + self.__timeeps > self.__sc_ingested_map[scan][-1]:
                 reingest_dataset = True
         else:
             rds = self._generate_rawdataset_metadata(scan)
@@ -555,10 +558,10 @@ class DatasetIngestor:
                 get_logger().debug("DB Timestamps: %s %s %s %s" % (
                     scan,
                     mtm, self.__sc_ingested_map[scan][-1],
-                    mtm > self.__sc_ingested_map[scan][-1]))
+                    mtm  + self.__timeeps > self.__sc_ingested_map[scan][-1]))
 
             if scan not in self.__sc_ingested_map.keys() \
-               or mtm > self.__sc_ingested_map[scan][-1]:
+               or mtm  + self.__timeeps > self.__sc_ingested_map[scan][-1]:
                 reingest_origdatablock = True
         else:
             odb = self._generate_origdatablock_metadata(scan)
@@ -580,13 +583,13 @@ class DatasetIngestor:
                     "DatasetIngestor: Ingest origdatablock: %s" % (odb))
         if (pid and reingest_dataset) or (dbstatus and reingest_origdatablock):
             ctime = time.time()
-            # get_logger().debug("Ingest TS New")
+            # get_logger().debug("Ingest TS New %s" % ctime)
         elif scan in self.__sc_ingested_map.keys():
             ctime = self.__sc_ingested_map[scan][-1]
-            # get_logger().debug("Ingest TS Old")
+            # get_logger().debug("Ingest TS Old %s" % ctime)
         else:
             ctime = 0
-            # get_logger().debug("Ingest TS 0")
+            # get_logger().debug("Ingest TS 0 %s" % ctime)
         self.__sc_ingested.append([scan, str(ctime)])
         with open(self.__idsfiletmp, 'a+') as f:
             f.write("%s %s\n" % (scan, ctime))
