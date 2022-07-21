@@ -278,7 +278,6 @@ class DatasetIngestor:
                 if not self._metadataEqual(dmeta, dnwmeta):
                     with open(mfilename, "w") as mf:
                         mf.write(nwmeta)
-                    get_logger().error('Regenerate: %s' % mfilename)
 
         odbs = glob.glob(
             "{scanpath}/{scanname}{dbpostfix}.json".format(
@@ -517,7 +516,6 @@ class DatasetIngestor:
         if dbstatus is None:
             mtmdb = 0
         self.__sc_ingested.append([scan, str(mtmds), str(mtmdb)])
-        print("APPEND IN", self.__sc_ingested[-1])
         with open(self.__idsfile, 'a+') as f:
             f.write("%s %s %s\n" % (scan, mtmds, mtmdb))
 
@@ -551,10 +549,6 @@ class DatasetIngestor:
                     scan,
                     mtm, self.__sc_ingested_map[scan][-2],
                     mtm > self.__sc_ingested_map[scan][-2]))
-                get_logger().error("DS Timestamps: %s %s %s %s" % (
-                    scan,
-                    mtm, self.__sc_ingested_map[scan][-2],
-                    mtm - self.__sc_ingested_map[scan][-2]))
             if scan not in self.__sc_ingested_map.keys() \
                or mtm > self.__sc_ingested_map[scan][-2]:
                 reingest_dataset = True
@@ -580,10 +574,6 @@ class DatasetIngestor:
                     scan,
                     mtm, self.__sc_ingested_map[scan][-1],
                     mtm > self.__sc_ingested_map[scan][-1]))
-                get_logger().error("DB Timestamps: %s %s %s %s" % (
-                    scan,
-                    mtm, self.__sc_ingested_map[scan][-1],
-                    mtm - self.__sc_ingested_map[scan][-1]))
 
             if scan not in self.__sc_ingested_map.keys() \
                or mtm > self.__sc_ingested_map[scan][-1]:
@@ -622,7 +612,6 @@ class DatasetIngestor:
         else:
             mtmdb = 0
         self.__sc_ingested.append([scan, str(mtmds), str(mtmdb)])
-        print("APPEND RE", self.__sc_ingested[-1])
         with open(self.__idsfiletmp, 'a+') as f:
             f.write("%s %s %s\n" % (scan, mtmds, mtmdb))
 

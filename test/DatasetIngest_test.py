@@ -26,6 +26,7 @@ import sys
 import threading
 import shutil
 import json
+import time
 
 from scingestor import datasetIngest
 
@@ -596,7 +597,7 @@ class DatasetIngestTest(unittest.TestCase):
                      % cfgfname).split(),
                     ('scicat_dataset_ingest --config %s'
                      % cfgfname).split()]
-        commands.pop()
+        # commands.pop()
         try:
             for cmd in commands:
                 os.mkdir(fsubdirname)
@@ -608,29 +609,17 @@ class DatasetIngestTest(unittest.TestCase):
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
-                print(vl)
-                print(er)
-
-                import time
-                mtmds = os.path.getmtime("%s/%s.scan.json"
-                         % (fsubdirname2, 'myscan_00001'))
-                mtmdb = os.path.getmtime("%s/%s.origdatablock.json"
-                         % (fsubdirname2, 'myscan_00002'))
-                print("BEFORE", mtmds, mtmdb)
+                # print(vl)
+                # print(er)
 
                 time.sleep(0.1)
+
                 os.utime("%s/%s.scan.json"
                          % (fsubdirname2, 'myscan_00001'), None)
                 os.utime("%s/%s.origdatablock.json"
                          % (fsubdirname2, 'myscan_00002'), None)
 
                 time.sleep(0.1)
-                mtmds = os.path.getmtime("%s/%s.scan.json"
-                         % (fsubdirname2, 'myscan_00001'))
-                mtmdb = os.path.getmtime("%s/%s.origdatablock.json"
-                         % (fsubdirname2, 'myscan_00002'))
-                print("AFTER", mtmds, mtmdb)
-
                 vl, er = self.runtest(cmd)
                 ser = er.split("\n")
                 seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
