@@ -18,7 +18,6 @@
 #
 #
 import os
-import time
 import glob
 import json
 import subprocess
@@ -279,6 +278,7 @@ class DatasetIngestor:
                 if not self._metadataEqual(dmeta, dnwmeta):
                     with open(mfilename, "w") as mf:
                         mf.write(nwmeta)
+                    get_logger().error('Regenerate: %s' % mfilename)
 
         odbs = glob.glob(
             "{scanpath}/{scanname}{dbpostfix}.json".format(
@@ -288,6 +288,17 @@ class DatasetIngestor:
         return ""
 
     def _metadataEqual(self, dct, dct2, skip=None, parent=None):
+        """ compare two dictionaries if metdatdata is equal
+
+        :param dct: first metadata dictionary
+        :type dct: :obj:`dct` <:obj:`str`, `any`>
+        :param dct2: second metadata dictionary
+        :type dct2: :obj:`dct` <:obj:`str`, `any`>
+        :param skip: a list of keywords to skip
+        :type skip: :obj:`list` <:obj:`str`>
+        :param parent: the parent metadata dictionary to use in recursion
+        :type parent: :obj:`dct` <:obj:`str`, `any`>
+        """
         parent = parent or ""
         if len(list(dct.keys())) != len(list(dct2.keys())):
             return False
@@ -475,6 +486,9 @@ class DatasetIngestor:
             rds = rdss[0]
         else:
             rds = self._generate_rawdataset_metadata(scan)
+        mtmds = 0
+        if rds:
+            mtmds = os.path.getmtime(rds)
 
         odbs = glob.glob(
             "{scanpath}/{scan}{postfix}.json".format(
@@ -484,6 +498,9 @@ class DatasetIngestor:
             odb = odbs[0]
         else:
             odb = self._generate_origdatablock_metadata(scan)
+        mtmdb = 0
+        if odb:
+            mtmdb = os.path.getmtime(odb)
         dbstatus = None
 
         pid = None
@@ -495,13 +512,14 @@ class DatasetIngestor:
                     pid = self._get_pid(rdss[0])
                 dbstatus = self._ingest_origdatablock_metadata(
                     odb, pid, token)
-        if pid and dbstatus:
-            ctime = time.time()
-        else:
-            ctime = 0
-        self.__sc_ingested.append([scan, str(ctime)])
+        if pid is None:
+            mtmds = 0
+        if dbstatus is None:
+            mtmdb = 0
+        self.__sc_ingested.append([scan, str(mtmds), str(mtmdb)])
+        print("APPEND IN", self.__sc_ingested[-1])
         with open(self.__idsfile, 'a+') as f:
-            f.write("%s %s\n" % (scan, ctime))
+            f.write("%s %s %s\n" % (scan, mtmds, mtmdb))
 
     def reingest(self, scan, token):
         """ ingest scan
@@ -522,7 +540,6 @@ class DatasetIngestor:
             "{scanpath}/{scan}{postfix}.json".format(
                 scan=scan, postfix=self.__scanpostfix,
                 scanpath=self.__dctfmt["scanpath"]))
-        # print("RE")
         if rdss and rdss[0]:
             rds = rdss[0]
             mtm = os.path.getmtime(rds)
@@ -532,16 +549,22 @@ class DatasetIngestor:
             if scan in self.__sc_ingested_map.keys():
                 get_logger().debug("DS Timestamps: %s %s %s %s" % (
                     scan,
-                    mtm, self.__sc_ingested_map[scan][-1],
-                    mtm > self.__sc_ingested_map[scan][-1]))
-
+                    mtm, self.__sc_ingested_map[scan][-2],
+                    mtm > self.__sc_ingested_map[scan][-2]))
+                get_logger().error("DS Timestamps: %s %s %s %s" % (
+                    scan,
+                    mtm, self.__sc_ingested_map[scan][-2],
+                    mtm - self.__sc_ingested_map[scan][-2]))
             if scan not in self.__sc_ingested_map.keys() \
-               or mtm > self.__sc_ingested_map[scan][-1]:
+               or mtm > self.__sc_ingested_map[scan][-2]:
                 reingest_dataset = True
         else:
             rds = self._generate_rawdataset_metadata(scan)
             get_logger().debug("DS No File: %s True" % (scan))
             reingest_dataset = True
+        mtmds = 0
+        if rds:
+            mtmds = os.path.getmtime(rds)
 
         odbs = glob.glob(
             "{scanpath}/{scan}{postfix}.json".format(
@@ -557,6 +580,10 @@ class DatasetIngestor:
                     scan,
                     mtm, self.__sc_ingested_map[scan][-1],
                     mtm > self.__sc_ingested_map[scan][-1]))
+                get_logger().error("DB Timestamps: %s %s %s %s" % (
+                    scan,
+                    mtm, self.__sc_ingested_map[scan][-1],
+                    mtm - self.__sc_ingested_map[scan][-1]))
 
             if scan not in self.__sc_ingested_map.keys() \
                or mtm > self.__sc_ingested_map[scan][-1]:
@@ -565,6 +592,9 @@ class DatasetIngestor:
             odb = self._generate_origdatablock_metadata(scan)
             get_logger().debug("DB No File: %s True" % (scan))
             reingest_origdatablock = True
+        mtmdb = 0
+        if odb:
+            mtmdb = os.path.getmtime(odb)
         dbstatus = None
         pid = None
         if rds and odb:
@@ -579,18 +609,22 @@ class DatasetIngestor:
                     odb, pid, token)
                 get_logger().info(
                     "DatasetIngestor: Ingest origdatablock: %s" % (odb))
-        if (pid and reingest_dataset) or (dbstatus and reingest_origdatablock):
-            ctime = time.time()
-            # get_logger().debug("Ingest TS New %s" % ctime)
+        if (pid and reingest_dataset):
+            pass
         elif scan in self.__sc_ingested_map.keys():
-            ctime = self.__sc_ingested_map[scan][-1]
-            # get_logger().debug("Ingest TS Old %s" % ctime)
+            mtmds = self.__sc_ingested_map[scan][-2]
         else:
-            ctime = 0
-            # get_logger().debug("Ingest TS 0 %s" % ctime)
-        self.__sc_ingested.append([scan, str(ctime)])
+            mtmds = 0
+        if (dbstatus and reingest_origdatablock):
+            pass
+        elif scan in self.__sc_ingested_map.keys():
+            mtmdb = self.__sc_ingested_map[scan][-1]
+        else:
+            mtmdb = 0
+        self.__sc_ingested.append([scan, str(mtmds), str(mtmdb)])
+        print("APPEND RE", self.__sc_ingested[-1])
         with open(self.__idsfiletmp, 'a+') as f:
-            f.write("%s %s\n" % (scan, ctime))
+            f.write("%s %s %s\n" % (scan, mtmds, mtmdb))
 
     def check_list(self, reingest=False):
         """ update waiting and ingested datasets
@@ -614,11 +648,13 @@ class DatasetIngestor:
             self.__sc_ingested_map = {}
             for sc in self.__sc_ingested:
                 try:
-                    if len(sc) > 1 and float(sc[-1]) > 0:
+                    if len(sc) > 2 and float(sc[-1]) > 0 \
+                       and float(sc[-2]) > 0:
                         sc[-1] = float(sc[-1])
+                        sc[-2] = float(sc[-2])
                         self.__sc_ingested_map[sc[0]] = sc
-                except Exception:
-                    pass
+                except Exception as e:
+                    get_logger().debug("%s" % str(e))
 
     def waiting_datasets(self):
         """ provides waitings datasets
