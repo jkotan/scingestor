@@ -151,8 +151,6 @@ class DatasetIngestor:
         self.timeout = 0.1
         # (:obj:`float`) time to recheck the dataset list
         self.checktime = 100
-        # (:obj:`float`) accuracy of time in s
-        self.__timeeps = 0.01
 
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
         self.__headers = {'Content-Type': 'application/json',
@@ -535,10 +533,10 @@ class DatasetIngestor:
                 get_logger().debug("DS Timestamps: %s %s %s %s" % (
                     scan,
                     mtm, self.__sc_ingested_map[scan][-1],
-                    mtm + self.__timeeps > self.__sc_ingested_map[scan][-1]))
+                    mtm > self.__sc_ingested_map[scan][-1]))
 
             if scan not in self.__sc_ingested_map.keys() \
-               or mtm + self.__timeeps > self.__sc_ingested_map[scan][-1]:
+               or mtm  > self.__sc_ingested_map[scan][-1]:
                 reingest_dataset = True
         else:
             rds = self._generate_rawdataset_metadata(scan)
@@ -558,10 +556,10 @@ class DatasetIngestor:
                 get_logger().debug("DB Timestamps: %s %s %s %s" % (
                     scan,
                     mtm, self.__sc_ingested_map[scan][-1],
-                    mtm + self.__timeeps > self.__sc_ingested_map[scan][-1]))
+                    mtm > self.__sc_ingested_map[scan][-1]))
 
             if scan not in self.__sc_ingested_map.keys() \
-               or mtm + self.__timeeps > self.__sc_ingested_map[scan][-1]:
+               or mtm > self.__sc_ingested_map[scan][-1]:
                 reingest_origdatablock = True
         else:
             odb = self._generate_origdatablock_metadata(scan)
