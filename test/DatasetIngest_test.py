@@ -597,7 +597,7 @@ class DatasetIngestTest(unittest.TestCase):
                      % cfgfname).split(),
                     ('scicat_dataset_ingest --config %s'
                      % cfgfname).split()]
-        # commands.pop()
+        commands.pop()
         try:
             for cmd in commands:
                 os.mkdir(fsubdirname)
@@ -612,14 +612,25 @@ class DatasetIngestTest(unittest.TestCase):
                 # print(vl)
                 # print(er)
 
-                time.sleep(0.1)
+                dsfname1 = "%s/%s.scan.json" % \
+                           (fsubdirname2, 'myscan_00001')
+                dbfname2 = "%s/%s.origdatablock.json" % \
+                           (fsubdirname2, 'myscan_00002')
+                # import time
+                # mtmds = os.path.getmtime(dsfname1)
+                # mtmdb = os.path.getmtime(dbfname2)
+                # print("BEFORE", mtmds, mtmdb)
 
-                os.utime("%s/%s.scan.json"
-                         % (fsubdirname2, 'myscan_00001'), None)
-                os.utime("%s/%s.origdatablock.json"
-                         % (fsubdirname2, 'myscan_00002'), None)
+                # on cenos6 touch modify only timestamps
+                # when last modification > 1s
+                time.sleep(1.1)
+                os.utime(dbfname2)
+                os.utime(dsfname1)
 
-                time.sleep(0.1)
+                # mtmds = os.path.getmtime(dsfname1)
+                # mtmdb = os.path.getmtime(dbfname2)
+                # print("AFTER", mtmds, mtmdb)
+
                 vl, er = self.runtest(cmd)
                 ser = er.split("\n")
                 seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]

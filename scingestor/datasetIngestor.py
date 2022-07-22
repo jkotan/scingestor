@@ -572,6 +572,12 @@ class DatasetIngestor:
             if scan not in self.__sc_ingested_map.keys() \
                or mtm0 > self.__sc_ingested_map[scan][-1]:
                 reingest_origdatablock = True
+            get_logger().debug("DB0 Timestamps: %s %s %s %s %s" % (
+                scan,
+                mtm0, self.__sc_ingested_map[scan][-1],
+                mtm0 - self.__sc_ingested_map[scan][-1],
+                reingest_origdatablock)
+            )
 
             self._regenerate_origdatablock_metadata(
                 scan, reingest_origdatablock)
