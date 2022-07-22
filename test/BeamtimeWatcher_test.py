@@ -309,9 +309,9 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r10 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r4 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r10 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r4 -l debug'
                      % cfgfname).split()]
 
         def test_thread():
@@ -324,6 +324,7 @@ optional arguments:
             shutil.copy(source, fdirname)
 
         try:
+            # commands.pop()
             for cmd in commands:
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
@@ -363,7 +364,7 @@ optional arguments:
                 except Exception:
                     print(er)
                     raise
-
+                #  print(er)
                 self.assertEqual('', vl)
         finally:
             if os.path.exists(cfgfname):

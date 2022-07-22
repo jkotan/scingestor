@@ -260,18 +260,24 @@ class BeamtimeWatcher:
                                 'ScanDirs watchers: %s' %
                                 (str(list(self.scandir_watchers.keys()))))
                             with self.scandir_lock:
+                                get_logger().debug('ScanDirs in lock')
                                 for ph, fl in \
                                         list(self.scandir_watchers.keys()):
                                     if ffn == fl or ph == ffn:
+                                        get_logger().debug(
+                                            'POP Scandir watchers: %s %s' %
+                                            (ph, fl))
                                         # stop scandir watcher if running
                                         ds = self.scandir_watchers.pop(
                                             (ph, fl))
                                         ds.running = False
                                         dds.append(ds)
+                            get_logger().debug(
+                                'stopping ScanDirs %s' % str(dds))
                             while len(dds):
                                 ds = dds.pop()
                                 ds.join()
-
+                            get_logger().debug('add paths')
                             self._add_path(path)
 
                         elif "IN_CREATE" in masks or \
