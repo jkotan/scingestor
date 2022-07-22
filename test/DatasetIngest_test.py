@@ -1150,12 +1150,14 @@ class DatasetIngestTest(unittest.TestCase):
                         'beamtime-metadata-99001234.json\n'
                         'INFO : DatasetIngest: dataset list: {dslist}\n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
-                        'INFO : DatasetIngestor: Checking origdatablock metadata:'
+                        'INFO : DatasetIngestor: '
+                        'Checking origdatablock metadata:'
                         ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                         # 'INFO : DatasetIngestor: Ingest dataset: '
                         # '{subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
-                        'INFO : DatasetIngestor: Checking origdatablock metadata:'
+                        'INFO : DatasetIngestor: '
+                        'Checking origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
@@ -1203,7 +1205,8 @@ class DatasetIngestTest(unittest.TestCase):
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
                          'sourceFolder':
-                         '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+                         '/asap3/petra3/gpfs/p00/2022/data/9901234/'
+                         'raw/special',
                          'type': 'raw',
                          'updatedAt': '2022-05-14 11:54:29'})
                     self.myAssertDict(
@@ -1227,7 +1230,8 @@ class DatasetIngestTest(unittest.TestCase):
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
                          'sourceFolder':
-                         '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+                         '/asap3/petra3/gpfs/p00/2022/data/9901234/'
+                         'raw/special',
                          'type': 'raw',
                          'updatedAt': '2022-05-14 11:54:29'})
                     self.myAssertDict(
@@ -1251,7 +1255,8 @@ class DatasetIngestTest(unittest.TestCase):
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
                          'sourceFolder':
-                         '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+                         '/asap3/petra3/gpfs/p00/2022/data/9901234/'
+                         'raw/special',
                          'type': 'raw',
                          'updatedAt': '2022-05-14 11:54:29'})
                     self.assertEqual(len(self.__server.origdatablocks), 3)

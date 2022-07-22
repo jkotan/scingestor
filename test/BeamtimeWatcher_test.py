@@ -331,7 +331,7 @@ optional arguments:
                 th = threading.Thread(target=test_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
-                th.join() 
+                th.join()
                 nodebug = "\n".join([ee for ee in er.split("\n")
                                      if "DEBUG :" not in ee])
                 try:
