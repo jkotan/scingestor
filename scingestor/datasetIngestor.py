@@ -236,11 +236,13 @@ class DatasetIngestor:
             return odbs[0]
         return ""
 
-    def _regenerate_origdatablock_metadata(self, scan):
+    def _regenerate_origdatablock_metadata(self, scan, force=False):
         """o generate origdatablock metadata
 
         :param scan: scan name
-        :type scan: :obj:`str
+        :type scan: :obj:`str`
+        :param force: force flag
+        :type force: :obj:`bool`
         :returns: a file name of generate file
         :rtype: :obj:`str
         """
@@ -259,7 +261,6 @@ class DatasetIngestor:
                 dmeta = json.loads(meta)
         except Exception as e:
             get_logger().warning('%s: %s' % (scan, str(e)))
-        # print("M1", dmeta)
         if dmeta is None:
             subprocess.run(
                 self.__datablockcommand.format(**self.__dctfmt).split())
@@ -275,7 +276,7 @@ class DatasetIngestor:
                 dnwmeta = None
             # print("M2", dnwmeta)
             if dnwmeta is not None:
-                if not self._metadataEqual(dmeta, dnwmeta):
+                if not self._metadataEqual(dmeta, dnwmeta) or force:
                     with open(mfilename, "w") as mf:
                         mf.write(nwmeta)
 
@@ -566,7 +567,14 @@ class DatasetIngestor:
                 scanpath=self.__dctfmt["scanpath"]))
         if odbs and odbs[0]:
             odb = odbs[0]
-            self._regenerate_origdatablock_metadata(scan)
+
+            mtm0 = os.path.getmtime(odb)
+            if scan not in self.__sc_ingested_map.keys() \
+               or mtm0 > self.__sc_ingested_map[scan][-1]:
+                reingest_origdatablock = True
+
+            self._regenerate_origdatablock_metadata(
+                scan, reingest_origdatablock)
             mtm = os.path.getmtime(odb)
 
             if scan in self.__sc_ingested_map.keys():
