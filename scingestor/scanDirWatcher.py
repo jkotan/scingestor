@@ -225,14 +225,19 @@ class ScanDirWatcher(threading.Thread):
                             if event.name is not None:
                                 npath = os.path.join(
                                     self.wd_to_path[qid], event.name)
+                                get_logger().debug("NPATH %s" % npath)
                                 if self.dslist_fullname == npath and \
                                    not os.path.isfile(self.dslist_fullname) \
                                    and os.path.isdir(self.__path):
+                                    get_logger().debug("SUBDIRS")
                                     subdirs = [
                                         it.path
                                         for it in os.scandir(self.__path)
                                         if it.is_dir()]
+                                    get_logger().debug(
+                                        "SUBDIRS %s" % str(subdirs))
                                     self._lunch_scandir_watcher(subdirs)
+                                    get_logger().debug("SUBDIRS END")
 
                         elif "IN_ISDIR" not in masks and (
                                 "IN_CREATE" in masks or "IN_MOVE_TO" in masks):

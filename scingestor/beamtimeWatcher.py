@@ -273,6 +273,8 @@ class BeamtimeWatcher:
                         #                       event.masks,
                         #                       self.wd_to_path[qid]))
                         masks = event.masks.split("|")
+                        # if "IN_DELETE" in masks:
+                        #     time.sleep(1.0)
                         if "IN_IGNORED" in masks or \
                            "IN_MOVE_FROM" in masks or \
                            "IN_DELETE" in masks or \
@@ -308,7 +310,9 @@ class BeamtimeWatcher:
                                 'stopping ScanDirs %s' % str(dds))
                             while len(dds):
                                 ds = dds.pop()
+                                get_logger().debug("JOIN")
                                 ds.join()
+                                get_logger().debug("JOIN END")
                             get_logger().debug('add paths')
                             self._add_path(path)
 
