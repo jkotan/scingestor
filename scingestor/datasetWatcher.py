@@ -70,7 +70,7 @@ class DatasetWatcher(threading.Thread):
         self.wd_to_queue = {}
 
         # (:obj:`float`) timeout value for inotifyx get events in s
-        self.timeout = 1.0
+        self.timeout = 0.01
         # (:obj:`float`) time to recheck the dataset list
         self.checktime = 100
 

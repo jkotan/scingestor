@@ -97,7 +97,7 @@ class BeamtimeWatcher:
         # (:class:`threading.Lock`) scandir watcher dictionary lock
         self.scandir_lock = threading.Lock()
         # (:obj:`float`) timeout value for inotifyx get events
-        self.timeout = 0.1
+        self.timeout = 0.01
         try:
             # (:obj:`float`) run time in s
             self.__runtime = float(options.runtime)
@@ -310,11 +310,9 @@ class BeamtimeWatcher:
                                 'stopping ScanDirs %s' % str(dds))
                             while len(dds):
                                 ds = dds.pop()
+                                ds.running = False
                                 get_logger().debug("JOIN")
-                                try:
-                                    ds.join()
-                                except Exception as e:
-                                    get_logger().warning(str(e))
+                                ds.join()
                                 get_logger().debug("JOIN END")
                             get_logger().debug('add paths')
                             self._add_path(path)
