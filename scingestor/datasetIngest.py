@@ -60,9 +60,6 @@ class DatasetIngest:
         # (:obj:`str`) beamtime file postfix
         self.bt_postfix = ".json"
 
-        # (:obj:`float`) timeout value for inotifyx get events
-        self.timeout = 0.1
-
         if not self.beamtime_dirs:
             get_logger().warning(
                 'DatasetIngest: Beamtime directories not defined')
