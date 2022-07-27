@@ -175,6 +175,7 @@ class ScanDirWatcher(threading.Thread):
             self._start_notifier(self.__path)
             # get_logger().info("START %s " % (self.notifier))
 
+            # get_logger().info("ScanDir file:  %s " % (self.dslist_fullname))
             get_logger().debug("ScanDir file:  %s " % (self.dslist_fullname))
             if os.path.isfile(self.dslist_fullname):
                 dw = None
