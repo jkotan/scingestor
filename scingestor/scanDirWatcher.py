@@ -225,19 +225,20 @@ class ScanDirWatcher(threading.Thread):
                             if event.name is not None:
                                 npath = os.path.join(
                                     self.wd_to_path[qid], event.name)
-                                get_logger().debug("NPATH %s" % npath)
+                                get_logger().debug(
+                                    "Remove path/file %s" % npath)
                                 if self.dslist_fullname == npath and \
                                    not os.path.isfile(self.dslist_fullname) \
                                    and os.path.isdir(self.__path):
-                                    get_logger().debug("SUBDIRS")
                                     subdirs = [
                                         it.path
                                         for it in os.scandir(self.__path)
                                         if it.is_dir()]
                                     get_logger().debug(
-                                        "SUBDIRS %s" % str(subdirs))
+                                        "Sub-directories: %s" % str(subdirs))
                                     self._lunch_scandir_watcher(subdirs)
-                                    get_logger().debug("SUBDIRS END")
+                                    get_logger().debug(
+                                        "watcher for subdirectories lunched")
 
                         elif "IN_ISDIR" not in masks and (
                                 "IN_CREATE" in masks or "IN_MOVE_TO" in masks):
@@ -287,13 +288,13 @@ class ScanDirWatcher(threading.Thread):
 
                 # time.sleep(self.timeout)
         finally:
-            get_logger().debug("STOPPING")
+            get_logger().debug("Stopping ScanDirWatcher")
             self.stop()
 
     def stop(self):
         """ stop the watcher
         """
-        get_logger().debug("STOP")
+        get_logger().debug("Stop ScanDirWatcher")
         self.running = False
         # time.sleep(0.2)
         self._stop_notifier()
