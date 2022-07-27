@@ -276,6 +276,153 @@ class ScanDirWatcherTest(unittest.TestCase):
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_scandir_exist_basedir(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        bdirname = os.path.abspath(dirname)
+        os.mkdir(bdirname)
+        fdirname = os.path.join(bdirname, "99001234")
+        os.mkdir(fdirname)
+
+        fsubdirname = os.path.abspath(os.path.join(fdirname, "raw"))
+        os.mkdir(fsubdirname)
+        btmeta = "beamtime-metadata-99001234.json"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        shutil.copy(source, fdirname)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"'.format(basedir=fdirname)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r3'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r3'
+                     % cfgfname).split()]
+        try:
+            for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                vl, er = self.runtest(cmd)
+                self.assertEqual(
+                    'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Create ScanDirWatcher {basedir}'
+                    ' {btmeta}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt2}: {basedir}\n'
+                    'INFO : ScanDirWatcher: Create ScanDirWatcher {subdir}'
+                    ' {btmeta}\n'
+                    'INFO : ScanDirWatcher: Adding watch {cnt3}: {subdir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                    '{basedir}\n'
+                    'INFO : BeamtimeWatcher: Stopping ScanDirWatcher {btmeta}'
+                    '\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt2}: {basedir}\n'
+                    'INFO : ScanDirWatcher: Stopping ScanDirWatcher {btmeta}\n'
+                    'INFO : ScanDirWatcher: Removing watch {cnt3}: {subdir}\n'
+                    .format(basedir=fdirname, btmeta=fullbtmeta,
+                            cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                            subdir=fsubdirname), er)
+                self.assertEqual('', vl)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+            if os.path.isdir(bdirname):
+                shutil.rmtree(bdirname)
+
+    def test_scandir_add_basedir(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        bdirname = os.path.abspath(dirname)
+        os.mkdir(bdirname)
+        fdirname = os.path.join(bdirname, "99001234")
+        os.mkdir(fdirname)
+        fsubdirname = os.path.abspath(os.path.join(fdirname, "raw"))
+        btmeta = "beamtime-metadata-99001234.json"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"'.format(basedir=fdirname)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r6 -l debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r6 -l debug'
+                     % cfgfname).split()]
+
+        def test_thread():
+            """ test thread which adds and removes beamtime metadata file """
+            time.sleep(1)
+            shutil.copy(source, fdirname)
+            time.sleep(1)
+            os.mkdir(fsubdirname)
+            time.sleep(1)
+            shutil.rmtree(fsubdirname)
+
+        try:
+            for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                th = threading.Thread(target=test_thread)
+                th.start()
+                vl, er = self.runtest(cmd)
+                th.join()
+                nodebug = "\n".join([ee for ee in er.split("\n")
+                                     if "DEBUG :" not in ee])
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                        '{basedir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        # 'INFO : BeamtimeWatcher: Removing watch on a '
+                        # 'CM event 1: {basedir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : BeamtimeWatcher: '
+                        'Stopping ScanDirWatcher {btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt3}: '
+                        '{subdir}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                                subdir=fsubdirname), nodebug)
+                except Exception:
+                    print(er)
+                    raise
+
+                self.assertEqual('', vl)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+            if os.path.isdir(bdirname):
+                shutil.rmtree(bdirname)
+
 
 if __name__ == '__main__':
     unittest.main()

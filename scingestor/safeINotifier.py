@@ -70,7 +70,7 @@ class SafeINotifier(threading.Thread):
         threading.Thread.__init__(self)
 
         # (:obj:`float`) timeout value for inotifyx get events
-        self.timeout = 0.01
+        self.timeout = 0.1
         # (:obj:`bool`) running loop flag
         self.running = True
         # (:obj:`int`) notifier ID
@@ -185,6 +185,13 @@ class SafeINotifier(threading.Thread):
                                     event.wd,
                                     self.qid_wd
                                 ))
+                            # get_logger().info(
+                            #     'SN: %s %s %s %s' % (
+                            #         event.name,
+                            #         event.get_mask_description(),
+                            #         event.wd,
+                            #         self.qid_wd
+                            #     ))
 
                             for qid, wd in self.qid_wd.items():
                                 if event.wd == wd and \
