@@ -445,14 +445,15 @@ class BeamtimeWatcher:
         self.running = False
         time.sleep(0.2)
         self._stop_notifier()
-        for pf, dsw in self.scandir_watchers.items():
-            path, ffn = pf
-            get_logger().info('BeamtimeWatcher: '
-                              'Stopping ScanDirWatcher %s' % ffn)
-            dsw.running = False
-            dsw.join()
-        #     sys.exit(0)
-        self.scandir_watchers = []
+        with self.scandir_lock:
+            for pf, dsw in self.scandir_watchers.items():
+                path, ffn = pf
+                get_logger().info('BeamtimeWatcher: '
+                                  'Stopping ScanDirWatcher %s' % ffn)
+                dsw.running = False
+                dsw.join()
+                #     sys.exit(0)
+            self.scandir_watchers = []
 
     def _signal_handle(self, sig, _):
         """ handle SIGTERM

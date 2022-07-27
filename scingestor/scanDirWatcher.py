@@ -295,17 +295,19 @@ class ScanDirWatcher(threading.Thread):
         self.running = False
         # time.sleep(0.2)
         self._stop_notifier()
-        for fn, scw in self.dataset_watchers.items():
-            get_logger().info(
-                'ScanDirWatcher: Stopping DatasetWatcher %s' % (fn))
-            scw.running = False
-            scw.join()
+        with self.dataset_lock:
+            for fn, scw in self.dataset_watchers.items():
+                get_logger().info(
+                    'ScanDirWatcher: Stopping DatasetWatcher %s' % (fn))
+                scw.running = False
+                scw.join()
         # self.dataset_watchers = []
 
-        for pf, dsw in self.scandir_watchers.items():
-            path, fn = pf
-            get_logger().info('ScanDirWatcher: '
-                              'Stopping ScanDirWatcher %s' % (fn))
-            dsw.running = False
-            dsw.join()
+        with self.scandir_lock:
+            for pf, dsw in self.scandir_watchers.items():
+                path, fn = pf
+                get_logger().info('ScanDirWatcher: '
+                                  'Stopping ScanDirWatcher %s' % (fn))
+                dsw.running = False
+                dsw.join()
         # self.scandir_watchers = []
