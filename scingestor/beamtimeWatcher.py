@@ -311,7 +311,10 @@ class BeamtimeWatcher:
                             while len(dds):
                                 ds = dds.pop()
                                 get_logger().debug("JOIN")
-                                ds.join()
+                                try:
+                                    ds.join()
+                                except Exception as e:
+                                    get_logger().warning(str(e))
                                 get_logger().debug("JOIN END")
                             get_logger().debug('add paths')
                             self._add_path(path)

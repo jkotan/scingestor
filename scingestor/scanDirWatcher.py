@@ -287,11 +287,13 @@ class ScanDirWatcher(threading.Thread):
 
                 # time.sleep(self.timeout)
         finally:
+            get_logger().debug("STOPPING")
             self.stop()
 
     def stop(self):
         """ stop the watcher
         """
+        get_logger().debug("STOP")
         self.running = False
         # time.sleep(0.2)
         self._stop_notifier()
