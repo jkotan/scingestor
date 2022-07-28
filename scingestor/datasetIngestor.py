@@ -171,11 +171,20 @@ class DatasetIngestor:
         self.__datablockurl = self.__scicat_url + "OrigDatablocks"
 
         self.__withoutsm = [
+            "techniques",
+            "classification",
+            "createdBy",
+            "updatedBy",
+            "datasetlifecycle",
+            "numberOfFiles",
+            "size",
             "createdAt",
-            "updateAt",
+            "updatedAt",
             "history",
             "creationTime",
-            "scientificMetadata"
+            "version",
+            "scientificMetadata",
+            "endTime"
         ]
 
     def _generate_rawdataset_metadata(self, scan):
@@ -306,7 +315,20 @@ class DatasetIngestor:
         :type parent: :obj:`dct` <:obj:`str`, `any`>
         """
         parent = parent or ""
-        if len(list(dct.keys())) != len(list(dct2.keys())):
+        w1 = [("%s.%s" % (parent, k) if parent else k)
+              for k in dct.keys()
+              if (not skip or
+                  (("%s.%s" % (parent, k) if parent else k)
+                   not in skip))]
+        w2 = [("%s.%s" % (parent, k) if parent else k)
+              for k in dct2.keys()
+              if (not skip or
+                  (("%s.%s" % (parent, k) if parent else k)
+                   not in skip))]
+        if len(w1) != len(w2):
+            get_logger().debug(
+                'DatasetIngestor: %s != %s' % (
+                    list(w1), list(w2)))
             return False
         status = True
         for k, v in dct.items():
@@ -315,18 +337,24 @@ class DatasetIngestor:
             else:
                 node = k
 
-            if k not in dct2.keys():
-                status = False
-                break
-
             if not skip or node not in skip:
 
+                if k not in dct2.keys():
+                    get_logger().debug(
+                        'DatasetIngestor: %s not in %s'
+                        % (k,  dct2.keys()))
+                    status = False
+                    break
                 if isinstance(v, dict):
-                    if not self._areMetadataEqual(v, dct2[k], skip, node):
+                    if not self._metadataEqual(v, dct2[k], skip, node):
                         status = False
                         break
                 else:
                     if v != dct2[k]:
+                        get_logger().debug(
+                            'DatasetIngestor %s: %s != %s'
+                            % (k, v,  dct2[k]))
+
                         status = False
                         break
 
@@ -404,7 +432,6 @@ class DatasetIngestor:
                                 dsmeta, mdic, skip=self.__withoutsm):
                             # create a new dataset since
                             # core metadata of dataset were changed
-
                             # find a new pid
                             pexist = True
                             npid = pid
@@ -567,6 +594,8 @@ class DatasetIngestor:
             if mt["datasetId"] != "%s/%s" % (self.__doiprefix, pid):
                 mt["datasetId"] = "%s/%s" % (self.__doiprefix, pid)
                 smt = json.dumps(mt)
+                with open(metafile, "w") as mf:
+                    mf.write(smt)
             status = self._ingest_origdatablock(smt, token)
             if status:
                 return mt["datasetId"]
@@ -722,7 +751,6 @@ class DatasetIngestor:
                     # get_logger().info("PID %s %s %s" % (scan,pid,oldpid))
                     odb = self._generate_origdatablock_metadata(scan)
                     reingest_origdatablock = True
-
             if odb and odb[0] and reingest_origdatablock:
                 if pid is None and rdss and rdss[0]:
                     pid = self._get_pid(rdss[0])
