@@ -68,7 +68,8 @@ class BeamtimeWatcherTest(unittest.TestCase):
 
         self.helperror = "Error: too few arguments\n"
 
-        self.helpinfo = """usage: scicat_dataset_ingestor [-h] [-c CONFIG] [-r RUNTIME] [-l LOG]
+        self.helpinfo = """usage: scicat_dataset_ingestor [-h]""" \
+            """[-c CONFIG] [-r RUNTIME] [-l LOG]
 
 BeamtimeWatcher service SciCat Dataset ingestior
 
@@ -78,7 +79,8 @@ optional arguments:
                         configuration file name
   -r RUNTIME, --runtime RUNTIME
                         stop program after runtime in seconds
-  -l LOG, --log LOG     logging level, i.e. debug, info, warning, error, critical
+  -l LOG, --log LOG     logging level, i.e. """ \
+      """debug, info, warning, error, critical
 
  examples:
       scicat_dataset_ingestor -c ~/.scingestor.yaml
@@ -170,6 +172,7 @@ optional arguments:
                     "optionalarguments:", "options:"),
                 "".join(vl.split()).replace("optionalarguments:", "options:"))
             self.assertEqual('', er)
+        self.notifier.running = False
 
     def test_noconfig(self):
         # fun = sys._getframe().f_code.co_name
