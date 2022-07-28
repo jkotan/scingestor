@@ -384,7 +384,7 @@ class DatasetIngestor:
                         headers=self.__headers,
                         data=metadata)
                     if response.ok:
-                        return True
+                        return mdct["pid"]
                     else:
                         raise Exception("%s" % response.text)
                 else:
@@ -447,7 +447,7 @@ class DatasetIngestor:
                                 headers=self.__headers,
                                 data=nmeta)
                             if response.ok:
-                                return True
+                                return mdic["pid"]
                             else:
                                 raise Exception("%s" % response.text)
                         else:
@@ -470,7 +470,7 @@ class DatasetIngestor:
                                         headers=self.__headers,
                                         data=nmeta)
                                     if response.ok:
-                                        return True
+                                        return mdct["pid"]
                                     else:
                                         raise Exception("%s" % response.text)
                     else:
@@ -480,7 +480,7 @@ class DatasetIngestor:
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
-        return False
+        return None
 
     def _ingest_origdatablock(self, metadata, token):
         """ ingets origdatablock
@@ -539,7 +539,7 @@ class DatasetIngestor:
                     % (mt["pid"], self.__bid, metafile))
             status = self._ingest_dataset(smt, token, mt)
             if status:
-                return mt["pid"]
+                return status
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
@@ -565,9 +565,8 @@ class DatasetIngestor:
                     "Wrong datasetId %s for DESY beamtimeId %s in  %s"
                     % (mt["pid"], self.__bid, metafile))
             if mt["datasetId"] != "%s/%s" % (self.__doiprefix, pid):
-                raise Exception(
-                    "Wrong datasetId %s for DESY beamtimeId %s in %s"
-                    % (mt["pid"], self.__bid, metafile))
+                mt["datasetId"] = "%s/%s" % (self.__doiprefix, pid)
+                smt = json.dumps(mt)
             status = self._ingest_origdatablock(smt, token)
             if status:
                 return mt["datasetId"]
@@ -718,6 +717,12 @@ class DatasetIngestor:
                 pid = self._ingest_rawdataset_metadata(rds, token)
                 get_logger().info(
                     "DatasetIngestor: Ingest dataset: %s" % (rds))
+                oldpid = self._get_pid(rds)
+                if pid and oldpid != pid:
+                    # get_logger().info("PID %s %s %s" % (scan,pid,oldpid))
+                    odb = self._generate_origdatablock_metadata(scan)
+                    reingest_origdatablock = True
+
             if odb and odb[0] and reingest_origdatablock:
                 if pid is None and rdss and rdss[0]:
                     pid = self._get_pid(rdss[0])

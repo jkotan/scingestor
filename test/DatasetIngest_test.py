@@ -888,6 +888,11 @@ class DatasetIngestTest(unittest.TestCase):
                     '10.3204/99001234/{sc1}/2\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock metadata:'
+                    ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: Ingest origdatablock:'
+                    ' {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
@@ -901,6 +906,7 @@ class DatasetIngestTest(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001/2\n"
+                    "OrigDatablocks: 10.3204/99001234/myscan_00001/2\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -986,7 +992,7 @@ class DatasetIngestTest(unittest.TestCase):
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
-                self.assertEqual(len(self.__server.origdatablocks), 3)
+                self.assertEqual(len(self.__server.origdatablocks), 4)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
                     {'dataFileList': [
@@ -1017,6 +1023,20 @@ class DatasetIngestTest(unittest.TestCase):
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[2]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'datasetId': '10.3204/99001234/myscan_00001/2',
+                     'accessGroups': [
+                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                     'ownerGroup': '99001234-part',
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[3]),
                     {'dataFileList': [
                         {'gid': 'jkotan',
                          'path': 'myscan_00001.scan.json',
@@ -1136,6 +1156,7 @@ class DatasetIngestTest(unittest.TestCase):
                 seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
                 nodebug = "\n".join([ee for ee in seri
                                      if "DEBUG :" not in ee])
+                # print(vl)
                 try:
                     # print(er)
                     # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
@@ -1163,6 +1184,9 @@ class DatasetIngestTest(unittest.TestCase):
                         '10.3204/99001234/{sc2}/2\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Ingest origdatablock:'
                         ' {subdir2}/{sc2}.origdatablock.json\n'
                         .format(basedir=fdirname,
@@ -1173,7 +1197,7 @@ class DatasetIngestTest(unittest.TestCase):
                     self.assertEqual(
                         "Login: ingestor\n"
                         "RawDatasets: 99001234/myscan_00002/2\n"
-                        "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
+                        "OrigDatablocks: 10.3204/99001234/myscan_00002/2\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -1291,7 +1315,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'ownerGroup': '99001234-part',
                          'size': 629}, skip=["dataFileList", "size"])
                     self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[1]),
+                        json.loads(self.__server.origdatablocks[2]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -1299,7 +1323,7 @@ class DatasetIngestTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '10.3204/99001234/myscan_00002',
+                         'datasetId': '10.3204/99001234/myscan_00002/2',
                          'accessGroups': [
                              '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                          'ownerGroup': '99001234-part',
