@@ -17,9 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'scingestor'
-copyright = '2022, Author'
-author = 'Author'
+project = 'SciCat Dataset Ingestor'
+copyright = '2022, DESY, Jan Kotanski'
+author = 'Jan Kotanski'
 
 
 # -- General configuration ---------------------------------------------------
@@ -68,3 +68,18 @@ html_static_path = ['_static']
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+# -- Options for manual page output ---------------------------------------
+
+# One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    ('index', 'scingestor', 'SciCat Dataset Ingestor Documentation',
+     [u'Jan Kotanski'], 1),
+    ('scicat_dataset_ingestor', 'scicat_dataset_ingestor',
+     'Server daemon to ingest SciCat RawDatasets',
+     [u'Jan Kotanski'], 1),
+    ('scicat_dataset_ingest', 'scicat_dataset_ingest',
+     'Reingestion script to upload SciCat RawDatasets',
+     [u'Jan Kotanski'], 1),
+]

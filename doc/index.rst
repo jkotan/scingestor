@@ -10,6 +10,8 @@ Welcome to scingestor's documentation!
    :maxdepth: 4
    :caption: Contents:
 
+   scicat_dataset_ingestor
+   scicat_dataset_ingest
    scingestor
 
 

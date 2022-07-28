@@ -160,12 +160,12 @@ def main():
     """ the main program function
     """
 
-    description = "SciCat Dataset ingestion"
+    description = "Re-ingestion script for SciCat RawDatasets."
 
     epilog = "" \
         " examples:\n" \
-        "       scicat_dataset_ingest -l debug\n\n" \
-        "       scicat_dataset_ingest -c myconfig.yaml\n" \
+        "      scicat_dataset_ingest -c ~/.scingestor.yaml\n " \
+        "      scicat_dataset_ingest -c ~/.scingestor.yaml -l debug\n" \
         "\n"
     parser = argparse.ArgumentParser(
         description=description, epilog=epilog,

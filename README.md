@@ -2,8 +2,31 @@
 
 ![github workflow](https://github.com/jkotan/scingestor/actions/workflows/tests.yml/badge.svg)
 
-`scingestor` provides ingestor scripts for ingesting RawDatasets and OrigDatablocks into the SciCat server.
+The `scingestor` python package provides a support for ingestor scripts for ingesting RawDatasets and OrigDatablocks into the SciCat server.
 
+## scicat_dataset_ingestor
+
+BeamtimeWatcher service SciCat Dataset ingestor. It can be executed by
+
+```
+    scicat_dataset_ingestor -c ~/.scingestor.yaml
+```
+Its configuration written in a YAML file  can contain the following variables `scicat_url`, `ingestor_credential_file`, `beamtime_dirs` or  `beamtime_base_dir` e.g.
+```
+beamtime_dirs:
+  - /home/jkotan/gpfs/current
+  - /home/jkotan/gpfs/commissioning
+scicat_url: http://localhost:8881
+ingestor_credential_file: /home/jkotan/gpfs/pwd
+```
+
+## scicat_dataset_ingest
+
+Re-ingestion script for SciCat RawDatasets.
+
+    scicat_dataset_ingestor -c ~/.scingestor.yaml
+
+Its configuration written in a YAML file as `scicat_dataset_ingestor`
 
 ## Installation
 
