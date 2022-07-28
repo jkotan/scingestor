@@ -52,6 +52,8 @@ class SafeINotifier(threading.Thread):
     _notifier = None
     # (:class:`threading.Lock`) singleton lock
     _lock = threading.Lock()
+    # (:obj:`bool`) make notifier to be a daemon
+    daemon = True
 
     def __new__(cls, *args, **kwargs):
         """ create a new object if it is the first one

@@ -172,7 +172,6 @@ optional arguments:
                     "optionalarguments:", "options:"),
                 "".join(vl.split()).replace("optionalarguments:", "options:"))
             self.assertEqual('', er)
-        self.notifier.running = False
 
     def test_noconfig(self):
         # fun = sys._getframe().f_code.co_name
