@@ -85,7 +85,7 @@ class ScanDirWatcher(threading.Thread):
         # (:class:`threading.Lock`) dataset watcher dictionary lock
         self.dataset_lock = threading.Lock()
         # (:obj:`float`) timeout value for inotifyx get events
-        self.timeout = 1.0
+        self.timeout = 0.01
 
         # (:obj:`dict` <(:obj:`str`, :obj:`str`),
         #                :class:`scanDirWatcher.ScanDirWatcher`>)
@@ -225,6 +225,8 @@ class ScanDirWatcher(threading.Thread):
                             if event.name is not None:
                                 npath = os.path.join(
                                     self.wd_to_path[qid], event.name)
+                                get_logger().debug(
+                                    "Remove path/file %s" % npath)
                                 if self.dslist_fullname == npath and \
                                    not os.path.isfile(self.dslist_fullname) \
                                    and os.path.isdir(self.__path):
@@ -232,7 +234,11 @@ class ScanDirWatcher(threading.Thread):
                                         it.path
                                         for it in os.scandir(self.__path)
                                         if it.is_dir()]
+                                    get_logger().debug(
+                                        "Sub-directories: %s" % str(subdirs))
                                     self._lunch_scandir_watcher(subdirs)
+                                    get_logger().debug(
+                                        "watcher for subdirectories lunched")
 
                         elif "IN_ISDIR" not in masks and (
                                 "IN_CREATE" in masks or "IN_MOVE_TO" in masks):
@@ -282,25 +288,29 @@ class ScanDirWatcher(threading.Thread):
 
                 # time.sleep(self.timeout)
         finally:
+            get_logger().debug("Stopping ScanDirWatcher")
             self.stop()
 
     def stop(self):
         """ stop the watcher
         """
+        get_logger().debug("Stop ScanDirWatcher")
         self.running = False
         # time.sleep(0.2)
         self._stop_notifier()
-        for fn, scw in self.dataset_watchers.items():
-            get_logger().info(
-                'ScanDirWatcher: Stopping DatasetWatcher %s' % (fn))
-            scw.running = False
-            scw.join()
+        with self.dataset_lock:
+            for fn, scw in self.dataset_watchers.items():
+                get_logger().info(
+                    'ScanDirWatcher: Stopping DatasetWatcher %s' % (fn))
+                scw.running = False
+                scw.join()
         # self.dataset_watchers = []
 
-        for pf, dsw in self.scandir_watchers.items():
-            path, fn = pf
-            get_logger().info('ScanDirWatcher: '
-                              'Stopping ScanDirWatcher %s' % (fn))
-            dsw.running = False
-            dsw.join()
+        with self.scandir_lock:
+            for pf, dsw in self.scandir_watchers.items():
+                path, fn = pf
+                get_logger().info('ScanDirWatcher: '
+                                  'Stopping ScanDirWatcher %s' % (fn))
+                dsw.running = False
+                dsw.join()
         # self.scandir_watchers = []

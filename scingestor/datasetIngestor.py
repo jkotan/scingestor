@@ -146,8 +146,6 @@ class DatasetIngestor:
         get_logger().debug(
             'DatasetIngestor: Parameters: %s' % str(self.__dctfmt))
 
-        # (:obj:`float`) timeout value for inotifyx get events in s
-        self.timeout = 0.1
         # (:obj:`float`) time to recheck the dataset list
         self.checktime = 100
 

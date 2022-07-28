@@ -97,7 +97,7 @@ class BeamtimeWatcher:
         # (:class:`threading.Lock`) scandir watcher dictionary lock
         self.scandir_lock = threading.Lock()
         # (:obj:`float`) timeout value for inotifyx get events
-        self.timeout = 0.1
+        self.timeout = 0.01
         try:
             # (:obj:`float`) run time in s
             self.__runtime = float(options.runtime)
@@ -308,7 +308,10 @@ class BeamtimeWatcher:
                                 'stopping ScanDirs %s' % str(dds))
                             while len(dds):
                                 ds = dds.pop()
+                                ds.running = False
+                                get_logger().debug("Joining ScanDirWatcher")
                                 ds.join()
+                                get_logger().debug("ScanDirWatcher Joined")
                             get_logger().debug('add paths')
                             self._add_path(path)
 
@@ -441,14 +444,15 @@ class BeamtimeWatcher:
         self.running = False
         time.sleep(0.2)
         self._stop_notifier()
-        for pf, dsw in self.scandir_watchers.items():
-            path, ffn = pf
-            get_logger().info('BeamtimeWatcher: '
-                              'Stopping ScanDirWatcher %s' % ffn)
-            dsw.running = False
-            dsw.join()
-        #     sys.exit(0)
-        self.scandir_watchers = []
+        with self.scandir_lock:
+            for pf, dsw in self.scandir_watchers.items():
+                path, ffn = pf
+                get_logger().info('BeamtimeWatcher: '
+                                  'Stopping ScanDirWatcher %s' % ffn)
+                dsw.running = False
+                dsw.join()
+                #     sys.exit(0)
+            self.scandir_watchers = []
 
     def _signal_handle(self, sig, _):
         """ handle SIGTERM
