@@ -41,7 +41,7 @@ install_requires = [
     'argcomplete',
     'nxstools>=3.23.0',
     'requests',
-    'pyyaml'
+    'pyyaml',
     'h5py',
     # 'pytest',
     # 'sphinx',
