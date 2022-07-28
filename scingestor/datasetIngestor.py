@@ -170,6 +170,14 @@ class DatasetIngestor:
         #     "OrigDatablocks"
         self.__datablockurl = self.__scicat_url + "OrigDatablocks"
 
+        self.__withoutsm = [
+            "createdAt",
+            "updateAt",
+            "history",
+            "creationTime",
+            "scientificMetadata"
+        ]
+
     def _generate_rawdataset_metadata(self, scan):
         """ generate raw dataset metadata
 
@@ -343,30 +351,136 @@ class DatasetIngestor:
                 'DatasetIngestor: %s' % (str(e)))
         return ""
 
-    def _ingest_dataset(self, metadata, token):
+    def _ingest_dataset(self, metadata, token, mdct):
         """ ingests dataset
 
         :param metadata: metadata in json string
         :type metadata: :obj:`str
         :param token: ingestor token
         :type token: :obj:`str
+        :param mdct: metadata in dct
+        :type mdct: :obj:`dct` <:obj:`str`, `any`>
         :returns: a file name of generate file
         :rtype: :obj:`str
         """
         try:
-            response = requests.post(
-                "%s?access_token=%s" % (self.__dataseturl, token),
-                headers=self.__headers,
-                data=metadata)
-            if response.ok:
-                return True
+            pid = "%s/%s" % (self.__doiprefix, mdct["pid"])
+            # check if dataset with the pid exists
+            get_logger().info(
+                'DatasetIngestor: Check if dataset exists: %s' % (pid))
+            resexists = requests.get(
+                "{url}/{pid}/exists?access_token={token}".format(
+                    url=self.__dataseturl,
+                    pid=pid.replace("/", "%2F"),
+                    token=token))
+            if resexists.ok:
+                exists = json.loads(resexists.content)["exists"]
+                if not exists:
+                    # post the new dataset since it does not exist
+                    get_logger().info(
+                        'DatasetIngestor: Post the dataset: %s' % (pid))
+                    response = requests.post(
+                        "%s?access_token=%s" % (self.__dataseturl, token),
+                        headers=self.__headers,
+                        data=metadata)
+                    if response.ok:
+                        return mdct["pid"]
+                    else:
+                        raise Exception("%s" % response.text)
+                else:
+                    # find dataset by pid
+                    get_logger().info(
+                        'DatasetIngestor: Find the dataset by id: %s' % (pid))
+                    resds = requests.get(
+                        "{url}/{pid}?access_token={token}".format(
+                            url=self.__dataseturl,
+                            pid=pid.replace("/", "%2F"),
+                            token=token))
+                    if resds.ok:
+                        dsmeta = json.loads(resds.content)
+                        mdic = dict(mdct)
+                        mdic["pid"] = pid
+                        if not self._metadataEqual(
+                                dsmeta, mdic, skip=self.__withoutsm):
+                            # create a new dataset since
+                            # core metadata of dataset were changed
+
+                            # find a new pid
+                            pexist = True
+                            npid = pid
+                            ipid = mdct["pid"]
+                            while pexist:
+                                spid = npid.split("/")
+                                if len(spid) > 3:
+                                    try:
+                                        ver = int(spid[-1])
+                                        spid[-1] = str(ver + 1)
+                                    except Exception:
+                                        spid.append("2")
+                                else:
+                                    spid.append("2")
+                                npid = "/".join(spid)
+                                if len(spid) > 0:
+                                    ipid = "/".join(spid[1:])
+                                resexists = requests.get(
+                                    "{url}/{pid}/exists?access_token={token}"
+                                    .format(
+                                        url=self.__dataseturl,
+                                        pid=npid.replace("/", "%2F"),
+                                        token=token))
+                                if resexists.ok:
+                                    pexist = json.loads(
+                                        resexists.content)["exists"]
+                                else:
+                                    raise Exception("%s" % resexists.text)
+
+                            mdic["pid"] = ipid
+                            nmeta = json.dumps(mdic)
+                            get_logger().info(
+                                'DatasetIngestor: '
+                                'Post the dataset with a new pid: %s' % (npid))
+
+                            # post the dataset with the new pid
+                            response = requests.post(
+                                "%s?access_token=%s"
+                                % (self.__dataseturl, token),
+                                headers=self.__headers,
+                                data=nmeta)
+                            if response.ok:
+                                return mdic["pid"]
+                            else:
+                                raise Exception("%s" % response.text)
+                        else:
+                            if "scientificMetadata" in dsmeta.keys() and \
+                               "scientificMetadata" in mdic.keys():
+                                smmeta = dsmeta["scientificMetadata"]
+                                smnmeta = mdic["scientificMetadata"]
+                                nmeta = json.dumps(mdic)
+                                if not self._metadataEqual(smmeta, smnmeta):
+                                    get_logger().info(
+                                        'DatasetIngestor: '
+                                        'Patch scientificMetadata of dataset:'
+                                        ' %s' % (pid))
+                                    response = requests.patch(
+                                        "{url}/{pid}?access_token={token}"
+                                        .format(
+                                            url=self.__dataseturl,
+                                            pid=pid.replace("/", "%2F"),
+                                            token=token),
+                                        headers=self.__headers,
+                                        data=nmeta)
+                                    if response.ok:
+                                        return mdct["pid"]
+                                    else:
+                                        raise Exception("%s" % response.text)
+                    else:
+                        raise Exception("%s" % resds.text)
             else:
                 raise Exception("%s" % response.text)
-
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
-        return False
+        return None
 
     def _ingest_origdatablock(self, metadata, token):
         """ ingets origdatablock
@@ -423,9 +537,9 @@ class DatasetIngestor:
                 raise Exception(
                     "Wrong pid %s for DESY beamtimeId %s in  %s"
                     % (mt["pid"], self.__bid, metafile))
-            status = self._ingest_dataset(smt, token)
+            status = self._ingest_dataset(smt, token, mt)
             if status:
-                return mt["pid"]
+                return status
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
@@ -451,9 +565,8 @@ class DatasetIngestor:
                     "Wrong datasetId %s for DESY beamtimeId %s in  %s"
                     % (mt["pid"], self.__bid, metafile))
             if mt["datasetId"] != "%s/%s" % (self.__doiprefix, pid):
-                raise Exception(
-                    "Wrong datasetId %s for DESY beamtimeId %s in %s"
-                    % (mt["pid"], self.__bid, metafile))
+                mt["datasetId"] = "%s/%s" % (self.__doiprefix, pid)
+                smt = json.dumps(mt)
             status = self._ingest_origdatablock(smt, token)
             if status:
                 return mt["datasetId"]
@@ -604,6 +717,12 @@ class DatasetIngestor:
                 pid = self._ingest_rawdataset_metadata(rds, token)
                 get_logger().info(
                     "DatasetIngestor: Ingest dataset: %s" % (rds))
+                oldpid = self._get_pid(rds)
+                if pid and oldpid != pid:
+                    # get_logger().info("PID %s %s %s" % (scan,pid,oldpid))
+                    odb = self._generate_origdatablock_metadata(scan)
+                    reingest_origdatablock = True
+
             if odb and odb[0] and reingest_origdatablock:
                 if pid is None and rdss and rdss[0]:
                     pid = self._get_pid(rdss[0])

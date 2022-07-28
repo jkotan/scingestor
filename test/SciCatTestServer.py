@@ -30,6 +30,42 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
 
     """ scicat mock server handler """
 
+    def do_PATCH(self):
+        """ implementation of action for http PATCH requests
+        """
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Accept', 'application/json')
+        self.end_headers()
+
+        # print(self.headers)
+        # print(self.path)
+        length = int(self.headers.get('Content-Length'))
+        contenttype = self.headers.get('Content-Type')
+        in_data = self.rfile.read(length)
+
+        message = ""
+
+        if self.path.lower().startswith(
+                '/rawdatasets/') and \
+                contenttype == 'application/json':
+            self.server.datasets.append(in_data)
+            # print(in_data)
+            # print(type(in_data))
+            dt = json.loads(in_data)
+            # print("Datasets: %s" % dt)
+            print("RawDatasets: %s" % dt["pid"])
+            npid = dt["pid"]
+            dt["pid"] = npid
+            self.server.pid_dataset[npid] = json.dumps(dt)
+            message = "{}"
+
+        else:
+            self.server.others.append(in_data)
+            print("Others: %s" % str(in_data))
+
+        self.wfile.write(bytes(message, "utf8"))
+
     def do_POST(self):
         """ implementation of action for http POST requests
         """
@@ -65,6 +101,9 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             dt = json.loads(in_data)
             # print("Datasets: %s" % dt)
             print("RawDatasets: %s" % dt["pid"])
+            npid = self.server.doiprefix + dt["pid"]
+            dt["pid"] = npid
+            self.server.pid_dataset[npid] = json.dumps(dt)
             message = "{}"
 
         elif self.path.lower().startswith(
@@ -89,6 +128,17 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
         message = "SciCat mock server for tests!"
+        path = self.path
+        if "?access_token=" in path:
+            spath = path.split("?access_token=")
+        dspath = spath[0].split("/")
+        if len(dspath) > 2 and dspath[1].lower() == "rawdatasets":
+            pid = dspath[2].replace("%2F", "/")
+            if len(dspath) == 4 and dspath[3].lower() == "exists":
+                message = json.dumps(
+                    {'exists': (pid in self.server.pid_dataset.keys())})
+            elif len(dspath) == 3:
+                message = self.server.pid_dataset[pid]
         self.wfile.write(bytes(message, "utf8"))
 
 
@@ -110,12 +160,17 @@ class SciCatTestServer(HTTPServer):
         self.userslogin = []
         # (:obj:`list`<:obj:`str`>) other ingestions
         self.others = []
+        # (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with datasets
+        self.pid_dataset = {}
+        # (:obj:`str`) doi prefix
+        self.doiprefix = "10.3204/"
 
     def reset(self):
         self.datasets = []
         self.origdatablocks = []
         self.userslogin = []
         self.others = []
+        self.pid_dataset = {}
 
     def run(self):
         try:
