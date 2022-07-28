@@ -2,7 +2,7 @@
 
 ![github workflow](https://github.com/jkotan/scingestor/actions/workflows/tests.yml/badge.svg)
 
-The `scingestor` python package provides a support for ingestor scripts for ingesting RawDatasets and OrigDatablocks into the SciCat server.
+The `scingestor` python package provides a support for scripts which ingest RawDatasets and OrigDatablocks into the SciCat server.
 
 ## scicat_dataset_ingestor
 
