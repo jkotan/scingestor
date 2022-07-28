@@ -364,7 +364,7 @@ class DatasetIngestor:
         """ provides ingestor token
 
         :returns: ingestor token
-        :rtype: :obj:`str
+        :rtype: :obj:`str`
         """
         try:
             response = requests.post(
