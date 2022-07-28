@@ -5,8 +5,7 @@
 The `scingestor` python package provides a support for scripts which ingest RawDatasets and OrigDatablocks into the SciCat server.
 
 ## scicat_dataset_ingestor
-
-BeamtimeWatcher service SciCat Dataset ingestor. It can be executed by
+SciCat Dataset ingestor server. It can be executed by
 
 ```
     scicat_dataset_ingestor -c ~/.scingestor.yaml
