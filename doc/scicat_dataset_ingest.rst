@@ -1,0 +1,35 @@
+=====================
+scicat_dataset_ingest
+=====================
+
+Description
+-----------
+
+Re-ingestion script for SciCat RawDatasets.
+
+
+Synopsis
+--------
+
+.. code:: bash
+
+	  scicat_dataset_ingest [-h] [-c CONFIG] [-r RUNTIME] [-l LOG]
+
+
+
+Options:
+  -h, --help            show this help message and exit
+  -c CONFIG, --configuration CONFIG
+                        configuration file name
+  -l LOG, --log LOG     logging level, i.e. debug, info, warning, error, critical
+
+
+Example
+-------
+
+.. code:: bash
+
+	  scicat_dataset_ingest -c ~/.scingestor.yaml
+
+	  scicat_dataset_ingest -c ~/.scingestor.yaml -l debug
+	  
