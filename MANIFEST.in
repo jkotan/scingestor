@@ -1,6 +1,7 @@
 include README.md
 include LICENSE
 include COPYRIGHT
+include man/scingestor.1
 include man/scicat_dataset_ingestor.1
 include man/scicat_dataset_ingest.1
 include doc/*
