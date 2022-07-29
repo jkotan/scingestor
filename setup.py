@@ -39,13 +39,13 @@ pytest_runner = ['pytest-runner'] if needs_pytest else []
 
 install_requires = [
     'argcomplete',
-    # 'h5py',
-    # 'pytz',
-    # 'numpy>1.6.0',
-    # 'lxml',
-    # 'fabio',
-    # 'pytango',
-    # 'pninexus',
+    'nxstools>=3.23.0',
+    'requests',
+    'pyyaml',
+    'h5py',
+    # 'inotify-py3',
+    # 'pytest',
+    # 'sphinx',
 ]
 
 
@@ -84,7 +84,7 @@ class TestCommand(Command):
 
 release = IPKG.__version__
 version = ".".join(release.split(".")[:2])
-name = "Scingestor"
+name = "SciCat Dataset Ingestor"
 author = "Jan Kotanski",
 glicense = "GNU GENERAL PUBLIC LICENSE, version 3"
 
@@ -109,8 +109,6 @@ SETUPDATA = dict(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
@@ -118,11 +116,12 @@ SETUPDATA = dict(
     ],
     packages=["scingestor"],
     scripts=[
-        'scicat_dataset_ingestor'
+        'scicat_dataset_ingestor',
+        'scicat_dataset_ingest'
     ],
     cmdclass={
         # 'test': TestCommand,
-        # 'build_sphinx': BuildDoc
+        'build_sphinx': BuildDoc
     },
     zip_safe=False,
     setup_requires=pytest_runner,

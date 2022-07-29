@@ -1,0 +1,457 @@
+.\" Man page generated from reStructuredText.
+.
+.TH "SCINGESTOR" "1" "Jul 28, 2022" "0.0" "SciCat Dataset Ingestor"
+.SH NAME
+scingestor \- SciCat Dataset Ingestor Documentation
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.SH SCICAT_DATASET_INGESTOR
+.SS Description
+.sp
+BeamtimeWatcher service SciCat Dataset ingestor.
+.SS Synopsis
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+scicat_dataset_ingestor [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B Options:
+.INDENT 7.0
+.TP
+.B \-h\fP,\fB  \-\-help
+show this help message and exit
+.TP
+.BI \-c \ CONFIG\fR,\fB \ \-\-configuration \ CONFIG
+configuration file name
+.TP
+.BI \-r \ RUNTIME\fR,\fB \ \-\-runtime \ RUNTIME
+stop program after runtime in seconds
+.TP
+.BI \-l \ LOG\fR,\fB \ \-\-log \ LOG
+logging level, i.e. debug, info, warning, error, critical
+.UNINDENT
+.UNINDENT
+.SS Example
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+scicat_dataset_ingestor \-c ~/.scingestor.yaml
+
+scicat_dataset_ingestor \-c ~/.scingestor.yaml \-l debug
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH SCICAT_DATASET_INGEST
+.SS Description
+.sp
+Re\-ingestion script for SciCat RawDatasets.
+.SS Synopsis
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+scicat_dataset_ingest [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B Options:
+.INDENT 7.0
+.TP
+.B \-h\fP,\fB  \-\-help
+show this help message and exit
+.TP
+.BI \-c \ CONFIG\fR,\fB \ \-\-configuration \ CONFIG
+configuration file name
+.TP
+.BI \-l \ LOG\fR,\fB \ \-\-log \ LOG
+logging level, i.e. debug, info, warning, error, critical
+.UNINDENT
+.UNINDENT
+.SS Example
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+scicat_dataset_ingest \-c ~/.scingestor.yaml
+
+scicat_dataset_ingest \-c ~/.scingestor.yaml \-l debug
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH SCINGESTOR PACKAGE
+.SS Submodules
+.SS scingestor.beamtimeWatcher module
+.INDENT 0.0
+.TP
+.B class scingestor.beamtimeWatcher.BeamtimeWatcher(options)
+Bases: \fBobject\fP
+.sp
+Beamtime Watcher
+.INDENT 7.0
+.TP
+.B find_bt_files(path, prefix, postfix)
+find beamtime files with given prefix and postfix in the given path
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBpath\fP (\fBstr\fP) – beamtime directory
+.IP \(bu 2
+\fBprefix\fP (\fBstr\fP) – file name prefix
+.IP \(bu 2
+\fBpostfix\fP (\fBstr\fP) – file name postfix
+.UNINDENT
+.TP
+.B Returns
+list of found files
+.TP
+.B Return type
+\fBlist\fP <\fBstr\fP>
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B start()
+start beamtime watcher
+.UNINDENT
+.INDENT 7.0
+.TP
+.B stop()
+stop beamtime watcher
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B scingestor.beamtimeWatcher.main()
+the main program function
+.UNINDENT
+.SS scingestor.configuration module
+.INDENT 0.0
+.TP
+.B scingestor.configuration.load_config(configfile)
+load config file
+.INDENT 7.0
+.TP
+.B Parameters
+\fBconfigfile\fP (\fBstr\fP) – configuration file name
+.UNINDENT
+.UNINDENT
+.SS scingestor.datasetIngest module
+.INDENT 0.0
+.TP
+.B class scingestor.datasetIngest.DatasetIngest(options)
+Bases: \fBobject\fP
+.sp
+Dataset Ingest command
+.INDENT 7.0
+.TP
+.B find_bt_files(path, prefix, postfix)
+find beamtime files with given prefix and postfix in the given path
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBpath\fP (\fBstr\fP) – beamtime directory
+.IP \(bu 2
+\fBprefix\fP (\fBstr\fP) – file name prefix
+.IP \(bu 2
+\fBpostfix\fP (\fBstr\fP) – file name postfix
+.UNINDENT
+.TP
+.B Returns
+list of found files
+.TP
+.B Return type
+\fBlist\fP <\fBstr\fP>
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B ingest_scandir(path, meta, bpath)
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBpath\fP (\fBstr\fP) – scan dir path
+.IP \(bu 2
+\fBmeta\fP (\fBdict\fP <\fBstr\fP,\(gaany\(ga>) – beamtime configuration
+.IP \(bu 2
+\fBbpath\fP (\fBstr\fP) – beamtime file
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B start()
+start ingestion
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B scingestor.datasetIngest.main()
+the main program function
+.UNINDENT
+.SS scingestor.datasetIngestor module
+.INDENT 0.0
+.TP
+.B class scingestor.datasetIngestor.DatasetIngestor(configuration, path, dsfile, idsfile, meta, beamtimefile, delay=5)
+Bases: \fBobject\fP
+.sp
+Dataset Ingestor
+.INDENT 7.0
+.TP
+.B check_list(reingest=False)
+update waiting and ingested datasets
+.UNINDENT
+.INDENT 7.0
+.TP
+.B clear_tmpfile()
+clear waitings datasets
+.UNINDENT
+.INDENT 7.0
+.TP
+.B clear_waiting_datasets()
+clear waitings datasets
+.UNINDENT
+.INDENT 7.0
+.TP
+.B get_token()
+provides ingestor token
+.INDENT 7.0
+.TP
+.B Returns
+ingestor token
+.TP
+.B Return type
+\fBstr\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B ingest(scan, token)
+ingest scan
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBscan\fP (\fBstr\fP) – scan name
+.IP \(bu 2
+\fBtoken\fP (\fBstr\fP) – access token
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B ingested_datasets()
+provides ingested datasets
+.INDENT 7.0
+.TP
+.B Returns
+ingested datasets list
+.TP
+.B Return type
+\fBlist\fP <\fBstr\fP>
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B reingest(scan, token)
+ingest scan
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBscan\fP (\fBstr\fP) – scan name
+.IP \(bu 2
+\fBtoken\fP (\fBstr\fP) – access token
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B update_from_tmpfile()
+clear waitings datasets
+.UNINDENT
+.INDENT 7.0
+.TP
+.B waiting_datasets()
+provides waitings datasets
+.INDENT 7.0
+.TP
+.B Returns
+waitings datasets list
+.TP
+.B Return type
+\fBlist\fP <\fBstr\fP>
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS scingestor.datasetWatcher module
+.INDENT 0.0
+.TP
+.B class scingestor.datasetWatcher.DatasetWatcher(configuration, path, dsfile, idsfile, meta, beamtimefile, delay=5)
+Bases: \fBthreading.Thread\fP
+.sp
+Dataset  Watcher
+.INDENT 7.0
+.TP
+.B run()
+scandir watcher thread
+.UNINDENT
+.INDENT 7.0
+.TP
+.B stop()
+stop the watcher
+.UNINDENT
+.UNINDENT
+.SS scingestor.logger module
+.INDENT 0.0
+.TP
+.B scingestor.logger.get_logger()
+.UNINDENT
+.INDENT 0.0
+.TP
+.B scingestor.logger.init_logger(name=\(aqscingestor.logger\(aq, level=\(aqdebug\(aq)
+init logger
+.UNINDENT
+.SS scingestor.safeINotifier module
+.INDENT 0.0
+.TP
+.B class scingestor.safeINotifier.EventData(name, masks)
+Bases: \fBobject\fP
+.sp
+event data
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class scingestor.safeINotifier.SafeINotifier(*args, **kwargs)
+Bases: \fBthreading.Thread\fP
+.sp
+singleton wrapper for inotifyx
+.INDENT 7.0
+.TP
+.B add_watch(path, masks)
+add watch to notifier
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBpath\fP (\fBstr\fP) – watch path
+.IP \(bu 2
+\fBmask\fP (\fBint\fP) – watch mask
+.UNINDENT
+.TP
+.B Returns
+queue providing events and its id
+.TP
+.B Return type
+[\fBthreading.queue\fP, \fBint\fP]
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B init()
+constructor
+.UNINDENT
+.INDENT 7.0
+.TP
+.B rm_watch(qid)
+add watch to notifier
+.INDENT 7.0
+.TP
+.B Parameters
+\fBqid\fP (\fBint\fP) – queue id
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B run()
+scandir watcher thread
+.UNINDENT
+.INDENT 7.0
+.TP
+.B stop()
+stop the watcher
+.UNINDENT
+.UNINDENT
+.SS scingestor.scanDirWatcher module
+.INDENT 0.0
+.TP
+.B class scingestor.scanDirWatcher.ScanDirWatcher(configuration, path, meta, bpath, delay=5)
+Bases: \fBthreading.Thread\fP
+.sp
+ScanDir Watcher
+.INDENT 7.0
+.TP
+.B run()
+scandir watcher thread
+.UNINDENT
+.INDENT 7.0
+.TP
+.B stop()
+stop the watcher
+.UNINDENT
+.UNINDENT
+.SS Module contents
+.INDENT 0.0
+.IP \(bu 2
+genindex
+.IP \(bu 2
+modindex
+.IP \(bu 2
+search
+.UNINDENT
+.SH AUTHOR
+Jan Kotanski
+.SH COPYRIGHT
+2022, DESY, Jan Kotanski
+.\" Generated by docutils manpage writer.
+.

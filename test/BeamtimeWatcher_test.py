@@ -68,20 +68,24 @@ class BeamtimeWatcherTest(unittest.TestCase):
 
         self.helperror = "Error: too few arguments\n"
 
-        self.helpinfo = """usage: scicat_dataset_ingestor [-h] [-c CONFIG] [-r RUNTIME] [-l LOG]
+        self.helpinfo = """usage: scicat_dataset_ingestor [-h]""" \
+            """[-c CONFIG] [-r RUNTIME] [-l LOG]
 
-BeamtimeWatcher service SciCat Dataset ingestion
+BeamtimeWatcher service SciCat Dataset ingestior
 
 optional arguments:
-  -h, --help         show this help message and exit
+  -h, --help            show this help message and exit
   -c CONFIG, --configuration CONFIG
                         configuration file name
   -r RUNTIME, --runtime RUNTIME
                         stop program after runtime in seconds
-  -l LOG, --log LOG  logging level, i.e. debug, info, warning, error, critical
+  -l LOG, --log LOG     logging level, i.e. """ \
+      """debug, info, warning, error, critical
 
  examples:
-       scicat_dataset_ingestor -l debug"""
+      scicat_dataset_ingestor -c ~/.scingestor.yaml
+       scicat_dataset_ingestor -c ~/.scingestor.yaml -l debug
+"""
 
         self.maxDiff = None
         self.notifier = safeINotifier.SafeINotifier()

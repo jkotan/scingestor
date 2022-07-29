@@ -468,11 +468,12 @@ def main():
     """ the main program function
     """
 
-    description = "BeamtimeWatcher service SciCat Dataset ingestion"
+    description = "BeamtimeWatcher service SciCat Dataset ingestior"
 
     epilog = "" \
         " examples:\n" \
-        "       scicat_dataset_ingestor -l debug\n" \
+        "      scicat_dataset_ingestor -c ~/.scingestor.yaml\n " \
+        "      scicat_dataset_ingestor -c ~/.scingestor.yaml -l debug\n" \
         "\n"
     parser = argparse.ArgumentParser(
         description=description, epilog=epilog,
@@ -500,5 +501,4 @@ def main():
 
     bw = BeamtimeWatcher(options)
     bw.start()
-    bw.notifier.running = False
     sys.exit(0)
