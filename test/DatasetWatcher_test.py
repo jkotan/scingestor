@@ -437,6 +437,7 @@ class DatasetWatcherTest(unittest.TestCase):
         url = 'http://localhost:8881'
         logdir = "/"
         cred = "12342345"
+        username = "myingestor"
         with open(credfile, "w") as cf:
             cf.write(cred)
 
@@ -444,8 +445,10 @@ class DatasetWatcherTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, logdir=logdir,
+                username=username, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -564,12 +567,12 @@ class DatasetWatcherTest(unittest.TestCase):
                             sc3='myscan_00003', sc4='myscan_00004'),
                     "\n".join(seri))
                 self.assertEqual(
-                    'Login: ingestor\n'
+                    'Login: myingestor\n'
                     "RawDatasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n"
-                    'Login: ingestor\n'
+                    'Login: myingestor\n'
                     "RawDatasets: 99001234/myscan_00003\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00003\n"
                     "RawDatasets: 99001234/myscan_00004\n"
@@ -577,10 +580,10 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
-                    b'{"username": "ingestor", "password": "12342345"}')
+                    b'{"username": "myingestor", "password": "12342345"}')
                 self.assertEqual(
                     self.__server.userslogin[1],
-                    b'{"username": "ingestor", "password": "12342345"}')
+                    b'{"username": "myingestor", "password": "12342345"}')
                 self.assertEqual(len(self.__server.datasets), 4)
                 for i in range(4):
                     self.myAssertDict(

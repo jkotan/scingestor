@@ -80,6 +80,8 @@ class DatasetIngestor:
 
         # (:obj:`str`) doi prefix
         self.__doiprefix = "10.3204"
+        # (:obj:`str`) username
+        self.__username = 'ingestor'
         # (:obj:`str`) beamtime id
         self.__incd = None
         # (:obj:`str`) scicat url
@@ -90,6 +92,8 @@ class DatasetIngestor:
         if "ingestor_credential_file" in self.__config.keys():
             with open(self.__config["ingestor_credential_file"]) as fl:
                 self.__incd = fl.read().strip()
+        if "ingestor_username" in self.__config.keys():
+            self.__username = self.__config["ingestor_username"]
         if "scicat_url" in self.__config.keys():
             self.__scicat_url = self.__config["scicat_url"]
 
@@ -369,7 +373,7 @@ class DatasetIngestor:
         try:
             response = requests.post(
                 self.__tokenurl, headers=self.__headers,
-                json={"username": "ingestor", "password": self.__incd})
+                json={"username": self.__username, "password": self.__incd})
             if response.ok:
                 return json.loads(response.content)["id"]
             else:
