@@ -84,6 +84,8 @@ class DatasetIngestor:
         self.__username = 'ingestor'
         # (:obj:`str`) beamtime id
         self.__incd = None
+        # (:obj:`str`) relative path in datablock
+        self.__relpath_in_datablock = False
         # (:obj:`str`) scicat url
         self.__scicat_url = "http://localhost:8881"
 
@@ -96,6 +98,9 @@ class DatasetIngestor:
             self.__username = self.__config["ingestor_username"]
         if "scicat_url" in self.__config.keys():
             self.__scicat_url = self.__config["scicat_url"]
+        if "relative_path_in_datablock" in self.__config.keys():
+            self.__relpath_in_datablock = \
+                self.__config["relative_path_in_datablock"]
 
         # (:obj:`list`<:obj:`str`>) ingested scan names
         self.__sc_ingested = []
@@ -114,12 +119,10 @@ class DatasetIngestor:
         self.__datasetcommandnxs = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix}.json " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
-            " -r {relpath} " \
             "{scanpath}/{scanname}.nxs"
         # (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix}.json " \
-            " -r {relpath} " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname}"
         # (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
@@ -134,6 +137,16 @@ class DatasetIngestor:
             " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
             " -p {doiprefix}/{beamtimeid}/{scanname} " \
             " {scanpath}/{scanname}"
+
+        if self.__relpath_in_datablock:
+            self.__datablockcommand = \
+                self.__datablockcommand + " -r {relpath} "
+            self.__datablockmemcommand = \
+                self.__datablockcommand + " -r {relpath}"
+        else:
+            self.__datasetcommand = self.__datasetcommand + " -r {relpath} "
+            self.__datasetcommandnxs = \
+                self.__datasetcommandnxs + " -r {relpath} "
 
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
         self.__dctfmt = {
