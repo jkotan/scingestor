@@ -432,14 +432,12 @@ class DatasetIngestor:
                     time.sleep(0.1)
                 if counter == self.__maxcounter:
                     checking = False
-                print(counter)
                 counter += 1
             if resexists.ok and hasattr(resexists, "content"):
                 try:
                     exists = json.loads(resexists.content)["exists"]
                 except Exception:
                     exists = False
-                print(resexists.ok, exists)
                 if not exists:
                     # post the new dataset since it does not exist
                     get_logger().info(
@@ -461,7 +459,6 @@ class DatasetIngestor:
                             url=self.__dataseturl,
                             pid=pid.replace("/", "%2F"),
                             token=token))
-                    print(resds.ok)
                     if resds.ok:
                         dsmeta = json.loads(resds.content)
                         mdic = dict(mdct)
