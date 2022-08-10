@@ -22,6 +22,7 @@ import glob
 import json
 import subprocess
 import requests
+import time
 
 from .logger import get_logger
 
@@ -163,8 +164,8 @@ class DatasetIngestor:
         get_logger().debug(
             'DatasetIngestor: Parameters: %s' % str(self.__dctfmt))
 
-        # (:obj:`float`) time to recheck the dataset list
-        self.checktime = 100
+        # (:obj:`int`) maximal counter value for post tries
+        self.__maxcounter = 100
 
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
         self.__headers = {'Content-Type': 'application/json',
@@ -413,13 +414,32 @@ class DatasetIngestor:
             # check if dataset with the pid exists
             get_logger().info(
                 'DatasetIngestor: Check if dataset exists: %s' % (pid))
-            resexists = requests.get(
-                "{url}/{pid}/exists?access_token={token}".format(
-                    url=self.__dataseturl,
-                    pid=pid.replace("/", "%2F"),
-                    token=token))
-            if resexists.ok:
-                exists = json.loads(resexists.content)["exists"]
+            checking = True
+            counter = 0
+            while checking:
+                resexists = requests.get(
+                    "{url}/{pid}/exists?access_token={token}".format(
+                        url=self.__dataseturl,
+                        pid=pid.replace("/", "%2F"),
+                        token=token))
+                if hasattr(resexists, "content"):
+                    try:
+                        json.loads(resexists.content)
+                        checking = False
+                    except Exception:
+                        time.sleep(0.1)
+                else:
+                    time.sleep(0.1)
+                if counter == self.__maxcounter:
+                    checking = False
+                print(counter)
+                counter += 1
+            if resexists.ok and hasattr(resexists, "content"):
+                try:
+                    exists = json.loads(resexists.content)["exists"]
+                except Exception:
+                    exists = False
+                print(resexists.ok, exists)
                 if not exists:
                     # post the new dataset since it does not exist
                     get_logger().info(
@@ -441,6 +461,7 @@ class DatasetIngestor:
                             url=self.__dataseturl,
                             pid=pid.replace("/", "%2F"),
                             token=token))
+                    print(resds.ok)
                     if resds.ok:
                         dsmeta = json.loads(resds.content)
                         mdic = dict(mdct)
@@ -520,7 +541,7 @@ class DatasetIngestor:
                     else:
                         raise Exception("%s" % resds.text)
             else:
-                raise Exception("%s" % response.text)
+                raise Exception("%s" % resexists.text)
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
