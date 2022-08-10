@@ -476,9 +476,9 @@ class DatasetWatcherTest(unittest.TestCase):
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
 
-        commands = [('scicat_dataset_ingestor -c %s -r26 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r36 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r26 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r36 -l debug'
                      % cfgfname).split()]
 
         def test_thread():
@@ -964,9 +964,9 @@ class DatasetWatcherTest(unittest.TestCase):
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
 
-        commands = [('scicat_dataset_ingestor -c %s -r26 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r36 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r26 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r36 -l debug'
                      % cfgfname).split()]
 
         def test_thread():
