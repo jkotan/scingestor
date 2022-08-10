@@ -231,13 +231,14 @@ class DatasetWatcherTest(unittest.TestCase):
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r18 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r10 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r18 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r10 -l debug'
                      % cfgfname).split()]
         # commands.pop()
         try:
             for cmd in commands:
+                time.sleep(1)
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
                 os.mkdir(fsubdirname3)
@@ -475,9 +476,9 @@ class DatasetWatcherTest(unittest.TestCase):
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
 
-        commands = [('scicat_dataset_ingestor -c %s -r36 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r26 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r36 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r26 -l debug'
                      % cfgfname).split()]
 
         def test_thread():
@@ -720,13 +721,14 @@ class DatasetWatcherTest(unittest.TestCase):
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r18 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r10 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r18 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r10 -l debug'
                      % cfgfname).split()]
         # commands.pop()
         try:
             for cmd in commands:
+                time.sleep(1)
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
                 os.mkdir(fsubdirname3)
@@ -962,9 +964,9 @@ class DatasetWatcherTest(unittest.TestCase):
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
 
-        commands = [('scicat_dataset_ingestor -c %s -r36 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r26 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r36 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r26 -l debug'
                      % cfgfname).split()]
 
         def test_thread():
