@@ -501,4 +501,5 @@ def main():
 
     bw = BeamtimeWatcher(options)
     bw.start()
+    bw.notifier.running = False
     sys.exit(0)
