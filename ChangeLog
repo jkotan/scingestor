@@ -1,3 +1,10 @@
-2021-04-21 Jan Kotanski <jan.kotanski@desy.de>
+2021-08-15 Jan Kotanski <jan.kotanski@desy.de>
+	* add update_strategy to configuration (#54)
+	* wait for scicat server if it is off (#52)
+	* add relative_path_in_datablock to the configuration (#50)
+	* add ingestor_username to the configuration (#49)
+	* tagged as 0.0.2
+
+2021-07-21 Jan Kotanski <jan.kotanski@desy.de>
 	* first release
 	* tagged as 0.0.1
