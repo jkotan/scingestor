@@ -23,8 +23,18 @@ import json
 import subprocess
 import requests
 import time
+import enum
 
 from .logger import get_logger
+
+
+class UpdateStrategy(enum.Enum):
+
+    """ Update strategy
+    """
+    PATCH = 0
+    CREATE = 1
+    MIXED = 2
 
 
 class DatasetIngestor:
@@ -83,6 +93,8 @@ class DatasetIngestor:
         self.__doiprefix = "10.3204"
         # (:obj:`str`) username
         self.__username = 'ingestor'
+        # (:obj:`str`) update strategy
+        self.__strategy = UpdateStrategy.PATCH
         # (:obj:`str`) beamtime id
         self.__incd = None
         # (:obj:`str`) relative path in datablock
@@ -97,6 +109,13 @@ class DatasetIngestor:
                 self.__incd = fl.read().strip()
         if "ingestor_username" in self.__config.keys():
             self.__username = self.__config["ingestor_username"]
+        if "update_strategy" in self.__config.keys():
+            try:
+                self.__strategy = UpdateStrategy[
+                    str(self.__config["update_strategy"]).upper()]
+            except Exception as e:
+                get_logger().warning(
+                    'Wrong UpdateStrategy value: %s' % str(e))
         if "scicat_url" in self.__config.keys():
             self.__scicat_url = self.__config["scicat_url"]
         if "relative_path_in_datablock" in self.__config.keys():
@@ -209,9 +228,9 @@ class DatasetIngestor:
         """ generate raw dataset metadata
 
         :param scan: scan name
-        :type scan: :obj:`str
+        :type scan: :obj:`str`
         :returns: a file name of generate file
-        :rtype: :obj:`str
+        :rtype: :obj:`str`
         """
         nxsmasterfile = "{scanpath}/{scanname}.nxs".format(**self.__dctfmt)
         if os.path.isfile(nxsmasterfile):
@@ -248,9 +267,9 @@ class DatasetIngestor:
         """ generate origdatablock metadata
 
         :param scan: scan name
-        :type scan: :obj:`str
+        :type scan: :obj:`str`
         :returns: a file name of generate file
-        :rtype: :obj:`str
+        :rtype: :obj:`str`
         """
         get_logger().info(
             'DatasetIngestor: Generating origdatablock metadata: %s %s' % (
@@ -277,7 +296,7 @@ class DatasetIngestor:
         :param force: force flag
         :type force: :obj:`bool`
         :returns: a file name of generate file
-        :rtype: :obj:`str
+        :rtype: :obj:`str`
         """
         mfilename = "{scanpath}/{scanname}{dbpostfix}.json".format(
             **self.__dctfmt)
@@ -310,6 +329,12 @@ class DatasetIngestor:
             # print("M2", dnwmeta)
             if dnwmeta is not None:
                 if not self._metadataEqual(dmeta, dnwmeta) or force:
+                    get_logger().info(
+                        'DatasetIngestor: '
+                        'Generating origdatablock metadata: %s %s' % (
+                            scan,
+                            "{scanpath}/{scanname}{dbpostfix}.json".format(
+                                **self.__dctfmt)))
                     with open(mfilename, "w") as mf:
                         mf.write(nwmeta)
 
@@ -397,17 +422,108 @@ class DatasetIngestor:
                 'DatasetIngestor: %s' % (str(e)))
         return ""
 
+    def _post_dataset(self, mdic, token, mdct):
+        """ post dataset
+
+        :param mdic: metadata in dct
+        :type mdic: :obj:`dct` <:obj:`str`, `any`>
+        :param token: ingestor token
+        :type token: :obj:`str`
+        :param mdct: metadata in dct
+        :type mdct: :obj:`dct` <:obj:`str`, `any`>
+        :returns: a file name of generate file
+        :rtype: :obj:`str`
+        """
+        # create a new dataset since
+        # core metadata of dataset were changed
+        # find a new pid
+        pexist = True
+        npid = mdic["pid"]
+        ipid = mdct["pid"]
+        while pexist:
+            spid = npid.split("/")
+            if len(spid) > 3:
+                try:
+                    ver = int(spid[-1])
+                    spid[-1] = str(ver + 1)
+                except Exception:
+                    spid.append("2")
+            else:
+                spid.append("2")
+            npid = "/".join(spid)
+            if len(spid) > 0:
+                ipid = "/".join(spid[1:])
+            resexists = requests.get(
+                "{url}/{pid}/exists?access_token={token}"
+                .format(
+                    url=self.__dataseturl,
+                    pid=npid.replace("/", "%2F"),
+                    token=token))
+            if resexists.ok:
+                pexist = json.loads(
+                    resexists.content)["exists"]
+            else:
+                raise Exception("%s" % resexists.text)
+
+        mdic["pid"] = ipid
+        nmeta = json.dumps(mdic)
+        get_logger().info(
+            'DatasetIngestor: '
+            'Post the dataset with a new pid: %s' % (npid))
+
+        # post the dataset with the new pid
+        response = requests.post(
+            "%s?access_token=%s"
+            % (self.__dataseturl, token),
+            headers=self.__headers,
+            data=nmeta)
+        if response.ok:
+            return mdic["pid"]
+        else:
+            raise Exception("%s" % response.text)
+
+    def _patch_dataset(self, nmeta, pid, token, mdct):
+        """ post dataset
+
+        :param nmeta: metadata in json string
+        :type nmeta: :obj:`str`
+        :param pid: dataset pid
+        :type pid: :obj:`str`
+        :param token: ingestor token
+        :type token: :obj:`str`
+        :param mdct: metadata in dct
+        :type mdct: :obj:`dct` <:obj:`str`, `any`>
+        :returns: a file name of generate file
+        :rtype: :obj:`str`
+        """
+        get_logger().info(
+            'DatasetIngestor: '
+            'Patch scientificMetadata of dataset:'
+            ' %s' % (pid))
+        response = requests.patch(
+            "{url}/{pid}?access_token={token}"
+            .format(
+                url=self.__dataseturl,
+                pid=pid.replace("/", "%2F"),
+                token=token),
+            headers=self.__headers,
+            data=nmeta)
+        if response.ok:
+            return mdct["pid"]
+        else:
+            raise Exception("%s" % response.text)
+
     def _ingest_dataset(self, metadata, token, mdct):
         """ ingests dataset
 
         :param metadata: metadata in json string
-        :type metadata: :obj:`str
+        :type metadata: :obj:`str`
         :param token: ingestor token
-        :type token: :obj:`str
+        :type token: :obj:`str`
         :param mdct: metadata in dct
         :type mdct: :obj:`dct` <:obj:`str`, `any`>
         :returns: a file name of generate file
-        :rtype: :obj:`str
+        :rtype: :obj:`str`
         """
         try:
             pid = "%s/%s" % (self.__doiprefix, mdct["pid"])
@@ -465,53 +581,12 @@ class DatasetIngestor:
                         mdic["pid"] = pid
                         if not self._metadataEqual(
                                 dsmeta, mdic, skip=self.__withoutsm):
-                            # create a new dataset since
-                            # core metadata of dataset were changed
-                            # find a new pid
-                            pexist = True
-                            npid = pid
-                            ipid = mdct["pid"]
-                            while pexist:
-                                spid = npid.split("/")
-                                if len(spid) > 3:
-                                    try:
-                                        ver = int(spid[-1])
-                                        spid[-1] = str(ver + 1)
-                                    except Exception:
-                                        spid.append("2")
-                                else:
-                                    spid.append("2")
-                                npid = "/".join(spid)
-                                if len(spid) > 0:
-                                    ipid = "/".join(spid[1:])
-                                resexists = requests.get(
-                                    "{url}/{pid}/exists?access_token={token}"
-                                    .format(
-                                        url=self.__dataseturl,
-                                        pid=npid.replace("/", "%2F"),
-                                        token=token))
-                                if resexists.ok:
-                                    pexist = json.loads(
-                                        resexists.content)["exists"]
-                                else:
-                                    raise Exception("%s" % resexists.text)
-
-                            mdic["pid"] = ipid
-                            nmeta = json.dumps(mdic)
-                            get_logger().info(
-                                'DatasetIngestor: '
-                                'Post the dataset with a new pid: %s' % (npid))
-
-                            # post the dataset with the new pid
-                            response = requests.post(
-                                "%s?access_token=%s"
-                                % (self.__dataseturl, token),
-                                headers=self.__headers,
-                                data=nmeta)
-                            if response.ok:
-                                return mdic["pid"]
+                            if self.__strategy == UpdateStrategy.PATCH:
+                                nmeta = json.dumps(mdic)
+                                return self._patch_dataset(
+                                    nmeta, pid, token, mdct)
                             else:
-                                raise Exception("%s" % response.text)
+                                return self._post_dataset(mdic, token, mdct)
                         else:
                             if "scientificMetadata" in dsmeta.keys() and \
                                "scientificMetadata" in mdic.keys():
@@ -519,22 +594,13 @@ class DatasetIngestor:
                                 smnmeta = mdic["scientificMetadata"]
                                 nmeta = json.dumps(mdic)
                                 if not self._metadataEqual(smmeta, smnmeta):
-                                    get_logger().info(
-                                        'DatasetIngestor: '
-                                        'Patch scientificMetadata of dataset:'
-                                        ' %s' % (pid))
-                                    response = requests.patch(
-                                        "{url}/{pid}?access_token={token}"
-                                        .format(
-                                            url=self.__dataseturl,
-                                            pid=pid.replace("/", "%2F"),
-                                            token=token),
-                                        headers=self.__headers,
-                                        data=nmeta)
-                                    if response.ok:
-                                        return mdct["pid"]
+                                    if self.__strategy == \
+                                       UpdateStrategy.CREATE:
+                                        return self._post_dataset(
+                                            mdic, token, mdct)
                                     else:
-                                        raise Exception("%s" % response.text)
+                                        return self._patch_dataset(
+                                            nmeta, pid, token, mdct)
                     else:
                         raise Exception("%s" % resds.text)
             else:
@@ -565,7 +631,7 @@ class DatasetIngestor:
         """ ingest raw dataset metadata
 
         :param metafile: metadata file name
-        :type metafile: :obj:`str
+        :type metafile: :obj:`str`
         """
         pid = None
         try:
@@ -583,9 +649,9 @@ class DatasetIngestor:
         """ ingest raw dataset metadata
 
         :param metafile: metadata file name
-        :type metafile: :obj:`str
+        :type metafile: :obj:`str`
         :returns: dataset id
-        :rtype: :obj:`str
+        :rtype: :obj:`str`
         """
         try:
             with open(metafile) as fl:
@@ -611,11 +677,11 @@ class DatasetIngestor:
         """ ingest origdatablock metadata
 
         :param metafile: metadata file name
-        :type metafile: :obj:`str
+        :type metafile: :obj:`str`
         :param pid: dataset id
-        :type pid: :obj:`str
+        :type pid: :obj:`str`
         :returns: dataset id
-        :rtype: :obj:`str
+        :rtype: :obj:`str`
         """
         try:
             with open(metafile) as fl:

@@ -84,7 +84,7 @@ class DatasetWatcher(threading.Thread):
         """ start notifier
 
         :param path: beamtime file subpath
-        :type path: :obj:`str
+        :type path: :obj:`str`
         """
         self.notifier = SafeINotifier()
         self._add_path(path)
