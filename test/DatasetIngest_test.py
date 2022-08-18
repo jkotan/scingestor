@@ -864,6 +864,13 @@ class DatasetIngestTest(unittest.TestCase):
                     scdict = json.loads(scn)
                 scdict["owner"] = "NewOwner"
                 scdict["contactEmail"] = "new.owner@ggg.gg"
+                scdict["techniques"] = [
+                   {
+                       'name': 'small angle x-ray scattering',
+                       'pid':
+                       'http://purl.org/pan-science/PaNET/PaNET01188'
+                   }
+                ]
                 with open(scfname, "w") as fl:
                     fl.write(json.dumps(scdict))
 
@@ -960,8 +967,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
-                     'techniques': [],
                      'owner': 'Ouruser',
+                     'techniques': [],
                      'ownerEmail': 'appuser@fake.com',
                      'ownerGroup': '99001234-part',
                      'pid': '99001234/myscan_00002',
@@ -985,7 +992,10 @@ class DatasetIngestTest(unittest.TestCase):
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
-                     'techniques': [],
+                     'techniques': [{
+                         'name': 'small angle x-ray scattering',
+                         'pid':
+                         'http://purl.org/pan-science/PaNET/PaNET01188'}],
                      'owner': 'NewOwner',
                      'ownerGroup': '99001234-part',
                      'ownerEmail': 'appuser@fake.com',
@@ -1125,6 +1135,13 @@ class DatasetIngestTest(unittest.TestCase):
                     scdict = json.loads(scn)
                 scdict["owner"] = "NewOwner"
                 scdict["contactEmail"] = "new.owner@ggg.gg"
+                scdict["techniques"] = [
+                   {
+                       'name': 'small angle x-ray scattering',
+                       'pid':
+                       'http://purl.org/pan-science/PaNET/PaNET01188'
+                   }
+                ]
                 with open(scfname, "w") as fl:
                     fl.write(json.dumps(scdict))
 
@@ -1251,7 +1268,10 @@ class DatasetIngestTest(unittest.TestCase):
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
-                     'techniques': [],
+                     'techniques': [{
+                         'name': 'small angle x-ray scattering',
+                         'pid':
+                         'http://purl.org/pan-science/PaNET/PaNET01188'}],
                      'owner': 'NewOwner',
                      'ownerGroup': '99001234-part',
                      'ownerEmail': 'appuser@fake.com',
@@ -1405,6 +1425,13 @@ class DatasetIngestTest(unittest.TestCase):
                     scdict = json.loads(scn)
                 scdict["owner"] = "NewOwner"
                 scdict["contactEmail"] = "new.owner@ggg.gg"
+                scdict["techniques"] = [
+                   {
+                       'name': 'small angle x-ray scattering',
+                       'pid':
+                       'http://purl.org/pan-science/PaNET/PaNET01188'
+                   }
+                ]
                 with open(scfname, "w") as fl:
                     fl.write(json.dumps(scdict))
 
@@ -1531,7 +1558,10 @@ class DatasetIngestTest(unittest.TestCase):
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
-                     'techniques': [],
+                     'techniques': [{
+                         'name': 'small angle x-ray scattering',
+                         'pid':
+                         'http://purl.org/pan-science/PaNET/PaNET01188'}],
                      'owner': 'NewOwner',
                      'ownerGroup': '99001234-part',
                      'ownerEmail': 'appuser@fake.com',
