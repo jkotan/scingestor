@@ -28,6 +28,31 @@ import ScanDirWatcher_test
 import DatasetWatcher_test
 import DatasetIngest_test
 
+try:
+    __import__("h5py")
+    # if module h5py available
+    H5PY_AVAILABLE = True
+except ImportError as e:
+    H5PY_AVAILABLE = False
+    print("h5py is not available: %s" % e)
+
+try:
+    __import__("pninexus.h5cpp")
+    # if module pninexus.h5cpp available
+    H5CPP_AVAILABLE = True
+except ImportError as e:
+    H5CPP_AVAILABLE = False
+    print("h5cpp is not available: %s" % e)
+except SystemError as e:
+    H5CPP_AVAILABLE = False
+    print("h5cpp is not available: %s" % e)
+
+if not H5PY_AVAILABLE and not H5CPP_AVAILABLE:
+    raise Exception("Please install h5py or pninexus.h5cpp")
+
+if H5CPP_AVAILABLE or H5PY_AVAILABLE:
+    import DatasetWatcherH5_test
+
 
 # main function
 def main():
@@ -44,6 +69,9 @@ def main():
             DatasetWatcher_test))
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
+            DatasetWatcherH5_test))
+    basicsuite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(
             DatasetIngest_test))
 
     # test runner
@@ -53,9 +81,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'args', metavar='name', type=str, nargs='*',
-        help='suite names: all, basic, tangosource, httpsource, '
-        ' generaltools, specializedtools, diffractogram'
-        ', tangofilesource'
+        help='suite names: all, basic'
     )
     options = parser.parse_args()
 
