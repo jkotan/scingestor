@@ -1974,6 +1974,10 @@ class DatasetWatcherTest(unittest.TestCase):
         fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
         fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
         fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
+        fsubdirnamedet1 = os.path.abspath(os.path.join(fsubdirname, "lambda1"))
+        fsubdirnamedet2 = os.path.abspath(os.path.join(fsubdirname, "lambda2"))
+        fsubdirnamedet3 = os.path.abspath(os.path.join(fsubdirname, "lambda3"))
+        fsubdirnamedet4 = os.path.abspath(os.path.join(fsubdirname, "lambda4"))
         os.mkdir(fdirname)
         btmeta = "beamtime-metadata-99001236.json"
         dslist = "scicat-datasets-99001236.lst"
@@ -2026,14 +2030,30 @@ class DatasetWatcherTest(unittest.TestCase):
             os.mkdir(fsubdirname3)
             time.sleep(12)
             with open(fdslist, "a+") as fds:
-                fds.write("myscan_00003\n")
-                fds.write("myscan_00004\n")
+                fds.write("myscan_00003 ../lambda3\n")
+                fds.write("myscan_00004 ../lambda4\n")
+                os.mkdir(fsubdirnamedet3)
+                os.mkdir(fsubdirnamedet4)
+                with open(os.path.join(
+                        fsubdirnamedet3, "data3.dat"), "w+") as cf:
+                    cf.write("12345")
+                with open(os.path.join(
+                        fsubdirnamedet4, "data4.dat"), "w+") as cf:
+                    cf.write("12345")
 
-        # commands.pop()
+        commands.pop()
         try:
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
+                os.mkdir(fsubdirnamedet1)
+                os.mkdir(fsubdirnamedet2)
+                with open(os.path.join(
+                        fsubdirnamedet1, "data1.dat"), "w+") as cf:
+                    cf.write("12345")
+                with open(os.path.join(
+                        fsubdirnamedet2, "data2.dat"), "w+") as cf:
+                    cf.write("12345")
                 # print(cmd)
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
@@ -2063,52 +2083,72 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : ScanDirWatcher: Adding watch {cnt3}: '
                         '{subdir}\n'
                         'INFO : ScanDirWatcher: Create ScanDirWatcher '
-                        '{subdir2} {btmeta}\n'
+                        '{detdir2} {btmeta}\n'
                         'INFO : ScanDirWatcher: Adding watch {cnt4}: '
+                        '{detdir2}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{detdir1} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt5}: '
+                        '{detdir1}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir2} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt6}: '
                         '{subdir2}\n'
                         'INFO : ScanDirWatcher: Creating DatasetWatcher '
                         '{dslist}\n'
-                        'INFO : DatasetWatcher: Adding watch {cnt5}: '
+                        'INFO : DatasetWatcher: Adding watch {cnt7}: '
                         '{dslist} {idslist}\n'
                         'INFO : DatasetWatcher: Waiting datasets: '
-                        '[\'{sc1}\', \'{sc2}\']\n'
+                        '[\'{sc1} {det1}\', \'{sc2} {det2}\']\n'
                         'INFO : DatasetWatcher: Ingested datasets: []\n'
-                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist}'
+                        ' {sc1} {det1}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
-                        ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        ' {sc1} {det1} {subdir2}/{sc1}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '10.3204/99001236/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
                         '10.3204/99001236/{sc1}\n'
-                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist}'
+                        ' {sc2} {det2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
-                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        ' {sc2} {det2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '10.3204/99001236/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
                         '10.3204/99001236/{sc2}\n'
-                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc3}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{detdir3} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt8}: '
+                        '{detdir3}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{detdir4} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt9}: '
+                        '{detdir4}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} '
+                        '{sc3} {det3}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
-                        ' {sc3} {subdir2}/{sc3}.origdatablock.json\n'
+                        ' {sc3} {det3} {subdir2}/{sc3}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '10.3204/99001236/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
                         '10.3204/99001236/{sc3}\n'
-                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc4}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} '
+                        '{sc4} {det4}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
-                        ' {sc4} {subdir2}/{sc4}.origdatablock.json\n'
+                        ' {sc4} {det4} {subdir2}/{sc4}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '10.3204/99001236/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
@@ -2126,16 +2166,40 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
                         '{btmeta}\n'
                         'INFO : ScanDirWatcher: Removing watch {cnt4}: '
+                        '{detdir2}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt5}: '
+                        '{detdir1}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt6}: '
                         '{subdir2}\n'
                         'INFO : ScanDirWatcher: Stopping DatasetWatcher '
                         '{dslist}\n'
-                        'INFO : ScanDirWatcher: Removing watch {cnt5}: '
+                        'INFO : ScanDirWatcher: Removing watch {cnt7}: '
                         '{dslist}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt8}: '
+                        '{detdir3}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt9}: '
+                        '{detdir4}\n'
                         .format(basedir=fdirname, btmeta=fullbtmeta,
                                 subdir=fsubdirname, subdir2=fsubdirname2,
+                                detdir1=fsubdirnamedet1,
+                                detdir2=fsubdirnamedet2,
+                                detdir3=fsubdirnamedet3,
+                                detdir4=fsubdirnamedet4,
                                 dslist=fdslist, idslist=fidslist,
                                 cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
                                 cnt4=(cnt + 3), cnt5=(cnt + 4),
+                                cnt6=(cnt + 5), cnt7=(cnt + 6),
+                                cnt8=(cnt + 7), cnt9=(cnt + 8),
+                                det1="../lambda1/", det2="../lambda2/",
+                                det3="../lambda3", det4="../lambda4",
                                 sc1='myscan_00001', sc2='myscan_00002',
                                 sc3='myscan_00003', sc4='myscan_00004'),
                         "\n".join(dseri))
@@ -2206,6 +2270,12 @@ class DatasetWatcherTest(unittest.TestCase):
                          'accessGroups': [
                              '99001236-clbt', '99001236-dmgt', 'p00dmgt'],
                          'size': 629}, skip=["dataFileList", "size"])
+                    dfl = json.loads(
+                        self.__server.origdatablocks[i])["dataFileList"]
+                    paths = sorted([df["path"] for df in dfl])
+                    self.assertEqual(
+                        paths,
+                        ['raw/lambda{ct}/data{ct}.dat'.format(ct=(i + 1))])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
         finally:
