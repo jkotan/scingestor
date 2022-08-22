@@ -889,7 +889,8 @@ class DatasetIngestor:
                     for sc in idsf.read().split("\n")
                     if sc.strip()]
         if not reingest:
-            ingested = [sc[0] for sc in self.__sc_ingested]
+            ingested = [(" ".join(sc[:-2]) if len(sc) > 2 else sc[0])
+                        for sc in self.__sc_ingested]
             self.__sc_waiting = [
                 sc for sc in scans if sc not in ingested]
         else:
@@ -901,7 +902,7 @@ class DatasetIngestor:
                        and float(sc[-2]) > 0:
                         sc[-1] = float(sc[-1])
                         sc[-2] = float(sc[-2])
-                        self.__sc_ingested_map[sc[0]] = sc
+                        self.__sc_ingested_map[" ".join(sc[:-2])] = sc
                 except Exception as e:
                     get_logger().debug("%s" % str(e))
 
