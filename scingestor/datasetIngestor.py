@@ -149,20 +149,20 @@ class DatasetIngestor:
             " -s *.pyc,*.origdatablock.json,*.scan.json,*~ " \
             " -p {doiprefix}/{beamtimeid}/{scanname} " \
             " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
-            " -o {scanpath}/{scanname}{dbpostfix}.json " \
-            " {scanpath}/{scanname}"
+            " -o {scanpath}/{scanname}{dbpostfix}.json "
         # (:obj:`str`) datablock shell command
         self.__datablockmemcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*.origdatablock.json,*.scan.json,*~ " \
             " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
-            " -p {doiprefix}/{beamtimeid}/{scanname} " \
-            " {scanpath}/{scanname}"
+            " -p {doiprefix}/{beamtimeid}/{scanname} "
+        # (:obj:`str`) datablock path postfix
+        self.__datablockscanpath = " {scanpath}/{scanname} "
 
         if self.__relpath_in_datablock:
             self.__datablockcommand = \
                 self.__datablockcommand + " -r {relpath} "
             self.__datablockmemcommand = \
-                self.__datablockcommand + " -r {relpath}"
+                self.__datablockcommand + " -r {relpath} "
         else:
             self.__datasetcommand = self.__datasetcommand + " -r {relpath} "
             self.__datasetcommandnxs = \
@@ -276,11 +276,16 @@ class DatasetIngestor:
                 scan,
                 "{scanpath}/{scanname}{dbpostfix}.json".format(
                     **self.__dctfmt)))
+        cmd = self.__datablockcommand.format(**self.__dctfmt)
+        sscan = (scan or "").split(" ")
+        for sc in sscan:
+            cmd += self.__datablockscanpath.format(
+                scanpath=self.__dctfmt["scanpath"], scanname=sc)
         get_logger().debug(
-            'DatasetIngestor: Generating origdatablock command: %s ' % (
-                self.__datablockcommand.format(**self.__dctfmt)))
-        subprocess.run(
-            self.__datablockcommand.format(**self.__dctfmt).split())
+            'DatasetIngestor: Generating origdatablock command: %s ' % cmd)
+        # get_logger().info(
+        #     'DatasetIngestor: Generating origdatablock command: %s ' % cmd)
+        subprocess.run(cmd.split())
         odbs = glob.glob(
             "{scanpath}/{scanname}{dbpostfix}.json".format(
                     **self.__dctfmt))
@@ -303,9 +308,14 @@ class DatasetIngestor:
         get_logger().info(
             'DatasetIngestor: Checking origdatablock metadata: %s %s' % (
                 scan, mfilename))
+
+        cmd = self.__datablockcommand.format(**self.__dctfmt)
+        sscan = (scan or "").split(" ")
+        for sc in sscan:
+            cmd += self.__datablockscanpath.format(
+                scanpath=self.__dctfmt["scanpath"], scanname=sc)
         get_logger().debug(
-            'DatasetIngestor: Checking origdatablock command: %s ' % (
-                self.__datablockcommand.format(**self.__dctfmt)))
+            'DatasetIngestor: Checking origdatablock command: %s ' % cmd)
         dmeta = None
         try:
             with open(mfilename, "r") as mf:
@@ -314,11 +324,16 @@ class DatasetIngestor:
         except Exception as e:
             get_logger().warning('%s: %s' % (scan, str(e)))
         if dmeta is None:
-            subprocess.run(
-                self.__datablockcommand.format(**self.__dctfmt).split())
+            subprocess.run(cmd.split())
         else:
+            cmd = self.__datablockmemcommand.format(**self.__dctfmt)
+            sscan = (scan or "").split(" ")
+            for sc in sscan:
+                cmd += self.__datablockscanpath.format(
+                    scanpath=self.__dctfmt["scanpath"], scanname=sc)
+
             result = subprocess.run(
-                self.__datablockmemcommand.format(**self.__dctfmt).split(),
+                cmd.split(),
                 text=True, capture_output=True)
             nwmeta = str(result.stdout)
             try:
@@ -717,23 +732,26 @@ class DatasetIngestor:
             'DatasetIngestor: Ingesting: %s %s' % (
                 self.__dsfile, scan))
 
-        self.__dctfmt["scanname"] = scan
+        sscan = scan.split(" ")
+        self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
 
         rdss = glob.glob(
             "{scanpath}/{scan}{postfix}.json".format(
-                scan=scan, postfix=self.__scanpostfix,
+                scan=self.__dctfmt["scanname"],
+                postfix=self.__scanpostfix,
                 scanpath=self.__dctfmt["scanpath"]))
         if rdss and rdss[0]:
             rds = rdss[0]
         else:
-            rds = self._generate_rawdataset_metadata(scan)
+            rds = self._generate_rawdataset_metadata(self.__dctfmt["scanname"])
         mtmds = 0
         if rds:
             mtmds = os.path.getmtime(rds)
 
         odbs = glob.glob(
             "{scanpath}/{scan}{postfix}.json".format(
-                scan=scan, postfix=self.__datablockpostfix,
+                scan=self.__dctfmt["scanname"],
+                postfix=self.__datablockpostfix,
                 scanpath=self.__dctfmt["scanpath"]))
         if odbs and odbs[0]:
             odb = odbs[0]
@@ -757,7 +775,9 @@ class DatasetIngestor:
             mtmds = 0
         if dbstatus is None:
             mtmdb = 0
-        self.__sc_ingested.append([scan, str(mtmds), str(mtmdb)])
+
+        sscan.extend([str(mtmds), str(mtmdb)])
+        self.__sc_ingested.append(sscan)
         with open(self.__idsfile, 'a+') as f:
             f.write("%s %s %s\n" % (scan, mtmds, mtmdb))
 
@@ -775,10 +795,12 @@ class DatasetIngestor:
 
         reingest_dataset = False
         reingest_origdatablock = False
-        self.__dctfmt["scanname"] = scan
+        sscan = scan.split(" ")
+        self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
         rdss = glob.glob(
             "{scanpath}/{scan}{postfix}.json".format(
-                scan=scan, postfix=self.__scanpostfix,
+                scan=self.__dctfmt["scanname"],
+                postfix=self.__scanpostfix,
                 scanpath=self.__dctfmt["scanpath"]))
         if rdss and rdss[0]:
             rds = rdss[0]
@@ -795,7 +817,7 @@ class DatasetIngestor:
                or mtm > self.__sc_ingested_map[scan][-2]:
                 reingest_dataset = True
         else:
-            rds = self._generate_rawdataset_metadata(scan)
+            rds = self._generate_rawdataset_metadata(self.__dctfmt["scanname"])
             get_logger().debug("DS No File: %s True" % (scan))
             reingest_dataset = True
         mtmds = 0
@@ -804,7 +826,8 @@ class DatasetIngestor:
 
         odbs = glob.glob(
             "{scanpath}/{scan}{postfix}.json".format(
-                scan=scan, postfix=self.__datablockpostfix,
+                scan=self.__dctfmt["scanname"],
+                postfix=self.__datablockpostfix,
                 scanpath=self.__dctfmt["scanpath"]))
         if odbs and odbs[0]:
             odb = odbs[0]
@@ -871,7 +894,9 @@ class DatasetIngestor:
             mtmdb = self.__sc_ingested_map[scan][-1]
         else:
             mtmdb = 0
-        self.__sc_ingested.append([scan, str(mtmds), str(mtmdb)])
+
+        sscan.extend([str(mtmds), str(mtmdb)])
+        self.__sc_ingested.append(sscan)
         with open(self.__idsfiletmp, 'a+') as f:
             f.write("%s %s %s\n" % (scan, mtmds, mtmdb))
 
