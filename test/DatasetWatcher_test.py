@@ -27,6 +27,7 @@ import threading
 import shutil
 import time
 import json
+import uuid
 
 from scingestor import beamtimeWatcher
 from scingestor import safeINotifier
@@ -1714,7 +1715,8 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        logdir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
+        fidslist = "%s%s" % (logdir, fidslist)
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -1958,6 +1960,8 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.assertEqual(paths, ['raw/lambda2/data2.dat'])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
+                if os.path.isdir(logdir):
+                    shutil.rmtree(logdir)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
@@ -1997,7 +2001,8 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        logdir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
+        fidslist = "%s%s" % (logdir, fidslist)
         cred = "12342345"
         username = "myingestor"
         with open(credfile, "w") as cf:
@@ -2029,19 +2034,21 @@ class DatasetWatcherTest(unittest.TestCase):
             time.sleep(5)
             os.mkdir(fsubdirname3)
             time.sleep(12)
+            os.mkdir(fsubdirnamedet3)
+            with open(os.path.join(
+                    fsubdirnamedet3, "data3.dat"), "w+") as cf:
+                cf.write("12345")
+            time.sleep(0.1)
+            os.mkdir(fsubdirnamedet4)
+            with open(os.path.join(
+                    fsubdirnamedet4, "data4.dat"), "w+") as cf:
+                cf.write("12345")
+            time.sleep(0.1)
             with open(fdslist, "a+") as fds:
                 fds.write("myscan_00003 ../lambda3\n")
                 fds.write("myscan_00004 ../lambda4\n")
-                os.mkdir(fsubdirnamedet3)
-                os.mkdir(fsubdirnamedet4)
-                with open(os.path.join(
-                        fsubdirnamedet3, "data3.dat"), "w+") as cf:
-                    cf.write("12345")
-                with open(os.path.join(
-                        fsubdirnamedet4, "data4.dat"), "w+") as cf:
-                    cf.write("12345")
 
-        commands.pop()
+        # commands.pop()
         try:
             for cmd in commands:
                 os.mkdir(fsubdirname)
@@ -2278,6 +2285,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         ['raw/lambda{ct}/data{ct}.dat'.format(ct=(i + 1))])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
+                if os.path.isdir(logdir):
+                    shutil.rmtree(logdir)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
