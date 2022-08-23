@@ -179,6 +179,7 @@ class ScanDirWatcher(threading.Thread):
         """ scandir watcher thread
         """
         try:
+            time.sleep(self.timeout/10.)
             self._start_notifier(self.__path)
             # get_logger().info("START %s " % (self.notifier))
 

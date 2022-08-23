@@ -1781,14 +1781,14 @@ class DatasetWatcherTest(unittest.TestCase):
                         '{subdir}\n'
                         'INFO : ScanDirWatcher: Create ScanDirWatcher '
                         '{detdir1} {btmeta}\n'
-                        'INFO : ScanDirWatcher: Adding watch {cnt4}: '
-                        '{detdir1}\n'
                         'INFO : ScanDirWatcher: Create ScanDirWatcher '
                         '{detdir2} {btmeta}\n'
-                        'INFO : ScanDirWatcher: Adding watch {cnt5}: '
-                        '{detdir2}\n'
                         'INFO : ScanDirWatcher: Create ScanDirWatcher '
                         '{subdir2} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt4}: '
+                        '{detdir1}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt5}: '
+                        '{detdir2}\n'
                         'INFO : ScanDirWatcher: Adding watch {cnt6}: '
                         '{subdir2}\n'
                         'INFO : ScanDirWatcher: Creating DatasetWatcher '
@@ -2034,17 +2034,19 @@ class DatasetWatcherTest(unittest.TestCase):
             time.sleep(5)
             os.mkdir(fsubdirname3)
             time.sleep(12)
+            os.mkdir(fsubdirnamedet3)
+            with open(os.path.join(
+                    fsubdirnamedet3, "data3.dat"), "w+") as cf:
+                cf.write("12345")
+            time.sleep(0.1)
+            os.mkdir(fsubdirnamedet4)
+            with open(os.path.join(
+                    fsubdirnamedet4, "data4.dat"), "w+") as cf:
+                cf.write("12345")
+            time.sleep(0.1)
             with open(fdslist, "a+") as fds:
                 fds.write("myscan_00003 ../lambda3\n")
                 fds.write("myscan_00004 ../lambda4\n")
-                os.mkdir(fsubdirnamedet3)
-                os.mkdir(fsubdirnamedet4)
-                with open(os.path.join(
-                        fsubdirnamedet3, "data3.dat"), "w+") as cf:
-                    cf.write("12345")
-                with open(os.path.join(
-                        fsubdirnamedet4, "data4.dat"), "w+") as cf:
-                    cf.write("12345")
 
         # commands.pop()
         try:
@@ -2089,14 +2091,14 @@ class DatasetWatcherTest(unittest.TestCase):
                         '{subdir}\n'
                         'INFO : ScanDirWatcher: Create ScanDirWatcher '
                         '{detdir1} {btmeta}\n'
-                        'INFO : ScanDirWatcher: Adding watch {cnt4}: '
-                        '{detdir1}\n'
                         'INFO : ScanDirWatcher: Create ScanDirWatcher '
                         '{detdir2} {btmeta}\n'
-                        'INFO : ScanDirWatcher: Adding watch {cnt5}: '
-                        '{detdir2}\n'
                         'INFO : ScanDirWatcher: Create ScanDirWatcher '
                         '{subdir2} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt4}: '
+                        '{detdir1}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt5}: '
+                        '{detdir2}\n'
                         'INFO : ScanDirWatcher: Adding watch {cnt6}: '
                         '{subdir2}\n'
                         'INFO : ScanDirWatcher: Creating DatasetWatcher '
