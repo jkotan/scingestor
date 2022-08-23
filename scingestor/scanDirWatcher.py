@@ -101,6 +101,13 @@ class ScanDirWatcher(threading.Thread):
         # (:obj:`str`) datasets file name
         self.dslist_fullname = os.path.join(self.__path, self.dslist_filename)
 
+        # (:obj:`str`) ingestor log directory
+        self.log_dir = ""
+        if "ingestor_log_dir" in self.__config.keys():
+            self.log_dir = self.__config["ingestor_log_dir"]
+        if self.log_dir == "/":
+            self.log_dir = ""
+
     def _start_notifier(self, path):
         """ start notifier
 
@@ -184,6 +191,11 @@ class ScanDirWatcher(threading.Thread):
                     if fn not in self.dataset_watchers.keys():
                         ifn = fn[:-(len(self.dslist_filename))] + \
                             self.idslist_filename
+                        if self.log_dir:
+                            ifn = "%s%s" % (self.log_dir, ifn)
+                        ipath, _ = os.path.split(ifn)
+                        if not os.path.isdir(ipath):
+                            os.makedirs(ipath, exist_ok=True)
                         dw = self.dataset_watchers[fn] = DatasetWatcher(
                             self.__config,
                             self.__path, fn, ifn, self.__meta, self.__bpath)
@@ -251,6 +263,11 @@ class ScanDirWatcher(threading.Thread):
                                     ifn = \
                                         fn[:-(len(self.dslist_filename))] \
                                         + self.idslist_filename
+                                    if self.log_dir:
+                                        ifn = "%s%s" % (self.log_dir, ifn)
+                                    ipath, _ = os.path.split(ifn)
+                                    if not os.path.isdir(ipath):
+                                        os.makedirs(ipath, exist_ok=True)
                                     dw = self.dataset_watchers[fn] = \
                                         DatasetWatcher(
                                             self.__config, self.__path,

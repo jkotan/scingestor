@@ -55,6 +55,13 @@ class DatasetIngest:
            and isinstance(self.__config["beamtime_dirs"], list):
             self.beamtime_dirs = self.__config["beamtime_dirs"]
 
+        # (:obj:`str`) ingestor log directory
+        self.log_dir = ""
+        if "ingestor_log_dir" in self.__config.keys():
+            self.log_dir = self.__config["ingestor_log_dir"]
+        if self.log_dir == "/":
+            self.log_dir = ""
+
         # (:obj:`str`) beamtime file prefix
         self.bt_prefix = "beamtime-metadata-"
         # (:obj:`str`) beamtime file postfix
@@ -121,6 +128,11 @@ class DatasetIngest:
         for fn in dslfiles:
             get_logger().info("DatasetIngest: dataset list: %s" % str(fn))
             ifn = fn[:-(len(dslist_filename))] + idslist_filename
+            if self.log_dir:
+                ifn = "%s%s" % (self.log_dir, ifn)
+            ipath, _ = os.path.split(ifn)
+            if not os.path.isdir(ipath):
+                os.makedirs(ipath, exist_ok=True)
             scpath, pfn = os.path.split(fn)
             ingestor = DatasetIngestor(
                 self.__config,
