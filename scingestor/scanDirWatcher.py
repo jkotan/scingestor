@@ -149,7 +149,7 @@ class ScanDirWatcher(threading.Thread):
         :param path: list of subdirectories
         :type path: :obj:`list`<:obj:`str`>
         """
-        for path in paths:
+        for path in sorted(paths):
             sdw = None
             try:
                 with self.scandir_lock:

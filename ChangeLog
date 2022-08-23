@@ -3,6 +3,7 @@
 	* wait for scicat server if it is off (#52)
 	* add relative_path_in_datablock to the configuration (#50)
 	* add ingestor_username to the configuration (#49)
+	* add support for external detector paths (#60)
 	* tagged as 0.0.2
 
 2021-07-21 Jan Kotanski <jan.kotanski@desy.de>
