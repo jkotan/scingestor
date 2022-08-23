@@ -171,6 +171,7 @@ class ScanDirWatcher(threading.Thread):
                             % (path, self.__bpath))
                 if sdw is not None:
                     sdw.start()
+                time.sleep(self.timeout/10.)
             except Exception as e:
                 get_logger().warning(
                     "%s cannot be watched: %s" % (path, str(e)))
@@ -179,7 +180,6 @@ class ScanDirWatcher(threading.Thread):
         """ scandir watcher thread
         """
         try:
-            time.sleep(self.timeout/10.)
             self._start_notifier(self.__path)
             # get_logger().info("START %s " % (self.notifier))
 
