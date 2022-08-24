@@ -13,7 +13,7 @@ scicat_dataset_ingestor -c ~/.scingestor.yaml
 Its configuration written in YAML can contain the following variables
 * `scicat_url` [str]
 * `ingestor_credential_file` [str]
-* `beamtime_dirs` [list(str)] or  `beamtime_base_dir` [str]
+* `beamtime_dirs` [list<str>] or  `beamtime_base_dir` [str]
 * `ingestor_log_dir` [str]
 * `ingestor_username` [str]
 * `doi_prefix` [str]
