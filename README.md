@@ -1,6 +1,6 @@
 # Scicat Dataset Ingestor
 
-![github workflow](https://github.com/jkotan/scingestor/actions/workflows/tests.yml/badge.svg)
+![github workflow](https://github.com/jkotan/scingestor/actions/workflows/tests.yml/badge.svg) [![docs](https://img.shields.io/badge/Documentation-webpages-ADD8E6.svg)](https://jkotan.github.io/scingestor/index.html) [![Pypi Version](https://img.shields.io/pypi/v/scingestor.svg)](https://pypi.python.org/pypi/scingestor) [![Python Versions](https://img.shields.io/pypi/pyversions/scingestor.svg)](https://pypi.python.org/pypi/scingestor/)
 
 The `scingestor` python package provides a support for scripts which ingest RawDatasets and OrigDatablocks into the SciCat metadata server.
 
