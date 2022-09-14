@@ -1,4 +1,5 @@
-2021-09-14 Jan Kotanski <jan.kotanski@desy.de>
+2021-09-16 Jan Kotanski <jan.kotanski@desy.de>
+	* add scan_metadata_postfix and datablock_metadata_postfix into configuation (#70)
 	* add oned_in_metadata into configuation (#68)
 	* add chmod_json_files into configuation (#68)
 	* tagged as 0.0.3

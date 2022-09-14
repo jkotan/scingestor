@@ -17,10 +17,12 @@ Its configuration written in YAML can contain the following variables
 * `ingestor_log_dir` (str)
 * `ingestor_username` (str)
 * `doi_prefix` (str)
-* `update_strategy` ('patch', 'create', 'mixed')
+* `update_strategy` (`patch`, `create`, `mixed`)
 * `relative_path_in_datablock` (bool)
 * `chmod_json_files` (str)
 * `oned_in_metadata` (bool)
+* `scan_metadata_postfix` (str)
+* `datablock_metadata_postfix` (str)
 
 e.g.
 ```
@@ -54,7 +56,7 @@ Its configuration written YAML like for `scicat_dataset_ingestor`
 
 ### Install from sources
 
-The code can be built with
+The code from https://github.com/jkotan/scingestor can be built with
 
 ```
 python3 setup.py install

@@ -6,10 +6,27 @@
 Scicat Dataset Ingestor
 =======================
 
-.. figure:: https://github.com/jkotan/scingestor/actions/workflows/tests.yml/badge.svg
-   :alt: github workflow
+|github workflow|
+|docs|
+|Pypi Version|
+|Python Versions|
 
-   github workflow
+.. |github workflow| image:: https://github.com/jkotan/scingestor/actions/workflows/tests.yml/badge.svg
+   :target: https://github.com/jkotan/scingestor/actions
+   :alt:
+
+.. |docs| image:: https://img.shields.io/badge/Documentation-webpages-ADD8E6.svg
+   :target: https://jkotan.github.io/scingestor/index.html
+   :alt:
+
+.. |Pypi Version| image:: https://img.shields.io/pypi/v/scingestor.svg
+                  :target: https://pypi.python.org/pypi/scingestor
+                  :alt:
+
+.. |Python Versions| image:: https://img.shields.io/pypi/pyversions/scingestor.svg
+                     :target: https://pypi.python.org/pypi/scingestor/
+                     :alt:
+
 
 The ``scingestor`` python package provides a support for scripts which
 ingest RawDatasets and OrigDatablocks into the SciCat metadata server.
@@ -26,16 +43,18 @@ is finished. It can be executed by
 
 Its configuration written in YAML can contain the following variables
 
-* ``scicat_url`` (str) 
-* ``ingestor_credential_file`` (str) 
-* ``beamtime_dirs`` (list<str>) or ``beamtime_base_dir`` (str) 
-* ``ingestor_log_dir`` (str) 
-* ``ingestor_username`` (str) 
-* ``doi_prefix`` (str) 
+* ``scicat_url`` (str)
+* ``ingestor_credential_file`` (str)
+* ``beamtime_dirs`` (list<str>) or ``beamtime_base_dir`` (str)
+* ``ingestor_log_dir`` (str)
+* ``ingestor_username`` (str)
+* ``doi_prefix`` (str)
 * ``update_strategy`` (‘patch’, ‘create’, ‘mixed’)
-* ``relative_path_in_datablock`` (bool) 
+* ``relative_path_in_datablock`` (bool)
 * ``chmod_json_files`` (str)
 * ``oned_in_metadata`` (bool)
+* ``scan_metadata_postfix`` (str)
+* ``datablock_metadata_postfix`` (str)
 
 e.g.
 
@@ -75,7 +94,7 @@ Required packages
 Install from sources
 ~~~~~~~~~~~~~~~~~~~~
 
-The code can be built with
+The code from https://github.com/jkotan/scingestor can be built with
 
 ::
 
@@ -157,7 +176,7 @@ Finally,
    apt-get install python3-scingestor
 
 
-   
+
 Contents
 ========
 
