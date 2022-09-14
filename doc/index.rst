@@ -94,7 +94,7 @@ Required packages
 Install from sources
 ~~~~~~~~~~~~~~~~~~~~
 
-The code can be built with
+The code from https://github.com/jkotan/scingestor can be built with
 
 ::
 
