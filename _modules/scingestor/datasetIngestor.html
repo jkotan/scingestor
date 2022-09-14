@@ -138,6 +138,11 @@
         <span class="c1"># (:obj:`bool`) oned metadata flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__oned</span> <span class="o">=</span> <span class="kc">False</span>
 
+        <span class="c1"># (:obj:`str`) raw dataset scan postfix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span> <span class="o">=</span> <span class="s2">&quot;.scan.json&quot;</span>
+        <span class="c1"># (:obj:`str`) origin datablock scan postfix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span> <span class="o">=</span> <span class="s2">&quot;.origdatablock.json&quot;</span>
+
         <span class="k">if</span> <span class="s2">&quot;doiprefix&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;doi_prefix&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="s2">&quot;ingestor_credential_file&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -162,6 +167,12 @@
         <span class="k">if</span> <span class="s2">&quot;oned_in_metadata&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__oned</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;oned_in_metadata&quot;</span><span class="p">]</span>
 
+        <span class="k">if</span> <span class="s2">&quot;scan_metadata_postfix&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;scan_metadata_postfix&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;datablock_metadata_postfix&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;datablock_metadata_postfix&quot;</span><span class="p">]</span>
+
         <span class="c1"># (:obj:`list`&lt;:obj:`str`&gt;) ingested scan names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># (:obj:`list`&lt;:obj:`str`&gt;) waiting scan names</span>
@@ -170,29 +181,24 @@
         <span class="c1">#   ingested scan names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="c1"># (:obj:`str`) raw dataset scan postfix</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span> <span class="o">=</span> <span class="s2">&quot;.scan*&quot;</span>
-        <span class="c1"># (:obj:`str`) origin datablock scan postfix</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span> <span class="o">=</span> <span class="s2">&quot;.origdatablock*&quot;</span>
-
         <span class="c1"># (:obj:`str`) nexus dataset shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata &quot;</span> \
-            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">.json &quot;</span> \
+            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.nxs&quot;</span>
         <span class="c1"># (:obj:`str`) datablock shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata &quot;</span> \
-            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">.json &quot;</span> \
+            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">&quot;</span>
         <span class="c1"># (:obj:`str`) datablock shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
-            <span class="s2">&quot; -s *.pyc,*.origdatablock.json,*.scan.json,*~ &quot;</span> \
+            <span class="s2">&quot; -s *.pyc,*</span><span class="si">{dbpostfix}</span><span class="s2">,*</span><span class="si">{scpostfix}</span><span class="s2">,*~ &quot;</span> \
             <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot; -c </span><span class="si">{beamtimeid}</span><span class="s2">-clbt,</span><span class="si">{beamtimeid}</span><span class="s2">-dmgt,</span><span class="si">{beamline}</span><span class="s2">dmgt&quot;</span> \
-            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">.json &quot;</span>
+            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2"> &quot;</span>
         <span class="c1"># (:obj:`str`) datablock shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
-            <span class="s2">&quot; -s *.pyc,*.origdatablock.json,*.scan.json,*~ &quot;</span> \
+            <span class="s2">&quot; -s *.pyc,*</span><span class="si">{dbpostfix}</span><span class="s2">,*</span><span class="si">{scpostfix}</span><span class="s2">,*~ &quot;</span> \
             <span class="s2">&quot; -c </span><span class="si">{beamtimeid}</span><span class="s2">-clbt,</span><span class="si">{beamtimeid}</span><span class="s2">-dmgt,</span><span class="si">{beamline}</span><span class="s2">dmgt&quot;</span> \
             <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
         <span class="c1"># (:obj:`str`) datablock path postfix</span>
@@ -234,8 +240,8 @@
             <span class="s2">&quot;beamline&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bl</span><span class="p">,</span>
             <span class="s2">&quot;doiprefix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span><span class="p">,</span>
             <span class="s2">&quot;beamtimefile&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bfile</span><span class="p">,</span>
-            <span class="s2">&quot;scpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;dbpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;scpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span><span class="p">,</span>
+            <span class="s2">&quot;dbpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s1">&#39;DatasetIngestor: Parameters: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">))</span>
@@ -294,7 +300,7 @@
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                 <span class="s1">&#39;DatasetIngestor: Generating nxs metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
                     <span class="n">scan</span><span class="p">,</span>
-                    <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="s1">&#39;DatasetIngestor: Generating dataset command: </span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="p">(</span>
@@ -305,7 +311,7 @@
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                 <span class="s1">&#39;DatasetIngestor: Generating metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
                     <span class="n">scan</span><span class="p">,</span>
-                    <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="s1">&#39;DatasetIngestor: Generating dataset command: </span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="p">(</span>
@@ -314,7 +320,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
 
         <span class="n">rdss</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">rdss</span> <span class="ow">and</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">return</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -331,7 +337,7 @@
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
             <span class="s1">&#39;DatasetIngestor: Generating origdatablock metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
                 <span class="n">scan</span><span class="p">,</span>
-                <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
         <span class="n">sscan</span> <span class="o">=</span> <span class="p">(</span><span class="n">scan</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
@@ -344,7 +350,7 @@
         <span class="c1">#     &#39;DatasetIngestor: Generating origdatablock command: %s &#39; % cmd)</span>
         <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
         <span class="n">odbs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">odbs</span> <span class="ow">and</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">return</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -360,7 +366,7 @@
 <span class="sd">        :returns: a file name of generate file</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">mfilename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">mfilename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
             <span class="s1">&#39;DatasetIngestor: Checking origdatablock metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
@@ -409,13 +415,13 @@
                         <span class="s1">&#39;DatasetIngestor: &#39;</span>
                         <span class="s1">&#39;Generating origdatablock metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
                             <span class="n">scan</span><span class="p">,</span>
-                            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                                 <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
                     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mfilename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mf</span><span class="p">:</span>
                         <span class="n">mf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">nwmeta</span><span class="p">)</span>
 
         <span class="n">odbs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">odbs</span> <span class="ow">and</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">return</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -797,7 +803,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
 
         <span class="n">rdss</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">scan</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">],</span>
                 <span class="n">postfix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span><span class="p">,</span>
                 <span class="n">scanpath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanpath&quot;</span><span class="p">]))</span>
@@ -810,7 +816,7 @@
             <span class="n">mtmds</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">rds</span><span class="p">)</span>
 
         <span class="n">odbs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">scan</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">],</span>
                 <span class="n">postfix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span><span class="p">,</span>
                 <span class="n">scanpath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanpath&quot;</span><span class="p">]))</span>
@@ -859,7 +865,7 @@
         <span class="n">sscan</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="n">rdss</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">scan</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">],</span>
                 <span class="n">postfix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span><span class="p">,</span>
                 <span class="n">scanpath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanpath&quot;</span><span class="p">]))</span>
@@ -886,7 +892,7 @@
             <span class="n">mtmds</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">rds</span><span class="p">)</span>
 
         <span class="n">odbs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">scan</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">],</span>
                 <span class="n">postfix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span><span class="p">,</span>
                 <span class="n">scanpath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanpath&quot;</span><span class="p">]))</span>

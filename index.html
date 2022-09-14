@@ -32,9 +32,10 @@
             
   <div class="section" id="scicat-dataset-ingestor">
 <h1>Scicat Dataset Ingestor<a class="headerlink" href="#scicat-dataset-ingestor" title="Permalink to this headline">¶</a></h1>
-<div class="figure" id="id2">
-<img alt="github workflow" src="https://github.com/jkotan/scingestor/actions/workflows/tests.yml/badge.svg" /><p class="caption"><span class="caption-text">github workflow</span></p>
-</div>
+<p><a class="reference external" href="https://github.com/jkotan/scingestor/actions"><img alt="" src="https://github.com/jkotan/scingestor/actions/workflows/tests.yml/badge.svg" /></a>
+<a class="reference external" href="https://jkotan.github.io/scingestor/index.html"><img alt="" src="https://img.shields.io/badge/Documentation-webpages-ADD8E6.svg" /></a>
+<a class="reference external" href="https://pypi.python.org/pypi/scingestor"><img alt="" src="https://img.shields.io/pypi/v/scingestor.svg" /></a>
+<a class="reference external" href="https://pypi.python.org/pypi/scingestor/"><img alt="" src="https://img.shields.io/pypi/pyversions/scingestor.svg" /></a></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">scingestor</span></code> python package provides a support for scripts which
 ingest RawDatasets and OrigDatablocks into the SciCat metadata server.</p>
 <div class="section" id="id1">
@@ -56,6 +57,8 @@ is finished. It can be executed by</p>
 <li><code class="docutils literal notranslate"><span class="pre">relative_path_in_datablock</span></code> (bool)</li>
 <li><code class="docutils literal notranslate"><span class="pre">chmod_json_files</span></code> (str)</li>
 <li><code class="docutils literal notranslate"><span class="pre">oned_in_metadata</span></code> (bool)</li>
+<li><code class="docutils literal notranslate"><span class="pre">scan_metadata_postfix</span></code> (str)</li>
+<li><code class="docutils literal notranslate"><span class="pre">datablock_metadata_postfix</span></code> (str)</li>
 </ul>
 <p>e.g.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">beamtime_dirs</span><span class="p">:</span>
@@ -90,7 +93,7 @@ Installation</p>
 </div>
 <div class="section" id="install-from-sources">
 <h3>Install from sources<a class="headerlink" href="#install-from-sources" title="Permalink to this headline">¶</a></h3>
-<p>The code can be built with</p>
+<p>The code from <a class="reference external" href="https://github.com/jkotan/scingestor">https://github.com/jkotan/scingestor</a> can be built with</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
