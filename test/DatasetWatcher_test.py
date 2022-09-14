@@ -1228,13 +1228,18 @@ class DatasetWatcherTest(unittest.TestCase):
         with open(credfile, "w") as cf:
             cf.write(cred)
 
+        dspostfix = ".dataset.json"
+        dbpostfix = ".datablock.json"
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'scan_metadata_postfix: "{dspostfix}"\n' \
+            'datablock_metadata_postfix: "{dbpostfix}"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'relative_path_in_datablock: true\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, logdir=logdir, credfile=credfile,
+                dspostfix=dspostfix, dbpostfix=dbpostfix)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -1290,20 +1295,20 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetWatcher: Ingested datasets: []\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
-                        '{sc1} {subdir2}/{sc1}.scan.json\n'
+                        '{sc1} {subdir2}/{sc1}.dataset.json\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
-                        ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        ' {sc1} {subdir2}/{sc1}.datablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '10.3204/99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
                         '10.3204/99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
-                        '{sc2} {subdir2}/{sc2}.scan.json\n'
+                        '{sc2} {subdir2}/{sc2}.dataset.json\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
-                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        ' {sc2} {subdir2}/{sc2}.datablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '10.3204/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
@@ -1403,7 +1408,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     json.loads(self.__server.origdatablocks[0]),
                     {'dataFileList': [
                         {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
+                         'path': 'myscan_00001.dataset.json',
                          'perm': '-rw-r--r--',
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
@@ -1417,7 +1422,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     json.loads(self.__server.origdatablocks[1]),
                     {'dataFileList': [
                         {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
+                         'path': 'myscan_00001.dataset.json',
                          'perm': '-rw-r--r--',
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',

@@ -106,6 +106,11 @@ class DatasetIngestor:
         # (:obj:`bool`) oned metadata flag
         self.__oned = False
 
+        # (:obj:`str`) raw dataset scan postfix
+        self.__scanpostfix = ".scan.json"
+        # (:obj:`str`) origin datablock scan postfix
+        self.__datablockpostfix = ".origdatablock.json"
+
         if "doiprefix" in self.__config.keys():
             self.__doiprefix = self.__config["doi_prefix"]
         if "ingestor_credential_file" in self.__config.keys():
@@ -130,6 +135,12 @@ class DatasetIngestor:
         if "oned_in_metadata" in self.__config.keys():
             self.__oned = self.__config["oned_in_metadata"]
 
+        if "scan_metadata_postfix" in self.__config.keys():
+            self.__scanpostfix = self.__config["scan_metadata_postfix"]
+        if "datablock_metadata_postfix" in self.__config.keys():
+            self.__datablockpostfix = \
+                self.__config["datablock_metadata_postfix"]
+
         # (:obj:`list`<:obj:`str`>) ingested scan names
         self.__sc_ingested = []
         # (:obj:`list`<:obj:`str`>) waiting scan names
@@ -138,29 +149,24 @@ class DatasetIngestor:
         #   ingested scan names
         self.__sc_ingested_map = {}
 
-        # (:obj:`str`) raw dataset scan postfix
-        self.__scanpostfix = ".scan*"
-        # (:obj:`str`) origin datablock scan postfix
-        self.__datablockpostfix = ".origdatablock*"
-
         # (:obj:`str`) nexus dataset shell command
         self.__datasetcommandnxs = "nxsfileinfo metadata " \
-            " -o {scanpath}/{scanname}{scpostfix}.json " \
+            " -o {scanpath}/{scanname}{scpostfix} " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             "{scanpath}/{scanname}.nxs"
         # (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata " \
-            " -o {scanpath}/{scanname}{scpostfix}.json " \
+            " -o {scanpath}/{scanname}{scpostfix} " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname}"
         # (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
-            " -s *.pyc,*.origdatablock.json,*.scan.json,*~ " \
+            " -s *.pyc,*{dbpostfix},*{scpostfix},*~ " \
             " -p {doiprefix}/{beamtimeid}/{scanname} " \
             " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
-            " -o {scanpath}/{scanname}{dbpostfix}.json "
+            " -o {scanpath}/{scanname}{dbpostfix} "
         # (:obj:`str`) datablock shell command
         self.__datablockmemcommand = "nxsfileinfo origdatablock " \
-            " -s *.pyc,*.origdatablock.json,*.scan.json,*~ " \
+            " -s *.pyc,*{dbpostfix},*{scpostfix},*~ " \
             " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
             " -p {doiprefix}/{beamtimeid}/{scanname} "
         # (:obj:`str`) datablock path postfix
@@ -202,8 +208,8 @@ class DatasetIngestor:
             "beamline": self.__bl,
             "doiprefix": self.__doiprefix,
             "beamtimefile": self.__bfile,
-            "scpostfix": self.__scanpostfix.replace("*", ""),
-            "dbpostfix": self.__datablockpostfix.replace("*", ""),
+            "scpostfix": self.__scanpostfix,
+            "dbpostfix": self.__datablockpostfix,
         }
         get_logger().debug(
             'DatasetIngestor: Parameters: %s' % str(self.__dctfmt))
@@ -262,7 +268,7 @@ class DatasetIngestor:
             get_logger().info(
                 'DatasetIngestor: Generating nxs metadata: %s %s' % (
                     scan,
-                    "{scanpath}/{scanname}{scpostfix}.json".format(
+                    "{scanpath}/{scanname}{scpostfix}".format(
                         **self.__dctfmt)))
             get_logger().debug(
                 'DatasetIngestor: Generating dataset command: %s ' % (
@@ -273,7 +279,7 @@ class DatasetIngestor:
             get_logger().info(
                 'DatasetIngestor: Generating metadata: %s %s' % (
                     scan,
-                    "{scanpath}/{scanname}{scpostfix}.json".format(
+                    "{scanpath}/{scanname}{scpostfix}".format(
                         **self.__dctfmt)))
             get_logger().debug(
                 'DatasetIngestor: Generating dataset command: %s ' % (
@@ -282,7 +288,7 @@ class DatasetIngestor:
                 self.__datasetcommand.format(**self.__dctfmt).split())
 
         rdss = glob.glob(
-            "{scanpath}/{scanname}{scpostfix}.json".format(
+            "{scanpath}/{scanname}{scpostfix}".format(
                         **self.__dctfmt))
         if rdss and rdss[0]:
             return rdss[0]
@@ -299,7 +305,7 @@ class DatasetIngestor:
         get_logger().info(
             'DatasetIngestor: Generating origdatablock metadata: %s %s' % (
                 scan,
-                "{scanpath}/{scanname}{dbpostfix}.json".format(
+                "{scanpath}/{scanname}{dbpostfix}".format(
                     **self.__dctfmt)))
         cmd = self.__datablockcommand.format(**self.__dctfmt)
         sscan = (scan or "").split(" ")
@@ -312,7 +318,7 @@ class DatasetIngestor:
         #     'DatasetIngestor: Generating origdatablock command: %s ' % cmd)
         subprocess.run(cmd.split())
         odbs = glob.glob(
-            "{scanpath}/{scanname}{dbpostfix}.json".format(
+            "{scanpath}/{scanname}{dbpostfix}".format(
                     **self.__dctfmt))
         if odbs and odbs[0]:
             return odbs[0]
@@ -328,7 +334,7 @@ class DatasetIngestor:
         :returns: a file name of generate file
         :rtype: :obj:`str`
         """
-        mfilename = "{scanpath}/{scanname}{dbpostfix}.json".format(
+        mfilename = "{scanpath}/{scanname}{dbpostfix}".format(
             **self.__dctfmt)
         get_logger().info(
             'DatasetIngestor: Checking origdatablock metadata: %s %s' % (
@@ -377,13 +383,13 @@ class DatasetIngestor:
                         'DatasetIngestor: '
                         'Generating origdatablock metadata: %s %s' % (
                             scan,
-                            "{scanpath}/{scanname}{dbpostfix}.json".format(
+                            "{scanpath}/{scanname}{dbpostfix}".format(
                                 **self.__dctfmt)))
                     with open(mfilename, "w") as mf:
                         mf.write(nwmeta)
 
         odbs = glob.glob(
-            "{scanpath}/{scanname}{dbpostfix}.json".format(
+            "{scanpath}/{scanname}{dbpostfix}".format(
                     **self.__dctfmt))
         if odbs and odbs[0]:
             return odbs[0]
@@ -765,7 +771,7 @@ class DatasetIngestor:
         self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
 
         rdss = glob.glob(
-            "{scanpath}/{scan}{postfix}.json".format(
+            "{scanpath}/{scan}{postfix}".format(
                 scan=self.__dctfmt["scanname"],
                 postfix=self.__scanpostfix,
                 scanpath=self.__dctfmt["scanpath"]))
@@ -778,7 +784,7 @@ class DatasetIngestor:
             mtmds = os.path.getmtime(rds)
 
         odbs = glob.glob(
-            "{scanpath}/{scan}{postfix}.json".format(
+            "{scanpath}/{scan}{postfix}".format(
                 scan=self.__dctfmt["scanname"],
                 postfix=self.__datablockpostfix,
                 scanpath=self.__dctfmt["scanpath"]))
@@ -827,7 +833,7 @@ class DatasetIngestor:
         sscan = scan.split(" ")
         self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
         rdss = glob.glob(
-            "{scanpath}/{scan}{postfix}.json".format(
+            "{scanpath}/{scan}{postfix}".format(
                 scan=self.__dctfmt["scanname"],
                 postfix=self.__scanpostfix,
                 scanpath=self.__dctfmt["scanpath"]))
@@ -854,7 +860,7 @@ class DatasetIngestor:
             mtmds = os.path.getmtime(rds)
 
         odbs = glob.glob(
-            "{scanpath}/{scan}{postfix}.json".format(
+            "{scanpath}/{scan}{postfix}".format(
                 scan=self.__dctfmt["scanname"],
                 postfix=self.__datablockpostfix,
                 scanpath=self.__dctfmt["scanpath"]))
