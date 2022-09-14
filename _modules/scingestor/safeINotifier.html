@@ -1,0 +1,321 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>scingestor.safeINotifier &#8212; SciCat Dataset Ingestor 0.0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for scingestor.safeINotifier</h1><div class="highlight"><pre>
+<span></span><span class="c1">#   This file is part of scingestor - Scientific Catalog Dataset Ingestor</span>
+<span class="c1">#</span>
+<span class="c1">#    Copyright (C) 2021-2021 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#    (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU General Public License</span>
+<span class="c1">#    along with scingestor.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">inotifyx</span>
+<span class="kn">import</span> <span class="nn">queue</span>
+<span class="c1"># import glob</span>
+<span class="c1"># import json</span>
+<span class="c1"># import os</span>
+<span class="kn">from</span> <span class="nn">.logger</span> <span class="k">import</span> <span class="n">get_logger</span>
+
+
+<div class="viewcode-block" id="EventData"><a class="viewcode-back" href="../../scingestor.html#scingestor.safeINotifier.EventData">[docs]</a><span class="k">class</span> <span class="nc">EventData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; event data &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">masks</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param name: name</span>
+<span class="sd">        :type name: :obj:`str`</span>
+<span class="sd">        :param masks: mask description</span>
+<span class="sd">        :type maks: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># (:obj:`str`) name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="c1"># (:obj:`str`) mask</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">masks</span> <span class="o">=</span> <span class="n">masks</span></div>
+
+
+<div class="viewcode-block" id="SafeINotifier"><a class="viewcode-back" href="../../scingestor.html#scingestor.safeINotifier.SafeINotifier">[docs]</a><span class="k">class</span> <span class="nc">SafeINotifier</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; singleton wrapper for inotifyx</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># (:class:`SafeINotifier`) singleton notifier instance</span>
+    <span class="n">_notifier</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># (:class:`threading.Lock`) singleton lock</span>
+    <span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+    <span class="c1"># (:obj:`bool`) make notifier to be a daemon</span>
+    <span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; create a new object if it is the first one</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_notifier</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_notifier</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">_notifier</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">SafeINotifier</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">_notifier</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_notifier</span>
+
+<div class="viewcode-block" id="SafeINotifier.init"><a class="viewcode-back" href="../../scingestor.html#scingestor.safeINotifier.SafeINotifier.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># (:obj:`float`) timeout value for inotifyx get events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mf">0.1</span>
+        <span class="c1"># (:obj:`bool`) running loop flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># (:obj:`int`) notifier ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">notifier</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># (:obj:`dict` &lt;:obj:`int`, :obj:`queue.Queue`&gt;)</span>
+        <span class="c1"># watch description queues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_queue</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># (:obj:`dict` &lt;:obj:`int`, :obj:`int`&gt;)  queue ids watch description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># (:obj:`int`) watch description queue counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># (:class:`threading.Lock`) watch dictionary lock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+        <span class="c1"># (:obj:`list` &lt; (:obj:`int`, :obj:`path`, :obj:`int`) &gt;)</span>
+        <span class="c1"># watch description to add i.e. (id, path, masks)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_add</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># (:obj:`list` &lt; :obj:`int`&gt;)</span>
+        <span class="c1"># queue id of watch description to remove</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_rm</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># start the thread</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SafeINotifier.add_watch"><a class="viewcode-back" href="../../scingestor.html#scingestor.safeINotifier.SafeINotifier.add_watch">[docs]</a>    <span class="k">def</span> <span class="nf">add_watch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">masks</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; add watch to notifier</span>
+
+<span class="sd">        :param path: watch path</span>
+<span class="sd">        :type path: :obj:`str`</span>
+<span class="sd">        :param mask: watch mask</span>
+<span class="sd">        :type mask: :obj:`int`</span>
+<span class="sd">        :returns: queue providing events and its id</span>
+<span class="sd">        :rtype: [:class:`threading.queue`, :obj:`int`]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">wqueue</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">qid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_counter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id_queue</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span> <span class="o">=</span> <span class="n">wqueue</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;ADD WATCH: </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">qid</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">masks</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_add</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">qid</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">masks</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">wqueue</span><span class="p">,</span> <span class="n">qid</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SafeINotifier.rm_watch"><a class="viewcode-back" href="../../scingestor.html#scingestor.safeINotifier.SafeINotifier.rm_watch">[docs]</a>    <span class="k">def</span> <span class="nf">rm_watch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; add watch to notifier</span>
+
+<span class="sd">        :param qid: queue id</span>
+<span class="sd">        :type qid: :obj:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span><span class="p">:</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;REMOVE WATCH: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">qid</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_rm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qid</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">qid</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_append</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; append waches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">qid</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">masks</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_add</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">wd</span> <span class="o">=</span> <span class="n">inotifyx</span><span class="o">.</span><span class="n">add_watch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">notifier</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">masks</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span> <span class="o">=</span> <span class="n">wd</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s1">&#39;SafeINotifier: append  </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_add</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; remove waches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">qid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_rm</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">qid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span><span class="p">:</span>
+                <span class="n">wd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">qid</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">wd</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">inotifyx</span><span class="o">.</span><span class="n">rm_watch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">notifier</span><span class="p">,</span> <span class="n">wd</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                            <span class="s1">&#39;SafeINotifier: remove </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_rm</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="SafeINotifier.run"><a class="viewcode-back" href="../../scingestor.html#scingestor.safeINotifier.SafeINotifier.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; scandir watcher thread</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">notifier</span> <span class="o">=</span> <span class="n">inotifyx</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
+
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_append</span><span class="p">()</span>
+                    <span class="n">qlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_queue</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">qlen</span><span class="p">:</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">events</span> <span class="o">=</span> <span class="n">inotifyx</span><span class="o">.</span><span class="n">get_events</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">notifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_append</span><span class="p">()</span>
+                    <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Sc Talk&#39;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+                        <span class="n">wd</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">wd</span>
+                        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span><span class="p">:</span>
+                            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                                <span class="s1">&#39;SN: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                                    <span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                    <span class="n">event</span><span class="o">.</span><span class="n">get_mask_description</span><span class="p">(),</span>
+                                    <span class="n">event</span><span class="o">.</span><span class="n">wd</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span>
+                                <span class="p">))</span>
+                            <span class="c1"># get_logger().info(</span>
+                            <span class="c1">#     &#39;SN: %s %s %s %s&#39; % (</span>
+                            <span class="c1">#         event.name,</span>
+                            <span class="c1">#         event.get_mask_description(),</span>
+                            <span class="c1">#         event.wd,</span>
+                            <span class="c1">#         self.qid_wd</span>
+                            <span class="c1">#     ))</span>
+
+                            <span class="k">for</span> <span class="n">qid</span><span class="p">,</span> <span class="n">wd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                                <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">wd</span> <span class="o">==</span> <span class="n">wd</span> <span class="ow">and</span> \
+                                   <span class="n">qid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                    <span class="n">wqueue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span>
+                                    <span class="n">wqueue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+                                        <span class="n">EventData</span><span class="p">(</span>
+                                            <span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                            <span class="n">event</span><span class="o">.</span><span class="n">get_mask_description</span><span class="p">()))</span>
+                                    <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                                        <span class="s1">&#39;PUT EVENT: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                                            <span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                            <span class="n">event</span><span class="o">.</span><span class="n">get_mask_description</span><span class="p">(),</span>
+                                            <span class="n">event</span><span class="o">.</span><span class="n">wd</span><span class="p">,</span> <span class="n">qid</span>
+                                        <span class="p">))</span>
+
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">wd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">inotifyx</span><span class="o">.</span><span class="n">rm_watch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">notifier</span><span class="p">,</span> <span class="n">wd</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="s1">&#39;SafeINotifier: finally </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SafeINotifier.stop"><a class="viewcode-back" href="../../scingestor.html#scingestor.safeINotifier.SafeINotifier.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; stop the watcher</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">SciCat Dataset Ingestor</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scicat_dataset_ingestor.html">scicat_dataset_ingestor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scicat_dataset_ingest.html">scicat_dataset_ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scingestor.html">scingestor package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, DESY, Jan Kotanski.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

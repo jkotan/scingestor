@@ -1,0 +1,1088 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>scingestor.datasetIngestor &#8212; SciCat Dataset Ingestor 0.0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for scingestor.datasetIngestor</h1><div class="highlight"><pre>
+<span></span><span class="c1">#   This file is part of scingestor - Scientific Catalog Dataset Ingestor</span>
+<span class="c1">#</span>
+<span class="c1">#    Copyright (C) 2021-2021 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#    (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU General Public License</span>
+<span class="c1">#    along with scingestor.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">enum</span>
+
+<span class="kn">from</span> <span class="nn">.logger</span> <span class="k">import</span> <span class="n">get_logger</span>
+
+
+<div class="viewcode-block" id="UpdateStrategy"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.UpdateStrategy">[docs]</a><span class="k">class</span> <span class="nc">UpdateStrategy</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot; Update strategy</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">PATCH</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">CREATE</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">MIXED</span> <span class="o">=</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="DatasetIngestor"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor">[docs]</a><span class="k">class</span> <span class="nc">DatasetIngestor</span><span class="p">:</span>
+
+    <span class="sd">&quot;&quot;&quot; Dataset Ingestor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span>
+                 <span class="n">path</span><span class="p">,</span> <span class="n">dsfile</span><span class="p">,</span> <span class="n">idsfile</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">beamtimefile</span><span class="p">,</span>
+                 <span class="n">delay</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param configuration: dictionary with the ingestor configuration</span>
+<span class="sd">        :type configuration: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :param path: scan dir path</span>
+<span class="sd">        :type path: :obj:`str`</span>
+<span class="sd">        :param dsfile: file with a dataset list</span>
+<span class="sd">        :type dsfile: :obj:`str`</span>
+<span class="sd">        :param dsfile: file with a ingester dataset list</span>
+<span class="sd">        :type dsfile: :obj:`str`</span>
+<span class="sd">        :param meta: beamtime configuration</span>
+<span class="sd">        :type meta: :obj:`dict` &lt;:obj:`str`,`any`&gt;</span>
+<span class="sd">        :param beamtimefile: beamtime filename</span>
+<span class="sd">        :type beamtimefile: :obj:`str`</span>
+<span class="sd">        :param doiprefix: doiprefix</span>
+<span class="sd">        :type doiprefix: :obj:`str`</span>
+<span class="sd">        :param ingestorcred: ingestor credential</span>
+<span class="sd">        :type ingestorcred: :obj:`str`</span>
+<span class="sd">        :param scicat_url: scicat_url</span>
+<span class="sd">        :type scicat_url: :obj:`str`</span>
+<span class="sd">        :param delay: time delay</span>
+<span class="sd">        :type delay: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># (:obj:`dict` &lt;:obj:`str`, `any`&gt;) ingestor configuration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__config</span> <span class="o">=</span> <span class="n">configuration</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="c1"># (:obj:`str`) file with a dataset list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span> <span class="o">=</span> <span class="n">dsfile</span>
+        <span class="c1"># (:obj:`str`) file with a ingested dataset list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__idsfile</span> <span class="o">=</span> <span class="n">idsfile</span>
+        <span class="c1"># (:obj:`str`) file with a ingested dataset list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__idsfiletmp</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">idsfile</span><span class="p">,</span> <span class="s2">&quot;.tmp&quot;</span><span class="p">)</span>
+        <span class="c1"># (:obj:`str`) scan path dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="c1"># (:obj:`str`) beamtime id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;beamtimeId&quot;</span><span class="p">]</span>
+        <span class="c1"># (:obj:`str`) beamline name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__bl</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;beamline&quot;</span><span class="p">]</span>
+        <span class="c1"># (:obj:`str`) beamtime id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__bfile</span> <span class="o">=</span> <span class="n">beamtimefile</span>
+
+        <span class="n">bpath</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">beamtimefile</span><span class="p">)</span>
+        <span class="c1"># (:obj:`str`) relative scan path to beamtime path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__relpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">bpath</span><span class="p">)</span>
+
+        <span class="c1"># (:obj:`str`) doi prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span> <span class="o">=</span> <span class="s2">&quot;10.3204&quot;</span>
+        <span class="c1"># (:obj:`str`) username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__username</span> <span class="o">=</span> <span class="s1">&#39;ingestor&#39;</span>
+        <span class="c1"># (:obj:`str`) update strategy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__strategy</span> <span class="o">=</span> <span class="n">UpdateStrategy</span><span class="o">.</span><span class="n">PATCH</span>
+        <span class="c1"># (:obj:`str`) beamtime id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__incd</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># (:obj:`bool`) relative path in datablock flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_in_datablock</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># (:obj:`str`) scicat url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8881&quot;</span>
+        <span class="c1"># (:obj:`str`) chmod string for json metadata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__chmod</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># (:obj:`bool`) oned metadata flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__oned</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="s2">&quot;doiprefix&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;doi_prefix&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;ingestor_credential_file&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;ingestor_credential_file&quot;</span><span class="p">])</span> <span class="k">as</span> <span class="n">fl</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__incd</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;ingestor_username&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__username</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;ingestor_username&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;update_strategy&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__strategy</span> <span class="o">=</span> <span class="n">UpdateStrategy</span><span class="p">[</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;update_strategy&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s1">&#39;Wrong UpdateStrategy value: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s2">&quot;scicat_url&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;scicat_url&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;relative_path_in_datablock&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_in_datablock</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;relative_path_in_datablock&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;chmod_json_files&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__chmod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;chmod_json_files&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;oned_in_metadata&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__oned</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;oned_in_metadata&quot;</span><span class="p">]</span>
+
+        <span class="c1"># (:obj:`list`&lt;:obj:`str`&gt;) ingested scan names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># (:obj:`list`&lt;:obj:`str`&gt;) waiting scan names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_waiting</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># (:obj:`dict`&lt;:obj:`str`, :obj:`list`&lt;:obj:`str`&gt;&gt;)</span>
+        <span class="c1">#   ingested scan names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># (:obj:`str`) raw dataset scan postfix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span> <span class="o">=</span> <span class="s2">&quot;.scan*&quot;</span>
+        <span class="c1"># (:obj:`str`) origin datablock scan postfix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span> <span class="o">=</span> <span class="s2">&quot;.origdatablock*&quot;</span>
+
+        <span class="c1"># (:obj:`str`) nexus dataset shell command</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata &quot;</span> \
+            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">.json &quot;</span> \
+            <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.nxs&quot;</span>
+        <span class="c1"># (:obj:`str`) datablock shell command</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata &quot;</span> \
+            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">.json &quot;</span> \
+            <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">&quot;</span>
+        <span class="c1"># (:obj:`str`) datablock shell command</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
+            <span class="s2">&quot; -s *.pyc,*.origdatablock.json,*.scan.json,*~ &quot;</span> \
+            <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
+            <span class="s2">&quot; -c </span><span class="si">{beamtimeid}</span><span class="s2">-clbt,</span><span class="si">{beamtimeid}</span><span class="s2">-dmgt,</span><span class="si">{beamline}</span><span class="s2">dmgt&quot;</span> \
+            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">.json &quot;</span>
+        <span class="c1"># (:obj:`str`) datablock shell command</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
+            <span class="s2">&quot; -s *.pyc,*.origdatablock.json,*.scan.json,*~ &quot;</span> \
+            <span class="s2">&quot; -c </span><span class="si">{beamtimeid}</span><span class="s2">-clbt,</span><span class="si">{beamtimeid}</span><span class="s2">-dmgt,</span><span class="si">{beamline}</span><span class="s2">dmgt&quot;</span> \
+            <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
+        <span class="c1"># (:obj:`str`) datablock path postfix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span> <span class="o">=</span> <span class="s2">&quot; </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_in_datablock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__chmod</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__oned</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="s2">&quot; --oned &quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="s2">&quot; --oned &quot;</span>
+
+        <span class="c1"># (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) command format parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;scanname&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;chmod&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__chmod</span><span class="p">,</span>
+            <span class="s2">&quot;scanpath&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">,</span>
+            <span class="s2">&quot;relpath&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__relpath</span><span class="p">,</span>
+            <span class="s2">&quot;beamtimeid&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">,</span>
+            <span class="s2">&quot;beamline&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bl</span><span class="p">,</span>
+            <span class="s2">&quot;doiprefix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span><span class="p">,</span>
+            <span class="s2">&quot;beamtimefile&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bfile</span><span class="p">,</span>
+            <span class="s2">&quot;scpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;dbpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s1">&#39;DatasetIngestor: Parameters: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">))</span>
+
+        <span class="c1"># (:obj:`int`) maximal counter value for post tries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span> <span class="o">=</span> <span class="mi">100</span>
+
+        <span class="c1"># (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) request headers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">}</span>
+
+        <span class="c1"># self.__tokenurl = &quot;http://www-science3d.desy.de:3000/api/v3/&quot; \</span>
+        <span class="c1">#       &quot;Users/login&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+        <span class="c1"># (:obj:`str`) token url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tokenurl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">+</span> <span class="s2">&quot;Users/login&quot;</span>
+        <span class="c1"># get_logger().info(</span>
+        <span class="c1">#     &#39;DatasetIngestor: LOGIN %s&#39; % self.__tokenurl)</span>
+        <span class="c1"># (:obj:`str`) dataset url</span>
+        <span class="c1"># self.__dataseturl = &quot;http://www-science3d.desy.de:3000/api/v3/&quot; \</span>
+        <span class="c1">#    &quot;RawDatasets&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dataseturl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">+</span> <span class="s2">&quot;RawDatasets&quot;</span>
+        <span class="c1"># (:obj:`str`) origdatablock url</span>
+        <span class="c1"># self.__dataseturl = &quot;http://www-science3d.desy.de:3000/api/v3/&quot; \</span>
+        <span class="c1">#     &quot;OrigDatablocks&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockurl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">+</span> <span class="s2">&quot;OrigDatablocks&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__withoutsm</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;techniques&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;classification&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;createdBy&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;updatedBy&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;datasetlifecycle&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;numberOfFiles&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;createdAt&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;updatedAt&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;history&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;creationTime&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;scientificMetadata&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;endTime&quot;</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_generate_rawdataset_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; generate raw dataset metadata</span>
+
+<span class="sd">        :param scan: scan name</span>
+<span class="sd">        :type scan: :obj:`str`</span>
+<span class="sd">        :returns: a file name of generate file</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nxsmasterfile</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.nxs&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">nxsmasterfile</span><span class="p">):</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s1">&#39;DatasetIngestor: Generating nxs metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">scan</span><span class="p">,</span>
+                    <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s1">&#39;DatasetIngestor: Generating dataset command: </span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s1">&#39;DatasetIngestor: Generating metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">scan</span><span class="p">,</span>
+                    <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s1">&#39;DatasetIngestor: Generating dataset command: </span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+        <span class="n">rdss</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">rdss</span> <span class="ow">and</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_generate_origdatablock_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; generate origdatablock metadata</span>
+
+<span class="sd">        :param scan: scan name</span>
+<span class="sd">        :type scan: :obj:`str`</span>
+<span class="sd">        :returns: a file name of generate file</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;DatasetIngestor: Generating origdatablock metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">scan</span><span class="p">,</span>
+                <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
+        <span class="n">sscan</span> <span class="o">=</span> <span class="p">(</span><span class="n">scan</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sc</span> <span class="ow">in</span> <span class="n">sscan</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">scanpath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanpath&quot;</span><span class="p">],</span> <span class="n">scanname</span><span class="o">=</span><span class="n">sc</span><span class="p">)</span>
+        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s1">&#39;DatasetIngestor: Generating origdatablock command: </span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="c1"># get_logger().info(</span>
+        <span class="c1">#     &#39;DatasetIngestor: Generating origdatablock command: %s &#39; % cmd)</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="n">odbs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">odbs</span> <span class="ow">and</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_regenerate_origdatablock_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;o generate origdatablock metadata</span>
+
+<span class="sd">        :param scan: scan name</span>
+<span class="sd">        :type scan: :obj:`str`</span>
+<span class="sd">        :param force: force flag</span>
+<span class="sd">        :type force: :obj:`bool`</span>
+<span class="sd">        :returns: a file name of generate file</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mfilename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
+        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;DatasetIngestor: Checking origdatablock metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">scan</span><span class="p">,</span> <span class="n">mfilename</span><span class="p">))</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
+        <span class="n">sscan</span> <span class="o">=</span> <span class="p">(</span><span class="n">scan</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span><span class="p">:</span>
+            <span class="n">dctfmt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sc</span> <span class="ow">in</span> <span class="n">sscan</span><span class="p">:</span>
+                <span class="n">dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sc</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">dctfmt</span><span class="p">)</span>
+        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s1">&#39;DatasetIngestor: Checking origdatablock command: </span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="n">dmeta</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mfilename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mf</span><span class="p">:</span>
+                <span class="n">meta</span> <span class="o">=</span> <span class="n">mf</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">dmeta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">dmeta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
+            <span class="n">sscan</span> <span class="o">=</span> <span class="p">(</span><span class="n">scan</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span><span class="p">:</span>
+                <span class="n">dctfmt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">sc</span> <span class="ow">in</span> <span class="n">sscan</span><span class="p">:</span>
+                    <span class="n">dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sc</span>
+                    <span class="n">cmd</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">dctfmt</span><span class="p">)</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="n">cmd</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span>
+                <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">nwmeta</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dnwmeta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">nwmeta</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+                <span class="n">dnwmeta</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="c1"># print(&quot;M2&quot;, dnwmeta)</span>
+            <span class="k">if</span> <span class="n">dnwmeta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadataEqual</span><span class="p">(</span><span class="n">dmeta</span><span class="p">,</span> <span class="n">dnwmeta</span><span class="p">)</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+                    <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="s1">&#39;DatasetIngestor: &#39;</span>
+                        <span class="s1">&#39;Generating origdatablock metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                            <span class="n">scan</span><span class="p">,</span>
+                            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mfilename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mf</span><span class="p">:</span>
+                        <span class="n">mf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">nwmeta</span><span class="p">)</span>
+
+        <span class="n">odbs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">odbs</span> <span class="ow">and</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_metadataEqual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dct</span><span class="p">,</span> <span class="n">dct2</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; compare two dictionaries if metdatdata is equal</span>
+
+<span class="sd">        :param dct: first metadata dictionary</span>
+<span class="sd">        :type dct: :obj:`dct` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :param dct2: second metadata dictionary</span>
+<span class="sd">        :type dct2: :obj:`dct` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :param skip: a list of keywords to skip</span>
+<span class="sd">        :type skip: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        :param parent: the parent metadata dictionary to use in recursion</span>
+<span class="sd">        :type parent: :obj:`dct` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">w1</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">parent</span> <span class="k">else</span> <span class="n">k</span><span class="p">)</span>
+              <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+              <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">skip</span> <span class="ow">or</span>
+                  <span class="p">((</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">parent</span> <span class="k">else</span> <span class="n">k</span><span class="p">)</span>
+                   <span class="ow">not</span> <span class="ow">in</span> <span class="n">skip</span><span class="p">))]</span>
+        <span class="n">w2</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">parent</span> <span class="k">else</span> <span class="n">k</span><span class="p">)</span>
+              <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dct2</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+              <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">skip</span> <span class="ow">or</span>
+                  <span class="p">((</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">parent</span> <span class="k">else</span> <span class="n">k</span><span class="p">)</span>
+                   <span class="ow">not</span> <span class="ow">in</span> <span class="n">skip</span><span class="p">))]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w1</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">w2</span><span class="p">):</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s1">&#39;DatasetIngestor: </span><span class="si">%s</span><span class="s1"> != </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="nb">list</span><span class="p">(</span><span class="n">w1</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">w2</span><span class="p">)))</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">parent</span><span class="p">:</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">k</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">skip</span> <span class="ow">or</span> <span class="n">node</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skip</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dct2</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="s1">&#39;DatasetIngestor: </span><span class="si">%s</span><span class="s1"> not in </span><span class="si">%s</span><span class="s1">&#39;</span>
+                        <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span>  <span class="n">dct2</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+                    <span class="n">status</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">break</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadataEqual</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dct2</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">skip</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+                        <span class="n">status</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="n">dct2</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
+                        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                            <span class="s1">&#39;DatasetIngestor </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1"> != </span><span class="si">%s</span><span class="s1">&#39;</span>
+                            <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>  <span class="n">dct2</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+
+                        <span class="n">status</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">status</span>
+
+<div class="viewcode-block" id="DatasetIngestor.get_token"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.get_token">[docs]</a>    <span class="k">def</span> <span class="nf">get_token</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides ingestor token</span>
+
+<span class="sd">        :returns: ingestor token</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__tokenurl</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__headers</span><span class="p">,</span>
+                <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__username</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__incd</span><span class="p">})</span>
+            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s1">&#39;DatasetIngestor: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+    <span class="k">def</span> <span class="nf">_post_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdic</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mdct</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; post dataset</span>
+
+<span class="sd">        :param mdic: metadata in dct</span>
+<span class="sd">        :type mdic: :obj:`dct` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :param token: ingestor token</span>
+<span class="sd">        :type token: :obj:`str`</span>
+<span class="sd">        :param mdct: metadata in dct</span>
+<span class="sd">        :type mdct: :obj:`dct` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :returns: a file name of generate file</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># create a new dataset since</span>
+        <span class="c1"># core metadata of dataset were changed</span>
+        <span class="c1"># find a new pid</span>
+        <span class="n">pexist</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">npid</span> <span class="o">=</span> <span class="n">mdic</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span>
+        <span class="n">ipid</span> <span class="o">=</span> <span class="n">mdct</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">pexist</span><span class="p">:</span>
+            <span class="n">spid</span> <span class="o">=</span> <span class="n">npid</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">spid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">ver</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">spid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">spid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ver</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="n">spid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">spid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span>
+            <span class="n">npid</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spid</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">spid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ipid</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spid</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="n">resexists</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">{url}</span><span class="s2">/</span><span class="si">{pid}</span><span class="s2">/exists?access_token=</span><span class="si">{token}</span><span class="s2">&quot;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dataseturl</span><span class="p">,</span>
+                    <span class="n">pid</span><span class="o">=</span><span class="n">npid</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%2F</span><span class="s2">&quot;</span><span class="p">),</span>
+                    <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">resexists</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+                <span class="n">pexist</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
+                    <span class="n">resexists</span><span class="o">.</span><span class="n">content</span><span class="p">)[</span><span class="s2">&quot;exists&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">resexists</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="n">mdic</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ipid</span>
+        <span class="n">nmeta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">mdic</span><span class="p">)</span>
+        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;DatasetIngestor: &#39;</span>
+            <span class="s1">&#39;Post the dataset with a new pid: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">npid</span><span class="p">))</span>
+
+        <span class="c1"># post the dataset with the new pid</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">?access_token=</span><span class="si">%s</span><span class="s2">&quot;</span>
+            <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dataseturl</span><span class="p">,</span> <span class="n">token</span><span class="p">),</span>
+            <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__headers</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">nmeta</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mdic</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_patch_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nmeta</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mdct</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; post dataset</span>
+
+<span class="sd">        :param nmeta: metadata in json string</span>
+<span class="sd">        :type nmeta: :obj:`str`</span>
+<span class="sd">        :param pid: dataset pid</span>
+<span class="sd">        :type pid: :obj:`str`</span>
+<span class="sd">        :param token: ingestor token</span>
+<span class="sd">        :type token: :obj:`str`</span>
+<span class="sd">        :param mdct: metadata in dct</span>
+<span class="sd">        :type mdct: :obj:`dct` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :returns: a file name of generate file</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;DatasetIngestor: &#39;</span>
+            <span class="s1">&#39;Patch scientificMetadata of dataset:&#39;</span>
+            <span class="s1">&#39; </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pid</span><span class="p">))</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{url}</span><span class="s2">/</span><span class="si">{pid}</span><span class="s2">?access_token=</span><span class="si">{token}</span><span class="s2">&quot;</span>
+            <span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dataseturl</span><span class="p">,</span>
+                <span class="n">pid</span><span class="o">=</span><span class="n">pid</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%2F</span><span class="s2">&quot;</span><span class="p">),</span>
+                <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">),</span>
+            <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__headers</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">nmeta</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mdct</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_ingest_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mdct</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ingests dataset</span>
+
+<span class="sd">        :param metadata: metadata in json string</span>
+<span class="sd">        :type metadata: :obj:`str`</span>
+<span class="sd">        :param token: ingestor token</span>
+<span class="sd">        :type token: :obj:`str`</span>
+<span class="sd">        :param mdct: metadata in dct</span>
+<span class="sd">        :type mdct: :obj:`dct` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :returns: a file name of generate file</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">pid</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span><span class="p">,</span> <span class="n">mdct</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">])</span>
+            <span class="c1"># check if dataset with the pid exists</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s1">&#39;DatasetIngestor: Check if dataset exists: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pid</span><span class="p">))</span>
+            <span class="n">checking</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">checking</span><span class="p">:</span>
+                <span class="n">resexists</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">{url}</span><span class="s2">/</span><span class="si">{pid}</span><span class="s2">/exists?access_token=</span><span class="si">{token}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dataseturl</span><span class="p">,</span>
+                        <span class="n">pid</span><span class="o">=</span><span class="n">pid</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%2F</span><span class="s2">&quot;</span><span class="p">),</span>
+                        <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">))</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">resexists</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resexists</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+                        <span class="n">checking</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">counter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span><span class="p">:</span>
+                    <span class="n">checking</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">resexists</span><span class="o">.</span><span class="n">ok</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">resexists</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">exists</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resexists</span><span class="o">.</span><span class="n">content</span><span class="p">)[</span><span class="s2">&quot;exists&quot;</span><span class="p">]</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="n">exists</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">exists</span><span class="p">:</span>
+                    <span class="c1"># post the new dataset since it does not exist</span>
+                    <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="s1">&#39;DatasetIngestor: Post the dataset: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pid</span><span class="p">))</span>
+                    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">?access_token=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dataseturl</span><span class="p">,</span> <span class="n">token</span><span class="p">),</span>
+                        <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__headers</span><span class="p">,</span>
+                        <span class="n">data</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">mdct</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># find dataset by pid</span>
+                    <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="s1">&#39;DatasetIngestor: Find the dataset by id: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pid</span><span class="p">))</span>
+                    <span class="n">resds</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="si">{url}</span><span class="s2">/</span><span class="si">{pid}</span><span class="s2">?access_token=</span><span class="si">{token}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dataseturl</span><span class="p">,</span>
+                            <span class="n">pid</span><span class="o">=</span><span class="n">pid</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%2F</span><span class="s2">&quot;</span><span class="p">),</span>
+                            <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">resds</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+                        <span class="n">dsmeta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resds</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+                        <span class="n">mdic</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mdct</span><span class="p">)</span>
+                        <span class="n">mdic</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pid</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadataEqual</span><span class="p">(</span>
+                                <span class="n">dsmeta</span><span class="p">,</span> <span class="n">mdic</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__withoutsm</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__strategy</span> <span class="o">==</span> <span class="n">UpdateStrategy</span><span class="o">.</span><span class="n">PATCH</span><span class="p">:</span>
+                                <span class="n">nmeta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">mdic</span><span class="p">)</span>
+                                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch_dataset</span><span class="p">(</span>
+                                    <span class="n">nmeta</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mdct</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post_dataset</span><span class="p">(</span><span class="n">mdic</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mdct</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="s2">&quot;scientificMetadata&quot;</span> <span class="ow">in</span> <span class="n">dsmeta</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
+                               <span class="s2">&quot;scientificMetadata&quot;</span> <span class="ow">in</span> <span class="n">mdic</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                <span class="n">smmeta</span> <span class="o">=</span> <span class="n">dsmeta</span><span class="p">[</span><span class="s2">&quot;scientificMetadata&quot;</span><span class="p">]</span>
+                                <span class="n">smnmeta</span> <span class="o">=</span> <span class="n">mdic</span><span class="p">[</span><span class="s2">&quot;scientificMetadata&quot;</span><span class="p">]</span>
+                                <span class="n">nmeta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">mdic</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadataEqual</span><span class="p">(</span><span class="n">smmeta</span><span class="p">,</span> <span class="n">smnmeta</span><span class="p">):</span>
+                                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__strategy</span> <span class="o">==</span> \
+                                       <span class="n">UpdateStrategy</span><span class="o">.</span><span class="n">CREATE</span><span class="p">:</span>
+                                        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post_dataset</span><span class="p">(</span>
+                                            <span class="n">mdic</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mdct</span><span class="p">)</span>
+                                    <span class="k">else</span><span class="p">:</span>
+                                        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch_dataset</span><span class="p">(</span>
+                                            <span class="n">nmeta</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mdct</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">resds</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">resexists</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s1">&#39;DatasetIngestor: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_ingest_origdatablock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ingets origdatablock</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">?access_token=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__datablockurl</span><span class="p">,</span> <span class="n">token</span><span class="p">),</span>
+                <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__headers</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s1">&#39;DatasetIngestor: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_get_pid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metafile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ingest raw dataset metadata</span>
+
+<span class="sd">        :param metafile: metadata file name</span>
+<span class="sd">        :type metafile: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pid</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metafile</span><span class="p">)</span> <span class="k">as</span> <span class="n">fl</span><span class="p">:</span>
+                <span class="n">smt</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">mt</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">smt</span><span class="p">)</span>
+                <span class="n">pid</span> <span class="o">=</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s1">&#39;DatasetIngestor: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">pid</span>
+
+    <span class="k">def</span> <span class="nf">_ingest_rawdataset_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metafile</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ingest raw dataset metadata</span>
+
+<span class="sd">        :param metafile: metadata file name</span>
+<span class="sd">        :type metafile: :obj:`str`</span>
+<span class="sd">        :returns: dataset id</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metafile</span><span class="p">)</span> <span class="k">as</span> <span class="n">fl</span><span class="p">:</span>
+                <span class="n">smt</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">mt</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">smt</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;proposalId&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Wrong SC proposalId </span><span class="si">%s</span><span class="s2"> for DESY beamtimeId </span><span class="si">%s</span><span class="s2"> in </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">mt</span><span class="p">[</span><span class="s2">&quot;proposalId&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">,</span> <span class="n">metafile</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Wrong pid </span><span class="si">%s</span><span class="s2"> for DESY beamtimeId </span><span class="si">%s</span><span class="s2"> in  </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">mt</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">,</span> <span class="n">metafile</span><span class="p">))</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ingest_dataset</span><span class="p">(</span><span class="n">smt</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mt</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">status</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s1">&#39;DatasetIngestor: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_ingest_origdatablock_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metafile</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ingest origdatablock metadata</span>
+
+<span class="sd">        :param metafile: metadata file name</span>
+<span class="sd">        :type metafile: :obj:`str`</span>
+<span class="sd">        :param pid: dataset id</span>
+<span class="sd">        :type pid: :obj:`str`</span>
+<span class="sd">        :returns: dataset id</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metafile</span><span class="p">)</span> <span class="k">as</span> <span class="n">fl</span><span class="p">:</span>
+                <span class="n">smt</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">mt</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">smt</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;datasetId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Wrong datasetId </span><span class="si">%s</span><span class="s2"> for DESY beamtimeId </span><span class="si">%s</span><span class="s2"> in  </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">mt</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">,</span> <span class="n">metafile</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;datasetId&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span><span class="p">,</span> <span class="n">pid</span><span class="p">):</span>
+                <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;datasetId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
+                <span class="n">smt</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">mt</span><span class="p">)</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metafile</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mf</span><span class="p">:</span>
+                    <span class="n">mf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">smt</span><span class="p">)</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ingest_origdatablock</span><span class="p">(</span><span class="n">smt</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;datasetId&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s1">&#39;DatasetIngestor: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+<div class="viewcode-block" id="DatasetIngestor.ingest"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.ingest">[docs]</a>    <span class="k">def</span> <span class="nf">ingest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ingest scan</span>
+
+<span class="sd">        :param scan: scan name</span>
+<span class="sd">        :type scan: :obj:`str`</span>
+<span class="sd">        :param token: access token</span>
+<span class="sd">        :type token: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;DatasetIngestor: Ingesting: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span><span class="p">,</span> <span class="n">scan</span><span class="p">))</span>
+
+        <span class="n">sscan</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="n">rdss</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">scan</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">],</span>
+                <span class="n">postfix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span><span class="p">,</span>
+                <span class="n">scanpath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanpath&quot;</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">rdss</span> <span class="ow">and</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">rds</span> <span class="o">=</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_rawdataset_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">])</span>
+        <span class="n">mtmds</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">rds</span><span class="p">:</span>
+            <span class="n">mtmds</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">rds</span><span class="p">)</span>
+
+        <span class="n">odbs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">scan</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">],</span>
+                <span class="n">postfix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span><span class="p">,</span>
+                <span class="n">scanpath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanpath&quot;</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">odbs</span> <span class="ow">and</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">odb</span> <span class="o">=</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">odb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_origdatablock_metadata</span><span class="p">(</span><span class="n">scan</span><span class="p">)</span>
+        <span class="n">mtmdb</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">odb</span><span class="p">:</span>
+            <span class="n">mtmdb</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">odb</span><span class="p">)</span>
+        <span class="n">dbstatus</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">pid</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">rds</span> <span class="ow">and</span> <span class="n">odb</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rds</span> <span class="ow">and</span> <span class="n">rds</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ingest_rawdataset_metadata</span><span class="p">(</span><span class="n">rds</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">odb</span> <span class="ow">and</span> <span class="n">odb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">pid</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rdss</span> <span class="ow">and</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pid</span><span class="p">(</span><span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">dbstatus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ingest_origdatablock_metadata</span><span class="p">(</span>
+                    <span class="n">odb</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mtmds</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">dbstatus</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mtmdb</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">sscan</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">mtmds</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">mtmdb</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__idsfile</span><span class="p">,</span> <span class="s1">&#39;a+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">mtmds</span><span class="p">,</span> <span class="n">mtmdb</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DatasetIngestor.reingest"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.reingest">[docs]</a>    <span class="k">def</span> <span class="nf">reingest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ingest scan</span>
+
+<span class="sd">        :param scan: scan name</span>
+<span class="sd">        :type scan: :obj:`str`</span>
+<span class="sd">        :param token: access token</span>
+<span class="sd">        :type token: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;DatasetIngestor: Checking: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span><span class="p">,</span> <span class="n">scan</span><span class="p">))</span>
+
+        <span class="n">reingest_dataset</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">reingest_origdatablock</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">sscan</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">rdss</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">scan</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">],</span>
+                <span class="n">postfix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span><span class="p">,</span>
+                <span class="n">scanpath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanpath&quot;</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">rdss</span> <span class="ow">and</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">rds</span> <span class="o">=</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">mtm</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">rds</span><span class="p">)</span>
+            <span class="c1"># print(self.__sc_ingested_map.keys())</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;MAP: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;DS Timestamps: </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">scan</span><span class="p">,</span>
+                    <span class="n">mtm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+                    <span class="n">mtm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">scan</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> \
+               <span class="ow">or</span> <span class="n">mtm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">reingest_dataset</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_rawdataset_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">])</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;DS No File: </span><span class="si">%s</span><span class="s2"> True&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scan</span><span class="p">))</span>
+            <span class="n">reingest_dataset</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">mtmds</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">rds</span><span class="p">:</span>
+            <span class="n">mtmds</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">rds</span><span class="p">)</span>
+
+        <span class="n">odbs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">scan</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">],</span>
+                <span class="n">postfix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span><span class="p">,</span>
+                <span class="n">scanpath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanpath&quot;</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">odbs</span> <span class="ow">and</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">odb</span> <span class="o">=</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">mtm0</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">odb</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">scan</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> \
+               <span class="ow">or</span> <span class="n">mtm0</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">reingest_origdatablock</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;DB0 Timestamps: </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">scan</span><span class="p">,</span>
+                    <span class="n">mtm0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">mtm0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">reingest_origdatablock</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_regenerate_origdatablock_metadata</span><span class="p">(</span>
+                <span class="n">scan</span><span class="p">,</span> <span class="n">reingest_origdatablock</span><span class="p">)</span>
+            <span class="n">mtm</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">odb</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;DB Timestamps: </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">scan</span><span class="p">,</span>
+                    <span class="n">mtm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">mtm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="k">if</span> <span class="n">scan</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> \
+               <span class="ow">or</span> <span class="n">mtm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">reingest_origdatablock</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">odb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_origdatablock_metadata</span><span class="p">(</span><span class="n">scan</span><span class="p">)</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;DB No File: </span><span class="si">%s</span><span class="s2"> True&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scan</span><span class="p">))</span>
+            <span class="n">reingest_origdatablock</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">mtmdb</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">odb</span><span class="p">:</span>
+            <span class="n">mtmdb</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">odb</span><span class="p">)</span>
+        <span class="n">dbstatus</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">pid</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">rds</span> <span class="ow">and</span> <span class="n">odb</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rds</span> <span class="ow">and</span> <span class="n">rds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">reingest_dataset</span><span class="p">:</span>
+                <span class="n">pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ingest_rawdataset_metadata</span><span class="p">(</span><span class="n">rds</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;DatasetIngestor: Ingest dataset: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rds</span><span class="p">))</span>
+                <span class="n">oldpid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pid</span><span class="p">(</span><span class="n">rds</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">pid</span> <span class="ow">and</span> <span class="n">oldpid</span> <span class="o">!=</span> <span class="n">pid</span><span class="p">:</span>
+                    <span class="c1"># get_logger().info(&quot;PID %s %s %s&quot; % (scan,pid,oldpid))</span>
+                    <span class="n">odb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_origdatablock_metadata</span><span class="p">(</span><span class="n">scan</span><span class="p">)</span>
+                    <span class="n">reingest_origdatablock</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">odb</span> <span class="ow">and</span> <span class="n">odb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">reingest_origdatablock</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rdss</span> <span class="ow">and</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pid</span><span class="p">(</span><span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">dbstatus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ingest_origdatablock_metadata</span><span class="p">(</span>
+                    <span class="n">odb</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;DatasetIngestor: Ingest origdatablock: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">odb</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pid</span> <span class="ow">and</span> <span class="n">reingest_dataset</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">mtmds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mtmds</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">dbstatus</span> <span class="ow">and</span> <span class="n">reingest_origdatablock</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">mtmdb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mtmdb</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">sscan</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">mtmds</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">mtmdb</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__idsfiletmp</span><span class="p">,</span> <span class="s1">&#39;a+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">mtmds</span><span class="p">,</span> <span class="n">mtmdb</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DatasetIngestor.check_list"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.check_list">[docs]</a>    <span class="k">def</span> <span class="nf">check_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reingest</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; update waiting and ingested datasets</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">dsf</span><span class="p">:</span>
+            <span class="n">scans</span> <span class="o">=</span> <span class="p">[</span><span class="n">sc</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                     <span class="k">for</span> <span class="n">sc</span> <span class="ow">in</span> <span class="n">dsf</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                     <span class="k">if</span> <span class="n">sc</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__idsfile</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__idsfile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">idsf</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">sc</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">sc</span> <span class="ow">in</span> <span class="n">idsf</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">sc</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">reingest</span><span class="p">:</span>
+            <span class="n">ingested</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sc</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">sc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="k">for</span> <span class="n">sc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__sc_waiting</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">sc</span> <span class="k">for</span> <span class="n">sc</span> <span class="ow">in</span> <span class="n">scans</span> <span class="k">if</span> <span class="n">sc</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ingested</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__sc_waiting</span> <span class="o">=</span> <span class="p">[</span><span class="n">sc</span> <span class="k">for</span> <span class="n">sc</span> <span class="ow">in</span> <span class="n">scans</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">sc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="nb">float</span><span class="p">(</span><span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span> \
+                       <span class="ow">and</span> <span class="nb">float</span><span class="p">(</span><span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sc</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])]</span> <span class="o">=</span> <span class="n">sc</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DatasetIngestor.waiting_datasets"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.waiting_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">waiting_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides waitings datasets</span>
+
+<span class="sd">        :returns: waitings datasets list</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sc_waiting</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DatasetIngestor.clear_waiting_datasets"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.clear_waiting_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">clear_waiting_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; clear waitings datasets</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_waiting</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="DatasetIngestor.clear_tmpfile"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.clear_tmpfile">[docs]</a>    <span class="k">def</span> <span class="nf">clear_tmpfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; clear waitings datasets</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__idsfiletmp</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__idsfiletmp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DatasetIngestor.update_from_tmpfile"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.update_from_tmpfile">[docs]</a>    <span class="k">def</span> <span class="nf">update_from_tmpfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; clear waitings datasets</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__idsfiletmp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__idsfile</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DatasetIngestor.ingested_datasets"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.ingested_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">ingested_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides ingested datasets</span>
+
+<span class="sd">        :returns:  ingested datasets list</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">SciCat Dataset Ingestor</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scicat_dataset_ingestor.html">scicat_dataset_ingestor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scicat_dataset_ingest.html">scicat_dataset_ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scingestor.html">scingestor package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, DESY, Jan Kotanski.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

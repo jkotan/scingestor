@@ -1,0 +1,261 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 0.0.3 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="scicat_dataset_ingestor" href="scicat_dataset_ingestor.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="scicat-dataset-ingestor">
+<h1>Scicat Dataset Ingestor<a class="headerlink" href="#scicat-dataset-ingestor" title="Permalink to this headline">¶</a></h1>
+<div class="figure" id="id2">
+<img alt="github workflow" src="https://github.com/jkotan/scingestor/actions/workflows/tests.yml/badge.svg" /><p class="caption"><span class="caption-text">github workflow</span></p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">scingestor</span></code> python package provides a support for scripts which
+ingest RawDatasets and OrigDatablocks into the SciCat metadata server.</p>
+<div class="section" id="id1">
+<h2>scicat_dataset_ingestor<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>SciCat Dataset ingestor server ingests scan metadata just after a scan
+is finished. It can be executed by</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scicat_dataset_ingestor</span> <span class="o">-</span><span class="n">c</span> <span class="o">~/.</span><span class="n">scingestor</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>Its configuration written in YAML can contain the following variables</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">scicat_url</span></code> (str)</li>
+<li><code class="docutils literal notranslate"><span class="pre">ingestor_credential_file</span></code> (str)</li>
+<li><code class="docutils literal notranslate"><span class="pre">beamtime_dirs</span></code> (list&lt;str&gt;) or <code class="docutils literal notranslate"><span class="pre">beamtime_base_dir</span></code> (str)</li>
+<li><code class="docutils literal notranslate"><span class="pre">ingestor_log_dir</span></code> (str)</li>
+<li><code class="docutils literal notranslate"><span class="pre">ingestor_username</span></code> (str)</li>
+<li><code class="docutils literal notranslate"><span class="pre">doi_prefix</span></code> (str)</li>
+<li><code class="docutils literal notranslate"><span class="pre">update_strategy</span></code> (‘patch’, ‘create’, ‘mixed’)</li>
+<li><code class="docutils literal notranslate"><span class="pre">relative_path_in_datablock</span></code> (bool)</li>
+<li><code class="docutils literal notranslate"><span class="pre">chmod_json_files</span></code> (str)</li>
+<li><code class="docutils literal notranslate"><span class="pre">oned_in_metadata</span></code> (bool)</li>
+</ul>
+<p>e.g.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">beamtime_dirs</span><span class="p">:</span>
+  <span class="o">-</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">jkotan</span><span class="o">/</span><span class="n">gpfs</span><span class="o">/</span><span class="n">current</span>
+  <span class="o">-</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">jkotan</span><span class="o">/</span><span class="n">gpfs</span><span class="o">/</span><span class="n">commissioning</span>
+<span class="n">scicat_url</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8881</span>
+<span class="n">ingestor_credential_file</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">jkotan</span><span class="o">/</span><span class="n">gpfs</span><span class="o">/</span><span class="n">pwd</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="scicat-dataset-ingest">
+<h2>scicat_dataset_ingest<a class="headerlink" href="#scicat-dataset-ingest" title="Permalink to this headline">¶</a></h2>
+<p>Re-ingestion script for SciCat RawDatasets and OrigDatablocks is usually
+performed at the end of the beamtime.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scicat_dataset_ingest</span> <span class="o">-</span><span class="n">c</span> <span class="o">~/.</span><span class="n">scingestor</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>Its configuration written YAML like for <code class="docutils literal notranslate"><span class="pre">scicat_dataset_ingestor</span></code> ##
+Installation</p>
+<div class="section" id="required-packages">
+<h3>Required packages<a class="headerlink" href="#required-packages" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>python3 &gt;= 3.7</li>
+<li>nxstools &gt;= 3.28.0</li>
+<li>inotifyx (python3 version)</li>
+<li>requests</li>
+<li>setuptools</li>
+<li>pyyaml</li>
+<li>pytest (to run tests)</li>
+<li>sphinx (to build the documentation)</li>
+</ul>
+</div>
+<div class="section" id="install-from-sources">
+<h3>Install from sources<a class="headerlink" href="#install-from-sources" title="Permalink to this headline">¶</a></h3>
+<p>The code can be built with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>To build the documentation use</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build_sphinx</span>
+</pre></div>
+</div>
+<p>The resulting documentation can be found below <code class="docutils literal notranslate"><span class="pre">build/sphinx/html</span></code> in
+the root directory of the source distribution.</p>
+<p>Finally, the package can be tested using</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pytest</span> <span class="n">test</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-in-conda-or-pip-environment">
+<h3>Install in conda or pip environment<a class="headerlink" href="#install-in-conda-or-pip-environment" title="Permalink to this headline">¶</a></h3>
+<p>The code can be installed in your conda environment by</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">myenv</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span>
+<span class="n">conda</span> <span class="n">activate</span> <span class="n">myenv</span>
+
+<span class="n">pip</span> <span class="n">install</span> <span class="n">inotifyx</span><span class="o">-</span><span class="n">py3</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">scingestor</span>
+</pre></div>
+</div>
+<p>or in your pip environment by</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">myvenv</span>
+<span class="o">.</span> <span class="n">myvenv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+
+<span class="n">pip</span> <span class="n">install</span> <span class="n">inotifyx</span><span class="o">-</span><span class="n">py3</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">scingestor</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="debian-and-ubuntu-packages">
+<h3>Debian and Ubuntu packages<a class="headerlink" href="#debian-and-ubuntu-packages" title="Permalink to this headline">¶</a></h3>
+<p>Debian <code class="docutils literal notranslate"><span class="pre">bullseye</span></code>, <code class="docutils literal notranslate"><span class="pre">buster</span></code> or Ubuntu <code class="docutils literal notranslate"><span class="pre">jammy</span></code>, <code class="docutils literal notranslate"><span class="pre">focal</span></code> packages
+can be found in the HDRI repository.</p>
+<p>To install the debian packages, add the PGP repository key</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">su</span>
+<span class="n">curl</span> <span class="o">-</span><span class="n">s</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">repos</span><span class="o">.</span><span class="n">pni</span><span class="o">-</span><span class="n">hdri</span><span class="o">.</span><span class="n">de</span><span class="o">/</span><span class="n">debian_repo</span><span class="o">.</span><span class="n">pub</span><span class="o">.</span><span class="n">gpg</span>  <span class="o">|</span> <span class="n">gpg</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">default</span><span class="o">-</span><span class="n">keyring</span> <span class="o">--</span><span class="n">keyring</span> <span class="n">gnupg</span><span class="o">-</span><span class="n">ring</span><span class="p">:</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">trusted</span><span class="o">.</span><span class="n">gpg</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">debian</span><span class="o">-</span><span class="n">hdri</span><span class="o">-</span><span class="n">repo</span><span class="o">.</span><span class="n">gpg</span> <span class="o">--</span><span class="kn">import</span>
+<span class="nn">chmod</span> <span class="mi">644</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">trusted</span><span class="o">.</span><span class="n">gpg</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">debian</span><span class="o">-</span><span class="n">hdri</span><span class="o">-</span><span class="n">repo</span><span class="o">.</span><span class="n">gpg</span>
+</pre></div>
+</div>
+<p>and then download the corresponding source list, e.g.&nbsp;for <code class="docutils literal notranslate"><span class="pre">bullseye</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">sources</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">d</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">repos</span><span class="o">.</span><span class="n">pni</span><span class="o">-</span><span class="n">hdri</span><span class="o">.</span><span class="n">de</span><span class="o">/</span><span class="n">bullseye</span><span class="o">-</span><span class="n">pni</span><span class="o">-</span><span class="n">hdri</span><span class="o">.</span><span class="n">list</span>
+</pre></div>
+</div>
+<p>or <code class="docutils literal notranslate"><span class="pre">jammy</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">sources</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">d</span>
+<span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">repos</span><span class="o">.</span><span class="n">pni</span><span class="o">-</span><span class="n">hdri</span><span class="o">.</span><span class="n">de</span><span class="o">/</span><span class="n">jammy</span><span class="o">-</span><span class="n">pni</span><span class="o">-</span><span class="n">hdri</span><span class="o">.</span><span class="n">list</span>
+</pre></div>
+</div>
+<p>respectively.</p>
+<p>Finally,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span>
+<span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">scingestor</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="contents">
+<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="scicat_dataset_ingestor.html">scicat_dataset_ingestor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scicat_dataset_ingestor.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scicat_dataset_ingestor.html#synopsis">Synopsis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scicat_dataset_ingestor.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scicat_dataset_ingest.html">scicat_dataset_ingest</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scicat_dataset_ingest.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scicat_dataset_ingest.html#synopsis">Synopsis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scicat_dataset_ingest.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scingestor.html">scingestor package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.beamtimeWatcher">scingestor.beamtimeWatcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.configuration">scingestor.configuration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.datasetIngest">scingestor.datasetIngest module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.datasetIngestor">scingestor.datasetIngestor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.datasetWatcher">scingestor.datasetWatcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.logger">scingestor.logger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.safeINotifier">scingestor.safeINotifier module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.scanDirWatcher">scingestor.scanDirWatcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">SciCat Dataset Ingestor</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="scicat_dataset_ingestor.html">scicat_dataset_ingestor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scicat_dataset_ingest.html">scicat_dataset_ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scingestor.html">scingestor package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="scicat_dataset_ingestor.html" title="next chapter">scicat_dataset_ingestor</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, DESY, Jan Kotanski.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
