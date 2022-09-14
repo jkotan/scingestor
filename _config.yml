@@ -1,0 +1,6 @@
+# Site settings
+title: SciCat Dataset Ingestor
+email: jan.kotanski@desy.de
+description: "SciCat Dataset Ingestor"
+
+include: ['_sources', '_static', '_modules']
