@@ -1,5 +1,3 @@
-.. include content
-
 scingestor package
 ==================
 
