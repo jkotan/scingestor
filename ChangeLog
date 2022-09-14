@@ -1,3 +1,8 @@
+2021-09-14 Jan Kotanski <jan.kotanski@desy.de>
+	* add oned_in_metadata into configuation (#68)
+	* add chmod_json_files into configuation (#68)
+	* tagged as 0.0.3
+
 2021-08-24 Jan Kotanski <jan.kotanski@desy.de>
 	* add update_strategy to configuration (#54)
 	* wait for scicat server if it is off (#52)

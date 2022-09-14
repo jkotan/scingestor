@@ -236,6 +236,7 @@ class DatasetWatcherTest(unittest.TestCase):
         url = 'http://localhost:8881'
         logdir = "/"
         cred = "12342345"
+        chmod = "0o662"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
             cf.write(cred)
@@ -246,9 +247,11 @@ class DatasetWatcherTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'chmod_json_files: "{chmod}"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, logdir=logdir,
+                credfile=credfile, chmod=chmod)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -325,6 +328,8 @@ class DatasetWatcherTest(unittest.TestCase):
 
                 for k, arg in enumerate(args):
                     nxsfilename = os.path.join(fsubdirname2, arg[0])
+                    dsfilename = nxsfilename[:-4] + ".scan.json"
+                    dbfilename = nxsfilename[:-4] + ".origdatablock.json"
                     title = arg[1]
                     beamtime = arg[2]
                     insname = arg[3]
@@ -373,6 +378,12 @@ class DatasetWatcherTest(unittest.TestCase):
                 ser = er.split("\n")
                 seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
                 dseri = [ln for ln in seri if "DEBUG :" not in ln]
+
+                status = os.stat(dsfilename)
+                self.assertEqual(chmod, str(oct(status.st_mode & 0o777)))
+                status = os.stat(dbfilename)
+                self.assertEqual(chmod, str(oct(status.st_mode & 0o777)))
+
                 # print(vl)
                 # print(er)
 
@@ -637,6 +648,7 @@ class DatasetWatcherTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'oned_in_metadata: true\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -703,6 +715,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     etime = arg[6]
                     smpl = arg[7]
                     formula = arg[8]
+                    spectrum = [243, 34, 34, 23, 334, 34, 34, 33, 32, 11]
 
                     nxsfile = filewriter.create_file(
                         nxsfilename, overwrite=True)
@@ -715,6 +728,8 @@ class DatasetWatcherTest(unittest.TestCase):
                     entry.create_group("data", "NXdata")
                     sample = entry.create_group("sample", "NXsample")
                     det.create_field("intimage", "uint32", [0, 30], [1, 30])
+                    sp = det.create_field("spectrum", "uint32", [10], [10])
+                    sp.write(spectrum)
 
                     entry.create_field("title", "string").write(title)
                     entry.create_field(
@@ -892,7 +907,14 @@ class DatasetWatcherTest(unittest.TestCase):
                               'detector': {
                                   'NX_class': 'NXdetector',
                                   'intimage': {
-                                      'shape': [0, 30]}},
+                                      'shape': [0, 30]
+                                  },
+                                  'spectrum': {
+                                      'value': spectrum,
+                                      'shape': [10]
+                                  }
+                              },
+
                               'name': {
                                   'short_name': '%s' % arg[4],
                                   'value': '%s' % arg[3]}},
