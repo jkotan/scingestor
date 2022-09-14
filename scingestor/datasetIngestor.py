@@ -236,7 +236,7 @@ class DatasetIngestor:
             "techniques",
             "classification",
             "createdBy",
-            "updatedBy"
+            "updatedBy",
             "datasetlifecycle",
             "numberOfFiles",
             "size",
