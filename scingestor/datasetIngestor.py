@@ -97,10 +97,14 @@ class DatasetIngestor:
         self.__strategy = UpdateStrategy.PATCH
         # (:obj:`str`) beamtime id
         self.__incd = None
-        # (:obj:`str`) relative path in datablock
+        # (:obj:`bool`) relative path in datablock flag
         self.__relpath_in_datablock = False
         # (:obj:`str`) scicat url
         self.__scicat_url = "http://localhost:8881"
+        # (:obj:`str`) chmod string for json metadata
+        self.__chmod = None
+        # (:obj:`bool`) oned metadata flag
+        self.__oned = False
 
         if "doiprefix" in self.__config.keys():
             self.__doiprefix = self.__config["doi_prefix"]
@@ -121,6 +125,10 @@ class DatasetIngestor:
         if "relative_path_in_datablock" in self.__config.keys():
             self.__relpath_in_datablock = \
                 self.__config["relative_path_in_datablock"]
+        if "chmod_json_files" in self.__config.keys():
+            self.__chmod = self.__config["chmod_json_files"]
+        if "oned_in_metadata" in self.__config.keys():
+            self.__oned = self.__config["oned_in_metadata"]
 
         # (:obj:`list`<:obj:`str`>) ingested scan names
         self.__sc_ingested = []
@@ -162,15 +170,32 @@ class DatasetIngestor:
             self.__datablockcommand = \
                 self.__datablockcommand + " -r {relpath} "
             self.__datablockmemcommand = \
-                self.__datablockcommand + " -r {relpath} "
+                self.__datablockmemcommand + " -r {relpath} "
         else:
             self.__datasetcommand = self.__datasetcommand + " -r {relpath} "
             self.__datasetcommandnxs = \
                 self.__datasetcommandnxs + " -r {relpath} "
 
+        if self.__chmod is not None:
+            self.__datasetcommand = \
+                self.__datasetcommand + " -x {chmod} "
+            self.__datasetcommandnxs = \
+                self.__datasetcommandnxs + " -x {chmod} "
+            self.__datablockcommand = \
+                self.__datablockcommand + " -x {chmod} "
+            self.__datablockmemcommand = \
+                self.__datablockmemcommand + " -x {chmod} "
+
+        if self.__oned:
+            self.__datasetcommand = \
+                self.__datasetcommand + " --oned "
+            self.__datasetcommandnxs = \
+                self.__datasetcommandnxs + " --oned "
+
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
         self.__dctfmt = {
             "scanname": None,
+            "chmod": self.__chmod,
             "scanpath": self.__path,
             "relpath": self.__relpath,
             "beamtimeid": self.__bid,
@@ -211,7 +236,7 @@ class DatasetIngestor:
             "techniques",
             "classification",
             "createdBy",
-            "updatedBy",
+            "updatedBy"
             "datasetlifecycle",
             "numberOfFiles",
             "size",
@@ -311,9 +336,11 @@ class DatasetIngestor:
 
         cmd = self.__datablockcommand.format(**self.__dctfmt)
         sscan = (scan or "").split(" ")
-        for sc in sscan:
-            cmd += self.__datablockscanpath.format(
-                scanpath=self.__dctfmt["scanpath"], scanname=sc)
+        if self.__datablockscanpath:
+            dctfmt = dict(self.__dctfmt)
+            for sc in sscan:
+                dctfmt["scanname"] = sc
+                cmd += self.__datablockscanpath.format(**dctfmt)
         get_logger().debug(
             'DatasetIngestor: Checking origdatablock command: %s ' % cmd)
         dmeta = None
@@ -328,9 +355,11 @@ class DatasetIngestor:
         else:
             cmd = self.__datablockmemcommand.format(**self.__dctfmt)
             sscan = (scan or "").split(" ")
-            for sc in sscan:
-                cmd += self.__datablockscanpath.format(
-                    scanpath=self.__dctfmt["scanpath"], scanname=sc)
+            if self.__datablockscanpath:
+                dctfmt = dict(self.__dctfmt)
+                for sc in sscan:
+                    dctfmt["scanname"] = sc
+                    cmd += self.__datablockscanpath.format(**dctfmt)
 
             result = subprocess.run(
                 cmd.split(),

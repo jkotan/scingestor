@@ -11,14 +11,16 @@ SciCat Dataset ingestor server ingests scan metadata just after a scan is finish
 scicat_dataset_ingestor -c ~/.scingestor.yaml
 ```
 Its configuration written in YAML can contain the following variables
-* `scicat_url` [str]
-* `ingestor_credential_file` [str]
-* `beamtime_dirs` [list\<str\>] or  `beamtime_base_dir` [str]
-* `ingestor_log_dir` [str]
-* `ingestor_username` [str]
-* `doi_prefix` [str]
-* `update_strategy` [`patch`, `create`, `mixed`]
-* `relative_path_in_datablock` [bool]
+* `scicat_url` (str)
+* `ingestor_credential_file` (str)
+* `beamtime_dirs` (list\<str\>)  or  `beamtime_base_dir` (str)
+* `ingestor_log_dir` (str)
+* `ingestor_username` (str)
+* `doi_prefix` (str)
+* `update_strategy` ('patch', 'create', 'mixed')
+* `relative_path_in_datablock` (bool)
+* `chmod_json_files` (str)
+* `oned_in_metadata` (bool)
 
 e.g.
 ```
@@ -36,13 +38,12 @@ Re-ingestion script for SciCat RawDatasets and OrigDatablocks is usually perform
 scicat_dataset_ingest -c ~/.scingestor.yaml
 ```
 Its configuration written YAML like for `scicat_dataset_ingestor`
-
 ## Installation
 
 ### Required packages
 
 * python3 >= 3.7
-* nxstools >= 3.23.0
+* nxstools >= 3.28.0
 * inotifyx (python3 version)
 * requests
 * setuptools
