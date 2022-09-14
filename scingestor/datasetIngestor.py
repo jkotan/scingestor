@@ -111,6 +111,29 @@ class DatasetIngestor:
         # (:obj:`str`) origin datablock scan postfix
         self.__datablockpostfix = ".origdatablock.json"
 
+        # (:obj:`str`) nexus dataset shell command
+        self.__datasetcommandnxs = "nxsfileinfo metadata " \
+            " -o {scanpath}/{scanname}{scpostfix} " \
+            " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
+            "{scanpath}/{scanname}.nxs"
+        # (:obj:`str`) datablock shell command
+        self.__datasetcommand = "nxsfileinfo metadata " \
+            " -o {scanpath}/{scanname}{scpostfix} " \
+            " -b {beamtimefile} -p {beamtimeid}/{scanname}"
+        # (:obj:`str`) datablock shell command
+        self.__datablockcommand = "nxsfileinfo origdatablock " \
+            " -s *.pyc,*{dbpostfix},*{scpostfix},*~ " \
+            " -p {doiprefix}/{beamtimeid}/{scanname} " \
+            " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
+            " -o {scanpath}/{scanname}{dbpostfix} "
+        # (:obj:`str`) datablock shell command
+        self.__datablockmemcommand = "nxsfileinfo origdatablock " \
+            " -s *.pyc,*{dbpostfix},*{scpostfix},*~ " \
+            " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
+            " -p {doiprefix}/{beamtimeid}/{scanname} "
+        # (:obj:`str`) datablock path postfix
+        self.__datablockscanpath = " {scanpath}/{scanname} "
+
         if "doiprefix" in self.__config.keys():
             self.__doiprefix = self.__config["doi_prefix"]
         if "ingestor_credential_file" in self.__config.keys():
@@ -141,6 +164,23 @@ class DatasetIngestor:
             self.__datablockpostfix = \
                 self.__config["datablock_metadata_postfix"]
 
+        if "nxs_dataset_metadata_generator" in self.__config.keys():
+            self.__datasetcommandnxs = \
+                self.__config["nxs_dataset_metadata_generator"]
+        if "dataset_metadata_generator" in self.__config.keys():
+            self.__datasetcommand = \
+                self.__config["dataset_metadata_generator"]
+        if "datablock_metadata_generator" in self.__config.keys():
+            self.__datablockcommand = \
+                self.__config["datablock_metadata_generator"]
+        if "datablock_metadata_stream_generator" in self.__config.keys():
+            self.__datablockmemcommand = \
+                self.__config["datablock_metadata_stream_generator"]
+        if "datablock_metadata_generator_scanpath_postfix" \
+           in self.__config.keys():
+            self.__datablockscanpath = \
+                self.__config["datablock_metadata_generator_scanpath_postfix"]
+
         # (:obj:`list`<:obj:`str`>) ingested scan names
         self.__sc_ingested = []
         # (:obj:`list`<:obj:`str`>) waiting scan names
@@ -149,54 +189,44 @@ class DatasetIngestor:
         #   ingested scan names
         self.__sc_ingested_map = {}
 
-        # (:obj:`str`) nexus dataset shell command
-        self.__datasetcommandnxs = "nxsfileinfo metadata " \
-            " -o {scanpath}/{scanname}{scpostfix} " \
-            " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
-            "{scanpath}/{scanname}.nxs"
-        # (:obj:`str`) datablock shell command
-        self.__datasetcommand = "nxsfileinfo metadata " \
-            " -o {scanpath}/{scanname}{scpostfix} " \
-            " -b {beamtimefile} -p {beamtimeid}/{scanname}"
-        # (:obj:`str`) datablock shell command
-        self.__datablockcommand = "nxsfileinfo origdatablock " \
-            " -s *.pyc,*{dbpostfix},*{scpostfix},*~ " \
-            " -p {doiprefix}/{beamtimeid}/{scanname} " \
-            " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
-            " -o {scanpath}/{scanname}{dbpostfix} "
-        # (:obj:`str`) datablock shell command
-        self.__datablockmemcommand = "nxsfileinfo origdatablock " \
-            " -s *.pyc,*{dbpostfix},*{scpostfix},*~ " \
-            " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
-            " -p {doiprefix}/{beamtimeid}/{scanname} "
-        # (:obj:`str`) datablock path postfix
-        self.__datablockscanpath = " {scanpath}/{scanname} "
-
         if self.__relpath_in_datablock:
-            self.__datablockcommand = \
-                self.__datablockcommand + " -r {relpath} "
-            self.__datablockmemcommand = \
-                self.__datablockmemcommand + " -r {relpath} "
+            if "datablock_metadata_generator" not in self.__config.keys():
+                self.__datablockcommand = \
+                    self.__datablockcommand + " -r {relpath} "
+            if "datablock_metadata_stream_generator" \
+               not in self.__config.keys():
+                self.__datablockmemcommand = \
+                    self.__datablockmemcommand + " -r {relpath} "
         else:
-            self.__datasetcommand = self.__datasetcommand + " -r {relpath} "
-            self.__datasetcommandnxs = \
-                self.__datasetcommandnxs + " -r {relpath} "
+            if "dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommand = \
+                    self.__datasetcommand + " -r {relpath} "
+            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommandnxs = \
+                    self.__datasetcommandnxs + " -r {relpath} "
 
         if self.__chmod is not None:
-            self.__datasetcommand = \
-                self.__datasetcommand + " -x {chmod} "
-            self.__datasetcommandnxs = \
-                self.__datasetcommandnxs + " -x {chmod} "
-            self.__datablockcommand = \
-                self.__datablockcommand + " -x {chmod} "
-            self.__datablockmemcommand = \
-                self.__datablockmemcommand + " -x {chmod} "
+            if "dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommand = \
+                    self.__datasetcommand + " -x {chmod} "
+            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommandnxs = \
+                    self.__datasetcommandnxs + " -x {chmod} "
+            if "datablock_metadata_generator" not in self.__config.keys():
+                self.__datablockcommand = \
+                    self.__datablockcommand + " -x {chmod} "
+            if "datablock_metadata_stream_generator" \
+               not in self.__config.keys():
+                self.__datablockmemcommand = \
+                    self.__datablockmemcommand + " -x {chmod} "
 
         if self.__oned:
-            self.__datasetcommand = \
-                self.__datasetcommand + " --oned "
-            self.__datasetcommandnxs = \
-                self.__datasetcommandnxs + " --oned "
+            if "dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommand = \
+                    self.__datasetcommand + " --oned "
+            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommandnxs = \
+                    self.__datasetcommandnxs + " --oned "
 
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
         self.__dctfmt = {
