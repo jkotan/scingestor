@@ -23,6 +23,11 @@ Its configuration written in YAML can contain the following variables
 * `oned_in_metadata` (bool)
 * `scan_metadata_postfix` (str)
 * `datablock_metadata_postfix` (str)
+* `nxs_dataset_metadata_generator` (str)
+* `dataset_metadata_generator` (str)
+* `datablock_metadata_generator` (str)
+* `datablock_metadata_stream_generator` (str)
+* `datablock_metadata_generator_scanpath_postfix` (str)
 
 e.g.
 ```
