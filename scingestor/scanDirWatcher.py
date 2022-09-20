@@ -150,8 +150,8 @@ class ScanDirWatcher(threading.Thread):
                 'ScanDirWatcher: '
                 'Removing watch %s: %s' % (str(wd), path))
 
-    def _lunch_scandir_watcher(self, paths):
-        """ lunch scandir watcher
+    def _launch_scandir_watcher(self, paths):
+        """ launch scandir watcher
 
         :param path: list of subdirectories
         :type path: :obj:`list`<:obj:`str`>
@@ -209,7 +209,7 @@ class ScanDirWatcher(threading.Thread):
             elif os.path.isdir(self.__path):
                 subdirs = [it.path for it in os.scandir(self.__path)
                            if it.is_dir()]
-                self._lunch_scandir_watcher(subdirs)
+                self._launch_scandir_watcher(subdirs)
 
             while self.running:
                 # time.sleep(self.delay)
@@ -249,9 +249,9 @@ class ScanDirWatcher(threading.Thread):
                                         if it.is_dir()]
                                     get_logger().debug(
                                         "Sub-directories: %s" % str(subdirs))
-                                    self._lunch_scandir_watcher(subdirs)
+                                    self._launch_scandir_watcher(subdirs)
                                     get_logger().debug(
-                                        "watcher for subdirectories lunched")
+                                        "watcher for subdirectories launched")
 
                         elif "IN_ISDIR" not in masks and (
                                 "IN_CREATE" in masks or "IN_MOVE_TO" in masks):
@@ -299,7 +299,7 @@ class ScanDirWatcher(threading.Thread):
                             if not os.path.isfile(self.dslist_fullname):
                                 npath = os.path.join(
                                     self.wd_to_path[qid], event.name)
-                                self._lunch_scandir_watcher([npath])
+                                self._launch_scandir_watcher([npath])
                         # elif "IN_DELETE_SELF" in masks:
                         #     "remove scandir watcher"
                         #     # self.wd_to_path[qid]

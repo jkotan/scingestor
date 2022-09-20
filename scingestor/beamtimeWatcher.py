@@ -252,7 +252,7 @@ class BeamtimeWatcher:
                     path, self.bt_prefix, self.bt_postfix)
 
                 # run ScanDirWatcher for each beamtime file subdirectory
-                self._lunch_scandir_watcher(path, files)
+                self._launch_scandir_watcher(path, files)
                 get_logger().debug('Files of %s: %s' % (path, files))
 
             while self.running:
@@ -331,7 +331,7 @@ class BeamtimeWatcher:
                                          fl.endswith(self.bt_postfix))]
                             if files:
                                 # new beamtime file
-                                self._lunch_scandir_watcher(
+                                self._launch_scandir_watcher(
                                     self.wd_to_path[qid], files)
                             else:
                                 path = self.wd_to_path.pop(qid)
@@ -344,7 +344,7 @@ class BeamtimeWatcher:
                                 files = self.find_bt_files(
                                     path, self.bt_prefix, self.bt_postfix)
 
-                                self._lunch_scandir_watcher(path, files)
+                                self._launch_scandir_watcher(path, files)
 
                             get_logger().debug(
                                 'Start beamtime %s' % event.name)
@@ -398,7 +398,7 @@ class BeamtimeWatcher:
                                     files = self.find_bt_files(
                                         dr, self.bt_prefix,
                                         self.bt_postfix)
-                                    self._lunch_scandir_watcher(dr, files)
+                                    self._launch_scandir_watcher(dr, files)
 
                                     get_logger().debug(
                                         'Files of %s: %s' % (dr, files))
@@ -412,8 +412,8 @@ class BeamtimeWatcher:
             get_logger().warning('Keyboard interrupt (SIGINT) received...')
             self.stop()
 
-    def _lunch_scandir_watcher(self, path, files):
-        """ lunch scandir watcher
+    def _launch_scandir_watcher(self, path, files):
+        """ launch scandir watcher
 
         :param path: base file path
         :type path: :obj:`str`
