@@ -197,7 +197,7 @@ class DatasetIngestTest(unittest.TestCase):
         fdirname = os.path.abspath(dirname)
         fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
         fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
-        btmeta = "bt-mt-99001234.jsn"
+        btmeta = "beamtime-metadata-99001234.json"
         dslist = "scicat-datasets-99001234.lst"
         idslist = "scicat-ingested-datasets-99001234.lst"
         wrongdslist = "scicat-datasets-99001235.lst"
@@ -223,8 +223,6 @@ class DatasetIngestTest(unittest.TestCase):
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
-            'beamtime_filename_prefix: "bt-mt-"\n' \
-            'beamtime_filename_postfix: ".jsn"\n' \
             'scicat_url: "{url}"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -257,7 +255,7 @@ class DatasetIngestTest(unittest.TestCase):
                 self.assertEqual(
                     'INFO : DatasetIngest: beamtime path: {basedir}\n'
                     'INFO : DatasetIngest: beamtime file: '
-                    'bt-mt-99001234.jsn\n'
+                    'beamtime-metadata-99001234.json\n'
                     'INFO : DatasetIngest: dataset list: {dslist}\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Generating metadata: '

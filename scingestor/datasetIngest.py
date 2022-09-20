@@ -51,29 +51,21 @@ class DatasetIngest:
             # "/gpfs/current",
             # "/gpfs/commissioning",
         ]
-
-        # (:obj:`str`) beamtime file prefix
-        self.bt_prefix = "beamtime-metadata-"
-        # (:obj:`str`) beamtime file postfix
-        self.bt_postfix = ".json"
-
-        # (:obj:`str`) ingestor log directory
-        self.log_dir = ""
-
         if "beamtime_dirs" in self.__config.keys() \
            and isinstance(self.__config["beamtime_dirs"], list):
             self.beamtime_dirs = self.__config["beamtime_dirs"]
 
+        # (:obj:`str`) ingestor log directory
+        self.log_dir = ""
         if "ingestor_log_dir" in self.__config.keys():
             self.log_dir = self.__config["ingestor_log_dir"]
         if self.log_dir == "/":
             self.log_dir = ""
 
-        if "beamtime_filename_prefix" in self.__config.keys():
-            self.bt_prefix = self.__config["beamtime_filename_prefix"]
-
-        if "beamtime_filename_postfix" in self.__config.keys():
-            self.bt_postfix = self.__config["beamtime_filename_postfix"]
+        # (:obj:`str`) beamtime file prefix
+        self.bt_prefix = "beamtime-metadata-"
+        # (:obj:`str`) beamtime file postfix
+        self.bt_postfix = ".json"
 
         if not self.beamtime_dirs:
             get_logger().warning(

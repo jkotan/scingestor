@@ -301,16 +301,14 @@ optional arguments:
             dirname = dirname + '_1'
         fdirname = os.path.abspath(dirname)
         os.mkdir(fdirname)
-        btmeta = "bt-mt-99001234.jsn"
+        btmeta = "beamtime-metadata-99001234.json"
         source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                               "config",
                               btmeta)
         fullbtmeta = os.path.join(fdirname, btmeta)
 
         cfg = 'beamtime_dirs:\n' \
-            '  - "{basedir}"\n' \
-            'beamtime_filename_prefix: "bt-mt-"\n' \
-            'beamtime_filename_postfix: ".jsn"\n'.format(basedir=fdirname)
+            '  - "{basedir}"'.format(basedir=fdirname)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:

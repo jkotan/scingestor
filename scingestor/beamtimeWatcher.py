@@ -105,13 +105,6 @@ class BeamtimeWatcher:
             self.__runtime = 0
         # (:obj:`float`) start time in s
         self.__starttime = time.time()
-
-        if "beamtime_filename_prefix" in self.__config.keys():
-            self.bt_prefix = self.__config["beamtime_filename_prefix"]
-
-        if "beamtime_filename_postfix" in self.__config.keys():
-            self.bt_postfix = self.__config["beamtime_filename_postfix"]
-
         if not self.beamtime_dirs and not self.beamtime_base_dir:
             self.running = False
             get_logger().warning(

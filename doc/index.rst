@@ -55,8 +55,6 @@ Its configuration written in YAML can contain the following variables
 * ``oned_in_metadata`` (bool)
 * ``scan_metadata_postfix`` (str)
 * ``datablock_metadata_postfix`` (str)
-* ``beamtime_filename_postfix`` (str)
-* ``beamtime_filename_prefix`` (str)
 * ``nxs_dataset_metadata_generator`` (str)
 * ``dataset_metadata_generator`` (str)
 * ``datablock_metadata_generator`` (str)

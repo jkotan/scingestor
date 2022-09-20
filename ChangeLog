@@ -1,10 +1,9 @@
 2021-09-16 Jan Kotanski <jan.kotanski@desy.de>
 	* add coverage tests for deb11 (#74)
-	* add nxs_dataset_metadata_generator dataset_metadata_generator datablock_metadata_generator datablock_metadata_stream_generator datablock_metadata_generator_scanpath_postfix into the configuation (#72)
-	* add scan_metadata_postfix and datablock_metadata_postfix into the configuation (#70)
-	* add oned_in_metadata into the configuation (#68)
-	* add chmod_json_files into the configuation (#68)
-	* add beamtime_filename_prefix and  beamtime_filenmae_postfix into the configuation (#81)
+	* add nxs_dataset_metadata_generator dataset_metadata_generator datablock_metadata_generator datablock_metadata_stream_generator datablock_metadata_generator_scanpath_postfix into configuation (#72)
+	* add scan_metadata_postfix and datablock_metadata_postfix into configuation (#70)
+	* add oned_in_metadata into configuation (#68)
+	* add chmod_json_files into configuation (#68)
 	* tagged as 0.0.3
 
 2021-08-24 Jan Kotanski <jan.kotanski@desy.de>
