@@ -188,6 +188,16 @@ class DatasetWatcherTest(unittest.TestCase):
         er = mystderr.getvalue()
         return vl, er, etxt
 
+    def sortmarkedlines(self, text, marks=None):
+        marks = marks or []
+        if isinstance(text, list):
+            ltext = text
+        else:
+            ltext = text.split("\n")
+        for bg, ed in marks:
+            ltext[bg:ed] = sorted(ltext[bg:ed])
+        return "\n".join(ltext)
+
     def test_datasetfile_exist(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
@@ -2043,7 +2053,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 # print(er)
                 # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
                 try:
-                    self.assertEqual(
+                    pattern = self.sortmarkedlines(
                         'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: Create ScanDirWatcher '
@@ -2131,7 +2141,9 @@ class DatasetWatcherTest(unittest.TestCase):
                                 cnt6=(cnt + 5), cnt7=(cnt + 6),
                                 det1="../lambda1/", det2="../lambda2/",
                                 sc1='myscan_00001', sc2='myscan_00002'),
-                        "\n".join(dseri))
+                        [(5, 9)])
+                    self.assertEqual(
+                        pattern, self.sortmarkedlines(dseri, [(5, 9)]))
                 except Exception:
                     print(er)
                     raise

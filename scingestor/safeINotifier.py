@@ -119,7 +119,7 @@ class SafeINotifier(threading.Thread):
         return [wqueue, qid]
 
     def rm_watch(self, qid):
-        """ add watch to notifier
+        """ remove watch from notifier
 
         :param qid: queue id
         :type qid: :obj:`int`
