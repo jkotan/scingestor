@@ -68,6 +68,9 @@ Its configuration written in YAML can contain the following variables
 * ``get_event_timeout`` (float)
 * ``ingestion_delay_time`` (float)
 * ``max_query_tries_number`` (int)
+* ``scicat_datasets_path`` (str)
+* ``scicat_datablocks_path`` (str)
+* ``scicat_users_login_path`` (str)
 
 e.g.
 

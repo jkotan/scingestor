@@ -98,6 +98,12 @@ class DatasetIngestor:
         self.__relpath_in_datablock = False
         # (:obj:`str`) scicat url
         self.__scicat_url = "http://localhost:8881"
+        # (:obj:`str`) scicat users login
+        self.__scicat_users_login = "Users/login"
+        # (:obj:`str`) scicat users login
+        self.__scicat_datasets = "RawDatasets"
+        # (:obj:`str`) scicat users login
+        self.__scicat_datablocks = "OrigDatablocks"
         # (:obj:`str`) chmod string for json metadata
         self.__chmod = None
         # (:obj:`bool`) oned metadata flag
@@ -148,8 +154,17 @@ class DatasetIngestor:
             except Exception as e:
                 get_logger().warning(
                     'Wrong UpdateStrategy value: %s' % str(e))
+
         if "scicat_url" in self.__config.keys():
             self.__scicat_url = self.__config["scicat_url"]
+        if "scicat_datasets_path" in self.__config.keys():
+            self.__scicat_datasets = self.__config["scicat_datasets_path"]
+        if "scicat_datablocks_path" in self.__config.keys():
+            self.__scicat_datablocks = self.__config["scicat_datablocks_path"]
+        if "scicat_users_login_path" in self.__config.keys():
+            self.__scicat_users_login = \
+                self.__config["scicat_users_login_path"]
+
         if "relative_path_in_datablock" in self.__config.keys():
             self.__relpath_in_datablock = \
                 self.__config["relative_path_in_datablock"]
@@ -260,17 +275,17 @@ class DatasetIngestor:
         if not self.__scicat_url.endswith("/"):
             self.__scicat_url = self.__scicat_url + "/"
         # (:obj:`str`) token url
-        self.__tokenurl = self.__scicat_url + "Users/login"
+        self.__tokenurl = self.__scicat_url + self.__scicat_users_login
         # get_logger().info(
         #     'DatasetIngestor: LOGIN %s' % self.__tokenurl)
         # (:obj:`str`) dataset url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #    "RawDatasets"
-        self.__dataseturl = self.__scicat_url + "RawDatasets"
+        self.__dataseturl = self.__scicat_url + self.__scicat_datasets
         # (:obj:`str`) origdatablock url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #     "OrigDatablocks"
-        self.__datablockurl = self.__scicat_url + "OrigDatablocks"
+        self.__datablockurl = self.__scicat_url + self.__scicat_datablocks
 
         self.__withoutsm = [
             "techniques",

@@ -235,6 +235,9 @@ class DatasetWatcherTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'scicat_users_login_path: "Users/login"\n' \
+            'scicat_datasets_path: "RawDatasets"\n' \
+            'scicat_datablocks_path: "OrigDatablocks"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
