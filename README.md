@@ -32,6 +32,10 @@ Its configuration written in YAML can contain the following variables
 * `datablock_metadata_generator` (str)
 * `datablock_metadata_stream_generator` (str)
 * `datablock_metadata_generator_scanpath_postfix` (str)
+* `inotify_timeout` (float)
+* `get_event_timeout` (float)
+* `ingestion_delay_time` (float)
+* `max_query_tries_number` (int)
 
 e.g.
 ```

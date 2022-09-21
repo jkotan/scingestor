@@ -227,6 +227,10 @@ class DatasetIngestTest(unittest.TestCase):
             'beamtime_filename_postfix: ".jsn"\n' \
             'datasets_filename_pattern: "sc-ds-{{bt}}.lst"\n' \
             'ingested_datasets_filename_pattern: "sc-ids-{{bt}}.lst"\n' \
+            'inotify_timeout: 0.2\n' \
+            'get_event_timeout: 0.02\n' \
+            'ingestion_delay_time: 2\n' \
+            'max_query_tries_number: 10\n' \
             'scicat_url: "{url}"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(

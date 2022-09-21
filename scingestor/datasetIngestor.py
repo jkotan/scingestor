@@ -43,8 +43,7 @@ class DatasetIngestor:
     """
 
     def __init__(self, configuration,
-                 path, dsfile, idsfile, meta, beamtimefile,
-                 delay=5):
+                 path, dsfile, idsfile, meta, beamtimefile):
         """ constructor
 
         :param configuration: dictionary with the ingestor configuration
@@ -65,8 +64,6 @@ class DatasetIngestor:
         :type ingestorcred: :obj:`str`
         :param scicat_url: scicat_url
         :type scicat_url: :obj:`str`
-        :param delay: time delay
-        :type delay: :obj:`str`
         """
         # (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
         self.__config = configuration or {}
@@ -105,6 +102,9 @@ class DatasetIngestor:
         self.__chmod = None
         # (:obj:`bool`) oned metadata flag
         self.__oned = False
+
+        # (:obj:`int`) maximal counter value for post tries
+        self.__maxcounter = 100
 
         # (:obj:`str`) raw dataset scan postfix
         self.__scanpostfix = ".scan.json"
@@ -228,6 +228,13 @@ class DatasetIngestor:
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + " --oned "
 
+        if "max_query_tries_number" in self.__config.keys():
+            try:
+                self.__maxcounter = int(
+                    self.__config["max_query_tries_number"])
+            except Exception as e:
+                get_logger().warning('%s' % (str(e)))
+
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
         self.__dctfmt = {
             "scanname": None,
@@ -243,9 +250,6 @@ class DatasetIngestor:
         }
         get_logger().debug(
             'DatasetIngestor: Parameters: %s' % str(self.__dctfmt))
-
-        # (:obj:`int`) maximal counter value for post tries
-        self.__maxcounter = 100
 
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
         self.__headers = {'Content-Type': 'application/json',
