@@ -281,7 +281,7 @@ class DatasetIngestor:
 
         if "metadata_keywords_without_checks" in self.__config.keys():
             try:
-                self.__withoutsm = dict(
+                self.__withoutsm = list(
                     self.__config["metadata_keywords_without_checks"])
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
