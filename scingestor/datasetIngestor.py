@@ -140,20 +140,6 @@ class DatasetIngestor:
         # (:obj:`str`) datablock path postfix
         self.__datablockscanpath = " {scanpath}/{scanname} "
 
-        # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
-        self.__dctfmt = {
-            "scanname": None,
-            "chmod": self.__chmod,
-            "scanpath": self.__path,
-            "relpath": self.__relpath,
-            "beamtimeid": self.__bid,
-            "beamline": self.__bl,
-            "doiprefix": self.__doiprefix,
-            "beamtimefile": self.__bfile,
-            "scpostfix": self.__scanpostfix,
-            "dbpostfix": self.__datablockpostfix,
-        }
-
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
         self.__headers = {'Content-Type': 'application/json',
                           'Accept': 'application/json'}
@@ -274,6 +260,20 @@ class DatasetIngestor:
                     self.__config["request_headers"])
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
+
+        # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
+        self.__dctfmt = {
+            "scanname": None,
+            "chmod": self.__chmod,
+            "scanpath": self.__path,
+            "relpath": self.__relpath,
+            "beamtimeid": self.__bid,
+            "beamline": self.__bl,
+            "doiprefix": self.__doiprefix,
+            "beamtimefile": self.__bfile,
+            "scpostfix": self.__scanpostfix,
+            "dbpostfix": self.__datablockpostfix,
+        }
 
         get_logger().debug(
             'DatasetIngestor: Parameters: %s' % str(self.__dctfmt))
