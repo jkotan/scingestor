@@ -72,6 +72,7 @@ Its configuration written in YAML can contain the following variables
 * ``scicat_datasets_path`` (str)
 * ``scicat_datablocks_path`` (str)
 * ``scicat_users_login_path`` (str)
+* ``metadata_keywords_without_checks`` (list\<str\>)
 
 e.g.
 

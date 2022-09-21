@@ -161,7 +161,7 @@ class DatasetIngestor:
             "scientificMetadata",
             "endTime"
         ]
-        
+
         # (:obj:`list`<:obj:`str`>) ingested scan names
         self.__sc_ingested = []
         # (:obj:`list`<:obj:`str`>) waiting scan names
@@ -319,7 +319,6 @@ class DatasetIngestor:
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #     "OrigDatablocks"
         self.__datablockurl = self.__scicat_url + self.__scicat_datablocks
-
 
     def _generate_rawdataset_metadata(self, scan):
         """ generate raw dataset metadata
