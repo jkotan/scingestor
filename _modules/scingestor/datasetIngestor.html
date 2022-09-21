@@ -106,7 +106,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span> <span class="o">=</span> <span class="n">dsfile</span>
         <span class="c1"># (:obj:`str`) file with a ingested dataset list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__idsfile</span> <span class="o">=</span> <span class="n">idsfile</span>
-        <span class="c1"># (:obj:`str`) file with a ingested dataset list</span>
+        <span class="c1"># (:obj:`str`) file with a ingested dataset tmp list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__idsfiletmp</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">idsfile</span><span class="p">,</span> <span class="s2">&quot;.tmp&quot;</span><span class="p">)</span>
         <span class="c1"># (:obj:`str`) scan path dir</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__path</span> <span class="o">=</span> <span class="n">path</span>
@@ -143,6 +143,29 @@
         <span class="c1"># (:obj:`str`) origin datablock scan postfix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span> <span class="o">=</span> <span class="s2">&quot;.origdatablock.json&quot;</span>
 
+        <span class="c1"># (:obj:`str`) nexus dataset shell command</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata &quot;</span> \
+            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2"> &quot;</span> \
+            <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.nxs&quot;</span>
+        <span class="c1"># (:obj:`str`) datablock shell command</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata &quot;</span> \
+            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2"> &quot;</span> \
+            <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">&quot;</span>
+        <span class="c1"># (:obj:`str`) datablock shell command</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
+            <span class="s2">&quot; -s *.pyc,*</span><span class="si">{dbpostfix}</span><span class="s2">,*</span><span class="si">{scpostfix}</span><span class="s2">,*~ &quot;</span> \
+            <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
+            <span class="s2">&quot; -c </span><span class="si">{beamtimeid}</span><span class="s2">-clbt,</span><span class="si">{beamtimeid}</span><span class="s2">-dmgt,</span><span class="si">{beamline}</span><span class="s2">dmgt&quot;</span> \
+            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2"> &quot;</span>
+        <span class="c1"># (:obj:`str`) datablock shell command</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
+            <span class="s2">&quot; -s *.pyc,*</span><span class="si">{dbpostfix}</span><span class="s2">,*</span><span class="si">{scpostfix}</span><span class="s2">,*~ &quot;</span> \
+            <span class="s2">&quot; -c </span><span class="si">{beamtimeid}</span><span class="s2">-clbt,</span><span class="si">{beamtimeid}</span><span class="s2">-dmgt,</span><span class="si">{beamline}</span><span class="s2">dmgt&quot;</span> \
+            <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
+        <span class="c1"># (:obj:`str`) datablock path postfix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span> <span class="o">=</span> <span class="s2">&quot; </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
+
         <span class="k">if</span> <span class="s2">&quot;doiprefix&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;doi_prefix&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="s2">&quot;ingestor_credential_file&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -173,6 +196,23 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;datablock_metadata_postfix&quot;</span><span class="p">]</span>
 
+        <span class="k">if</span> <span class="s2">&quot;nxs_dataset_metadata_generator&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;nxs_dataset_metadata_generator&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;dataset_metadata_generator&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;dataset_metadata_generator&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;datablock_metadata_generator&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;datablock_metadata_generator&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;datablock_metadata_stream_generator&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;datablock_metadata_stream_generator&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;datablock_metadata_generator_scanpath_postfix&quot;</span> \
+           <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;datablock_metadata_generator_scanpath_postfix&quot;</span><span class="p">]</span>
+
         <span class="c1"># (:obj:`list`&lt;:obj:`str`&gt;) ingested scan names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># (:obj:`list`&lt;:obj:`str`&gt;) waiting scan names</span>
@@ -181,54 +221,44 @@
         <span class="c1">#   ingested scan names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="c1"># (:obj:`str`) nexus dataset shell command</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata &quot;</span> \
-            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2"> &quot;</span> \
-            <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
-            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.nxs&quot;</span>
-        <span class="c1"># (:obj:`str`) datablock shell command</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata &quot;</span> \
-            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2"> &quot;</span> \
-            <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">&quot;</span>
-        <span class="c1"># (:obj:`str`) datablock shell command</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
-            <span class="s2">&quot; -s *.pyc,*</span><span class="si">{dbpostfix}</span><span class="s2">,*</span><span class="si">{scpostfix}</span><span class="s2">,*~ &quot;</span> \
-            <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
-            <span class="s2">&quot; -c </span><span class="si">{beamtimeid}</span><span class="s2">-clbt,</span><span class="si">{beamtimeid}</span><span class="s2">-dmgt,</span><span class="si">{beamline}</span><span class="s2">dmgt&quot;</span> \
-            <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2"> &quot;</span>
-        <span class="c1"># (:obj:`str`) datablock shell command</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
-            <span class="s2">&quot; -s *.pyc,*</span><span class="si">{dbpostfix}</span><span class="s2">,*</span><span class="si">{scpostfix}</span><span class="s2">,*~ &quot;</span> \
-            <span class="s2">&quot; -c </span><span class="si">{beamtimeid}</span><span class="s2">-clbt,</span><span class="si">{beamtimeid}</span><span class="s2">-dmgt,</span><span class="si">{beamline}</span><span class="s2">dmgt&quot;</span> \
-            <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
-        <span class="c1"># (:obj:`str`) datablock path postfix</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span> <span class="o">=</span> <span class="s2">&quot; </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_in_datablock</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;datablock_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;datablock_metadata_stream_generator&quot;</span> \
+               <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;dataset_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;nxs_dataset_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__chmod</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;dataset_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;nxs_dataset_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;datablock_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;datablock_metadata_stream_generator&quot;</span> \
+               <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__oned</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="s2">&quot; --oned &quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="s2">&quot; --oned &quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;dataset_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="s2">&quot; --oned &quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;nxs_dataset_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="s2">&quot; --oned &quot;</span>
 
         <span class="c1"># (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) command format parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span> <span class="o">=</span> <span class="p">{</span>

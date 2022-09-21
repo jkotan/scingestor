@@ -43,31 +43,6 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Beamtime Watcher</p>
 <dl class="method">
-<dt id="scingestor.beamtimeWatcher.BeamtimeWatcher.find_bt_files">
-<code class="descname">find_bt_files</code><span class="sig-paren">(</span><em>path</em>, <em>prefix</em>, <em>postfix</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/beamtimeWatcher.html#BeamtimeWatcher.find_bt_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.beamtimeWatcher.BeamtimeWatcher.find_bt_files" title="Permalink to this definition">¶</a></dt>
-<dd><p>find beamtime files with given prefix and postfix in the given path</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>path</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – beamtime directory</li>
-<li><strong>prefix</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – file name prefix</li>
-<li><strong>postfix</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – file name postfix</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list of found files</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> &lt;<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>&gt;</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="scingestor.beamtimeWatcher.BeamtimeWatcher.start">
 <code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/beamtimeWatcher.html#BeamtimeWatcher.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.beamtimeWatcher.BeamtimeWatcher.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>start beamtime watcher</p>
@@ -112,50 +87,6 @@
 <em class="property">class </em><code class="descclassname">scingestor.datasetIngest.</code><code class="descname">DatasetIngest</code><span class="sig-paren">(</span><em>options</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngest.html#DatasetIngest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngest.DatasetIngest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Dataset Ingest command</p>
-<dl class="method">
-<dt id="scingestor.datasetIngest.DatasetIngest.find_bt_files">
-<code class="descname">find_bt_files</code><span class="sig-paren">(</span><em>path</em>, <em>prefix</em>, <em>postfix</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngest.html#DatasetIngest.find_bt_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngest.DatasetIngest.find_bt_files" title="Permalink to this definition">¶</a></dt>
-<dd><p>find beamtime files with given prefix and postfix in the given path</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>path</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – beamtime directory</li>
-<li><strong>prefix</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – file name prefix</li>
-<li><strong>postfix</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – file name postfix</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list of found files</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> &lt;<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>&gt;</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="scingestor.datasetIngest.DatasetIngest.ingest_scandir">
-<code class="descname">ingest_scandir</code><span class="sig-paren">(</span><em>path</em>, <em>meta</em>, <em>bpath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngest.html#DatasetIngest.ingest_scandir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngest.DatasetIngest.ingest_scandir" title="Permalink to this definition">¶</a></dt>
-<dd><p>constructor</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – scan dir path</li>
-<li><strong>meta</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code> &lt;<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>,`any`&gt;) – beamtime configuration</li>
-<li><strong>bpath</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – beamtime file</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="method">
 <dt id="scingestor.datasetIngest.DatasetIngest.start">
 <code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngest.html#DatasetIngest.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngest.DatasetIngest.start" title="Permalink to this definition">¶</a></dt>
@@ -399,7 +330,7 @@
 <dl class="method">
 <dt id="scingestor.safeINotifier.SafeINotifier.rm_watch">
 <code class="descname">rm_watch</code><span class="sig-paren">(</span><em>qid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#SafeINotifier.rm_watch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier.rm_watch" title="Permalink to this definition">¶</a></dt>
-<dd><p>add watch to notifier</p>
+<dd><p>remove watch from notifier</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

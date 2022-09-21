@@ -137,12 +137,19 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__runtime</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># (:obj:`float`) start time in s</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__starttime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s2">&quot;beamtime_filename_prefix&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bt_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;beamtime_filename_prefix&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;beamtime_filename_postfix&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bt_postfix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;beamtime_filename_postfix&quot;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">beamtime_dirs</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">beamtime_base_dir</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                 <span class="s1">&#39;BeamtimeWatcher: Beamtime directories not defined&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BeamtimeWatcher.find_bt_files"><a class="viewcode-back" href="../../scingestor.html#scingestor.beamtimeWatcher.BeamtimeWatcher.find_bt_files">[docs]</a>    <span class="k">def</span> <span class="nf">find_bt_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">postfix</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_find_bt_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">postfix</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; find beamtime files with given prefix and postfix in the given path</span>
 
 <span class="sd">        :param path: beamtime directory</span>
@@ -162,7 +169,7 @@
                              <span class="ow">and</span> <span class="n">fl</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">postfix</span><span class="p">))]</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">files</span></div>
+        <span class="k">return</span> <span class="n">files</span>
 
     <span class="k">def</span> <span class="nf">_start_notifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paths</span><span class="p">,</span> <span class="n">bpath</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; start notifier for all given paths to look for beamtime files</span>
@@ -273,11 +280,11 @@
 
             <span class="c1"># find already existing beamtime files</span>
             <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">beamtime_dirs</span><span class="p">:</span>
-                <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_bt_files</span><span class="p">(</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_bt_files</span><span class="p">(</span>
                     <span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bt_prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bt_postfix</span><span class="p">)</span>
 
                 <span class="c1"># run ScanDirWatcher for each beamtime file subdirectory</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_lunch_scandir_watcher</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_launch_scandir_watcher</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Files of </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">files</span><span class="p">))</span>
 
             <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
@@ -356,7 +363,7 @@
                                          <span class="n">fl</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bt_postfix</span><span class="p">))]</span>
                             <span class="k">if</span> <span class="n">files</span><span class="p">:</span>
                                 <span class="c1"># new beamtime file</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">_lunch_scandir_watcher</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_launch_scandir_watcher</span><span class="p">(</span>
                                     <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_path</span><span class="p">[</span><span class="n">qid</span><span class="p">],</span> <span class="n">files</span><span class="p">)</span>
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_path</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">qid</span><span class="p">)</span>
@@ -366,10 +373,10 @@
                                 <span class="c1">#     &#39;BeamtimeWatcher: &#39;</span>
                                 <span class="c1">#     &#39;Removing watch on a CM event %s: %s&#39;</span>
                                 <span class="c1">#     % (str(qid), path))</span>
-                                <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_bt_files</span><span class="p">(</span>
+                                <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_bt_files</span><span class="p">(</span>
                                     <span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bt_prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bt_postfix</span><span class="p">)</span>
 
-                                <span class="bp">self</span><span class="o">.</span><span class="n">_lunch_scandir_watcher</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_launch_scandir_watcher</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
 
                             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                                 <span class="s1">&#39;Start beamtime </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -420,10 +427,10 @@
                                 <span class="k">if</span> <span class="n">dr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">beamtime_dirs</span><span class="p">:</span>
                                     <span class="bp">self</span><span class="o">.</span><span class="n">beamtime_dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dr</span><span class="p">)</span>
                                     <span class="bp">self</span><span class="o">.</span><span class="n">_add_path</span><span class="p">(</span><span class="n">dr</span><span class="p">)</span>
-                                    <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_bt_files</span><span class="p">(</span>
+                                    <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_bt_files</span><span class="p">(</span>
                                         <span class="n">dr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bt_prefix</span><span class="p">,</span>
                                         <span class="bp">self</span><span class="o">.</span><span class="n">bt_postfix</span><span class="p">)</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">_lunch_scandir_watcher</span><span class="p">(</span><span class="n">dr</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">_launch_scandir_watcher</span><span class="p">(</span><span class="n">dr</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
 
                                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                                         <span class="s1">&#39;Files of </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dr</span><span class="p">,</span> <span class="n">files</span><span class="p">))</span>
@@ -437,8 +444,8 @@
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Keyboard interrupt (SIGINT) received...&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">_lunch_scandir_watcher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; lunch scandir watcher</span>
+    <span class="k">def</span> <span class="nf">_launch_scandir_watcher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; launch scandir watcher</span>
 
 <span class="sd">        :param path: base file path</span>
 <span class="sd">        :type path: :obj:`str`</span>

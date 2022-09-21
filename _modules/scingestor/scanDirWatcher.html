@@ -98,9 +98,9 @@
         <span class="c1"># (:obj:`bool`) running loop flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1"># (:obj:`str`) scicat dataset file pattern</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ds_pattern</span> <span class="o">=</span> <span class="s2">&quot;scicat-datasets-</span><span class="si">{bt}</span><span class="s2">.lst&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ds_pattern</span> <span class="o">=</span> <span class="s2">&quot;scicat-datasets-</span><span class="si">{bt}</span><span class="s2">.lst&quot;</span>
         <span class="c1"># (:obj:`str`) indested scicat dataset file pattern</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ids_pattern</span> <span class="o">=</span> <span class="s2">&quot;scicat-ingested-datasets-</span><span class="si">{bt}</span><span class="s2">.lst&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ids_pattern</span> <span class="o">=</span> <span class="s2">&quot;scicat-ingested-datasets-</span><span class="si">{bt}</span><span class="s2">.lst&quot;</span>
 
         <span class="c1"># (:obj:`int`) notifier ID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">notifier</span> <span class="o">=</span> <span class="kc">None</span>
@@ -126,10 +126,17 @@
         <span class="c1"># (:class:`threading.Lock`) scandir watcher dictionary lock</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scandir_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
 
+        <span class="k">if</span> <span class="s2">&quot;datasets_filename_pattern&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ds_pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;datasets_filename_pattern&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;ingested_datasets_filename_pattern&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ids_pattern</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;ingested_datasets_filename_pattern&quot;</span><span class="p">]</span>
+
         <span class="c1"># (:obj:`str`) datasets file name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dslist_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds_pattern</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">beamtimeId</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dslist_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ds_pattern</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">beamtimeId</span><span class="p">)</span>
         <span class="c1"># (:obj:`str`) ingescted datasets file name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">idslist_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ids_pattern</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">beamtimeId</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idslist_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ids_pattern</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">beamtimeId</span><span class="p">)</span>
         <span class="c1"># (:obj:`str`) datasets file name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dslist_fullname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dslist_filename</span><span class="p">)</span>
 
@@ -182,8 +189,8 @@
                 <span class="s1">&#39;ScanDirWatcher: &#39;</span>
                 <span class="s1">&#39;Removing watch </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">wd</span><span class="p">),</span> <span class="n">path</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">_lunch_scandir_watcher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paths</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; lunch scandir watcher</span>
+    <span class="k">def</span> <span class="nf">_launch_scandir_watcher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paths</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; launch scandir watcher</span>
 
 <span class="sd">        :param path: list of subdirectories</span>
 <span class="sd">        :type path: :obj:`list`&lt;:obj:`str`&gt;</span>
@@ -241,7 +248,7 @@
             <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">):</span>
                 <span class="n">subdirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span><span class="o">.</span><span class="n">path</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">)</span>
                            <span class="k">if</span> <span class="n">it</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_lunch_scandir_watcher</span><span class="p">(</span><span class="n">subdirs</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_launch_scandir_watcher</span><span class="p">(</span><span class="n">subdirs</span><span class="p">)</span>
 
             <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
                 <span class="c1"># time.sleep(self.delay)</span>
@@ -281,9 +288,9 @@
                                         <span class="k">if</span> <span class="n">it</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()]</span>
                                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                                         <span class="s2">&quot;Sub-directories: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">subdirs</span><span class="p">))</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">_lunch_scandir_watcher</span><span class="p">(</span><span class="n">subdirs</span><span class="p">)</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">_launch_scandir_watcher</span><span class="p">(</span><span class="n">subdirs</span><span class="p">)</span>
                                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                                        <span class="s2">&quot;watcher for subdirectories lunched&quot;</span><span class="p">)</span>
+                                        <span class="s2">&quot;watcher for subdirectories launched&quot;</span><span class="p">)</span>
 
                         <span class="k">elif</span> <span class="s2">&quot;IN_ISDIR&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">masks</span> <span class="ow">and</span> <span class="p">(</span>
                                 <span class="s2">&quot;IN_CREATE&quot;</span> <span class="ow">in</span> <span class="n">masks</span> <span class="ow">or</span> <span class="s2">&quot;IN_MOVE_TO&quot;</span> <span class="ow">in</span> <span class="n">masks</span><span class="p">):</span>
@@ -331,7 +338,7 @@
                             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dslist_fullname</span><span class="p">):</span>
                                 <span class="n">npath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                                     <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_path</span><span class="p">[</span><span class="n">qid</span><span class="p">],</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">_lunch_scandir_watcher</span><span class="p">([</span><span class="n">npath</span><span class="p">])</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_launch_scandir_watcher</span><span class="p">([</span><span class="n">npath</span><span class="p">])</span>
                         <span class="c1"># elif &quot;IN_DELETE_SELF&quot; in masks:</span>
                         <span class="c1">#     &quot;remove scandir watcher&quot;</span>
                         <span class="c1">#     # self.wd_to_path[qid]</span>
