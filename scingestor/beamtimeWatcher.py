@@ -117,7 +117,7 @@ class BeamtimeWatcher:
             get_logger().warning(
                 'BeamtimeWatcher: Beamtime directories not defined')
 
-    def find_bt_files(self, path, prefix, postfix):
+    def _find_bt_files(self, path, prefix, postfix):
         """ find beamtime files with given prefix and postfix in the given path
 
         :param path: beamtime directory
@@ -248,7 +248,7 @@ class BeamtimeWatcher:
 
             # find already existing beamtime files
             for path in self.beamtime_dirs:
-                files = self.find_bt_files(
+                files = self._find_bt_files(
                     path, self.bt_prefix, self.bt_postfix)
 
                 # run ScanDirWatcher for each beamtime file subdirectory
@@ -341,7 +341,7 @@ class BeamtimeWatcher:
                                 #     'BeamtimeWatcher: '
                                 #     'Removing watch on a CM event %s: %s'
                                 #     % (str(qid), path))
-                                files = self.find_bt_files(
+                                files = self._find_bt_files(
                                     path, self.bt_prefix, self.bt_postfix)
 
                                 self._launch_scandir_watcher(path, files)
@@ -395,7 +395,7 @@ class BeamtimeWatcher:
                                 if dr not in self.beamtime_dirs:
                                     self.beamtime_dirs.append(dr)
                                     self._add_path(dr)
-                                    files = self.find_bt_files(
+                                    files = self._find_bt_files(
                                         dr, self.bt_prefix,
                                         self.bt_postfix)
                                     self._launch_scandir_watcher(dr, files)

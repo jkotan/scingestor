@@ -453,8 +453,8 @@ class DatasetWatcherTest(unittest.TestCase):
         fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
         os.mkdir(fdirname)
         btmeta = "beamtime-metadata-99001234.json"
-        dslist = "scicat-datasets-99001234.lst"
-        idslist = "scicat-ingested-datasets-99001234.lst"
+        dslist = "sc-ds-99001234.lst"
+        idslist = "sc-ids-99001234.lst"
         # wrongdslist = "scicat-datasets-99001235.lst"
         source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                               "config",
@@ -479,6 +479,8 @@ class DatasetWatcherTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'datasets_filename_pattern: "sc-ds-{{bt}}.lst"\n' \
+            'ingested_datasets_filename_pattern: "sc-ids-{{bt}}.lst"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(

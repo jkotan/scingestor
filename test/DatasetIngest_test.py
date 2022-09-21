@@ -198,9 +198,9 @@ class DatasetIngestTest(unittest.TestCase):
         fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
         fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
         btmeta = "bt-mt-99001234.jsn"
-        dslist = "scicat-datasets-99001234.lst"
-        idslist = "scicat-ingested-datasets-99001234.lst"
-        wrongdslist = "scicat-datasets-99001235.lst"
+        dslist = "sc-ds-99001234.lst"
+        idslist = "sc-ids-99001234.lst"
+        wrongdslist = "sc-ds-99001235.lst"
         source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                               "config",
                               btmeta)
@@ -225,6 +225,8 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'beamtime_filename_prefix: "bt-mt-"\n' \
             'beamtime_filename_postfix: ".jsn"\n' \
+            'datasets_filename_pattern: "sc-ds-{{bt}}.lst"\n' \
+            'ingested_datasets_filename_pattern: "sc-ids-{{bt}}.lst"\n' \
             'scicat_url: "{url}"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(

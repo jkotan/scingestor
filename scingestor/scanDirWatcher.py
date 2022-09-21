@@ -66,9 +66,9 @@ class ScanDirWatcher(threading.Thread):
         # (:obj:`bool`) running loop flag
         self.running = True
         # (:obj:`str`) scicat dataset file pattern
-        self.ds_pattern = "scicat-datasets-{bt}.lst"
+        self.__ds_pattern = "scicat-datasets-{bt}.lst"
         # (:obj:`str`) indested scicat dataset file pattern
-        self.ids_pattern = "scicat-ingested-datasets-{bt}.lst"
+        self.__ids_pattern = "scicat-ingested-datasets-{bt}.lst"
 
         # (:obj:`int`) notifier ID
         self.notifier = None
@@ -94,10 +94,17 @@ class ScanDirWatcher(threading.Thread):
         # (:class:`threading.Lock`) scandir watcher dictionary lock
         self.scandir_lock = threading.Lock()
 
+        if "datasets_filename_pattern" in self.__config.keys():
+            self.__ds_pattern = self.__config["datasets_filename_pattern"]
+
+        if "ingested_datasets_filename_pattern" in self.__config.keys():
+            self.__ids_pattern = \
+                self.__config["ingested_datasets_filename_pattern"]
+
         # (:obj:`str`) datasets file name
-        self.dslist_filename = self.ds_pattern.format(bt=self.beamtimeId)
+        self.dslist_filename = self.__ds_pattern.format(bt=self.beamtimeId)
         # (:obj:`str`) ingescted datasets file name
-        self.idslist_filename = self.ids_pattern.format(bt=self.beamtimeId)
+        self.idslist_filename = self.__ids_pattern.format(bt=self.beamtimeId)
         # (:obj:`str`) datasets file name
         self.dslist_fullname = os.path.join(self.__path, self.dslist_filename)
 

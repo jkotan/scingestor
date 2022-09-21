@@ -57,6 +57,11 @@ class DatasetIngest:
         # (:obj:`str`) beamtime file postfix
         self.bt_postfix = ".json"
 
+        # (:obj:`str`) scicat dataset file pattern
+        self.__ds_pattern = "scicat-datasets-{bt}.lst"
+        # (:obj:`str`) indested scicat dataset file pattern
+        self.__ids_pattern = "scicat-ingested-datasets-{bt}.lst"
+
         # (:obj:`str`) ingestor log directory
         self.log_dir = ""
 
@@ -75,6 +80,13 @@ class DatasetIngest:
         if "beamtime_filename_postfix" in self.__config.keys():
             self.bt_postfix = self.__config["beamtime_filename_postfix"]
 
+        if "datasets_filename_pattern" in self.__config.keys():
+            self.__ds_pattern = self.__config["datasets_filename_pattern"]
+
+        if "ingested_datasets_filename_pattern" in self.__config.keys():
+            self.__ids_pattern = \
+                self.__config["ingested_datasets_filename_pattern"]
+
         if not self.beamtime_dirs:
             get_logger().warning(
                 'DatasetIngest: Beamtime directories not defined')
@@ -84,7 +96,7 @@ class DatasetIngest:
 
         for path in self.beamtime_dirs:
             get_logger().info("DatasetIngest: beamtime path: %s" % str(path))
-            files = self.find_bt_files(
+            files = self._find_bt_files(
                 path, self.bt_prefix, self.bt_postfix)
 
             for bt in files:
@@ -99,12 +111,12 @@ class DatasetIngest:
                         time.sleep(0.1)
                         with open(ffn) as fl:
                             btmd = json.loads(fl.read())
-                    self.ingest_scandir(path, btmd, ffn)
+                    self._ingest_scandir(path, btmd, ffn)
                 except Exception as e:
                     get_logger().warning(
                         "%s cannot be ingested: %s" % (ffn, str(e)))
 
-    def ingest_scandir(self, path, meta, bpath):
+    def _ingest_scandir(self, path, meta, bpath):
         """ constructor
 
         :param path: scan dir path
@@ -122,15 +134,11 @@ class DatasetIngest:
         # self.__meta = meta
         # (:obj:`str`) beamtime id
         beamtimeId = meta["beamtimeId"]
-        # (:obj:`str`) beamline
-        ds_pattern = "scicat-datasets-{bt}.lst"
-        # (:obj:`str`) indested scicat dataset file pattern
-        ids_pattern = "scicat-ingested-datasets-{bt}.lst"
 
         # (:obj:`str`) datasets file name
-        dslist_filename = ds_pattern.format(bt=beamtimeId)
+        dslist_filename = self.__ds_pattern.format(bt=beamtimeId)
         # (:obj:`str`) ingescted datasets file name
-        idslist_filename = ids_pattern.format(bt=beamtimeId)
+        idslist_filename = self.__ids_pattern.format(bt=beamtimeId)
         dslfiles = glob.glob(
             "%s/**/%s" % (path, dslist_filename), recursive=True)
         for fn in dslfiles:
@@ -153,7 +161,7 @@ class DatasetIngest:
                     ingestor.reingest(scan, token)
             ingestor.update_from_tmpfile()
 
-    def find_bt_files(self, path, prefix, postfix):
+    def _find_bt_files(self, path, prefix, postfix):
         """ find beamtime files with given prefix and postfix in the given path
 
         :param path: beamtime directory

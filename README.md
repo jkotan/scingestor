@@ -25,6 +25,8 @@ Its configuration written in YAML can contain the following variables
 * `datablock_metadata_postfix` (str)
 * `beamtime_filename_postfix` (str)
 * `beamtime_filename_prefix` (str)
+* `datasets_filename_pattern` (str)
+* `ingested_datasets_filename_pattern` (str)
 * `nxs_dataset_metadata_generator` (str)
 * `dataset_metadata_generator` (str)
 * `datablock_metadata_generator` (str)
