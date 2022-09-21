@@ -140,6 +140,32 @@ class DatasetIngestor:
         # (:obj:`str`) datablock path postfix
         self.__datablockscanpath = " {scanpath}/{scanname} "
 
+        # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
+        self.__dctfmt = {
+            "scanname": None,
+            "chmod": self.__chmod,
+            "scanpath": self.__path,
+            "relpath": self.__relpath,
+            "beamtimeid": self.__bid,
+            "beamline": self.__bl,
+            "doiprefix": self.__doiprefix,
+            "beamtimefile": self.__bfile,
+            "scpostfix": self.__scanpostfix,
+            "dbpostfix": self.__datablockpostfix,
+        }
+
+        # (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
+        self.__headers = {'Content-Type': 'application/json',
+                          'Accept': 'application/json'}
+
+        # (:obj:`list`<:obj:`str`>) ingested scan names
+        self.__sc_ingested = []
+        # (:obj:`list`<:obj:`str`>) waiting scan names
+        self.__sc_waiting = []
+        # (:obj:`dict`<:obj:`str`, :obj:`list`<:obj:`str`>>)
+        #   ingested scan names
+        self.__sc_ingested_map = {}
+        
         if "doiprefix" in self.__config.keys():
             self.__doiprefix = self.__config["doi_prefix"]
         if "ingestor_credential_file" in self.__config.keys():
@@ -196,14 +222,6 @@ class DatasetIngestor:
             self.__datablockscanpath = \
                 self.__config["datablock_metadata_generator_scanpath_postfix"]
 
-        # (:obj:`list`<:obj:`str`>) ingested scan names
-        self.__sc_ingested = []
-        # (:obj:`list`<:obj:`str`>) waiting scan names
-        self.__sc_waiting = []
-        # (:obj:`dict`<:obj:`str`, :obj:`list`<:obj:`str`>>)
-        #   ingested scan names
-        self.__sc_ingested_map = {}
-
         if self.__relpath_in_datablock:
             if "datablock_metadata_generator" not in self.__config.keys():
                 self.__datablockcommand = \
@@ -243,32 +261,22 @@ class DatasetIngestor:
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + " --oned "
 
-        if "max_query_tries_number" in self.__config.keys():
+        if "max_request_tries_number" in self.__config.keys():
             try:
                 self.__maxcounter = int(
-                    self.__config["max_query_tries_number"])
+                    self.__config["max_request_tries_number"])
+            except Exception as e:
+                get_logger().warning('%s' % (str(e)))
+                
+        if "request_headers" in self.__config.keys():
+            try:
+                self.__headers = dict(
+                    self.__config["request_headers"])
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
 
-        # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
-        self.__dctfmt = {
-            "scanname": None,
-            "chmod": self.__chmod,
-            "scanpath": self.__path,
-            "relpath": self.__relpath,
-            "beamtimeid": self.__bid,
-            "beamline": self.__bl,
-            "doiprefix": self.__doiprefix,
-            "beamtimefile": self.__bfile,
-            "scpostfix": self.__scanpostfix,
-            "dbpostfix": self.__datablockpostfix,
-        }
         get_logger().debug(
             'DatasetIngestor: Parameters: %s' % str(self.__dctfmt))
-
-        # (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
-        self.__headers = {'Content-Type': 'application/json',
-                          'Accept': 'application/json'}
 
         # self.__tokenurl = "http://www-science3d.desy.de:3000/api/v3/" \
         #       "Users/login"

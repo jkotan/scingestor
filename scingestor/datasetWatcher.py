@@ -75,10 +75,10 @@ class DatasetWatcher(threading.Thread):
         # (:obj:`float`) max count of recheck the dataset list
         self.__maxcounter = 100
 
-        if "max_query_tries_number" in self.__config.keys():
+        if "max_request_tries_number" in self.__config.keys():
             try:
                 self.__maxcounter = int(
-                    self.__config["max_query_tries_number"])
+                    self.__config["max_request_tries_number"])
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
 

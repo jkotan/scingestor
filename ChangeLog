@@ -6,8 +6,9 @@
 	* add chmod_json_files into the configuation (#68)
 	* add beamtime_filename_prefix and  beamtime_filenmae_postfix into the configuation (#81)
 	* add datasets_filename_pattern and ingested_datasets_filename_pattern into the configuation (#83)
-	* add inotify_timeout, get_event_timeout, ingestion_delay_time and max_query_tries_number into the configuation (#85)
+	* add inotify_timeout, get_event_timeout, ingestion_delay_time and max_request_tries_number into the configuation (#85)
 	* add scicat_datasets_path, scicat_datablocks_path and  scicat_users_login_path into the configuation (#86)
+	* add request_headers into the configuation (#87)
 	* tagged as 0.0.3
 
 2021-08-24 Jan Kotanski <jan.kotanski@desy.de>
