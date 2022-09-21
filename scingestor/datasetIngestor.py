@@ -165,7 +165,7 @@ class DatasetIngestor:
         # (:obj:`dict`<:obj:`str`, :obj:`list`<:obj:`str`>>)
         #   ingested scan names
         self.__sc_ingested_map = {}
-        
+
         if "doiprefix" in self.__config.keys():
             self.__doiprefix = self.__config["doi_prefix"]
         if "ingestor_credential_file" in self.__config.keys():
@@ -267,7 +267,7 @@ class DatasetIngestor:
                     self.__config["max_request_tries_number"])
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
-                
+
         if "request_headers" in self.__config.keys():
             try:
                 self.__headers = dict(
