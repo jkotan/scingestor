@@ -4,6 +4,7 @@
 	* add scan_metadata_postfix and datablock_metadata_postfix into the configuation (#70)
 	* add oned_in_metadata into the configuation (#68)
 	* add chmod_json_files into the configuation (#68)
+	* add beamtime_filename_prefix and  beamtime_filenmae_postfix into the configuation (#81)
 	* add datasets_filename_pattern and ingested_datasets_filename_pattern into the configuation (#83)
 	* tagged as 0.0.3
 
