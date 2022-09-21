@@ -74,7 +74,7 @@ class DatasetIngestor:
         self.__dsfile = dsfile
         # (:obj:`str`) file with a ingested dataset list
         self.__idsfile = idsfile
-        # (:obj:`str`) file with a ingested dataset list
+        # (:obj:`str`) file with a ingested dataset tmp list
         self.__idsfiletmp = "%s%s" % (idsfile, ".tmp")
         # (:obj:`str`) scan path dir
         self.__path = path
