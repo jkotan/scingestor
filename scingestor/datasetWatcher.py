@@ -54,6 +54,8 @@ class DatasetWatcher(threading.Thread):
         # (:obj:`bool`) running loop flag
         self.running = True
 
+        # (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
+        self.__config = configuration or {}
         # (:obj:`str`) file with a dataset list
         self.__dsfile = dsfile
         # (:obj:`str`) file with a ingested dataset list

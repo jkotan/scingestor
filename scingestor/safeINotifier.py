@@ -27,7 +27,7 @@ import queue
 from .logger import get_logger
 
 
-class EventData(object):
+class EventData:
     """ event data """
 
     def __init__(self, name, masks):
