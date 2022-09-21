@@ -608,6 +608,21 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'metadata_keywords_without_checks:\n' \
+            '  - "techniques"\n' \
+            '  - "classification"\n' \
+            '  - "createdBy"\n' \
+            '  - "updatedBy"\n' \
+            '  - "datasetlifecycle"\n' \
+            '  - "numberOfFiles"\n' \
+            '  - "size"\n' \
+            '  - "createdAt"\n' \
+            '  - "updatedAt"\n' \
+            '  - "history"\n' \
+            '  - "creationTime"\n' \
+            '  - "version"\n' \
+            '  - "scientificMetadata"\n' \
+            '  - "endTime"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, logdir=logdir, credfile=credfile)

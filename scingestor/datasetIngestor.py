@@ -144,6 +144,24 @@ class DatasetIngestor:
         self.__headers = {'Content-Type': 'application/json',
                           'Accept': 'application/json'}
 
+        # (:obj:`list`<:obj:`str`>) metadata keywords without checks
+        self.__withoutsm = [
+            "techniques",
+            "classification",
+            "createdBy",
+            "updatedBy",
+            "datasetlifecycle",
+            "numberOfFiles",
+            "size",
+            "createdAt",
+            "updatedAt",
+            "history",
+            "creationTime",
+            "version",
+            "scientificMetadata",
+            "endTime"
+        ]
+
         # (:obj:`list`<:obj:`str`>) ingested scan names
         self.__sc_ingested = []
         # (:obj:`list`<:obj:`str`>) waiting scan names
@@ -261,6 +279,13 @@ class DatasetIngestor:
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
 
+        if "metadata_keywords_without_checks" in self.__config.keys():
+            try:
+                self.__withoutsm = list(
+                    self.__config["metadata_keywords_without_checks"])
+            except Exception as e:
+                get_logger().warning('%s' % (str(e)))
+
         # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
         self.__dctfmt = {
             "scanname": None,
@@ -294,23 +319,6 @@ class DatasetIngestor:
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #     "OrigDatablocks"
         self.__datablockurl = self.__scicat_url + self.__scicat_datablocks
-
-        self.__withoutsm = [
-            "techniques",
-            "classification",
-            "createdBy",
-            "updatedBy",
-            "datasetlifecycle",
-            "numberOfFiles",
-            "size",
-            "createdAt",
-            "updatedAt",
-            "history",
-            "creationTime",
-            "version",
-            "scientificMetadata",
-            "endTime"
-        ]
 
     def _generate_rawdataset_metadata(self, scan):
         """ generate raw dataset metadata

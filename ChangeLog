@@ -1,14 +1,15 @@
 2021-09-22 Jan Kotanski <jan.kotanski@desy.de>
 	* add coverage tests for deb11 (#74)
-	* add nxs_dataset_metadata_generator dataset_metadata_generator datablock_metadata_generator datablock_metadata_stream_generator datablock_metadata_generator_scanpath_postfix into the configuation (#72)
-	* add scan_metadata_postfix and datablock_metadata_postfix into the configuation (#70)
-	* add oned_in_metadata into the configuation (#68)
-	* add chmod_json_files into the configuation (#68)
-	* add beamtime_filename_prefix and  beamtime_filenmae_postfix into the configuation (#81)
-	* add datasets_filename_pattern and ingested_datasets_filename_pattern into the configuation (#83)
-	* add inotify_timeout, get_event_timeout, ingestion_delay_time and max_request_tries_number into the configuation (#85)
-	* add scicat_datasets_path, scicat_datablocks_path and  scicat_users_login_path into the configuation (#86)
-	* add request_headers into the configuation (#87)
+	* add nxs_dataset_metadata_generator dataset_metadata_generator datablock_metadata_generator datablock_metadata_stream_generator datablock_metadata_generator_scanpath_postfix into the configuration (#72)
+	* add scan_metadata_postfix and datablock_metadata_postfix into the configuration (#70)
+	* add oned_in_metadata into the configuration (#68)
+	* add chmod_json_files into the configuration (#68)
+	* add beamtime_filename_prefix and  beamtime_filenmae_postfix into the configuration (#81)
+	* add datasets_filename_pattern and ingested_datasets_filename_pattern into the configuration (#83)
+	* add inotify_timeout, get_event_timeout, ingestion_delay_time and max_request_tries_number into the configuration (#85)
+	* add scicat_datasets_path, scicat_datablocks_path and  scicat_users_login_path into the configuration (#86)
+	* add request_headers into the configuration (#87)
+	* add metadata_keywords_without_checks into the configuration (#88)
 	* tagged as 0.0.3
 
 2021-08-24 Jan Kotanski <jan.kotanski@desy.de>
