@@ -152,7 +152,7 @@ class DatasetIngest:
             scpath, pfn = os.path.split(fn)
             ingestor = DatasetIngestor(
                 self.__config,
-                scpath, fn, ifn, meta, bpath, 0)
+                scpath, fn, ifn, meta, bpath)
             ingestor.check_list(reingest=True)
             ingestor.clear_tmpfile()
             if ingestor.waiting_datasets():
