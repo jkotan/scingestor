@@ -33,8 +33,7 @@ class ScanDirWatcher(threading.Thread):
     """
     def __init__(self,
                  configuration,
-                 path, meta, bpath,
-                 delay=5):
+                 path, meta, bpath):
         """ constructor
 
         :param configuration: dictionary with the ingestor configuration
@@ -45,10 +44,12 @@ class ScanDirWatcher(threading.Thread):
         :type meta: :obj:`dict` <:obj:`str`,`any`>
         :param bpath: beamtime file
         :type bpath: :obj:`str`
-        :param delay: time delay
-        :type delay: :obj:`int`
         """
         threading.Thread.__init__(self)
+
+        # (:obj:`bool`) running loop flag
+        self.running = True
+
         # (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
         self.__config = configuration or {}
         # (:obj:`str`) scan dir path
@@ -58,41 +59,43 @@ class ScanDirWatcher(threading.Thread):
         # (:obj:`dict` <:obj:`str`,`any`>) beamtime configuration
         self.__meta = meta
         # (:obj:`str`) beamtime id
-        self.beamtimeId = meta["beamtimeId"]
+        self.__beamtimeId = meta["beamtimeId"]
         # (:obj:`str`) beamline metadata
         self.__meta = meta
-        # (:obj:`float`) delay time for ingestion in s
-        self.delay = delay
-        # (:obj:`bool`) running loop flag
-        self.running = True
         # (:obj:`str`) scicat dataset file pattern
         self.__ds_pattern = "scicat-datasets-{bt}.lst"
         # (:obj:`str`) indested scicat dataset file pattern
         self.__ids_pattern = "scicat-ingested-datasets-{bt}.lst"
 
         # (:obj:`int`) notifier ID
-        self.notifier = None
+        self.__notifier = None
         # (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
-        self.wd_to_path = {}
+        self.__wd_to_path = {}
         # (:obj:`dict` <:obj:`int`, :obj:`str`>)
         #                               beamtime watch description paths
-        self.wd_to_queue = {}
+        self.__wd_to_queue = {}
 
         # (:obj:`dict` <(:obj:`str`, :obj:`str`),
         #                :class:`scanDirWatcher.ScanDirWatcher`>)
         #        dataset watchers instances for given path and beamtime file
-        self.dataset_watchers = {}
+        self.__dataset_watchers = {}
         # (:class:`threading.Lock`) dataset watcher dictionary lock
-        self.dataset_lock = threading.Lock()
+        self.__dataset_lock = threading.Lock()
         # (:obj:`float`) timeout value for inotifyx get events
-        self.timeout = 0.01
+        self.__timeout = 0.01
 
         # (:obj:`dict` <(:obj:`str`, :obj:`str`),
         #                :class:`scanDirWatcher.ScanDirWatcher`>)
         #        scandir watchers instances for given path and beamtime file
-        self.scandir_watchers = {}
+        self.__scandir_watchers = {}
         # (:class:`threading.Lock`) scandir watcher dictionary lock
-        self.scandir_lock = threading.Lock()
+        self.__scandir_lock = threading.Lock()
+
+        if "get_event_timeout" in self.__config.keys():
+            try:
+                self.__timeout = float(self.__config["get_event_timeout"])
+            except Exception as e:
+                get_logger().warning('%s' % (str(e)))
 
         if "datasets_filename_pattern" in self.__config.keys():
             self.__ds_pattern = self.__config["datasets_filename_pattern"]
@@ -102,18 +105,21 @@ class ScanDirWatcher(threading.Thread):
                 self.__config["ingested_datasets_filename_pattern"]
 
         # (:obj:`str`) datasets file name
-        self.dslist_filename = self.__ds_pattern.format(bt=self.beamtimeId)
+        self.__dslist_filename = self.__ds_pattern.format(
+            bt=self.__beamtimeId)
         # (:obj:`str`) ingescted datasets file name
-        self.idslist_filename = self.__ids_pattern.format(bt=self.beamtimeId)
+        self.__idslist_filename = self.__ids_pattern.format(
+            bt=self.__beamtimeId)
         # (:obj:`str`) datasets file name
-        self.dslist_fullname = os.path.join(self.__path, self.dslist_filename)
+        self.__dslist_fullname = os.path.join(
+            self.__path, self.__dslist_filename)
 
         # (:obj:`str`) ingestor log directory
-        self.log_dir = ""
+        self.__log_dir = ""
         if "ingestor_log_dir" in self.__config.keys():
-            self.log_dir = self.__config["ingestor_log_dir"]
-        if self.log_dir == "/":
-            self.log_dir = ""
+            self.__log_dir = self.__config["ingestor_log_dir"]
+        if self.__log_dir == "/":
+            self.__log_dir = ""
 
     def _start_notifier(self, path):
         """ start notifier
@@ -121,7 +127,7 @@ class ScanDirWatcher(threading.Thread):
         :param path: beamtime file subpath
         :type path: :obj:`str`
         """
-        self.notifier = SafeINotifier()
+        self.__notifier = SafeINotifier()
         self._add_path(path)
 
     def _add_path(self, path):
@@ -131,28 +137,28 @@ class ScanDirWatcher(threading.Thread):
         :type path: :obj:`str`
         """
         try:
-            wqueue, watch_descriptor = self.notifier.add_watch(
+            wqueue, watch_descriptor = self.__notifier.add_watch(
                 path,
                 inotifyx.IN_ALL_EVENTS |
                 inotifyx.IN_CLOSE_WRITE | inotifyx.IN_DELETE |
                 inotifyx.IN_MOVE_SELF |
                 inotifyx.IN_ALL_EVENTS |
                 inotifyx.IN_MOVED_TO | inotifyx.IN_MOVED_FROM)
-            self.wd_to_path[watch_descriptor] = path
-            self.wd_to_queue[watch_descriptor] = wqueue
+            self.__wd_to_path[watch_descriptor] = path
+            self.__wd_to_queue[watch_descriptor] = wqueue
             get_logger().info('ScanDirWatcher: Adding watch %s: %s'
                               % (str(watch_descriptor), path))
             # get_logger().info('ScanDirWatcher START %s: %s'
-            #                   % (self.notifier, path))
+            #                   % (self.__notifier, path))
         except Exception as e:
             get_logger().warning('%s: %s' % (path, str(e)))
 
     def _stop_notifier(self):
         """ stop notifier
         """
-        for wd in list(self.wd_to_path.keys()):
-            path = self.wd_to_path.pop(wd, None)
-            self.wd_to_queue.pop(wd, None)
+        for wd in list(self.__wd_to_path.keys()):
+            path = self.__wd_to_path.pop(wd, None)
+            self.__wd_to_queue.pop(wd, None)
             get_logger().info(
                 'ScanDirWatcher: '
                 'Removing watch %s: %s' % (str(wd), path))
@@ -166,11 +172,11 @@ class ScanDirWatcher(threading.Thread):
         for path in sorted(paths):
             sdw = None
             try:
-                with self.scandir_lock:
+                with self.__scandir_lock:
                     if (path, self.__bpath) \
-                       not in self.scandir_watchers.keys():
+                       not in self.__scandir_watchers.keys():
                         sdw = \
-                            self.scandir_watchers[(path, self.__bpath)] =  \
+                            self.__scandir_watchers[(path, self.__bpath)] =  \
                             ScanDirWatcher(self.__config,
                                            path, self.__meta, self.__bpath)
                         get_logger().info(
@@ -178,7 +184,7 @@ class ScanDirWatcher(threading.Thread):
                             % (path, self.__bpath))
                 if sdw is not None:
                     sdw.start()
-                time.sleep(self.timeout/10.)
+                time.sleep(self.__timeout/10.)
             except Exception as e:
                 get_logger().warning(
                     "%s cannot be watched: %s" % (path, str(e)))
@@ -188,23 +194,22 @@ class ScanDirWatcher(threading.Thread):
         """
         try:
             self._start_notifier(self.__path)
-            # get_logger().info("START %s " % (self.notifier))
+            # get_logger().info("START %s " % (self.__notifier))
 
-            # get_logger().info("ScanDir file:  %s " % (self.dslist_fullname))
-            get_logger().debug("ScanDir file:  %s " % (self.dslist_fullname))
-            if os.path.isfile(self.dslist_fullname):
+            get_logger().debug("ScanDir file:  %s " % (self.__dslist_fullname))
+            if os.path.isfile(self.__dslist_fullname):
                 dw = None
-                with self.dataset_lock:
-                    fn = self.dslist_fullname
-                    if fn not in self.dataset_watchers.keys():
-                        ifn = fn[:-(len(self.dslist_filename))] + \
-                            self.idslist_filename
-                        if self.log_dir:
-                            ifn = "%s%s" % (self.log_dir, ifn)
+                with self.__dataset_lock:
+                    fn = self.__dslist_fullname
+                    if fn not in self.__dataset_watchers.keys():
+                        ifn = fn[:-(len(self.__dslist_filename))] + \
+                            self.__idslist_filename
+                        if self.__log_dir:
+                            ifn = "%s%s" % (self.__log_dir, ifn)
                         ipath, _ = os.path.split(ifn)
                         if not os.path.isdir(ipath):
                             os.makedirs(ipath, exist_ok=True)
-                        dw = self.dataset_watchers[fn] = DatasetWatcher(
+                        dw = self.__dataset_watchers[fn] = DatasetWatcher(
                             self.__config,
                             self.__path, fn, ifn, self.__meta, self.__bpath)
                         get_logger().info(
@@ -219,22 +224,21 @@ class ScanDirWatcher(threading.Thread):
                 self._launch_scandir_watcher(subdirs)
 
             while self.running:
-                # time.sleep(self.delay)
                 get_logger().debug('Dt Tac')
-                if not self.wd_to_queue:
-                    time.sleep(self.timeout/10.)
-                for qid in list(self.wd_to_queue.keys()):
-                    wqueue = self.wd_to_queue[qid]
+                if not self.__wd_to_queue:
+                    time.sleep(self.__timeout/10.)
+                for qid in list(self.__wd_to_queue.keys()):
+                    wqueue = self.__wd_to_queue[qid]
                     try:
-                        event = wqueue.get(block=True, timeout=self.timeout)
+                        event = wqueue.get(block=True, timeout=self.__timeout)
                     except queue.Empty:
                         break
-                    if qid in self.wd_to_path.keys():
+                    if qid in self.__wd_to_path.keys():
                         get_logger().debug(
                             'Sd: %s %s %s %s' % (qid,
                                                  event.name,
                                                  event.masks,
-                                                 self.wd_to_path[qid]))
+                                                 self.__wd_to_path[qid]))
                         masks = event.masks.split("|")
                         if "IN_IGNORED" in masks or \
                            "IN_MOVE_FROM" in masks or \
@@ -244,11 +248,11 @@ class ScanDirWatcher(threading.Thread):
                             #     (moved/deleted)
                             if event.name is not None:
                                 npath = os.path.join(
-                                    self.wd_to_path[qid], event.name)
+                                    self.__wd_to_path[qid], event.name)
                                 get_logger().debug(
                                     "Remove path/file %s" % npath)
-                                if self.dslist_fullname == npath and \
-                                   not os.path.isfile(self.dslist_fullname) \
+                                if self.__dslist_fullname == npath and \
+                                   not os.path.isfile(self.__dslist_fullname) \
                                    and os.path.isdir(self.__path):
                                     subdirs = [
                                         it.path
@@ -263,20 +267,20 @@ class ScanDirWatcher(threading.Thread):
                         elif "IN_ISDIR" not in masks and (
                                 "IN_CREATE" in masks or "IN_MOVE_TO" in masks):
                             fn = os.path.join(
-                                self.wd_to_path[qid], event.name)
+                                self.__wd_to_path[qid], event.name)
                             dw = None
-                            with self.dataset_lock:
-                                if fn not in self.dataset_watchers.keys() \
-                                   and fn == self.dslist_fullname:
+                            with self.__dataset_lock:
+                                if fn not in self.__dataset_watchers.keys() \
+                                   and fn == self.__dslist_fullname:
                                     ifn = \
-                                        fn[:-(len(self.dslist_filename))] \
-                                        + self.idslist_filename
-                                    if self.log_dir:
-                                        ifn = "%s%s" % (self.log_dir, ifn)
+                                        fn[:-(len(self.__dslist_filename))] \
+                                        + self.__idslist_filename
+                                    if self.__log_dir:
+                                        ifn = "%s%s" % (self.__log_dir, ifn)
                                     ipath, _ = os.path.split(ifn)
                                     if not os.path.isdir(ipath):
                                         os.makedirs(ipath, exist_ok=True)
-                                    dw = self.dataset_watchers[fn] = \
+                                    dw = self.__dataset_watchers[fn] = \
                                         DatasetWatcher(
                                             self.__config, self.__path,
                                             fn, ifn,
@@ -287,10 +291,11 @@ class ScanDirWatcher(threading.Thread):
                                     'ScanDirWatcher: Creating '
                                     'DatasetWatcher %s' % fn)
                             dds = []
-                            with self.dataset_lock:
+                            with self.__dataset_lock:
                                 for path, fn in \
-                                        list(self.scandir_watchers.keys()):
-                                    ds = self.scandir_watchers.pop((path, fn))
+                                        list(self.__scandir_watchers.keys()):
+                                    ds = self.__scandir_watchers.pop(
+                                        (path, fn))
                                     get_logger().info(
                                         'ScanDirWatcher: '
                                         'Stopping ScanDirWatcher %s' % (fn))
@@ -303,15 +308,15 @@ class ScanDirWatcher(threading.Thread):
                         elif "IN_ISDIR" in masks and (
                                 "IN_CREATE" in masks
                                 or "IN_MOVE_TO" in masks):
-                            if not os.path.isfile(self.dslist_fullname):
+                            if not os.path.isfile(self.__dslist_fullname):
                                 npath = os.path.join(
-                                    self.wd_to_path[qid], event.name)
+                                    self.__wd_to_path[qid], event.name)
                                 self._launch_scandir_watcher([npath])
                         # elif "IN_DELETE_SELF" in masks:
                         #     "remove scandir watcher"
-                        #     # self.wd_to_path[qid]
+                        #     # self.__wd_to_path[qid]
 
-                # time.sleep(self.timeout)
+                # time.sleep(self.__timeout)
         finally:
             get_logger().debug("Stopping ScanDirWatcher")
             self.stop()
@@ -323,19 +328,19 @@ class ScanDirWatcher(threading.Thread):
         self.running = False
         # time.sleep(0.2)
         self._stop_notifier()
-        with self.dataset_lock:
-            for fn, scw in self.dataset_watchers.items():
+        with self.__dataset_lock:
+            for fn, scw in self.__dataset_watchers.items():
                 get_logger().info(
                     'ScanDirWatcher: Stopping DatasetWatcher %s' % (fn))
                 scw.running = False
                 scw.join()
-        # self.dataset_watchers = []
+        # self.__dataset_watchers = []
 
-        with self.scandir_lock:
-            for pf, dsw in self.scandir_watchers.items():
+        with self.__scandir_lock:
+            for pf, dsw in self.__scandir_watchers.items():
                 path, fn = pf
                 get_logger().info('ScanDirWatcher: '
                                   'Stopping ScanDirWatcher %s' % (fn))
                 dsw.running = False
                 dsw.join()
-        # self.scandir_watchers = []
+        # self.__scandir_watchers = []

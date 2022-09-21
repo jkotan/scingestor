@@ -37,8 +37,8 @@ class DatasetIngest:
     def __init__(self, options):
         """ constructor
 
-        :param options: time delay
-        :type options: :obj:`str`
+        :param options: parser options
+        :type options: :class:`argparse.Namespace`
         """
         # (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
         self.__config = {}
@@ -47,15 +47,15 @@ class DatasetIngest:
             get_logger().debug("CONFIGURATION: %s" % str(self.__config))
 
         # (:obj:`list` <:obj:`str`>) beamtime directories
-        self.beamtime_dirs = [
+        self.__beamtime_dirs = [
             # "/gpfs/current",
             # "/gpfs/commissioning",
         ]
 
         # (:obj:`str`) beamtime file prefix
-        self.bt_prefix = "beamtime-metadata-"
+        self.__bt_prefix = "beamtime-metadata-"
         # (:obj:`str`) beamtime file postfix
-        self.bt_postfix = ".json"
+        self.__bt_postfix = ".json"
 
         # (:obj:`str`) scicat dataset file pattern
         self.__ds_pattern = "scicat-datasets-{bt}.lst"
@@ -63,22 +63,22 @@ class DatasetIngest:
         self.__ids_pattern = "scicat-ingested-datasets-{bt}.lst"
 
         # (:obj:`str`) ingestor log directory
-        self.log_dir = ""
+        self.__log_dir = ""
 
         if "beamtime_dirs" in self.__config.keys() \
            and isinstance(self.__config["beamtime_dirs"], list):
-            self.beamtime_dirs = self.__config["beamtime_dirs"]
+            self.__beamtime_dirs = self.__config["beamtime_dirs"]
 
         if "ingestor_log_dir" in self.__config.keys():
-            self.log_dir = self.__config["ingestor_log_dir"]
-        if self.log_dir == "/":
-            self.log_dir = ""
+            self.__log_dir = self.__config["ingestor_log_dir"]
+        if self.__log_dir == "/":
+            self.__log_dir = ""
 
         if "beamtime_filename_prefix" in self.__config.keys():
-            self.bt_prefix = self.__config["beamtime_filename_prefix"]
+            self.__bt_prefix = self.__config["beamtime_filename_prefix"]
 
         if "beamtime_filename_postfix" in self.__config.keys():
-            self.bt_postfix = self.__config["beamtime_filename_postfix"]
+            self.__bt_postfix = self.__config["beamtime_filename_postfix"]
 
         if "datasets_filename_pattern" in self.__config.keys():
             self.__ds_pattern = self.__config["datasets_filename_pattern"]
@@ -87,17 +87,17 @@ class DatasetIngest:
             self.__ids_pattern = \
                 self.__config["ingested_datasets_filename_pattern"]
 
-        if not self.beamtime_dirs:
+        if not self.__beamtime_dirs:
             get_logger().warning(
                 'DatasetIngest: Beamtime directories not defined')
 
     def start(self):
         """ start ingestion """
 
-        for path in self.beamtime_dirs:
+        for path in self.__beamtime_dirs:
             get_logger().info("DatasetIngest: beamtime path: %s" % str(path))
             files = self._find_bt_files(
-                path, self.bt_prefix, self.bt_postfix)
+                path, self.__bt_prefix, self.__bt_postfix)
 
             for bt in files:
                 get_logger().info("DatasetIngest: beamtime file: %s" % str(bt))
@@ -144,8 +144,8 @@ class DatasetIngest:
         for fn in dslfiles:
             get_logger().info("DatasetIngest: dataset list: %s" % str(fn))
             ifn = fn[:-(len(dslist_filename))] + idslist_filename
-            if self.log_dir:
-                ifn = "%s%s" % (self.log_dir, ifn)
+            if self.__log_dir:
+                ifn = "%s%s" % (self.__log_dir, ifn)
             ipath, _ = os.path.split(ifn)
             if not os.path.isdir(ipath):
                 os.makedirs(ipath, exist_ok=True)
