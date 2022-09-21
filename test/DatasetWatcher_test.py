@@ -485,7 +485,10 @@ class DatasetWatcherTest(unittest.TestCase):
             'inotify_timeout: 0.2\n' \
             'get_event_timeout: 0.02\n' \
             'ingestion_delay_time: 2\n' \
-            'max_query_tries_number: 10\n' \
+            'max_request_tries_number: 10\n' \
+            'request_headers:\n' \
+            '  "Content-Type": "application/json"\n' \
+            '  "Accept": "application/json"\n' \
             'datasets_filename_pattern: "sc-ds-{{bt}}.lst"\n' \
             'ingested_datasets_filename_pattern: "sc-ids-{{bt}}.lst"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
