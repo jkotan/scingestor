@@ -55,6 +55,7 @@ Its configuration written in YAML can contain the following variables
 * ``oned_in_metadata`` (bool)
 * ``scan_metadata_postfix`` (str)
 * ``datablock_metadata_postfix`` (str)
+* ``metadata_in_log_dir`` (bool)
 * ``beamtime_filename_postfix`` (str)
 * ``beamtime_filename_prefix`` (str)
 * ``datasets_filename_pattern`` (str)
