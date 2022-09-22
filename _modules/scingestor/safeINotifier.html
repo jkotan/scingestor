@@ -70,9 +70,9 @@
 <span class="sd">        :param masks: mask description</span>
 <span class="sd">        :type maks: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># (:obj:`str`) name</span>
+        <span class="c1">#: (:obj:`str`) name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="c1"># (:obj:`str`) mask</span>
+        <span class="c1">#: (:obj:`str`) mask</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">masks</span> <span class="o">=</span> <span class="n">masks</span></div>
 
 
@@ -80,11 +80,11 @@
     <span class="sd">&quot;&quot;&quot; singleton wrapper for inotifyx</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># (:class:`SafeINotifier`) singleton notifier instance</span>
+    <span class="c1">#: (:class:`SafeINotifier`) singleton notifier instance</span>
     <span class="n">_notifier</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="c1"># (:class:`threading.Lock`) singleton lock</span>
+    <span class="c1">#: (:class:`threading.Lock`) singleton lock</span>
     <span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
-    <span class="c1"># (:obj:`bool`) make notifier to be a daemon</span>
+    <span class="c1">#: (:obj:`bool`) make notifier to be a daemon</span>
     <span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -103,28 +103,30 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-        <span class="c1"># (:obj:`float`) timeout value for inotifyx get events</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mf">0.1</span>
-        <span class="c1"># (:obj:`bool`) running loop flag</span>
+        <span class="c1">#: (:obj:`bool`) running loop flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="c1"># (:obj:`int`) notifier ID</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">notifier</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="c1"># (:obj:`dict` &lt;:obj:`int`, :obj:`queue.Queue`&gt;)</span>
-        <span class="c1"># watch description queues</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">id_queue</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="c1"># (:obj:`dict` &lt;:obj:`int`, :obj:`int`&gt;)  queue ids watch description</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="c1"># (:obj:`int`) watch description queue counter</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_counter</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="c1"># (:class:`threading.Lock`) watch dictionary lock</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
 
-        <span class="c1"># (:obj:`list` &lt; (:obj:`int`, :obj:`path`, :obj:`int`) &gt;)</span>
+        <span class="c1">#: (:obj:`int`) watch description queue counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1">#: (:obj:`float`) timeout value for inotifyx get events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inotify_timeout</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+        <span class="c1">#: (:obj:`int`) notifier ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, :obj:`queue.Queue`&gt;)</span>
+        <span class="c1"># watch description queues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, :obj:`int`&gt;)  queue ids watch description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__qid_wd</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1">#: (:class:`threading.Lock`) watch dictionary lock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+        <span class="c1">#: (:obj:`list` &lt; (:obj:`int`, :obj:`path`, :obj:`int`) &gt;)</span>
         <span class="c1"># watch description to add i.e. (id, path, masks)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_add</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># (:obj:`list` &lt; :obj:`int`&gt;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_add</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#: (:obj:`list` &lt; :obj:`int`&gt;)</span>
         <span class="c1"># queue id of watch description to remove</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_rm</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_rm</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># start the thread</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
@@ -141,13 +143,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">wqueue</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
-        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span><span class="p">:</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue_lock</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_counter</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">qid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_counter</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">id_queue</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span> <span class="o">=</span> <span class="n">wqueue</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span> <span class="o">=</span> <span class="n">wqueue</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="s2">&quot;ADD WATCH: </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">qid</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">masks</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_add</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">qid</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">masks</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_add</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">qid</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">masks</span><span class="p">))</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">wqueue</span><span class="p">,</span> <span class="n">qid</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="SafeINotifier.rm_watch"><a class="viewcode-back" href="../../scingestor.html#scingestor.safeINotifier.SafeINotifier.rm_watch">[docs]</a>    <span class="k">def</span> <span class="nf">rm_watch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qid</span><span class="p">):</span>
@@ -156,81 +158,82 @@
 <span class="sd">        :param qid: queue id</span>
 <span class="sd">        :type qid: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span><span class="p">:</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue_lock</span><span class="p">:</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="s2">&quot;REMOVE WATCH: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">qid</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_rm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qid</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">id_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">qid</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_rm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qid</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">qid</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_append</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; append waches</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">qid</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">masks</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_add</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">qid</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">masks</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_add</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">wd</span> <span class="o">=</span> <span class="n">inotifyx</span><span class="o">.</span><span class="n">add_watch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">notifier</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">masks</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span> <span class="o">=</span> <span class="n">wd</span>
+                <span class="n">wd</span> <span class="o">=</span> <span class="n">inotifyx</span><span class="o">.</span><span class="n">add_watch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">masks</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__qid_wd</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span> <span class="o">=</span> <span class="n">wd</span>
 
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                     <span class="s1">&#39;SafeINotifier: append  </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_add</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_add</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span> <span class="nf">_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; remove waches</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">qid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_rm</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">qid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span><span class="p">:</span>
-                <span class="n">wd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">qid</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">wd</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">qid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_rm</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">qid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__qid_wd</span><span class="p">:</span>
+                <span class="n">wd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__qid_wd</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">qid</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">wd</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__qid_wd</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                     <span class="k">try</span><span class="p">:</span>
-                        <span class="n">inotifyx</span><span class="o">.</span><span class="n">rm_watch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">notifier</span><span class="p">,</span> <span class="n">wd</span><span class="p">)</span>
+                        <span class="n">inotifyx</span><span class="o">.</span><span class="n">rm_watch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span><span class="p">,</span> <span class="n">wd</span><span class="p">)</span>
                     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                             <span class="s1">&#39;SafeINotifier: remove </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_rm</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_rm</span> <span class="o">=</span> <span class="p">[]</span>
 
 <div class="viewcode-block" id="SafeINotifier.run"><a class="viewcode-back" href="../../scingestor.html#scingestor.safeINotifier.SafeINotifier.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; scandir watcher thread</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">notifier</span> <span class="o">=</span> <span class="n">inotifyx</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span> <span class="o">=</span> <span class="n">inotifyx</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
 
-                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue_lock</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_append</span><span class="p">()</span>
-                    <span class="n">qlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_queue</span><span class="p">)</span>
+                    <span class="n">qlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__id_queue</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">qlen</span><span class="p">:</span>
-                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inotify_timeout</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">events</span> <span class="o">=</span> <span class="n">inotifyx</span><span class="o">.</span><span class="n">get_events</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">notifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
-                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span><span class="p">:</span>
+                    <span class="n">events</span> <span class="o">=</span> <span class="n">inotifyx</span><span class="o">.</span><span class="n">get_events</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inotify_timeout</span><span class="p">)</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue_lock</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">()</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_append</span><span class="p">()</span>
                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Sc Talk&#39;</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
                         <span class="n">wd</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">wd</span>
-                        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span><span class="p">:</span>
+                        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue_lock</span><span class="p">:</span>
                             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                                 <span class="s1">&#39;SN: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
                                     <span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                                     <span class="n">event</span><span class="o">.</span><span class="n">get_mask_description</span><span class="p">(),</span>
                                     <span class="n">event</span><span class="o">.</span><span class="n">wd</span><span class="p">,</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__qid_wd</span>
                                 <span class="p">))</span>
                             <span class="c1"># get_logger().info(</span>
                             <span class="c1">#     &#39;SN: %s %s %s %s&#39; % (</span>
                             <span class="c1">#         event.name,</span>
                             <span class="c1">#         event.get_mask_description(),</span>
                             <span class="c1">#         event.wd,</span>
-                            <span class="c1">#         self.qid_wd</span>
+                            <span class="c1">#         self.__qid_wd</span>
                             <span class="c1">#     ))</span>
 
-                            <span class="k">for</span> <span class="n">qid</span><span class="p">,</span> <span class="n">wd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                            <span class="k">for</span> <span class="n">qid</span><span class="p">,</span> <span class="n">wd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__qid_wd</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                                 <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">wd</span> <span class="o">==</span> <span class="n">wd</span> <span class="ow">and</span> \
-                                   <span class="n">qid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                                    <span class="n">wqueue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span>
+                                   <span class="n">qid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                    <span class="n">wqueue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span>
                                     <span class="n">wqueue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
                                         <span class="n">EventData</span><span class="p">(</span>
                                             <span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
@@ -242,12 +245,12 @@
                                             <span class="n">event</span><span class="o">.</span><span class="n">wd</span><span class="p">,</span> <span class="n">qid</span>
                                         <span class="p">))</span>
 
-                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_queue_lock</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue_lock</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">()</span>
         <span class="k">finally</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">wd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qid_wd</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">wd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__qid_wd</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">inotifyx</span><span class="o">.</span><span class="n">rm_watch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">notifier</span><span class="p">,</span> <span class="n">wd</span><span class="p">)</span>
+                    <span class="n">inotifyx</span><span class="o">.</span><span class="n">rm_watch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span><span class="p">,</span> <span class="n">wd</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                         <span class="s1">&#39;SafeINotifier: finally </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>

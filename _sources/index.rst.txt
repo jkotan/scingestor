@@ -64,6 +64,15 @@ Its configuration written in YAML can contain the following variables
 * ``datablock_metadata_generator`` (str)
 * ``datablock_metadata_stream_generator`` (str)
 * ``datablock_metadata_generator_scanpath_postfix`` (str)
+* ``inotify_timeout`` (float)
+* ``get_event_timeout`` (float)
+* ``ingestion_delay_time`` (float)
+* ``max_request_tries_number`` (int)
+* ``request_headers`` (dict\<str,str\>)
+* ``scicat_datasets_path`` (str)
+* ``scicat_datablocks_path`` (str)
+* ``scicat_users_login_path`` (str)
+* ``metadata_keywords_without_checks`` (list\<str\>)
 
 e.g.
 

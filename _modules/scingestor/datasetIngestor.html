@@ -75,8 +75,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span>
-                 <span class="n">path</span><span class="p">,</span> <span class="n">dsfile</span><span class="p">,</span> <span class="n">idsfile</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">beamtimefile</span><span class="p">,</span>
-                 <span class="n">delay</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+                 <span class="n">path</span><span class="p">,</span> <span class="n">dsfile</span><span class="p">,</span> <span class="n">idsfile</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">beamtimefile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param configuration: dictionary with the ingestor configuration</span>
@@ -97,74 +96,111 @@
 <span class="sd">        :type ingestorcred: :obj:`str`</span>
 <span class="sd">        :param scicat_url: scicat_url</span>
 <span class="sd">        :type scicat_url: :obj:`str`</span>
-<span class="sd">        :param delay: time delay</span>
-<span class="sd">        :type delay: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># (:obj:`dict` &lt;:obj:`str`, `any`&gt;) ingestor configuration</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, `any`&gt;) ingestor configuration</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__config</span> <span class="o">=</span> <span class="n">configuration</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="c1"># (:obj:`str`) file with a dataset list</span>
+        <span class="c1">#: (:obj:`str`) file with a dataset list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span> <span class="o">=</span> <span class="n">dsfile</span>
-        <span class="c1"># (:obj:`str`) file with a ingested dataset list</span>
+        <span class="c1">#: (:obj:`str`) file with a ingested dataset list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__idsfile</span> <span class="o">=</span> <span class="n">idsfile</span>
-        <span class="c1"># (:obj:`str`) file with a ingested dataset tmp list</span>
+        <span class="c1">#: (:obj:`str`) file with a ingested dataset tmp list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__idsfiletmp</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">idsfile</span><span class="p">,</span> <span class="s2">&quot;.tmp&quot;</span><span class="p">)</span>
-        <span class="c1"># (:obj:`str`) scan path dir</span>
+        <span class="c1">#: (:obj:`str`) scan path dir</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__path</span> <span class="o">=</span> <span class="n">path</span>
-        <span class="c1"># (:obj:`str`) beamtime id</span>
+        <span class="c1">#: (:obj:`str`) beamtime id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;beamtimeId&quot;</span><span class="p">]</span>
-        <span class="c1"># (:obj:`str`) beamline name</span>
+        <span class="c1">#: (:obj:`str`) beamline name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__bl</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;beamline&quot;</span><span class="p">]</span>
-        <span class="c1"># (:obj:`str`) beamtime id</span>
+        <span class="c1">#: (:obj:`str`) beamtime id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__bfile</span> <span class="o">=</span> <span class="n">beamtimefile</span>
 
         <span class="n">bpath</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">beamtimefile</span><span class="p">)</span>
-        <span class="c1"># (:obj:`str`) relative scan path to beamtime path</span>
+        <span class="c1">#: (:obj:`str`) relative scan path to beamtime path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__relpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">bpath</span><span class="p">)</span>
 
-        <span class="c1"># (:obj:`str`) doi prefix</span>
+        <span class="c1">#: (:obj:`str`) doi prefix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span> <span class="o">=</span> <span class="s2">&quot;10.3204&quot;</span>
-        <span class="c1"># (:obj:`str`) username</span>
+        <span class="c1">#: (:obj:`str`) username</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__username</span> <span class="o">=</span> <span class="s1">&#39;ingestor&#39;</span>
-        <span class="c1"># (:obj:`str`) update strategy</span>
+        <span class="c1">#: (:obj:`str`) update strategy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__strategy</span> <span class="o">=</span> <span class="n">UpdateStrategy</span><span class="o">.</span><span class="n">PATCH</span>
-        <span class="c1"># (:obj:`str`) beamtime id</span>
+        <span class="c1">#: (:obj:`str`) beamtime id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__incd</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="c1"># (:obj:`bool`) relative path in datablock flag</span>
+        <span class="c1">#: (:obj:`bool`) relative path in datablock flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_in_datablock</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="c1"># (:obj:`str`) scicat url</span>
+        <span class="c1">#: (:obj:`str`) scicat url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8881&quot;</span>
-        <span class="c1"># (:obj:`str`) chmod string for json metadata</span>
+        <span class="c1">#: (:obj:`str`) scicat users login</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_users_login</span> <span class="o">=</span> <span class="s2">&quot;Users/login&quot;</span>
+        <span class="c1">#: (:obj:`str`) scicat users login</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_datasets</span> <span class="o">=</span> <span class="s2">&quot;RawDatasets&quot;</span>
+        <span class="c1">#: (:obj:`str`) scicat users login</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_datablocks</span> <span class="o">=</span> <span class="s2">&quot;OrigDatablocks&quot;</span>
+        <span class="c1">#: (:obj:`str`) chmod string for json metadata</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__chmod</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="c1"># (:obj:`bool`) oned metadata flag</span>
+        <span class="c1">#: (:obj:`bool`) oned metadata flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__oned</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="c1"># (:obj:`str`) raw dataset scan postfix</span>
+        <span class="c1">#: (:obj:`int`) maximal counter value for post tries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span> <span class="o">=</span> <span class="mi">100</span>
+
+        <span class="c1">#: (:obj:`str`) raw dataset scan postfix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span> <span class="o">=</span> <span class="s2">&quot;.scan.json&quot;</span>
-        <span class="c1"># (:obj:`str`) origin datablock scan postfix</span>
+        <span class="c1">#: (:obj:`str`) origin datablock scan postfix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span> <span class="o">=</span> <span class="s2">&quot;.origdatablock.json&quot;</span>
 
-        <span class="c1"># (:obj:`str`) nexus dataset shell command</span>
+        <span class="c1">#: (:obj:`str`) nexus dataset shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata &quot;</span> \
             <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.nxs&quot;</span>
-        <span class="c1"># (:obj:`str`) datablock shell command</span>
+        <span class="c1">#: (:obj:`str`) datablock shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata &quot;</span> \
             <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">&quot;</span>
-        <span class="c1"># (:obj:`str`) datablock shell command</span>
+        <span class="c1">#: (:obj:`str`) datablock shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
             <span class="s2">&quot; -s *.pyc,*</span><span class="si">{dbpostfix}</span><span class="s2">,*</span><span class="si">{scpostfix}</span><span class="s2">,*~ &quot;</span> \
             <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot; -c </span><span class="si">{beamtimeid}</span><span class="s2">-clbt,</span><span class="si">{beamtimeid}</span><span class="s2">-dmgt,</span><span class="si">{beamline}</span><span class="s2">dmgt&quot;</span> \
             <span class="s2">&quot; -o </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2"> &quot;</span>
-        <span class="c1"># (:obj:`str`) datablock shell command</span>
+        <span class="c1">#: (:obj:`str`) datablock shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
             <span class="s2">&quot; -s *.pyc,*</span><span class="si">{dbpostfix}</span><span class="s2">,*</span><span class="si">{scpostfix}</span><span class="s2">,*~ &quot;</span> \
             <span class="s2">&quot; -c </span><span class="si">{beamtimeid}</span><span class="s2">-clbt,</span><span class="si">{beamtimeid}</span><span class="s2">-dmgt,</span><span class="si">{beamline}</span><span class="s2">dmgt&quot;</span> \
             <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
-        <span class="c1"># (:obj:`str`) datablock path postfix</span>
+        <span class="c1">#: (:obj:`str`) datablock path postfix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span> <span class="o">=</span> <span class="s2">&quot; </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
+
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) request headers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">}</span>
+
+        <span class="c1">#: (:obj:`list`&lt;:obj:`str`&gt;) metadata keywords without checks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__withoutsm</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;techniques&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;classification&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;createdBy&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;updatedBy&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;datasetlifecycle&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;numberOfFiles&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;createdAt&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;updatedAt&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;history&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;creationTime&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;scientificMetadata&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;endTime&quot;</span>
+        <span class="p">]</span>
+
+        <span class="c1">#: (:obj:`list`&lt;:obj:`str`&gt;) ingested scan names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#: (:obj:`list`&lt;:obj:`str`&gt;) waiting scan names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_waiting</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#: (:obj:`dict`&lt;:obj:`str`, :obj:`list`&lt;:obj:`str`&gt;&gt;)</span>
+        <span class="c1">#   ingested scan names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">if</span> <span class="s2">&quot;doiprefix&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;doi_prefix&quot;</span><span class="p">]</span>
@@ -180,8 +216,17 @@
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                     <span class="s1">&#39;Wrong UpdateStrategy value: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
         <span class="k">if</span> <span class="s2">&quot;scicat_url&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;scicat_url&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;scicat_datasets_path&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_datasets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;scicat_datasets_path&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;scicat_datablocks_path&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_datablocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;scicat_datablocks_path&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;scicat_users_login_path&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_users_login</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;scicat_users_login_path&quot;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="s2">&quot;relative_path_in_datablock&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_in_datablock</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;relative_path_in_datablock&quot;</span><span class="p">]</span>
@@ -212,14 +257,6 @@
            <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;datablock_metadata_generator_scanpath_postfix&quot;</span><span class="p">]</span>
-
-        <span class="c1"># (:obj:`list`&lt;:obj:`str`&gt;) ingested scan names</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># (:obj:`list`&lt;:obj:`str`&gt;) waiting scan names</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_waiting</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># (:obj:`dict`&lt;:obj:`str`, :obj:`list`&lt;:obj:`str`&gt;&gt;)</span>
-        <span class="c1">#   ingested scan names</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_in_datablock</span><span class="p">:</span>
             <span class="k">if</span> <span class="s2">&quot;datablock_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -260,7 +297,28 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
                     <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="s2">&quot; --oned &quot;</span>
 
-        <span class="c1"># (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) command format parameters</span>
+        <span class="k">if</span> <span class="s2">&quot;max_request_tries_number&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;max_request_tries_number&quot;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="s2">&quot;request_headers&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__headers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;request_headers&quot;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="s2">&quot;metadata_keywords_without_checks&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__withoutsm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;metadata_keywords_without_checks&quot;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) command format parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;scanname&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
             <span class="s2">&quot;chmod&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__chmod</span><span class="p">,</span>
@@ -273,49 +331,26 @@
             <span class="s2">&quot;scpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span><span class="p">,</span>
             <span class="s2">&quot;dbpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span><span class="p">,</span>
         <span class="p">}</span>
+
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s1">&#39;DatasetIngestor: Parameters: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">))</span>
-
-        <span class="c1"># (:obj:`int`) maximal counter value for post tries</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span> <span class="o">=</span> <span class="mi">100</span>
-
-        <span class="c1"># (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) request headers</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
-                          <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">}</span>
 
         <span class="c1"># self.__tokenurl = &quot;http://www-science3d.desy.de:3000/api/v3/&quot; \</span>
         <span class="c1">#       &quot;Users/login&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
-        <span class="c1"># (:obj:`str`) token url</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__tokenurl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">+</span> <span class="s2">&quot;Users/login&quot;</span>
+        <span class="c1">#: (:obj:`str`) token url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tokenurl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_users_login</span>
         <span class="c1"># get_logger().info(</span>
         <span class="c1">#     &#39;DatasetIngestor: LOGIN %s&#39; % self.__tokenurl)</span>
-        <span class="c1"># (:obj:`str`) dataset url</span>
+        <span class="c1">#: (:obj:`str`) dataset url</span>
         <span class="c1"># self.__dataseturl = &quot;http://www-science3d.desy.de:3000/api/v3/&quot; \</span>
         <span class="c1">#    &quot;RawDatasets&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__dataseturl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">+</span> <span class="s2">&quot;RawDatasets&quot;</span>
-        <span class="c1"># (:obj:`str`) origdatablock url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dataseturl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_datasets</span>
+        <span class="c1">#: (:obj:`str`) origdatablock url</span>
         <span class="c1"># self.__dataseturl = &quot;http://www-science3d.desy.de:3000/api/v3/&quot; \</span>
         <span class="c1">#     &quot;OrigDatablocks&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockurl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">+</span> <span class="s2">&quot;OrigDatablocks&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">__withoutsm</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;techniques&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;classification&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;createdBy&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;updatedBy&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;datasetlifecycle&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;numberOfFiles&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;size&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;createdAt&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;updatedAt&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;history&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;creationTime&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;version&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;scientificMetadata&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;endTime&quot;</span>
-        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__datablockurl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_url</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scicat_datablocks</span>
 
     <span class="k">def</span> <span class="nf">_generate_rawdataset_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; generate raw dataset metadata</span>

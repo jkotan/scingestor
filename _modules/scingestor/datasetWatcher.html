@@ -65,8 +65,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span>
-                 <span class="n">path</span><span class="p">,</span> <span class="n">dsfile</span><span class="p">,</span> <span class="n">idsfile</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">beamtimefile</span><span class="p">,</span>
-                 <span class="n">delay</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+                 <span class="n">path</span><span class="p">,</span> <span class="n">dsfile</span><span class="p">,</span> <span class="n">idsfile</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">beamtimefile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param configuration: dictionary with the ingestor configuration</span>
@@ -81,36 +80,56 @@
 <span class="sd">        :type meta: :obj:`dict` &lt;:obj:`str`,`any`&gt;</span>
 <span class="sd">        :param beamtimefile: beamtime filename</span>
 <span class="sd">        :type beamtimefile: :obj:`str`</span>
-<span class="sd">        :param delay: time delay</span>
-<span class="sd">        :type delay: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="c1"># (:obj:`str`) file with a dataset list</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span> <span class="o">=</span> <span class="n">dsfile</span>
-        <span class="c1"># (:obj:`str`) file with a ingested dataset list</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__idsfile</span> <span class="o">=</span> <span class="n">idsfile</span>
-        <span class="c1"># (:obj:`float`) delay time for ingestion in s</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
-        <span class="c1"># (:obj:`bool`) running loop flag</span>
+
+        <span class="c1">#: (:obj:`bool`) running loop flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="c1"># (:obj:`int`) notifier ID</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">notifier</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="c1"># (:obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;) watch description paths</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_path</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="c1"># (:obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;)</span>
+
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, `any`&gt;) ingestor configuration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__config</span> <span class="o">=</span> <span class="n">configuration</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="c1">#: (:obj:`str`) file with a dataset list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span> <span class="o">=</span> <span class="n">dsfile</span>
+        <span class="c1">#: (:obj:`str`) file with a ingested dataset list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__idsfile</span> <span class="o">=</span> <span class="n">idsfile</span>
+        <span class="c1">#: (:obj:`float`) delay time for ingestion in s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__delay</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="c1">#: (:obj:`int`) notifier ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;) watch description paths</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_path</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;)</span>
         <span class="c1">#                               beamtime watch description paths</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_queue</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_queue</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="c1"># (:obj:`float`) timeout value for inotifyx get events in s</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mf">0.01</span>
-        <span class="c1"># (:obj:`float`) time to recheck the dataset list</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">checktime</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="c1">#: (:obj:`float`) timeout value for inotifyx get events in s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__timeout</span> <span class="o">=</span> <span class="mf">0.01</span>
+        <span class="c1">#: (:obj:`float`) max count of recheck the dataset list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span> <span class="o">=</span> <span class="mi">100</span>
 
-        <span class="c1"># (:class:`scingestor.datasetIngestor.DatasetIngestor`)</span>
-        <span class="c1"># dataset ingestor</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span> <span class="o">=</span> <span class="n">DatasetIngestor</span><span class="p">(</span>
-            <span class="n">configuration</span><span class="p">,</span>
-            <span class="n">path</span><span class="p">,</span> <span class="n">dsfile</span><span class="p">,</span> <span class="n">idsfile</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">beamtimefile</span><span class="p">,</span> <span class="n">delay</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;max_request_tries_number&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;max_request_tries_number&quot;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="s2">&quot;get_event_timeout&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__timeout</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;get_event_timeout&quot;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="s2">&quot;ingestion_delay_time&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__delay</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;ingestion_delay_time&quot;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+
+        <span class="c1">#: (:class:`scingestor.datasetIngestor.DatasetIngestor`)</span>
+        <span class="c1">#  dataset ingestor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span> <span class="o">=</span> <span class="n">DatasetIngestor</span><span class="p">(</span>
+            <span class="n">configuration</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">dsfile</span><span class="p">,</span> <span class="n">idsfile</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">beamtimefile</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_start_notifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; start notifier</span>
@@ -118,7 +137,7 @@
 <span class="sd">        :param path: beamtime file subpath</span>
 <span class="sd">        :type path: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">notifier</span> <span class="o">=</span> <span class="n">SafeINotifier</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span> <span class="o">=</span> <span class="n">SafeINotifier</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_add_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_add_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
@@ -128,7 +147,7 @@
 <span class="sd">        :type path: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">wqueue</span><span class="p">,</span> <span class="n">watch_descriptor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">notifier</span><span class="o">.</span><span class="n">add_watch</span><span class="p">(</span>
+            <span class="n">wqueue</span><span class="p">,</span> <span class="n">watch_descriptor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span><span class="o">.</span><span class="n">add_watch</span><span class="p">(</span>
                 <span class="n">path</span><span class="p">,</span>
                 <span class="n">inotifyx</span><span class="o">.</span><span class="n">IN_ALL_EVENTS</span> <span class="o">|</span>
                 <span class="n">inotifyx</span><span class="o">.</span><span class="n">IN_MODIFY</span> <span class="o">|</span>
@@ -137,8 +156,8 @@
                 <span class="n">inotifyx</span><span class="o">.</span><span class="n">IN_MOVE_SELF</span> <span class="o">|</span>
                 <span class="n">inotifyx</span><span class="o">.</span><span class="n">IN_ALL_EVENTS</span> <span class="o">|</span>
                 <span class="n">inotifyx</span><span class="o">.</span><span class="n">IN_MOVED_TO</span> <span class="o">|</span> <span class="n">inotifyx</span><span class="o">.</span><span class="n">IN_MOVED_FROM</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_path</span><span class="p">[</span><span class="n">watch_descriptor</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_queue</span><span class="p">[</span><span class="n">watch_descriptor</span><span class="p">]</span> <span class="o">=</span> <span class="n">wqueue</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_path</span><span class="p">[</span><span class="n">watch_descriptor</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_queue</span><span class="p">[</span><span class="n">watch_descriptor</span><span class="p">]</span> <span class="o">=</span> <span class="n">wqueue</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;DatasetWatcher: Adding watch </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
                 <span class="n">watch_descriptor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__idsfile</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -147,10 +166,10 @@
     <span class="k">def</span> <span class="nf">_stop_notifier</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; stop notifier</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">wd</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wd_to_path</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">notifier</span><span class="o">.</span><span class="n">rm_watch</span><span class="p">(</span><span class="n">wd</span><span class="p">)</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_path</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">wd</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">wd</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">wd</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_path</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span><span class="o">.</span><span class="n">rm_watch</span><span class="p">(</span><span class="n">wd</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_path</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">wd</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">wd</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                 <span class="s1">&#39;ScanDirWatcher: &#39;</span>
                 <span class="s1">&#39;Removing watch </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">wd</span><span class="p">),</span> <span class="n">path</span><span class="p">))</span>
@@ -159,21 +178,21 @@
         <span class="sd">&quot;&quot;&quot; scandir watcher thread</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_start_notifier</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">check_list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">check_list</span><span class="p">()</span>
 
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
             <span class="s1">&#39;DatasetWatcher: Waiting datasets: </span><span class="si">%s</span><span class="s1">&#39;</span>
-            <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">()))</span>
+            <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">()))</span>
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
             <span class="s1">&#39;DatasetWatcher: Ingested datasets: </span><span class="si">%s</span><span class="s1">&#39;</span>
-            <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">ingested_datasets</span><span class="p">()))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
-            <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">get_token</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">ingest</span><span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">clear_waiting_datasets</span><span class="p">()</span>
+            <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">ingested_datasets</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__delay</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
+            <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">get_token</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">ingest</span><span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">clear_waiting_datasets</span><span class="p">()</span>
 
         <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">try</span><span class="p">:</span>
@@ -181,73 +200,73 @@
 
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Sc Talk&#39;</span><span class="p">)</span>
 
-                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_queue</span><span class="p">:</span>
-                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">qid</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wd_to_queue</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                    <span class="n">wqueue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_queue</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_queue</span><span class="p">:</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__timeout</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">qid</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_queue</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                    <span class="n">wqueue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_queue</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span>
                     <span class="k">try</span><span class="p">:</span>
-                        <span class="n">event</span> <span class="o">=</span> <span class="n">wqueue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+                        <span class="n">event</span> <span class="o">=</span> <span class="n">wqueue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__timeout</span><span class="p">)</span>
                     <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
                         <span class="k">break</span>
-                    <span class="k">if</span> <span class="n">qid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_path</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">qid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_path</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                         <span class="c1"># get_logger().info(</span>
                         <span class="c1">#     &#39;Ds: %s %s %s&#39; % (event.name,</span>
                         <span class="c1">#                       event.masks,</span>
-                        <span class="c1">#                       self.wd_to_path[qid]))</span>
+                        <span class="c1">#                       self.__wd_to_path[qid]))</span>
                         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                             <span class="s1">&#39;Ds: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                                               <span class="n">event</span><span class="o">.</span><span class="n">masks</span><span class="p">,</span>
-                                              <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_path</span><span class="p">[</span><span class="n">qid</span><span class="p">]))</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_path</span><span class="p">[</span><span class="n">qid</span><span class="p">]))</span>
                         <span class="n">masks</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">masks</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)</span>
                         <span class="k">if</span> <span class="s2">&quot;IN_CLOSE_WRITE&quot;</span> <span class="ow">in</span> <span class="n">masks</span><span class="p">:</span>
                             <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
                                 <span class="n">fdir</span><span class="p">,</span> <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_path</span><span class="p">[</span><span class="n">qid</span><span class="p">])</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_path</span><span class="p">[</span><span class="n">qid</span><span class="p">])</span>
                                 <span class="n">ffn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fdir</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
                             <span class="k">else</span><span class="p">:</span>
-                                <span class="n">ffn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_path</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span>
+                                <span class="n">ffn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_path</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span>
                             <span class="k">if</span> <span class="n">ffn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ffn</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span><span class="p">:</span>
                                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                                     <span class="s1">&#39;DatasetWatcher: Changed </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">ffn</span><span class="p">)</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">check_list</span><span class="p">()</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">check_list</span><span class="p">()</span>
                         <span class="k">elif</span> <span class="s2">&quot;IN_MODIFY&quot;</span> <span class="ow">in</span> <span class="n">masks</span> <span class="ow">or</span> <span class="s2">&quot;IN_OPEN&quot;</span> <span class="ow">in</span> <span class="n">masks</span><span class="p">:</span>
                             <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
                                 <span class="n">fdir</span><span class="p">,</span> <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">wd_to_path</span><span class="p">[</span><span class="n">qid</span><span class="p">])</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_path</span><span class="p">[</span><span class="n">qid</span><span class="p">])</span>
                                 <span class="n">ffn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fdir</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
                                 <span class="k">if</span> <span class="n">ffn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
                                    <span class="n">ffn</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span><span class="p">:</span>
                                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                                         <span class="s1">&#39;DatasetWatcher: Changed </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">ffn</span><span class="p">)</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">check_list</span><span class="p">()</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">check_list</span><span class="p">()</span>
 
-                <span class="k">if</span> <span class="n">counter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">checktime</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">counter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span><span class="p">:</span>
                     <span class="c1"># if inotify does not work</span>
                     <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
                     <span class="c1"># get_logger().info(</span>
                     <span class="c1">#     &#39;DatasetWatcher: Re-check dataset list after %s s&#39;</span>
-                    <span class="c1">#     % self.checktime)</span>
+                    <span class="c1">#     % self.__maxcounter)</span>
                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                         <span class="s1">&#39;DatasetWatcher: Re-check dataset list after </span><span class="si">%s</span><span class="s1"> s&#39;</span>
-                        <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">checktime</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">check_list</span><span class="p">()</span>
-                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">checktime</span> <span class="o">&gt;</span> <span class="n">counter</span><span class="p">:</span>
+                        <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">check_list</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span> <span class="o">&gt;</span> <span class="n">counter</span><span class="p">:</span>
                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                         <span class="s1">&#39;DatasetWatcher: increase counter </span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span>
-                        <span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">checktime</span><span class="p">))</span>
+                        <span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span><span class="p">))</span>
                     <span class="c1"># get_logger().info(</span>
                     <span class="c1">#     &#39;DatasetWatcher: increase counter %s/%s &#39; %</span>
-                    <span class="c1">#     (counter, self.checktime))</span>
+                    <span class="c1">#     (counter, self.__maxcounter))</span>
                     <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
 
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
-                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">)</span>
-                    <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">get_token</span><span class="p">()</span>
-                    <span class="k">for</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">ingest</span><span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">ingestor</span><span class="o">.</span><span class="n">clear_waiting_datasets</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__delay</span><span class="p">)</span>
+                    <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">get_token</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">ingest</span><span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">clear_waiting_datasets</span><span class="p">()</span>
                 <span class="c1"># else:</span>
-                <span class="c1">#     time.sleep(self.timeout)</span>
+                <span class="c1">#     time.sleep(self.__timeout)</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
 

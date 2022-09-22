@@ -69,48 +69,48 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
-<span class="sd">        :param options: time delay</span>
-<span class="sd">        :type options: :obj:`str`</span>
+<span class="sd">        :param options: parser options</span>
+<span class="sd">        :type options: :class:`argparse.Namespace`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># (:obj:`dict` &lt;:obj:`str`, `any`&gt;) ingestor configuration</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, `any`&gt;) ingestor configuration</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__config</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__config</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">config</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;CONFIGURATION: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">))</span>
 
-        <span class="c1"># (:obj:`list` &lt;:obj:`str`&gt;) beamtime directories</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">beamtime_dirs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) beamtime directories</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime_dirs</span> <span class="o">=</span> <span class="p">[</span>
             <span class="c1"># &quot;/gpfs/current&quot;,</span>
             <span class="c1"># &quot;/gpfs/commissioning&quot;,</span>
         <span class="p">]</span>
 
-        <span class="c1"># (:obj:`str`) beamtime file prefix</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bt_prefix</span> <span class="o">=</span> <span class="s2">&quot;beamtime-metadata-&quot;</span>
-        <span class="c1"># (:obj:`str`) beamtime file postfix</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bt_postfix</span> <span class="o">=</span> <span class="s2">&quot;.json&quot;</span>
+        <span class="c1">#: (:obj:`str`) beamtime file prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__bt_prefix</span> <span class="o">=</span> <span class="s2">&quot;beamtime-metadata-&quot;</span>
+        <span class="c1">#: (:obj:`str`) beamtime file postfix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__bt_postfix</span> <span class="o">=</span> <span class="s2">&quot;.json&quot;</span>
 
-        <span class="c1"># (:obj:`str`) scicat dataset file pattern</span>
+        <span class="c1">#: (:obj:`str`) scicat dataset file pattern</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ds_pattern</span> <span class="o">=</span> <span class="s2">&quot;scicat-datasets-</span><span class="si">{bt}</span><span class="s2">.lst&quot;</span>
-        <span class="c1"># (:obj:`str`) indested scicat dataset file pattern</span>
+        <span class="c1">#: (:obj:`str`) indested scicat dataset file pattern</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ids_pattern</span> <span class="o">=</span> <span class="s2">&quot;scicat-ingested-datasets-</span><span class="si">{bt}</span><span class="s2">.lst&quot;</span>
 
-        <span class="c1"># (:obj:`str`) ingestor log directory</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1">#: (:obj:`str`) ingestor log directory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__log_dir</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
         <span class="k">if</span> <span class="s2">&quot;beamtime_dirs&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> \
            <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;beamtime_dirs&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">beamtime_dirs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;beamtime_dirs&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime_dirs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;beamtime_dirs&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="s2">&quot;ingestor_log_dir&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;ingestor_log_dir&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__log_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;ingestor_log_dir&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__log_dir</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__log_dir</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
         <span class="k">if</span> <span class="s2">&quot;beamtime_filename_prefix&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">bt_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;beamtime_filename_prefix&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__bt_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;beamtime_filename_prefix&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="s2">&quot;beamtime_filename_postfix&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">bt_postfix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;beamtime_filename_postfix&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__bt_postfix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;beamtime_filename_postfix&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="s2">&quot;datasets_filename_pattern&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ds_pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;datasets_filename_pattern&quot;</span><span class="p">]</span>
@@ -119,17 +119,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__ids_pattern</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;ingested_datasets_filename_pattern&quot;</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">beamtime_dirs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime_dirs</span><span class="p">:</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                 <span class="s1">&#39;DatasetIngest: Beamtime directories not defined&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DatasetIngest.start"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngest.DatasetIngest.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; start ingestion &quot;&quot;&quot;</span>
 
-        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">beamtime_dirs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime_dirs</span><span class="p">:</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;DatasetIngest: beamtime path: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
             <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_bt_files</span><span class="p">(</span>
-                <span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bt_prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bt_postfix</span><span class="p">)</span>
+                <span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bt_prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bt_postfix</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">bt</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;DatasetIngest: beamtime file: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">bt</span><span class="p">))</span>
@@ -158,33 +158,33 @@
 <span class="sd">        :param bpath: beamtime file</span>
 <span class="sd">        :type bpath: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># # (:obj:`str`) scan dir path</span>
+        <span class="c1"># #: (:obj:`str`) scan dir path</span>
         <span class="c1"># self.__path = path</span>
-        <span class="c1"># # (:obj:`str`) beamtime path and file name</span>
+        <span class="c1"># #: (:obj:`str`) beamtime path and file name</span>
         <span class="c1"># self.__bpath = bpath</span>
-        <span class="c1"># # (:obj:`dict` &lt;:obj:`str`,`any`&gt;) beamtime configuration</span>
+        <span class="c1"># #: (:obj:`dict` &lt;:obj:`str`,`any`&gt;) beamtime configuration</span>
         <span class="c1"># self.__meta = meta</span>
-        <span class="c1"># (:obj:`str`) beamtime id</span>
+        <span class="c1">#: (:obj:`str`) beamtime id</span>
         <span class="n">beamtimeId</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;beamtimeId&quot;</span><span class="p">]</span>
 
-        <span class="c1"># (:obj:`str`) datasets file name</span>
+        <span class="c1">#: (:obj:`str`) datasets file name</span>
         <span class="n">dslist_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ds_pattern</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bt</span><span class="o">=</span><span class="n">beamtimeId</span><span class="p">)</span>
-        <span class="c1"># (:obj:`str`) ingescted datasets file name</span>
+        <span class="c1">#: (:obj:`str`) ingescted datasets file name</span>
         <span class="n">idslist_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ids_pattern</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bt</span><span class="o">=</span><span class="n">beamtimeId</span><span class="p">)</span>
         <span class="n">dslfiles</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
             <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/**/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">dslist_filename</span><span class="p">),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">dslfiles</span><span class="p">:</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;DatasetIngest: dataset list: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">fn</span><span class="p">))</span>
             <span class="n">ifn</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[:</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dslist_filename</span><span class="p">))]</span> <span class="o">+</span> <span class="n">idslist_filename</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="p">:</span>
-                <span class="n">ifn</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">ifn</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__log_dir</span><span class="p">:</span>
+                <span class="n">ifn</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__log_dir</span><span class="p">,</span> <span class="n">ifn</span><span class="p">)</span>
             <span class="n">ipath</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">ifn</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">ipath</span><span class="p">):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">ipath</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">scpath</span><span class="p">,</span> <span class="n">pfn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
             <span class="n">ingestor</span> <span class="o">=</span> <span class="n">DatasetIngestor</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">,</span>
-                <span class="n">scpath</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ifn</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">bpath</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">scpath</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">ifn</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">bpath</span><span class="p">)</span>
             <span class="n">ingestor</span><span class="o">.</span><span class="n">check_list</span><span class="p">(</span><span class="n">reingest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">ingestor</span><span class="o">.</span><span class="n">clear_tmpfile</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
