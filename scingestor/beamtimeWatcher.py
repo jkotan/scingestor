@@ -42,18 +42,18 @@ class BeamtimeWatcher:
         :type options: :class:`argparse.Namespace`
         """
 
-        # (:obj:`bool`) running loop flag
+        #: (:obj:`bool`) running loop flag
         self.running = True
 
         signal.signal(signal.SIGTERM, self._signal_handle)
 
-        # (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
+        #: (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
         self.__config = {}
         if options.config:
             self.__config = load_config(options.config) or {}
             get_logger().debug("CONFIGURATION: %s" % str(self.__config))
 
-        # (:obj:`list` <:obj:`str`>) beamtime directories
+        #: (:obj:`list` <:obj:`str`>) beamtime directories
         self.__beamtime_dirs = [
             # "/gpfs/current",
             # "/gpfs/commissioning",
@@ -62,42 +62,42 @@ class BeamtimeWatcher:
            and isinstance(self.__config["beamtime_dirs"], list):
             self.__beamtime_dirs = self.__config["beamtime_dirs"]
 
-        # (:obj:`str`) beamtime base directories
+        #: (:obj:`str`) beamtime base directories
         self.__beamtime_base_dir = ""
         if "beamtime_base_dir" in self.__config.keys() \
            and self.__config["beamtime_base_dir"]:
             self.__beamtime_base_dir = os.path.abspath(
                 self.__config["beamtime_base_dir"])
-        # (:obj:`dict` <:obj:`str`, :obj:`str`>)
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>)
         #                             beamtime path to watcher path map
         self.__wait_for_dirs = {}
 
-        # (:obj:`int`) notifier id
+        #: (:obj:`int`) notifier id
         self.__notifier = None
-        # (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
+        #: (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
         self.__wd_to_path = {}
-        # (:obj:`dict` <:obj:`int`, :obj:`str`>)
+        #: (:obj:`dict` <:obj:`int`, :obj:`str`>)
         #                               beamtime watch description paths
         self.__wd_to_queue = {}
-        # (:obj:`dict` <:obj:`int`, :class:`queue.Queue`>)
+        #: (:obj:`dict` <:obj:`int`, :class:`queue.Queue`>)
         #                               beamtime watch description paths
         self.__wd_to_bpath = {}
-        # (:obj:`dict` <:obj:`int`, :class:`queue.Queue`>)
+        #: (:obj:`dict` <:obj:`int`, :class:`queue.Queue`>)
         #                               beamtime watch description paths
         self.__wd_to_bqueue = {}
 
-        # (:obj:`str`) beamtime file prefix
+        #: (:obj:`str`) beamtime file prefix
         self.__bt_prefix = "beamtime-metadata-"
-        # (:obj:`str`) beamtime file postfix
+        #: (:obj:`str`) beamtime file postfix
         self.__bt_postfix = ".json"
 
-        # (:obj:`dict` <(:obj:`str`, :obj:`str`),
+        #: (:obj:`dict` <(:obj:`str`, :obj:`str`),
         #                :class:`scanDirWatcher.ScanDirWatcher`>)
         #        scandir watchers instances for given path and beamtime file
         self.__scandir_watchers = {}
-        # (:class:`threading.Lock`) scandir watcher dictionary lock
+        #: (:class:`threading.Lock`) scandir watcher dictionary lock
         self.__scandir_lock = threading.Lock()
-        # (:obj:`float`) timeout value for inotifyx get events
+        #: (:obj:`float`) timeout value for inotifyx get events
         self.__timeout = 0.01
 
         if "get_event_timeout" in self.__config.keys():
@@ -107,11 +107,11 @@ class BeamtimeWatcher:
                 get_logger().warning('%s' % (str(e)))
 
         try:
-            # (:obj:`float`) run time in s
+            #: (:obj:`float`) run time in s
             self.__runtime = float(options.runtime)
         except Exception:
             self.__runtime = 0
-        # (:obj:`float`) start time in s
+        #: (:obj:`float`) start time in s
         self.__starttime = time.time()
 
         if "beamtime_filename_prefix" in self.__config.keys():

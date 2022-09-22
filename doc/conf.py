@@ -6,12 +6,16 @@
 
 # -- Path setup --------------------------------------------------------------
 
+import os
+import sys
+
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
+if os.path.isfile('conf.py'):
+    sys.path.insert(0, os.path.abspath('..'))
 # sys.path.insert(0, '/home/jkotan/ndts/scingestor/scingestor')
 
 
@@ -28,6 +32,7 @@ author = 'Jan Kotanski'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.intersphinx',
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
@@ -55,6 +60,9 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # a list of builtin themes.
 #
 html_theme = 'alabaster'
+# html_theme = 'bootstrap'
+# html_theme = 'python_docs_theme'
+# html_theme = 'bizstyle'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -84,3 +92,34 @@ man_pages = [
      'Reingestion script to upload SciCat RawDatasets',
      [u'Jan Kotanski'], 1),
 ]
+
+autoclass_content = 'both'
+
+# autodoc_default_flags = [
+#     'members',
+#     'undoc-members',
+#     # 'private-members',
+#     # 'special-members',
+#     'inherited-members',
+#     'show-inheritance',
+#     # 'ignore-module-all',
+#     # 'exclude-members'
+# ]
+
+intersphinx_mapping = {
+    'https://docs.python.org/3/': None,
+    'https://scipy.github.io/devdocs': None,
+    'https://numpy.org/doc/stable/': None,
+    # 'http://pytango.readthedocs.io/en/stable': None,
+    # 'https://pni-libraries.github.io/python-pninexus/stable': None,
+    'https://docs.h5py.org/en/stable': None,
+    # 'https://pyqtgraph.readthedocs.io/en/latest': None,
+    'https://pyzmq.readthedocs.io/en/stable': None,
+    # 'https://docs.python-requests.org/en/master': None,
+    # 'https://requests.readthedocs.io/en/master': None,
+    'https://requests.readthedocs.io/en/latest': None,
+    # 'https://doc.qt.io/qtforpython/': None,
+    # 'https://www.silx.org/doc/fabio/latest/': None,
+    # 'https://pillow.readthedocs.io/en/stable/': None,
+    # 'https://pyfai.readthedocs.io/en/master/': None,
+}

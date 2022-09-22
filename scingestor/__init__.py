@@ -18,4 +18,6 @@
 # Authors:
 #     Jan Kotanski <jan.kotanski@desy.de>
 #
+
+#: (:obj:`str`) the scingestor version
 __version__ = "0.0.3"

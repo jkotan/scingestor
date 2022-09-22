@@ -152,17 +152,17 @@ class SciCatTestServer(HTTPServer):
     def __init__(self, *args, **kw):
         HTTPServer.__init__(self, *args, **kw)
 
-        # (:obj:`list`<:obj:`str`>) ingested datasets
+        #: (:obj:`list`<:obj:`str`>) ingested datasets
         self.datasets = []
-        # (:obj:`list`<:obj:`str`>) ingested origdatablocks
+        #: (:obj:`list`<:obj:`str`>) ingested origdatablocks
         self.origdatablocks = []
-        # (:obj:`list`<:obj:`str`>) requested credentials
+        #: (:obj:`list`<:obj:`str`>) requested credentials
         self.userslogin = []
-        # (:obj:`list`<:obj:`str`>) other ingestions
+        #: (:obj:`list`<:obj:`str`>) other ingestions
         self.others = []
-        # (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with datasets
+        #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with datasets
         self.pid_dataset = {}
-        # (:obj:`str`) doi prefix
+        #: (:obj:`str`) doi prefix
         self.doiprefix = "10.3204/"
 
     def reset(self):
