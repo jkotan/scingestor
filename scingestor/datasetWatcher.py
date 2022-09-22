@@ -45,34 +45,34 @@ class DatasetWatcher(threading.Thread):
         :param dsfile: file with a ingester dataset list
         :type dsfile: :obj:`str`
         :param meta: beamtime configuration
-        :type meta: :obj:`dict` <:obj:`str`,`any`>
+        :type meta: :obj:`dict` <:obj:`str`, `any`>
         :param beamtimefile: beamtime filename
         :type beamtimefile: :obj:`str`
         """
         threading.Thread.__init__(self)
 
-        # (:obj:`bool`) running loop flag
+        #: (:obj:`bool`) running loop flag
         self.running = True
 
-        # (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
+        #: (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
         self.__config = configuration or {}
-        # (:obj:`str`) file with a dataset list
+        #: (:obj:`str`) file with a dataset list
         self.__dsfile = dsfile
-        # (:obj:`str`) file with a ingested dataset list
+        #: (:obj:`str`) file with a ingested dataset list
         self.__idsfile = idsfile
-        # (:obj:`float`) delay time for ingestion in s
+        #: (:obj:`float`) delay time for ingestion in s
         self.__delay = 5
-        # (:obj:`int`) notifier ID
+        #: (:obj:`int`) notifier ID
         self.__notifier = None
-        # (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
+        #: (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
         self.__wd_to_path = {}
-        # (:obj:`dict` <:obj:`int`, :obj:`str`>)
+        #: (:obj:`dict` <:obj:`int`, :obj:`str`>)
         #                               beamtime watch description paths
         self.__wd_to_queue = {}
 
-        # (:obj:`float`) timeout value for inotifyx get events in s
+        #: (:obj:`float`) timeout value for inotifyx get events in s
         self.__timeout = 0.01
-        # (:obj:`float`) max count of recheck the dataset list
+        #: (:obj:`float`) max count of recheck the dataset list
         self.__maxcounter = 100
 
         if "max_request_tries_number" in self.__config.keys():
@@ -94,8 +94,8 @@ class DatasetWatcher(threading.Thread):
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
 
-        # (:class:`scingestor.datasetIngestor.DatasetIngestor`)
-        # dataset ingestor
+        #: (:class:`scingestor.datasetIngestor.DatasetIngestor`)
+        #  dataset ingestor
         self.__ingestor = DatasetIngestor(
             configuration, path, dsfile, idsfile, meta, beamtimefile)
 

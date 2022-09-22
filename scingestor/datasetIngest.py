@@ -40,29 +40,29 @@ class DatasetIngest:
         :param options: parser options
         :type options: :class:`argparse.Namespace`
         """
-        # (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
+        #: (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
         self.__config = {}
         if options.config:
             self.__config = load_config(options.config) or {}
             get_logger().debug("CONFIGURATION: %s" % str(self.__config))
 
-        # (:obj:`list` <:obj:`str`>) beamtime directories
+        #: (:obj:`list` <:obj:`str`>) beamtime directories
         self.__beamtime_dirs = [
             # "/gpfs/current",
             # "/gpfs/commissioning",
         ]
 
-        # (:obj:`str`) beamtime file prefix
+        #: (:obj:`str`) beamtime file prefix
         self.__bt_prefix = "beamtime-metadata-"
-        # (:obj:`str`) beamtime file postfix
+        #: (:obj:`str`) beamtime file postfix
         self.__bt_postfix = ".json"
 
-        # (:obj:`str`) scicat dataset file pattern
+        #: (:obj:`str`) scicat dataset file pattern
         self.__ds_pattern = "scicat-datasets-{bt}.lst"
-        # (:obj:`str`) indested scicat dataset file pattern
+        #: (:obj:`str`) indested scicat dataset file pattern
         self.__ids_pattern = "scicat-ingested-datasets-{bt}.lst"
 
-        # (:obj:`str`) ingestor log directory
+        #: (:obj:`str`) ingestor log directory
         self.__log_dir = ""
 
         if "beamtime_dirs" in self.__config.keys() \
@@ -122,22 +122,22 @@ class DatasetIngest:
         :param path: scan dir path
         :type path: :obj:`str`
         :param meta: beamtime configuration
-        :type meta: :obj:`dict` <:obj:`str`,`any`>
+        :type meta: :obj:`dict` <:obj:`str`, `any`>
         :param bpath: beamtime file
         :type bpath: :obj:`str`
         """
-        # # (:obj:`str`) scan dir path
+        # #: (:obj:`str`) scan dir path
         # self.__path = path
-        # # (:obj:`str`) beamtime path and file name
+        # #: (:obj:`str`) beamtime path and file name
         # self.__bpath = bpath
-        # # (:obj:`dict` <:obj:`str`,`any`>) beamtime configuration
+        # #: (:obj:`dict` <:obj:`str`, `any`>) beamtime configuration
         # self.__meta = meta
-        # (:obj:`str`) beamtime id
+        #: (:obj:`str`) beamtime id
         beamtimeId = meta["beamtimeId"]
 
-        # (:obj:`str`) datasets file name
+        #: (:obj:`str`) datasets file name
         dslist_filename = self.__ds_pattern.format(bt=beamtimeId)
-        # (:obj:`str`) ingescted datasets file name
+        #: (:obj:`str`) ingescted datasets file name
         idslist_filename = self.__ids_pattern.format(bt=beamtimeId)
         dslfiles = glob.glob(
             "%s/**/%s" % (path, dslist_filename), recursive=True)

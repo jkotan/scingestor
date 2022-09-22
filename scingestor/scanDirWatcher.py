@@ -41,54 +41,54 @@ class ScanDirWatcher(threading.Thread):
         :param path: scan dir path
         :type path: :obj:`str`
         :param meta: beamtime configuration
-        :type meta: :obj:`dict` <:obj:`str`,`any`>
+        :type meta: :obj:`dict` <:obj:`str`, `any`>
         :param bpath: beamtime file
         :type bpath: :obj:`str`
         """
         threading.Thread.__init__(self)
 
-        # (:obj:`bool`) running loop flag
+        #: (:obj:`bool`) running loop flag
         self.running = True
 
-        # (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
+        #: (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
         self.__config = configuration or {}
-        # (:obj:`str`) scan dir path
+        #: (:obj:`str`) scan dir path
         self.__path = path
-        # (:obj:`str`) beamtime path and file name
+        #: (:obj:`str`) beamtime path and file name
         self.__bpath = bpath
-        # (:obj:`dict` <:obj:`str`,`any`>) beamtime configuration
+        #: (:obj:`dict` <:obj:`str`, `any`>) beamtime configuration
         self.__meta = meta
-        # (:obj:`str`) beamtime id
+        #: (:obj:`str`) beamtime id
         self.__beamtimeId = meta["beamtimeId"]
-        # (:obj:`str`) beamline metadata
+        #: (:obj:`str`) beamline metadata
         self.__meta = meta
-        # (:obj:`str`) scicat dataset file pattern
+        #: (:obj:`str`) scicat dataset file pattern
         self.__ds_pattern = "scicat-datasets-{bt}.lst"
-        # (:obj:`str`) indested scicat dataset file pattern
+        #: (:obj:`str`) indested scicat dataset file pattern
         self.__ids_pattern = "scicat-ingested-datasets-{bt}.lst"
 
-        # (:obj:`int`) notifier ID
+        #: (:obj:`int`) notifier ID
         self.__notifier = None
-        # (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
+        #: (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
         self.__wd_to_path = {}
-        # (:obj:`dict` <:obj:`int`, :obj:`str`>)
+        #: (:obj:`dict` <:obj:`int`, :obj:`str`>)
         #                               beamtime watch description paths
         self.__wd_to_queue = {}
 
-        # (:obj:`dict` <(:obj:`str`, :obj:`str`),
+        #: (:obj:`dict` <(:obj:`str`, :obj:`str`),
         #                :class:`scanDirWatcher.ScanDirWatcher`>)
         #        dataset watchers instances for given path and beamtime file
         self.__dataset_watchers = {}
-        # (:class:`threading.Lock`) dataset watcher dictionary lock
+        #: (:class:`threading.Lock`) dataset watcher dictionary lock
         self.__dataset_lock = threading.Lock()
-        # (:obj:`float`) timeout value for inotifyx get events
+        #: (:obj:`float`) timeout value for inotifyx get events
         self.__timeout = 0.01
 
-        # (:obj:`dict` <(:obj:`str`, :obj:`str`),
+        #: (:obj:`dict` <(:obj:`str`, :obj:`str`),
         #                :class:`scanDirWatcher.ScanDirWatcher`>)
         #        scandir watchers instances for given path and beamtime file
         self.__scandir_watchers = {}
-        # (:class:`threading.Lock`) scandir watcher dictionary lock
+        #: (:class:`threading.Lock`) scandir watcher dictionary lock
         self.__scandir_lock = threading.Lock()
 
         if "get_event_timeout" in self.__config.keys():
@@ -104,17 +104,17 @@ class ScanDirWatcher(threading.Thread):
             self.__ids_pattern = \
                 self.__config["ingested_datasets_filename_pattern"]
 
-        # (:obj:`str`) datasets file name
+        #: (:obj:`str`) datasets file name
         self.__dslist_filename = self.__ds_pattern.format(
             bt=self.__beamtimeId)
-        # (:obj:`str`) ingescted datasets file name
+        #: (:obj:`str`) ingescted datasets file name
         self.__idslist_filename = self.__ids_pattern.format(
             bt=self.__beamtimeId)
-        # (:obj:`str`) datasets file name
+        #: (:obj:`str`) datasets file name
         self.__dslist_fullname = os.path.join(
             self.__path, self.__dslist_filename)
 
-        # (:obj:`str`) ingestor log directory
+        #: (:obj:`str`) ingestor log directory
         self.__log_dir = ""
         if "ingestor_log_dir" in self.__config.keys():
             self.__log_dir = self.__config["ingestor_log_dir"]

@@ -55,7 +55,7 @@ class DatasetIngestor:
         :param dsfile: file with a ingester dataset list
         :type dsfile: :obj:`str`
         :param meta: beamtime configuration
-        :type meta: :obj:`dict` <:obj:`str`,`any`>
+        :type meta: :obj:`dict` <:obj:`str`, `any`>
         :param beamtimefile: beamtime filename
         :type beamtimefile: :obj:`str`
         :param doiprefix: doiprefix
@@ -65,86 +65,86 @@ class DatasetIngestor:
         :param scicat_url: scicat_url
         :type scicat_url: :obj:`str`
         """
-        # (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
+        #: (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
         self.__config = configuration or {}
-        # (:obj:`str`) file with a dataset list
+        #: (:obj:`str`) file with a dataset list
         self.__dsfile = dsfile
-        # (:obj:`str`) file with a ingested dataset list
+        #: (:obj:`str`) file with a ingested dataset list
         self.__idsfile = idsfile
-        # (:obj:`str`) file with a ingested dataset tmp list
+        #: (:obj:`str`) file with a ingested dataset tmp list
         self.__idsfiletmp = "%s%s" % (idsfile, ".tmp")
-        # (:obj:`str`) scan path dir
+        #: (:obj:`str`) scan path dir
         self.__path = path
-        # (:obj:`str`) beamtime id
+        #: (:obj:`str`) beamtime id
         self.__bid = meta["beamtimeId"]
-        # (:obj:`str`) beamline name
+        #: (:obj:`str`) beamline name
         self.__bl = meta["beamline"]
-        # (:obj:`str`) beamtime id
+        #: (:obj:`str`) beamtime id
         self.__bfile = beamtimefile
 
         bpath, _ = os.path.split(beamtimefile)
-        # (:obj:`str`) relative scan path to beamtime path
+        #: (:obj:`str`) relative scan path to beamtime path
         self.__relpath = os.path.relpath(path, bpath)
 
-        # (:obj:`str`) doi prefix
+        #: (:obj:`str`) doi prefix
         self.__doiprefix = "10.3204"
-        # (:obj:`str`) username
+        #: (:obj:`str`) username
         self.__username = 'ingestor'
-        # (:obj:`str`) update strategy
+        #: (:obj:`str`) update strategy
         self.__strategy = UpdateStrategy.PATCH
-        # (:obj:`str`) beamtime id
+        #: (:obj:`str`) beamtime id
         self.__incd = None
-        # (:obj:`bool`) relative path in datablock flag
+        #: (:obj:`bool`) relative path in datablock flag
         self.__relpath_in_datablock = False
-        # (:obj:`str`) scicat url
+        #: (:obj:`str`) scicat url
         self.__scicat_url = "http://localhost:8881"
-        # (:obj:`str`) scicat users login
+        #: (:obj:`str`) scicat users login
         self.__scicat_users_login = "Users/login"
-        # (:obj:`str`) scicat users login
+        #: (:obj:`str`) scicat users login
         self.__scicat_datasets = "RawDatasets"
-        # (:obj:`str`) scicat users login
+        #: (:obj:`str`) scicat users login
         self.__scicat_datablocks = "OrigDatablocks"
-        # (:obj:`str`) chmod string for json metadata
+        #: (:obj:`str`) chmod string for json metadata
         self.__chmod = None
-        # (:obj:`bool`) oned metadata flag
+        #: (:obj:`bool`) oned metadata flag
         self.__oned = False
 
-        # (:obj:`int`) maximal counter value for post tries
+        #: (:obj:`int`) maximal counter value for post tries
         self.__maxcounter = 100
 
-        # (:obj:`str`) raw dataset scan postfix
+        #: (:obj:`str`) raw dataset scan postfix
         self.__scanpostfix = ".scan.json"
-        # (:obj:`str`) origin datablock scan postfix
+        #: (:obj:`str`) origin datablock scan postfix
         self.__datablockpostfix = ".origdatablock.json"
 
-        # (:obj:`str`) nexus dataset shell command
+        #: (:obj:`str`) nexus dataset shell command
         self.__datasetcommandnxs = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix} " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             "{scanpath}/{scanname}.nxs"
-        # (:obj:`str`) datablock shell command
+        #: (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata " \
             " -o {scanpath}/{scanname}{scpostfix} " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname}"
-        # (:obj:`str`) datablock shell command
+        #: (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*{dbpostfix},*{scpostfix},*~ " \
             " -p {doiprefix}/{beamtimeid}/{scanname} " \
             " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
             " -o {scanpath}/{scanname}{dbpostfix} "
-        # (:obj:`str`) datablock shell command
+        #: (:obj:`str`) datablock shell command
         self.__datablockmemcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*{dbpostfix},*{scpostfix},*~ " \
             " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
             " -p {doiprefix}/{beamtimeid}/{scanname} "
-        # (:obj:`str`) datablock path postfix
+        #: (:obj:`str`) datablock path postfix
         self.__datablockscanpath = " {scanpath}/{scanname} "
 
-        # (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
         self.__headers = {'Content-Type': 'application/json',
                           'Accept': 'application/json'}
 
-        # (:obj:`list`<:obj:`str`>) metadata keywords without checks
+        #: (:obj:`list`<:obj:`str`>) metadata keywords without checks
         self.__withoutsm = [
             "techniques",
             "classification",
@@ -162,11 +162,11 @@ class DatasetIngestor:
             "endTime"
         ]
 
-        # (:obj:`list`<:obj:`str`>) ingested scan names
+        #: (:obj:`list`<:obj:`str`>) ingested scan names
         self.__sc_ingested = []
-        # (:obj:`list`<:obj:`str`>) waiting scan names
+        #: (:obj:`list`<:obj:`str`>) waiting scan names
         self.__sc_waiting = []
-        # (:obj:`dict`<:obj:`str`, :obj:`list`<:obj:`str`>>)
+        #: (:obj:`dict`<:obj:`str`, :obj:`list`<:obj:`str`>>)
         #   ingested scan names
         self.__sc_ingested_map = {}
 
@@ -286,7 +286,7 @@ class DatasetIngestor:
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
 
-        # (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) command format parameters
         self.__dctfmt = {
             "scanname": None,
             "chmod": self.__chmod,
@@ -307,15 +307,15 @@ class DatasetIngestor:
         #       "Users/login"
         if not self.__scicat_url.endswith("/"):
             self.__scicat_url = self.__scicat_url + "/"
-        # (:obj:`str`) token url
+        #: (:obj:`str`) token url
         self.__tokenurl = self.__scicat_url + self.__scicat_users_login
         # get_logger().info(
         #     'DatasetIngestor: LOGIN %s' % self.__tokenurl)
-        # (:obj:`str`) dataset url
+        #: (:obj:`str`) dataset url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #    "RawDatasets"
         self.__dataseturl = self.__scicat_url + self.__scicat_datasets
-        # (:obj:`str`) origdatablock url
+        #: (:obj:`str`) origdatablock url
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #     "OrigDatablocks"
         self.__datablockurl = self.__scicat_url + self.__scicat_datablocks

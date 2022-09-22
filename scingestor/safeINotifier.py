@@ -38,9 +38,9 @@ class EventData:
         :param masks: mask description
         :type maks: :obj:`str`
         """
-        # (:obj:`str`) name
+        #: (:obj:`str`) name
         self.name = name
-        # (:obj:`str`) mask
+        #: (:obj:`str`) mask
         self.masks = masks
 
 
@@ -48,11 +48,11 @@ class SafeINotifier(threading.Thread):
     """ singleton wrapper for inotifyx
     """
 
-    # (:class:`SafeINotifier`) singleton notifier instance
+    #: (:class:`SafeINotifier`) singleton notifier instance
     _notifier = None
-    # (:class:`threading.Lock`) singleton lock
+    #: (:class:`threading.Lock`) singleton lock
     _lock = threading.Lock()
-    # (:obj:`bool`) make notifier to be a daemon
+    #: (:obj:`bool`) make notifier to be a daemon
     daemon = True
 
     def __new__(cls, *args, **kwargs):
@@ -71,28 +71,28 @@ class SafeINotifier(threading.Thread):
         """
         threading.Thread.__init__(self)
 
-        # (:obj:`bool`) running loop flag
+        #: (:obj:`bool`) running loop flag
         self.running = True
 
-        # (:obj:`int`) watch description queue counter
+        #: (:obj:`int`) watch description queue counter
         self.id_queue_counter = 0
-        # (:obj:`float`) timeout value for inotifyx get events
+        #: (:obj:`float`) timeout value for inotifyx get events
         self.inotify_timeout = 0.1
 
-        # (:obj:`int`) notifier ID
+        #: (:obj:`int`) notifier ID
         self.__notifier = None
-        # (:obj:`dict` <:obj:`int`, :obj:`queue.Queue`>)
+        #: (:obj:`dict` <:obj:`int`, :obj:`queue.Queue`>)
         # watch description queues
         self.__id_queue = {}
-        # (:obj:`dict` <:obj:`int`, :obj:`int`>)  queue ids watch description
+        #: (:obj:`dict` <:obj:`int`, :obj:`int`>)  queue ids watch description
         self.__qid_wd = {}
-        # (:class:`threading.Lock`) watch dictionary lock
+        #: (:class:`threading.Lock`) watch dictionary lock
         self.__id_queue_lock = threading.Lock()
 
-        # (:obj:`list` < (:obj:`int`, :obj:`path`, :obj:`int`) >)
+        #: (:obj:`list` < (:obj:`int`, :obj:`path`, :obj:`int`) >)
         # watch description to add i.e. (id, path, masks)
         self.__wd_to_add = []
-        # (:obj:`list` < :obj:`int`>)
+        #: (:obj:`list` < :obj:`int`>)
         # queue id of watch description to remove
         self.__wd_to_rm = []
 
