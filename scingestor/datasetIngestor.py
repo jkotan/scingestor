@@ -55,7 +55,7 @@ class DatasetIngestor:
         :param dsfile: file with a ingester dataset list
         :type dsfile: :obj:`str`
         :param meta: beamtime configuration
-        :type meta: :obj:`dict` <:obj:`str`,`any`>
+        :type meta: :obj:`dict` <:obj:`str`, `any`>
         :param beamtimefile: beamtime filename
         :type beamtimefile: :obj:`str`
         :param doiprefix: doiprefix

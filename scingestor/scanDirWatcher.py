@@ -41,7 +41,7 @@ class ScanDirWatcher(threading.Thread):
         :param path: scan dir path
         :type path: :obj:`str`
         :param meta: beamtime configuration
-        :type meta: :obj:`dict` <:obj:`str`,`any`>
+        :type meta: :obj:`dict` <:obj:`str`, `any`>
         :param bpath: beamtime file
         :type bpath: :obj:`str`
         """
@@ -56,7 +56,7 @@ class ScanDirWatcher(threading.Thread):
         self.__path = path
         #: (:obj:`str`) beamtime path and file name
         self.__bpath = bpath
-        #: (:obj:`dict` <:obj:`str`,`any`>) beamtime configuration
+        #: (:obj:`dict` <:obj:`str`, `any`>) beamtime configuration
         self.__meta = meta
         #: (:obj:`str`) beamtime id
         self.__beamtimeId = meta["beamtimeId"]
