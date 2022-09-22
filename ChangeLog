@@ -1,5 +1,6 @@
 2021-09-23 Jan Kotanski <jan.kotanski@desy.de>
 	* improve catching errors coming from metadata script generators or wrong file permissions (#93)
+	* add metadata_in_log_dir to the configuration (#94)
 	* tagged as 0.0.4
 
 2021-09-22 Jan Kotanski <jan.kotanski@desy.de>
