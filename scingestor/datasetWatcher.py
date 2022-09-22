@@ -217,7 +217,11 @@ class DatasetWatcher(threading.Thread):
                     get_logger().debug(
                         'DatasetWatcher: Re-check dataset list after %s s'
                         % self.__maxcounter)
-                    self.__ingestor.check_list()
+                    try:
+                        self.__ingestor.check_list()
+                    except Exception as e:
+                        get_logger().info(str(e))
+                        continue
                 elif self.__maxcounter > counter:
                     get_logger().debug(
                         'DatasetWatcher: increase counter %s/%s ' %
