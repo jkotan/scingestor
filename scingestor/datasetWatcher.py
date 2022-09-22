@@ -146,7 +146,10 @@ class DatasetWatcher(threading.Thread):
         """ scandir watcher thread
         """
         self._start_notifier(self.__dsfile)
-        self.__ingestor.check_list()
+        try:
+            self.__ingestor.check_list()
+        except Exception as e:
+            get_logger().warning(str(e))
 
         get_logger().info(
             'DatasetWatcher: Waiting datasets: %s'
@@ -157,10 +160,13 @@ class DatasetWatcher(threading.Thread):
         if self.__ingestor.waiting_datasets():
             time.sleep(self.__delay)
         if self.__ingestor.waiting_datasets():
-            token = self.__ingestor.get_token()
-            for scan in self.__ingestor.waiting_datasets():
-                self.__ingestor.ingest(scan, token)
-            self.__ingestor.clear_waiting_datasets()
+            try:
+                token = self.__ingestor.get_token()
+                for scan in self.__ingestor.waiting_datasets():
+                    self.__ingestor.ingest(scan, token)
+                self.__ingestor.clear_waiting_datasets()
+            except Exception as e:
+                get_logger().warning(str(e))
 
         counter = 0
         try:
@@ -196,7 +202,11 @@ class DatasetWatcher(threading.Thread):
                             if ffn is not None and ffn == self.__dsfile:
                                 get_logger().debug(
                                     'DatasetWatcher: Changed %s' % ffn)
-                                self.__ingestor.check_list()
+                                try:
+                                    self.__ingestor.check_list()
+                                except Exception as e:
+                                    get_logger().warning(str(e))
+                                    continue
                         elif "IN_MODIFY" in masks or "IN_OPEN" in masks:
                             if event.name:
                                 fdir, fname = os.path.split(
@@ -206,7 +216,11 @@ class DatasetWatcher(threading.Thread):
                                    ffn == self.__dsfile:
                                     get_logger().debug(
                                         'DatasetWatcher: Changed %s' % ffn)
-                                    self.__ingestor.check_list()
+                                    try:
+                                        self.__ingestor.check_list()
+                                    except Exception as e:
+                                        get_logger().warning(str(e))
+                                        continue
 
                 if counter == self.__maxcounter:
                     # if inotify does not work
@@ -217,7 +231,11 @@ class DatasetWatcher(threading.Thread):
                     get_logger().debug(
                         'DatasetWatcher: Re-check dataset list after %s s'
                         % self.__maxcounter)
-                    self.__ingestor.check_list()
+                    try:
+                        self.__ingestor.check_list()
+                    except Exception as e:
+                        get_logger().warning(str(e))
+                        continue
                 elif self.__maxcounter > counter:
                     get_logger().debug(
                         'DatasetWatcher: increase counter %s/%s ' %
@@ -229,9 +247,17 @@ class DatasetWatcher(threading.Thread):
 
                 if self.__ingestor.waiting_datasets():
                     time.sleep(self.__delay)
-                    token = self.__ingestor.get_token()
+                    try:
+                        token = self.__ingestor.get_token()
+                    except Exception as e:
+                        get_logger().warning(str(e))
+                        continue
                     for scan in self.__ingestor.waiting_datasets():
-                        self.__ingestor.ingest(scan, token)
+                        try:
+                            self.__ingestor.ingest(scan, token)
+                        except Exception as e:
+                            get_logger().warning(str(e))
+                            continue
                     self.__ingestor.clear_waiting_datasets()
                 # else:
                 #     time.sleep(self.__timeout)

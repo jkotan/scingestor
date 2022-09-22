@@ -1,3 +1,7 @@
+2021-09-23 Jan Kotanski <jan.kotanski@desy.de>
+	* improve catching errors coming from metadata script generators or wrong file permissions (#93)
+	* tagged as 0.0.4
+
 2021-09-22 Jan Kotanski <jan.kotanski@desy.de>
 	* add coverage tests for deb11 (#74)
 	* add nxs_dataset_metadata_generator dataset_metadata_generator datablock_metadata_generator datablock_metadata_stream_generator datablock_metadata_generator_scanpath_postfix into the configuration (#72)

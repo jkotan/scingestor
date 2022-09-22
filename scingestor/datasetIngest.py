@@ -153,13 +153,16 @@ class DatasetIngest:
             ingestor = DatasetIngestor(
                 self.__config,
                 scpath, fn, ifn, meta, bpath)
-            ingestor.check_list(reingest=True)
-            ingestor.clear_tmpfile()
-            if ingestor.waiting_datasets():
-                token = ingestor.get_token()
-                for scan in ingestor.waiting_datasets():
-                    ingestor.reingest(scan, token)
-            ingestor.update_from_tmpfile()
+            try:
+                ingestor.check_list(reingest=True)
+                ingestor.clear_tmpfile()
+                if ingestor.waiting_datasets():
+                    token = ingestor.get_token()
+                    for scan in ingestor.waiting_datasets():
+                        ingestor.reingest(scan, token)
+                ingestor.update_from_tmpfile()
+            except Exception as e:
+                get_logger().warning(str(e))
 
     def _find_bt_files(self, path, prefix, postfix):
         """ find beamtime files with given prefix and postfix in the given path
