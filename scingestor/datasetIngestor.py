@@ -339,7 +339,8 @@ class DatasetIngestor:
                 'DatasetIngestor: Generating dataset command: %s ' % (
                     self.__datasetcommandnxs.format(**self.__dctfmt)))
             subprocess.run(
-                self.__datasetcommandnxs.format(**self.__dctfmt).split())
+                self.__datasetcommandnxs.format(**self.__dctfmt).split(),
+                check=True)
         else:
             get_logger().info(
                 'DatasetIngestor: Generating metadata: %s %s' % (
@@ -350,7 +351,8 @@ class DatasetIngestor:
                 'DatasetIngestor: Generating dataset command: %s ' % (
                     self.__datasetcommand.format(**self.__dctfmt)))
             subprocess.run(
-                self.__datasetcommand.format(**self.__dctfmt).split())
+                self.__datasetcommand.format(**self.__dctfmt).split(),
+                check=True)
 
         rdss = glob.glob(
             "{scanpath}/{scanname}{scpostfix}".format(
@@ -381,7 +383,7 @@ class DatasetIngestor:
             'DatasetIngestor: Generating origdatablock command: %s ' % cmd)
         # get_logger().info(
         #     'DatasetIngestor: Generating origdatablock command: %s ' % cmd)
-        subprocess.run(cmd.split())
+        subprocess.run(cmd.split(), check=True)
         odbs = glob.glob(
             "{scanpath}/{scanname}{dbpostfix}".format(
                     **self.__dctfmt))
@@ -422,7 +424,7 @@ class DatasetIngestor:
         except Exception as e:
             get_logger().warning('%s: %s' % (scan, str(e)))
         if dmeta is None:
-            subprocess.run(cmd.split())
+            subprocess.run(cmd.split(), check=True)
         else:
             cmd = self.__datablockmemcommand.format(**self.__dctfmt)
             sscan = (scan or "").split(" ")
@@ -434,7 +436,7 @@ class DatasetIngestor:
 
             result = subprocess.run(
                 cmd.split(),
-                text=True, capture_output=True)
+                text=True, capture_output=True, check=True)
             nwmeta = str(result.stdout)
             try:
                 dnwmeta = json.loads(nwmeta)
