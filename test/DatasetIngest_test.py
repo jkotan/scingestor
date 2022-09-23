@@ -3902,11 +3902,16 @@ class DatasetIngestTest(unittest.TestCase):
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
             cf.write(cred)
+        prop = {
+            "ownerGroup": "mygroup",
+            "accessGroups": ["group1", "group2"],
+        }
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'metadata_in_log_dir: true\n' \
+            'owner_access_groups_from_proposal: true\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
@@ -3927,6 +3932,7 @@ class DatasetIngestTest(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
                 self.__server.reset()
+                self.__server.pid_proposal["99001234"] = json.dumps(prop)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
@@ -3976,13 +3982,17 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
+                    "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
-                self.assertEqual(len(self.__server.userslogin), 1)
+                self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[1],
                     b'{"username": "ingestor", "password": "12342345"}')
                 self.assertEqual(len(self.__server.datasets), 2)
                 self.myAssertDict(
@@ -3995,9 +4005,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Ouruser',
-                     'ownerGroup': '99001234-part',
-                     'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                     'ownerGroup': 'mygroup',
+                     'accessGroups': ['group1', 'group2'],
                      'ownerEmail': 'appuser@fake.com',
                      'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
@@ -4020,12 +4029,11 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Ouruser',
-                     'ownerGroup': '99001234-part',
+                     'accessGroups': ['group1', 'group2'],
+                     'ownerGroup': 'mygroup',
                      'ownerEmail': 'appuser@fake.com',
                      'pid': '99001234/myscan_00002',
                      'datasetName': 'myscan_00002',
-                     'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -4045,9 +4053,8 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-part',
-                     'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                     'ownerGroup': 'mygroup',
+                     'accessGroups': ['group1', 'group2'],
                      'datasetId': '10.3204/99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
@@ -4060,9 +4067,8 @@ class DatasetIngestTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'datasetId': '10.3204/99001234/myscan_00002',
-                     'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
-                     'ownerGroup': '99001234-part',
+                     'accessGroups': ['group1', 'group2'],
+                     'ownerGroup': 'mygroup',
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -4109,11 +4115,16 @@ class DatasetIngestTest(unittest.TestCase):
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
             cf.write(cred)
+        prop = {
+            "ownerGroup": "mygroup",
+            "accessGroups": ["group1", "group2"],
+        }
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'metadata_in_log_dir: true\n' \
+            'owner_access_groups_from_proposal: true\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
@@ -4134,6 +4145,7 @@ class DatasetIngestTest(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
                 self.__server.reset()
+                self.__server.pid_proposal["99001234"] = json.dumps(prop)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
@@ -4159,13 +4171,19 @@ class DatasetIngestTest(unittest.TestCase):
                             dslist=fdslist,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
-                self.assertEqual("Login: ingestor\n", vl)
-                self.assertEqual(len(self.__server.userslogin), 2)
+                self.assertEqual("Login: ingestor\nLogin: ingestor\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 4)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
                 self.assertEqual(
                     self.__server.userslogin[1],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[2],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[3],
                     b'{"username": "ingestor", "password": "12342345"}')
                 self.assertEqual(len(self.__server.datasets), 2)
                 self.myAssertDict(
@@ -4177,13 +4195,12 @@ class DatasetIngestTest(unittest.TestCase):
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
+                     'ownerGroup': 'mygroup',
                      'owner': 'Ouruser',
-                     'ownerGroup': '99001234-part',
                      'ownerEmail': 'appuser@fake.com',
                      'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
-                     'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                     'accessGroups': ['group1', 'group2'],
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata': {
@@ -4204,12 +4221,11 @@ class DatasetIngestTest(unittest.TestCase):
                      'techniques': [],
                      'owner': 'Ouruser',
                      'ownerEmail': 'appuser@fake.com',
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': 'mygroup',
                      'pid': '99001234/myscan_00002',
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
-                     'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                     'accessGroups': ['group1', 'group2'],
                      'proposalId': '99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
@@ -4229,9 +4245,8 @@ class DatasetIngestTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'datasetId': '10.3204/99001234/myscan_00001',
-                     'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
-                     'ownerGroup': '99001234-part',
+                     'accessGroups': ['group1', 'group2'],
+                     'ownerGroup': 'mygroup',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -4243,9 +4258,8 @@ class DatasetIngestTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'datasetId': '10.3204/99001234/myscan_00002',
-                     'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
-                     'ownerGroup': '99001234-part',
+                     'accessGroups': ['group1', 'group2'],
+                     'ownerGroup': 'mygroup',
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -4299,9 +4313,15 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'metadata_in_log_dir: true\n' \
+            'owner_access_groups_from_proposal: true\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+
+        prop = {
+            "ownerGroup": "mygroup",
+            "accessGroups": ["group1", "group2"],
+        }
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -4319,6 +4339,7 @@ class DatasetIngestTest(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
                 self.__server.reset()
+                self.__server.pid_proposal["99001234"] = json.dumps(prop)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
@@ -4381,14 +4402,21 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
+                    "Login: ingestor\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
                     vl)
-                self.assertEqual(len(self.__server.userslogin), 2)
+                self.assertEqual(len(self.__server.userslogin), 4)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
                 self.assertEqual(
                     self.__server.userslogin[1],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[2],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[3],
                     b'{"username": "ingestor", "password": "12342345"}')
                 # self.assertEqual(
                 #     self.__server.userslogin[2],
@@ -4399,7 +4427,7 @@ class DatasetIngestTest(unittest.TestCase):
                     {'contactEmail': 'BSName',
                      'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/p00',
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': 'mygroup',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
@@ -4409,8 +4437,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
-                     'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                     'accessGroups': ['group1', 'group2'],
                      'proposalId': '99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
@@ -4429,13 +4456,13 @@ class DatasetIngestTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Ouruser',
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': 'mygroup',
                      'ownerEmail': 'appuser@fake.com',
                      'pid': '99001234/myscan_00002',
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         'group1', 'group2'],
                      'proposalId': '99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
@@ -4456,8 +4483,8 @@ class DatasetIngestTest(unittest.TestCase):
                          'uid': 'jkotan'}],
                      'datasetId': '10.3204/99001234/myscan_00001',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
-                     'ownerGroup': '99001234-part',
+                         'group1', 'group2'],
+                     'ownerGroup': 'mygroup',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -4470,8 +4497,8 @@ class DatasetIngestTest(unittest.TestCase):
                          'uid': 'jkotan'}],
                      'datasetId': '10.3204/99001234/myscan_00002',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
-                     'ownerGroup': '99001234-part',
+                         'group1', 'group2'],
+                     'ownerGroup': 'mygroup',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[2]),
@@ -4484,8 +4511,8 @@ class DatasetIngestTest(unittest.TestCase):
                          'uid': 'jkotan'}],
                      'datasetId': '10.3204/99001234/myscan_00002',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
-                     'ownerGroup': '99001234-part',
+                         'group1', 'group2'],
+                     'ownerGroup': 'mygroup',
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)

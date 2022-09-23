@@ -71,9 +71,11 @@ Its configuration written in YAML can contain the following variables
 * ``max_request_tries_number`` (int)
 * ``request_headers`` (dict\<str,str\>)
 * ``scicat_datasets_path`` (str)
+* ``scicat_proposals_path`` (str)
 * ``scicat_datablocks_path`` (str)
 * ``scicat_users_login_path`` (str)
 * ``metadata_keywords_without_checks`` (list\<str\>)
+* ``owner_access_groups_from_proposal`` (bool)
 
 e.g.
 
