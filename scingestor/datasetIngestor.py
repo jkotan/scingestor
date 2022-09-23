@@ -127,9 +127,9 @@ class DatasetIngestor:
         self.__datasetcommandnxs = "nxsfileinfo metadata " \
             " -o {metapath}/{scanname}{scpostfix} " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
-            " -c {accessgroups}" \
             " -w {ownergroup}" \
-            "{scanpath}/{scanname}.nxs"
+            " -c {accessgroups}" \
+            " {scanpath}/{scanname}.nxs"
         #: (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata " \
             " -o {metapath}/{scanname}{scpostfix} " \
