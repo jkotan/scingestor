@@ -107,7 +107,7 @@ class SafeINotifier(threading.Thread):
         :param mask: watch mask
         :type mask: :obj:`int`
         :returns: queue providing events and its id
-        :rtype: [:class:`threading.queue`, :obj:`int`]
+        :rtype: [:class:`queue.Queue`, :obj:`int`]
         """
 
         wqueue = queue.Queue()
