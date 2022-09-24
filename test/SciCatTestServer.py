@@ -139,6 +139,13 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     {'exists': (pid in self.server.pid_dataset.keys())})
             elif len(dspath) == 3:
                 message = self.server.pid_dataset[pid]
+        if len(dspath) > 2 and dspath[1].lower() == "proposals":
+            pid = dspath[2].replace("%2F", "/")
+            if len(dspath) == 4 and dspath[3].lower() == "exists":
+                message = json.dumps(
+                    {'exists': (pid in self.server.pid_proposal.keys())})
+            elif len(dspath) == 3:
+                message = self.server.pid_proposal[pid]
         self.wfile.write(bytes(message, "utf8"))
 
 
@@ -162,6 +169,8 @@ class SciCatTestServer(HTTPServer):
         self.others = []
         #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with datasets
         self.pid_dataset = {}
+        #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with proposals
+        self.pid_proposal = {}
         #: (:obj:`str`) doi prefix
         self.doiprefix = "10.3204/"
 
@@ -171,6 +180,7 @@ class SciCatTestServer(HTTPServer):
         self.userslogin = []
         self.others = []
         self.pid_dataset = {}
+        self.pid_proposal = {}
 
     def run(self):
         try:

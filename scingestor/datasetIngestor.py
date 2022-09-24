@@ -83,6 +83,8 @@ class DatasetIngestor:
         self.__bl = meta["beamline"]
         #: (:obj:`str`) beamtime id
         self.__bfile = beamtimefile
+        #: (:obj:`dict` <:obj:`str`, `any`>) beamtime metadata
+        self.__meta = meta
 
         bpath, _ = os.path.split(beamtimefile)
         #: (:obj:`str`) relative scan path to beamtime path
@@ -102,9 +104,11 @@ class DatasetIngestor:
         self.__scicat_url = "http://localhost:8881"
         #: (:obj:`str`) scicat users login
         self.__scicat_users_login = "Users/login"
-        #: (:obj:`str`) scicat users login
+        #: (:obj:`str`) scicat datasets class
         self.__scicat_datasets = "RawDatasets"
-        #: (:obj:`str`) scicat users login
+        #: (:obj:`str`) scicat proposal class
+        self.__scicat_proposals = "Proposals"
+        #: (:obj:`str`) scicat datablock class
         self.__scicat_datablocks = "OrigDatablocks"
         #: (:obj:`str`) chmod string for json metadata
         self.__chmod = None
@@ -123,21 +127,27 @@ class DatasetIngestor:
         self.__datasetcommandnxs = "nxsfileinfo metadata " \
             " -o {metapath}/{scanname}{scpostfix} " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
-            "{scanpath}/{scanname}.nxs"
+            " -w {ownergroup}" \
+            " -c {accessgroups}" \
+            " {scanpath}/{scanname}.nxs"
         #: (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata " \
             " -o {metapath}/{scanname}{scpostfix} " \
+            " -c {accessgroups}" \
+            " -w {ownergroup}" \
             " -b {beamtimefile} -p {beamtimeid}/{scanname}"
         #: (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*{dbpostfix},*{scpostfix},*~ " \
             " -p {doiprefix}/{beamtimeid}/{scanname} " \
-            " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
+            " -w {ownergroup}" \
+            " -c {accessgroups}" \
             " -o {metapath}/{scanname}{dbpostfix} "
         #: (:obj:`str`) datablock shell command
         self.__datablockmemcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*{dbpostfix},*{scpostfix},*~ " \
-            " -c {beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt" \
+            " -w {ownergroup}" \
+            " -c {accessgroups}" \
             " -p {doiprefix}/{beamtimeid}/{scanname} "
         #: (:obj:`str`) datablock path postfix
         self.__datablockscanpath = " {scanpath}/{scanname} "
@@ -171,6 +181,20 @@ class DatasetIngestor:
         #: (:obj:`dict`<:obj:`str`, :obj:`list`<:obj:`str`>>)
         #   ingested scan names
         self.__sc_ingested_map = {}
+
+        #: (:obj:`str`) access groups
+        self.__accessgroups = \
+            "{beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt".format(
+                beamtimeid=self.__bid, beamline=self.__bl)
+        if "accessGroups" in self.__meta:
+            self.__accessgroups = ",".join(self.__meta["accessGroups"])
+
+        #: (:obj:`str`) owner group
+        self.__ownergroup = \
+            "{beamtimeid}-part".format(
+                beamtimeid=self.__bid)
+        if "ownerGroup" in self.__meta:
+            self.__ownergroup = self.__meta["ownerGroup"]
 
         #: (:obj:`bool`) metadata in log dir flag
         self.__meta_in_log_dir = False
@@ -207,6 +231,8 @@ class DatasetIngestor:
             self.__scicat_url = self.__config["scicat_url"]
         if "scicat_datasets_path" in self.__config.keys():
             self.__scicat_datasets = self.__config["scicat_datasets_path"]
+        if "scicat_proposals_path" in self.__config.keys():
+            self.__scicat_proposals = self.__config["scicat_proposals_path"]
         if "scicat_datablocks_path" in self.__config.keys():
             self.__scicat_datablocks = self.__config["scicat_datablocks_path"]
         if "scicat_users_login_path" in self.__config.keys():
@@ -317,6 +343,8 @@ class DatasetIngestor:
             "beamtimefile": self.__bfile,
             "scpostfix": self.__scanpostfix,
             "dbpostfix": self.__datablockpostfix,
+            "ownergroup": self.__ownergroup,
+            "accessgroups": self.__accessgroups
         }
 
         get_logger().debug(
@@ -330,14 +358,20 @@ class DatasetIngestor:
         self.__tokenurl = self.__scicat_url + self.__scicat_users_login
         # get_logger().info(
         #     'DatasetIngestor: LOGIN %s' % self.__tokenurl)
+
         #: (:obj:`str`) dataset url
+        self.__dataseturl = self.__scicat_url + self.__scicat_datasets
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #    "RawDatasets"
-        self.__dataseturl = self.__scicat_url + self.__scicat_datasets
+        #: (:obj:`str`) dataset url
+        self.__proposalurl = self.__scicat_url + self.__scicat_proposals
+        # self.__proposalurl = "http://www-science3d.desy.de:3000/api/v3/" \
+        #    "Proposals"
+
         #: (:obj:`str`) origdatablock url
+        self.__datablockurl = self.__scicat_url + self.__scicat_datablocks
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #     "OrigDatablocks"
-        self.__datablockurl = self.__scicat_url + self.__scicat_datablocks
 
     def _generate_rawdataset_metadata(self, scan):
         """ generate raw dataset metadata
@@ -536,7 +570,6 @@ class DatasetIngestor:
 
                         status = False
                         break
-
         return status
 
     def get_token(self):
@@ -557,6 +590,60 @@ class DatasetIngestor:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
         return ""
+
+    def append_proposal_groups(self):
+        """ appends owner and access groups to beamtime
+
+        :param meta: beamtime configuration
+        :type meta: :obj:`dict` <:obj:`str`, `any`>
+        :param path: base file path
+        :type path: :obj:`str`
+        :returns: updated beamtime configuration
+        :rtype: :obj:`dict` <:obj:`str`, `any`>
+        """
+        token = self.get_token()
+        bid = self.__meta["beamtimeId"]
+        try:
+            resexists = requests.get(
+                "{url}/{pid}/exists?access_token={token}"
+                .format(
+                    url=self.__proposalurl,
+                    pid=bid.replace("/", "%2F"),
+                    token=token))
+            if resexists.ok:
+                pexists = json.loads(resexists.content)["exists"]
+            else:
+                raise Exception("Proposal %s: %s" % (bid, resexists.text))
+            if pexists:
+                resget = requests.get(
+                    "{url}/{pid}?access_token={token}"
+                    .format(
+                        url=self.__proposalurl,
+                        pid=bid.replace("/", "%2F"),
+                        token=token))
+                if resget.ok:
+                    proposal = json.loads(resget.content)
+                    if "ownerGroup" not in self.__meta and \
+                       "ownerGroup" in proposal:
+                        self.__meta["ownerGroup"] = proposal["ownerGroup"]
+                        self.__ownergroup = self.__meta["ownerGroup"]
+                        self.__dctfmt["ownergroup"] = self.__ownergroup
+
+                    if "accessGroups" not in self.__meta and \
+                       "accessGroups" in proposal:
+                        self.__meta["accessGroups"] = list(
+                            proposal["accessGroups"])
+                        self.__accessgroups = \
+                            ",".join(self.__meta["accessGroups"])
+                        self.__dctfmt["accessgroups"] = self.__accessgroups
+                else:
+                    raise Exception(
+                        "Proposal %s: %s" % (bid, resget.text))
+            else:
+                raise Exception("Proposal %s: %s" % (bid, resexists.text))
+        except Exception as e:
+            get_logger().warning('%s' % (str(e)))
+        return self.__meta
 
     def _post_dataset(self, mdic, token, mdct):
         """ post dataset

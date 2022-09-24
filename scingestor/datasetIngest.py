@@ -65,6 +65,12 @@ class DatasetIngest:
         #: (:obj:`str`) ingestor log directory
         self.__log_dir = ""
 
+        #: (:obj:`bool`) access groups from proposals
+        self.__groups_from_proposal = False
+        if "owner_access_groups_from_proposal" in self.__config.keys():
+            self.__groups_from_proposal = \
+                self.__config["owner_access_groups_from_proposal"]
+
         if "beamtime_dirs" in self.__config.keys() \
            and isinstance(self.__config["beamtime_dirs"], list):
             self.__beamtime_dirs = self.__config["beamtime_dirs"]
@@ -153,6 +159,9 @@ class DatasetIngest:
             ingestor = DatasetIngestor(
                 self.__config,
                 scpath, fn, ifn, meta, bpath)
+            if self.__groups_from_proposal and \
+               ("accessGroups" not in meta or "ownerGroup" not in meta):
+                meta = ingestor.append_proposal_groups()
             try:
                 ingestor.check_list(reingest=True)
                 ingestor.clear_tmpfile()

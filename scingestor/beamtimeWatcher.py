@@ -27,6 +27,7 @@ import inotifyx
 
 from .scanDirWatcher import ScanDirWatcher
 from .safeINotifier import SafeINotifier
+from .datasetIngestor import DatasetIngestor
 from .configuration import load_config
 from .logger import get_logger, init_logger
 
@@ -68,6 +69,13 @@ class BeamtimeWatcher:
            and self.__config["beamtime_base_dir"]:
             self.__beamtime_base_dir = os.path.abspath(
                 self.__config["beamtime_base_dir"])
+
+        #: (:obj:`bool`) access groups from proposals
+        self.__groups_from_proposal = False
+        if "owner_access_groups_from_proposal" in self.__config.keys():
+            self.__groups_from_proposal = \
+                self.__config["owner_access_groups_from_proposal"]
+
         #: (:obj:`dict` <:obj:`str`, :obj:`str`>)
         #                             beamtime path to watcher path map
         self.__wait_for_dirs = {}
@@ -452,6 +460,7 @@ class BeamtimeWatcher:
                         get_logger().info(
                             'BeamtimeWatcher: Create ScanDirWatcher %s %s'
                             % (path, ffn))
+                        btmd = self.__append_proposal_groups(btmd, path)
                         sdw = self.__scandir_watchers[(path, ffn)] =  \
                             ScanDirWatcher(self.__config, path, btmd, ffn)
                 if sdw is not None:
@@ -459,6 +468,24 @@ class BeamtimeWatcher:
             except Exception as e:
                 get_logger().warning(
                     "%s cannot be watched: %s" % (ffn, str(e)))
+
+    def __append_proposal_groups(self, meta, path):
+        """ appends owner and access groups to beamtime
+
+        :param meta: beamtime configuration
+        :type meta: :obj:`dict` <:obj:`str`, `any`>
+        :param path: base file path
+        :type path: :obj:`str`
+        :returns: updated beamtime configuration
+        :rtype: :obj:`dict` <:obj:`str`, `any`>
+        """
+        if not self.__groups_from_proposal or (
+                "accessGroups" in meta and "ownerGroup" in meta):
+            return meta
+        else:
+            ingestor = DatasetIngestor(
+                self.__config, path, "", "", meta, path)
+            return ingestor.append_proposal_groups()
 
     def stop(self):
         """ stop beamtime watcher
