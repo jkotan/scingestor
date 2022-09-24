@@ -10,40 +10,42 @@ SciCat Dataset ingestor server ingests scan metadata just after a scan is finish
 ```
 scicat_dataset_ingestor -c ~/.scingestor.yaml
 ```
-Its configuration written in YAML can contain the following variables
-* `scicat_url` (str)
-* `ingestor_credential_file` (str)
-* `beamtime_dirs` (list\<str\>)  or  `beamtime_base_dir` (str)
-* `ingestor_log_dir` (str)
-* `ingestor_username` (str)
-* `doi_prefix` (str)
-* `update_strategy` (`patch`, `create`, `mixed`)
-* `relative_path_in_datablock` (bool)
-* `chmod_json_files` (str)
-* `oned_in_metadata` (bool)
-* `scan_metadata_postfix` (str)
-* `datablock_metadata_postfix` (str)
-* `metadata_in_log_dir` (bool)
-* `beamtime_filename_postfix` (str)
-* `beamtime_filename_prefix` (str)
-* `datasets_filename_pattern` (str)
-* `ingested_datasets_filename_pattern` (str)
-* `nxs_dataset_metadata_generator` (str)
-* `dataset_metadata_generator` (str)
-* `datablock_metadata_generator` (str)
-* `datablock_metadata_stream_generator` (str)
-* `datablock_metadata_generator_scanpath_postfix` (str)
-* `inotify_timeout` (float)
-* `get_event_timeout` (float)
-* `ingestion_delay_time` (float)
-* `max_request_tries_number` (int)
-* `request_headers` (dict\<str,str\>)
-* `scicat_datasets_path` (str)
-* `scicat_proposals_path` (str)
-* `scicat_datablocks_path` (str)
-* `scicat_users_login_path` (str)
-* `metadata_keywords_without_checks` (list\<str\>)
-* `owner_access_groups_from_proposal` (bool)
+## Configuration variables
+The configuration written in YAML can contain the following variables
+* **scicat_url** *(str)* , default: `"http://localhost:8881"`
+* **ingestor_credential_file** *(str)* , default: `None`
+* **beamtime_dirs** *(list\<str\>)* , default: `[]`
+* **beamtime_base_dir** *(str)* , default: `""`
+* **ingestor_log_dir** *(str)* , default: `""`
+* **ingestor_username** *(str)* , default: `"ingestor"`
+* **doi_prefix** *(str)* , default: `"10.3204"`
+* **update_strategy** (`"patch"`, `"create"`, `"mixed"`) , default: `"patch"`
+* **relative_path_in_datablock** *(bool)* , default: `False`
+* **chmod_json_files** *(str)* , default: `None`
+* **oned_in_metadata** *(bool)* , default: `False`
+* **scan_metadata_postfix** *(str)* , default: `".scan.json"`
+* **datablock_metadata_postfix** *(str)* , default: `".origdatablock.json"`
+* **metadata_in_log_dir** *(bool)* , default: `False`
+* **beamtime_filename_postfix** *(str)* , default: `"beamtime-metadata-"`
+* **beamtime_filename_prefix** *(str)* , default: `".json"`
+* **datasets_filename_pattern** *(str)* , default: `"scicat-datasets-{bt}.lst"`
+* **ingested_datasets_filename_pattern** *(str)* , default: `"scicat-ingested-datasets-{bt}.lst"`
+* **nxs_dataset_metadata_generator** *(str)* , default: `"nxsfileinfo metadata  -o {metapath}/{scanname}{scpostfix}  -b {beamtimefile} -p {beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} {scanpath}/{scanname}.nxs"`
+* **dataset_metadata_generator** *(str)* , default: `"nxsfileinfo metadata  -o {metapath}/{scanname}{scpostfix}  -c {accessgroups} -w {ownergroup} -b {beamtimefile} -p {beamtimeid}/{scanname}"`
+* **datablock_metadata_generator** *(str)* , default: `"nxsfileinfo origdatablock  -s *.pyc,*{dbpostfix},*{scpostfix},*~  -p {doiprefix}/{beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} -o {metapath}/{scanname}{dbpostfix} "`
+* **datablock_metadata_stream_generator** *(str)* , default: `"nxsfileinfo origdatablock  -s *.pyc,*{dbpostfix},*{scpostfix},*~  -w {ownergroup} -c {accessgroups} -p {doiprefix}/{beamtimeid}/{scanname} "`
+* **datablock_metadata_generator_scanpath_postfix** *(str)* , default: `" {scanpath}/{scanname} "`
+* **inotify_timeout** *(float)* , default: `0.1`
+* **get_event_timeout** *(float)* , default: `0.01`
+* **ingestion_delay_time** *(float)* , default: `5.0`
+* **max_request_tries_number** *(int)* , default: `100`
+* **request_headers** *(dict\<str,str\>)* , default: `{"Content-Type": "application/json", "Accept": "application/json"}`
+* **scicat_datasets_path** *(str)* , default: `"RawDatasets"`
+* **scicat_proposals_path** *(str)* , default: `"Proposals"`
+* **scicat_datablocks_path** *(str)*, default: `"OrigDatablocks"`
+* **scicat_users_login_path** *(str)*, default: `"Users/login"`
+* **owner_access_groups_from_proposal** *(bool)*, default: `False`
+* **metadata_keywords_without_checks** *(list\<str\>)*, default: `["techniques", "classification", "createdBy", "updatedBy", "datasetlifecycle", "numberOfFiles", "size", "createdAt", "updatedAt", "history", "creationTime", "version", "scientificMetadata", "endTime"]`
 
 e.g.
 ```
