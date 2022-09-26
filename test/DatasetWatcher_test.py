@@ -2153,9 +2153,9 @@ class DatasetWatcherTest(unittest.TestCase):
                                 cnt6=(cnt + 5), cnt7=(cnt + 6),
                                 det1="../lambda1/", det2="../lambda2/",
                                 sc1='myscan_00001', sc2='myscan_00002'),
-                        [(5, 9)])
+                        [(5, 11)])
                     self.assertEqual(
-                        pattern, self.sortmarkedlines(dseri, [(5, 9)]))
+                        pattern, self.sortmarkedlines(dseri, [(5, 11)]))
                 except Exception:
                     print(er)
                     raise
