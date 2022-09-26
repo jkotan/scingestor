@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>scingestor.beamtimeWatcher &#8212; SciCat Dataset Ingestor 0.0.3 documentation</title>
+    <title>scingestor.beamtimeWatcher &#8212; SciCat Dataset Ingestor 0.0.4 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -59,6 +59,7 @@
 
 <span class="kn">from</span> <span class="nn">.scanDirWatcher</span> <span class="k">import</span> <span class="n">ScanDirWatcher</span>
 <span class="kn">from</span> <span class="nn">.safeINotifier</span> <span class="k">import</span> <span class="n">SafeINotifier</span>
+<span class="kn">from</span> <span class="nn">.datasetIngestor</span> <span class="k">import</span> <span class="n">DatasetIngestor</span>
 <span class="kn">from</span> <span class="nn">.configuration</span> <span class="k">import</span> <span class="n">load_config</span>
 <span class="kn">from</span> <span class="nn">.logger</span> <span class="k">import</span> <span class="n">get_logger</span><span class="p">,</span> <span class="n">init_logger</span>
 
@@ -100,6 +101,13 @@
            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;beamtime_base_dir&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__beamtime_base_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;beamtime_base_dir&quot;</span><span class="p">])</span>
+
+        <span class="c1">#: (:obj:`bool`) access groups from proposals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__groups_from_proposal</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="s2">&quot;owner_access_groups_from_proposal&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__groups_from_proposal</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;owner_access_groups_from_proposal&quot;</span><span class="p">]</span>
+
         <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;)</span>
         <span class="c1">#                             beamtime path to watcher path map</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__wait_for_dirs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -484,6 +492,7 @@
                         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                             <span class="s1">&#39;BeamtimeWatcher: Create ScanDirWatcher </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span>
                             <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">ffn</span><span class="p">))</span>
+                        <span class="n">btmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__append_proposal_groups</span><span class="p">(</span><span class="n">btmd</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
                         <span class="n">sdw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scandir_watchers</span><span class="p">[(</span><span class="n">path</span><span class="p">,</span> <span class="n">ffn</span><span class="p">)]</span> <span class="o">=</span>  \
                             <span class="n">ScanDirWatcher</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">btmd</span><span class="p">,</span> <span class="n">ffn</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">sdw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -491,6 +500,24 @@
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                     <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> cannot be watched: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ffn</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">__append_proposal_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; appends owner and access groups to beamtime</span>
+
+<span class="sd">        :param meta: beamtime configuration</span>
+<span class="sd">        :type meta: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :param path: base file path</span>
+<span class="sd">        :type path: :obj:`str`</span>
+<span class="sd">        :returns: updated beamtime configuration</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__groups_from_proposal</span> <span class="ow">or</span> <span class="p">(</span>
+                <span class="s2">&quot;accessGroups&quot;</span> <span class="ow">in</span> <span class="n">meta</span> <span class="ow">and</span> <span class="s2">&quot;ownerGroup&quot;</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">meta</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ingestor</span> <span class="o">=</span> <span class="n">DatasetIngestor</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ingestor</span><span class="o">.</span><span class="n">append_proposal_groups</span><span class="p">()</span>
 
 <div class="viewcode-block" id="BeamtimeWatcher.stop"><a class="viewcode-back" href="../../scingestor.html#scingestor.beamtimeWatcher.BeamtimeWatcher.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; stop beamtime watcher</span>
