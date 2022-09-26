@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "SCINGESTOR" "1" "Sep 22, 2022" "0.0" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "Sep 26, 2022" "0.0" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .
@@ -52,69 +52,78 @@ scicat_dataset_ingestor \-c ~/.scingestor.yaml
 .fi
 .UNINDENT
 .UNINDENT
+.SH CONFIGURATION VARIABLES
 .sp
-Its configuration written in YAML can contain the following variables
+The configuration written in YAML can contain the following variables
 .INDENT 0.0
 .IP \(bu 2
-\fBscicat_url\fP (str)
+\fBscicat_url\fP \fI(str)\fP , default: \fB"http://localhost:8881"\fP
 .IP \(bu 2
-\fBingestor_credential_file\fP (str)
+\fBingestor_credential_file\fP \fI(str)\fP , default: \fBNone\fP
 .IP \(bu 2
-\fBbeamtime_dirs\fP (list<str>) or \fBbeamtime_base_dir\fP (str)
+\fBbeamtime_dirs\fP \fI(list<str>)\fP , default: \fB[]\fP
 .IP \(bu 2
-\fBingestor_log_dir\fP (str)
+\fBbeamtime_base_dir\fP \fI(str)\fP , default: \fB""\fP
 .IP \(bu 2
-\fBingestor_username\fP (str)
+\fBingestor_log_dir\fP \fI(str)\fP , default: \fB""\fP
 .IP \(bu 2
-\fBdoi_prefix\fP (str)
+\fBingestor_username\fP \fI(str)\fP , default: \fB"ingestor"\fP
 .IP \(bu 2
-\fBupdate_strategy\fP (‘patch’, ‘create’, ‘mixed’)
+\fBdoi_prefix\fP \fI(str)\fP , default: \fB"10.3204"\fP
 .IP \(bu 2
-\fBrelative_path_in_datablock\fP (bool)
+\fBupdate_strategy\fP (\fB"patch"\fP, \fB"create"\fP, \fB"mixed"\fP) , default: \fB"patch"\fP
 .IP \(bu 2
-\fBchmod_json_files\fP (str)
+\fBrelative_path_in_datablock\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
-\fBoned_in_metadata\fP (bool)
+\fBchmod_json_files\fP \fI(str)\fP , default: \fBNone\fP
 .IP \(bu 2
-\fBscan_metadata_postfix\fP (str)
+\fBoned_in_metadata\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
-\fBdatablock_metadata_postfix\fP (str)
+\fBscan_metadata_postfix\fP \fI(str)\fP , default: \fB".scan.json"\fP
 .IP \(bu 2
-\fBbeamtime_filename_postfix\fP (str)
+\fBdatablock_metadata_postfix\fP \fI(str)\fP , default: \fB".origdatablock.json"\fP
 .IP \(bu 2
-\fBbeamtime_filename_prefix\fP (str)
+\fBmetadata_in_log_dir\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
-\fBdatasets_filename_pattern\fP (str)
+\fBbeamtime_filename_postfix\fP \fI(str)\fP , default: \fB"beamtime\-metadata\-"\fP
 .IP \(bu 2
-\fBingested_datasets_filename_pattern\fP (str)
+\fBbeamtime_filename_prefix\fP \fI(str)\fP , default: \fB".json"\fP
 .IP \(bu 2
-\fBnxs_dataset_metadata_generator\fP (str)
+\fBdatasets_filename_pattern\fP \fI(str)\fP , default: \fB"scicat\-datasets\-{bt}.lst"\fP
 .IP \(bu 2
-\fBdataset_metadata_generator\fP (str)
+\fBingested_datasets_filename_pattern\fP \fI(str)\fP , default: \fB"scicat\-ingested\-datasets\-{bt}.lst"\fP
 .IP \(bu 2
-\fBdatablock_metadata_generator\fP (str)
+\fBnxs_dataset_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo metadata  \-o {metapath}/{scanname}{scpostfix}  \-b {beamtimefile} \-p {beamtimeid}/{scanname}  \-w {ownergroup} \-c {accessgroups} {scanpath}/{scanname}.nxs"\fP
 .IP \(bu 2
-\fBdatablock_metadata_stream_generator\fP (str)
+\fBdataset_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo metadata  \-o {metapath}/{scanname}{scpostfix}  \-c {accessgroups} \-w {ownergroup} \-b {beamtimefile} \-p {beamtimeid}/{scanname}"\fP
 .IP \(bu 2
-\fBdatablock_metadata_generator_scanpath_postfix\fP (str)
+\fBdatablock_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo origdatablock  \-s *.pyc,*{dbpostfix},*{scpostfix},*~  \-p {doiprefix}/{beamtimeid}/{scanname}  \-w {ownergroup} \-c {accessgroups} \-o {metapath}/{scanname}{dbpostfix} "\fP
 .IP \(bu 2
-\fBinotify_timeout\fP (float)
+\fBdatablock_metadata_stream_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo origdatablock  \-s *.pyc,*{dbpostfix},*{scpostfix},*~  \-w {ownergroup} \-c {accessgroups} \-p {doiprefix}/{beamtimeid}/{scanname} "\fP
 .IP \(bu 2
-\fBget_event_timeout\fP (float)
+\fBdatablock_metadata_generator_scanpath_postfix\fP \fI(str)\fP , default: \fB" {scanpath}/{scanname} "\fP
 .IP \(bu 2
-\fBingestion_delay_time\fP (float)
+\fBinotify_timeout\fP \fI(float)\fP , default: \fB0.1\fP
 .IP \(bu 2
-\fBmax_request_tries_number\fP (int)
+\fBget_event_timeout\fP \fI(float)\fP , default: \fB0.01\fP
 .IP \(bu 2
-\fBrequest_headers\fP (dict<str,str>)
+\fBingestion_delay_time\fP \fI(float)\fP , default: \fB5.0\fP
 .IP \(bu 2
-\fBscicat_datasets_path\fP (str)
+\fBmax_request_tries_number\fP \fI(int)\fP , default: \fB100\fP
 .IP \(bu 2
-\fBscicat_datablocks_path\fP (str)
+\fBrequest_headers\fP \fI(dict<str,str>)\fP , default: \fB{"Content\-Type": "application/json", "Accept": "application/json"}\fP
 .IP \(bu 2
-\fBscicat_users_login_path\fP (str)
+\fBscicat_datasets_path\fP \fI(str)\fP , default: \fB"RawDatasets"\fP
 .IP \(bu 2
-\fBmetadata_keywords_without_checks\fP (list<str>)
+\fBscicat_proposals_path\fP \fI(str)\fP , default: \fB"Proposals"\fP
+.IP \(bu 2
+\fBscicat_datablocks_path\fP \fI(str)\fP, default: \fB"OrigDatablocks"\fP
+.IP \(bu 2
+\fBscicat_users_login_path\fP \fI(str)\fP, default: \fB"Users/login"\fP
+.IP \(bu 2
+\fBowner_access_groups_from_proposal\fP \fI(bool)\fP, default: \fBFalse\fP
+.IP \(bu 2
+\fBmetadata_keywords_without_checks\fP \fI(list<str>)\fP, default: \fB["techniques", "classification", "createdBy", "updatedBy", "datasetlifecycle", "numberOfFiles", "size", "createdAt", "updatedAt", "history", "creationTime", "version", "scientificMetadata", "endTime"]\fP
 .UNINDENT
 .sp
 e.g.
@@ -403,7 +412,7 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBoptions\fP (\fI\%argparse.Namespace\fP) \-\- parser options
+\fBoptions\fP (\fI\%argparse.Namespace\fP) – parser options
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -434,7 +443,7 @@ load config file
 .INDENT 7.0
 .TP
 .B Parameters
-\fBconfigfile\fP (\fI\%str\fP) \-\- configuration file name
+\fBconfigfile\fP (\fI\%str\fP) – configuration file name
 .UNINDENT
 .UNINDENT
 .SS scingestor.datasetIngest module
@@ -449,7 +458,7 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBoptions\fP (\fI\%argparse.Namespace\fP) \-\- parser options
+\fBoptions\fP (\fI\%argparse.Namespace\fP) – parser options
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -476,23 +485,44 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- dictionary with the ingestor configuration
+\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – dictionary with the ingestor configuration
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) \-\- scan dir path
+\fBpath\fP (\fI\%str\fP) – scan dir path
 .IP \(bu 2
-\fBdsfile\fP (\fI\%str\fP) \-\- file with a dataset list
+\fBdsfile\fP (\fI\%str\fP) – file with a dataset list
 .IP \(bu 2
-\fBdsfile\fP \-\- file with a ingester dataset list
+\fBdsfile\fP – file with a ingester dataset list
 .IP \(bu 2
-\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- beamtime configuration
+\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – beamtime configuration
 .IP \(bu 2
-\fBbeamtimefile\fP (\fI\%str\fP) \-\- beamtime filename
+\fBbeamtimefile\fP (\fI\%str\fP) – beamtime filename
 .IP \(bu 2
-\fBdoiprefix\fP (\fI\%str\fP) \-\- doiprefix
+\fBdoiprefix\fP (\fI\%str\fP) – doiprefix
 .IP \(bu 2
-\fBingestorcred\fP (\fI\%str\fP) \-\- ingestor credential
+\fBingestorcred\fP (\fI\%str\fP) – ingestor credential
 .IP \(bu 2
-\fBscicat_url\fP (\fI\%str\fP) \-\- scicat_url
+\fBscicat_url\fP (\fI\%str\fP) – scicat_url
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B append_proposal_groups()
+appends owner and access groups to beamtime
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – beamtime configuration
+.IP \(bu 2
+\fBpath\fP (\fI\%str\fP) – base file path
+.UNINDENT
+.TP
+.B Returns
+updated beamtime configuration
+.TP
+.B Return type
+\fI\%dict\fP <\fI\%str\fP, \fIany\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -532,9 +562,9 @@ ingest scan
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBscan\fP (\fI\%str\fP) \-\- scan name
+\fBscan\fP (\fI\%str\fP) – scan name
 .IP \(bu 2
-\fBtoken\fP (\fI\%str\fP) \-\- access token
+\fBtoken\fP (\fI\%str\fP) – access token
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -560,9 +590,9 @@ ingest scan
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBscan\fP (\fI\%str\fP) \-\- scan name
+\fBscan\fP (\fI\%str\fP) – scan name
 .IP \(bu 2
-\fBtoken\fP (\fI\%str\fP) \-\- access token
+\fBtoken\fP (\fI\%str\fP) – access token
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -618,17 +648,17 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- dictionary with the ingestor configuration
+\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – dictionary with the ingestor configuration
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) \-\- scan dir path
+\fBpath\fP (\fI\%str\fP) – scan dir path
 .IP \(bu 2
-\fBdsfile\fP (\fI\%str\fP) \-\- file with a dataset list
+\fBdsfile\fP (\fI\%str\fP) – file with a dataset list
 .IP \(bu 2
-\fBdsfile\fP \-\- file with a ingester dataset list
+\fBdsfile\fP – file with a ingester dataset list
 .IP \(bu 2
-\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- beamtime configuration
+\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – beamtime configuration
 .IP \(bu 2
-\fBbeamtimefile\fP (\fI\%str\fP) \-\- beamtime filename
+\fBbeamtimefile\fP (\fI\%str\fP) – beamtime filename
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -671,9 +701,9 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBname\fP (\fI\%str\fP) \-\- name
+\fBname\fP (\fI\%str\fP) – name
 .IP \(bu 2
-\fBmasks\fP \-\- mask description
+\fBmasks\fP – mask description
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -703,7 +733,7 @@ class is implemented.
 method. Defaults to None, meaning nothing is called.
 .sp
 \fIname\fP is the thread name. By default, a unique name is constructed of
-the form "Thread\-N" where N is a small decimal number.
+the form “Thread\-N” where N is a small decimal number.
 .sp
 \fIargs\fP is the argument tuple for the target invocation. Defaults to ().
 .sp
@@ -722,16 +752,16 @@ add watch to notifier
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) \-\- watch path
+\fBpath\fP (\fI\%str\fP) – watch path
 .IP \(bu 2
-\fBmask\fP (\fI\%int\fP) \-\- watch mask
+\fBmask\fP (\fI\%int\fP) – watch mask
 .UNINDENT
 .TP
 .B Returns
 queue providing events and its id
 .TP
 .B Return type
-[\fBthreading.queue\fP, \fI\%int\fP]
+[\fI\%queue.Queue\fP, \fI\%int\fP]
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -751,7 +781,7 @@ remove watch from notifier
 .INDENT 7.0
 .TP
 .B Parameters
-\fBqid\fP (\fI\%int\fP) \-\- queue id
+\fBqid\fP (\fI\%int\fP) – queue id
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -779,13 +809,13 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- dictionary with the ingestor configuration
+\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – dictionary with the ingestor configuration
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) \-\- scan dir path
+\fBpath\fP (\fI\%str\fP) – scan dir path
 .IP \(bu 2
-\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- beamtime configuration
+\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – beamtime configuration
 .IP \(bu 2
-\fBbpath\fP (\fI\%str\fP) \-\- beamtime file
+\fBbpath\fP (\fI\%str\fP) – beamtime file
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
