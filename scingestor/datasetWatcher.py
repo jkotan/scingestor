@@ -73,12 +73,12 @@ class DatasetWatcher(threading.Thread):
         #: (:obj:`float`) timeout value for inotifyx get events in s
         self.__timeout = 0.01
         #: (:obj:`float`) max count of recheck the dataset list
-        self.__maxcounter = 100
+        self.__recheck_dslist_interval = 1000
 
-        if "max_request_tries_number" in self.__config.keys():
+        if "recheck_dataset_list_interval" in self.__config.keys():
             try:
-                self.__maxcounter = int(
-                    self.__config["max_request_tries_number"])
+                self.__recheck_dslist_interval = int(
+                    self.__config["recheck_dataset_list_interval"])
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
 
@@ -186,7 +186,7 @@ class DatasetWatcher(threading.Thread):
                         # get_logger().info(
                         #     'Ds: %s %s %s' % (event.name,
                         #                       event.masks,
-                        #                       self.__wd_to_path[qid]))
+                        #                       self._w_maid_to_path[qid]))
                         get_logger().debug(
                             'Ds: %s %s %s' % (event.name,
                                               event.masks,
@@ -222,28 +222,30 @@ class DatasetWatcher(threading.Thread):
                                         get_logger().warning(str(e))
                                         continue
 
-                if counter == self.__maxcounter:
-                    # if inotify does not work
-                    counter = 0
-                    # get_logger().info(
-                    #     'DatasetWatcher: Re-check dataset list after %s s'
-                    #     % self.__maxcounter)
-                    get_logger().debug(
-                        'DatasetWatcher: Re-check dataset list after %s s'
-                        % self.__maxcounter)
-                    try:
-                        self.__ingestor.check_list()
-                    except Exception as e:
-                        get_logger().warning(str(e))
-                        continue
-                elif self.__maxcounter > counter:
-                    get_logger().debug(
-                        'DatasetWatcher: increase counter %s/%s ' %
-                        (counter, self.__maxcounter))
-                    # get_logger().info(
-                    #     'DatasetWatcher: increase counter %s/%s ' %
-                    #     (counter, self.__maxcounter))
-                    counter += 1
+                if self.__recheck_dslist_interval > 0:
+                    if counter == self.__recheck_dslist_interval:
+                        # if inotify does not work
+                        counter = 0
+                        # get_logger().info(
+                        #   'DatasetWatcher: Re-check dataset list after %s s'
+                        #     % self.__recheck_dslist_interval)
+                        get_logger().debug(
+                            'DatasetWatcher: '
+                            'Re-check dataset list after %s s'
+                            % self.__recheck_dslist_interval)
+                        try:
+                            self.__ingestor.check_list()
+                        except Exception as e:
+                            get_logger().warning(str(e))
+                            continue
+                    elif self.__recheck_dslist_interval > counter:
+                        get_logger().debug(
+                            'DatasetWatcher: increase counter %s/%s ' %
+                            (counter, self.__recheck_dslist_interval))
+                        # GET_logger().info(
+                        #     'DatasetWatcher: increase counter %s/%s ' %
+                        #     (counter, self.__recheck_dslist_interval))
+                        counter += 1
 
                 if self.__ingestor.waiting_datasets():
                     time.sleep(self.__delay)

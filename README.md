@@ -39,6 +39,8 @@ The configuration written in YAML can contain the following variables
 * **get_event_timeout** *(float)* , default: `0.01`
 * **ingestion_delay_time** *(float)* , default: `5.0`
 * **max_request_tries_number** *(int)* , default: `100`
+* **recheck_dataset_list_interval** *(int)* , default: `1000`
+* **recheck_beamtime_file_interval** *(int)* , default: `1000`
 * **request_headers** *(dict\<str,str\>)* , default: `{"Content-Type": "application/json", "Accept": "application/json"}`
 * **scicat_datasets_path** *(str)* , default: `"RawDatasets"`
 * **scicat_proposals_path** *(str)* , default: `"Proposals"`
