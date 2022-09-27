@@ -231,6 +231,8 @@ class DatasetIngestTest(unittest.TestCase):
             'get_event_timeout: 0.02\n' \
             'ingestion_delay_time: 2\n' \
             'max_request_tries_number: 10\n' \
+            'recheck_beamtime_file_interval: 1000\n' \
+            'rrecheck_dataset_list_interval: 1000\n' \
             'scicat_url: "{url}"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(

@@ -486,6 +486,8 @@ class DatasetWatcherTest(unittest.TestCase):
             'get_event_timeout: 0.02\n' \
             'ingestion_delay_time: 2\n' \
             'max_request_tries_number: 10\n' \
+            'recheck_beamtime_file_interval: 1000\n' \
+            'rrecheck_dataset_list_interval: 1000\n' \
             'request_headers:\n' \
             '  "Content-Type": "application/json"\n' \
             '  "Accept": "application/json"\n' \

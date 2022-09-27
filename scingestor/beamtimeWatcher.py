@@ -53,7 +53,6 @@ class BeamtimeWatcher:
         if options.config:
             self.__config = load_config(options.config) or {}
             get_logger().debug("CONFIGURATION: %s" % str(self.__config))
-
         #: (:obj:`list` <:obj:`str`>) beamtime directories
         self.__beamtime_dirs = [
             # "/gpfs/current",
@@ -85,19 +84,28 @@ class BeamtimeWatcher:
         #: (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
         self.__wd_to_path = {}
         #: (:obj:`dict` <:obj:`int`, :obj:`str`>)
-        #                               beamtime watch description paths
+        #                               beamtime watch description path queues
         self.__wd_to_queue = {}
         #: (:obj:`dict` <:obj:`int`, :class:`queue.Queue`>)
-        #                               beamtime watch description paths
+        #                               beamtime watch description base paths
         self.__wd_to_bpath = {}
         #: (:obj:`dict` <:obj:`int`, :class:`queue.Queue`>)
-        #                               beamtime watch description paths
+        #                        beamtime watch description base path queues
         self.__wd_to_bqueue = {}
 
         #: (:obj:`str`) beamtime file prefix
         self.__bt_prefix = "beamtime-metadata-"
         #: (:obj:`str`) beamtime file postfix
         self.__bt_postfix = ".json"
+
+        #: (:obj:`float`) max count of recheck the beamtime files
+        self.__recheck_btfile_interval = 1000
+        if "recheck_beamtime_file_interval" in self.__config.keys():
+            try:
+                self.__recheck_btfile_interval = int(
+                    self.__config["recheck_beamtime_file_interval"])
+            except Exception as e:
+                get_logger().warning('%s' % (str(e)))
 
         #: (:obj:`dict` <(:obj:`str`, :obj:`str`),
         #                :class:`scanDirWatcher.ScanDirWatcher`>)
@@ -279,6 +287,7 @@ class BeamtimeWatcher:
                 self._launch_scandir_watcher(path, files)
                 get_logger().debug('Files of %s: %s' % (path, files))
 
+            counter = 0
             while self.running:
                 get_logger().debug('Bt Tic')
                 if not self.__wd_to_queue and not self.__wd_to_bqueue:
@@ -426,6 +435,50 @@ class BeamtimeWatcher:
 
                                     get_logger().debug(
                                         'Files of %s: %s' % (dr, files))
+
+                if self.__recheck_btfile_interval > 0:
+                    if counter == self.__recheck_btfile_interval:
+                        # if inotify does not work
+                        counter = 0
+                        # get_logger().info(
+                        #   'DatasetWatcher: Re-check dataset list after %s s'
+                        #   % self.__recheck_btfile_interval)
+                        get_logger().debug(
+                            'BeamtimeWatcher: '
+                            'Re-check beamtime file after %s s'
+                            % self.__recheck_btfile_interval)
+                        dds = []
+                        for (ph, fl) in self.__scandir_watchers.keys():
+                            if not os.path.isfile(fl):
+                                ds = self.__scandir_watchers.pop((ph, fl))
+                                ds.running = False
+                                dds.append(ds)
+                        while len(dds):
+                            ds = dds.pop()
+                            ds.running = False
+                            get_logger().debug("Joining ScanDirWatcher")
+                            ds.join()
+                            get_logger().debug("ScanDirWatcher Joined")
+                        get_logger().debug('add paths')
+
+                        for path in self.__beamtime_dirs:
+                            files = self._find_bt_files(
+                                path, self.__bt_prefix, self.__bt_postfix)
+                            self._launch_scandir_watcher(path, files)
+
+                        # try:
+                        #     self.__ingestor.check_list()
+                        # except Exception as e:
+                        #     get_logger().warning(str(e))
+                        #     continue
+                    elif self.__recheck_btfile_interval > counter:
+                        get_logger().debug(
+                            'BeamtimeWatcher: increase counter %s/%s ' %
+                            (counter, self.__recheck_btfile_interval))
+                        # GET_logger().info(
+                        #     'DatasetWatcher: increase counter %s/%s ' %
+                        #     (counter, self.__recheck_btfile_interval))
+                        counter += 1
 
                 get_logger().debug(
                     "Running: %s s" % (time.time() - self.__starttime))
