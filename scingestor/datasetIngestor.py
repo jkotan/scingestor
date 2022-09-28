@@ -32,9 +32,15 @@ class UpdateStrategy(enum.Enum):
 
     """ Update strategy
     """
-    PATCH = 0
-    CREATE = 1
-    MIXED = 2
+    #: (:class:`datasetIngestor.UpdateStrategy`) leave datasets unchanged
+    NO = 0
+    #: (:class:`datasetIngestor.UpdateStrategy`) patch datasets
+    PATCH = 1
+    #: (:class:`datasetIngestor.UpdateStrategy`) recreate datasets
+    CREATE = 2
+    #: (:class:`datasetIngestor.UpdateStrategy`) patch datasets only if
+    #       scientificMetadata changed otherwise recreate datasets
+    MIXED = 3
 
 
 class DatasetIngestor:
@@ -219,10 +225,10 @@ class DatasetIngestor:
                 self.__incd = fl.read().strip()
         if "ingestor_username" in self.__config.keys():
             self.__username = self.__config["ingestor_username"]
-        if "update_strategy" in self.__config.keys():
+        if "dataset_update_strategy" in self.__config.keys():
             try:
                 self.__strategy = UpdateStrategy[
-                    str(self.__config["update_strategy"]).upper()]
+                    str(self.__config["dataset_update_strategy"]).upper()]
             except Exception as e:
                 get_logger().warning(
                     'Wrong UpdateStrategy value: %s' % str(e))
@@ -1005,29 +1011,32 @@ class DatasetIngestor:
         reingest_origdatablock = False
         sscan = scan.split(" ")
         self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
+        rds = None
         rdss = glob.glob(
             "{metapath}/{scan}{postfix}".format(
                 scan=self.__dctfmt["scanname"],
                 postfix=self.__scanpostfix,
                 metapath=self.__dctfmt["metapath"]))
-        if rdss and rdss[0]:
-            rds = rdss[0]
-            mtm = os.path.getmtime(rds)
-            # print(self.__sc_ingested_map.keys())
-            get_logger().debug("MAP: %s" % (self.__sc_ingested_map))
+        if self.__strategy != UpdateStrategy.NO:
+            if rdss and rdss[0]:
+                rds = rdss[0]
+                mtm = os.path.getmtime(rds)
+                # print(self.__sc_ingested_map.keys())
+                get_logger().debug("MAP: %s" % (self.__sc_ingested_map))
 
-            if scan in self.__sc_ingested_map.keys():
-                get_logger().debug("DS Timestamps: %s %s %s %s" % (
-                    scan,
-                    mtm, self.__sc_ingested_map[scan][-2],
-                    mtm > self.__sc_ingested_map[scan][-2]))
-            if scan not in self.__sc_ingested_map.keys() \
-               or mtm > self.__sc_ingested_map[scan][-2]:
+                if scan in self.__sc_ingested_map.keys():
+                    get_logger().debug("DS Timestamps: %s %s %s %s" % (
+                        scan,
+                        mtm, self.__sc_ingested_map[scan][-2],
+                        mtm > self.__sc_ingested_map[scan][-2]))
+                if scan not in self.__sc_ingested_map.keys() \
+                   or mtm > self.__sc_ingested_map[scan][-2]:
+                    reingest_dataset = True
+            else:
+                rds = self._generate_rawdataset_metadata(
+                    self.__dctfmt["scanname"])
+                get_logger().debug("DS No File: %s True" % (scan))
                 reingest_dataset = True
-        else:
-            rds = self._generate_rawdataset_metadata(self.__dctfmt["scanname"])
-            get_logger().debug("DS No File: %s True" % (scan))
-            reingest_dataset = True
         mtmds = 0
         if rds:
             mtmds = os.path.getmtime(rds)

@@ -53,7 +53,7 @@ The configuration written in YAML can contain the following variables
 * **ingestor_log_dir** *(str)* , default: ``""``
 * **ingestor_username** *(str)* , default: ``"ingestor"``
 * **doi_prefix** *(str)* , default: ``"10.3204"``
-* **update_strategy** (``"patch"``, ``"create"``, ``"mixed"``) , default: ``"patch"``
+* **dataset_update_strategy** (``"no"``, ``"patch"``, ``"create"``, ``"mixed"``) , default: ``"patch"``
 * **relative_path_in_datablock** *(bool)* , default: ``False``
 * **chmod_json_files** *(str)* , default: ``None``
 * **oned_in_metadata** *(bool)* , default: ``False``
