@@ -1,5 +1,6 @@
 2021-09-30 Jan Kotanski <jan.kotanski@desy.de>
 	* add rechecking beamtime files if exists (#100)
+	* change {bt} format keyword to {beamtimeid} keyword (#104)
 	* tagged as 0.0.5
 
 2021-09-23 Jan Kotanski <jan.kotanski@desy.de>

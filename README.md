@@ -28,8 +28,8 @@ The configuration written in YAML can contain the following variables
 * **metadata_in_log_dir** *(bool)* , default: `False`
 * **beamtime_filename_postfix** *(str)* , default: `"beamtime-metadata-"`
 * **beamtime_filename_prefix** *(str)* , default: `".json"`
-* **datasets_filename_pattern** *(str)* , default: `"scicat-datasets-{bt}.lst"`
-* **ingested_datasets_filename_pattern** *(str)* , default: `"scicat-ingested-datasets-{bt}.lst"`
+* **datasets_filename_pattern** *(str)* , default: `"scicat-datasets-{beamtimeid}.lst"`
+* **ingested_datasets_filename_pattern** *(str)* , default: `"scicat-ingested-datasets-{beamtimeid}.lst"`
 * **nxs_dataset_metadata_generator** *(str)* , default: `"nxsfileinfo metadata  -o {metapath}/{scanname}{scpostfix}  -b {beamtimefile} -p {beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} {scanpath}/{scanname}.nxs"`
 * **dataset_metadata_generator** *(str)* , default: `"nxsfileinfo metadata  -o {metapath}/{scanname}{scpostfix}  -c {accessgroups} -w {ownergroup} -b {beamtimefile} -p {beamtimeid}/{scanname}"`
 * **datablock_metadata_generator** *(str)* , default: `"nxsfileinfo origdatablock  -s *.pyc,*{dbpostfix},*{scpostfix},*~  -p {doiprefix}/{beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} -o {metapath}/{scanname}{dbpostfix} "`

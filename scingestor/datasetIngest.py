@@ -58,9 +58,9 @@ class DatasetIngest:
         self.__bt_postfix = ".json"
 
         #: (:obj:`str`) scicat dataset file pattern
-        self.__ds_pattern = "scicat-datasets-{bt}.lst"
+        self.__ds_pattern = "scicat-datasets-{beamtimeid}.lst"
         #: (:obj:`str`) indested scicat dataset file pattern
-        self.__ids_pattern = "scicat-ingested-datasets-{bt}.lst"
+        self.__ids_pattern = "scicat-ingested-datasets-{beamtimeid}.lst"
 
         #: (:obj:`str`) ingestor log directory
         self.__log_dir = ""
@@ -142,9 +142,9 @@ class DatasetIngest:
         beamtimeId = meta["beamtimeId"]
 
         #: (:obj:`str`) datasets file name
-        dslist_filename = self.__ds_pattern.format(bt=beamtimeId)
+        dslist_filename = self.__ds_pattern.format(beamtimeid=beamtimeId)
         #: (:obj:`str`) ingescted datasets file name
-        idslist_filename = self.__ids_pattern.format(bt=beamtimeId)
+        idslist_filename = self.__ids_pattern.format(beamtimeid=beamtimeId)
         dslfiles = glob.glob(
             "%s/**/%s" % (path, dslist_filename), recursive=True)
         for fn in dslfiles:
