@@ -32,9 +32,15 @@ class UpdateStrategy(enum.Enum):
 
     """ Update strategy
     """
-    PATCH = 0
-    CREATE = 1
-    MIXED = 2
+    #: (:class:`datasetIngestor.UpdateStrategy`) leave datasets unchanged
+    NO = 0
+    #: (:class:`datasetIngestor.UpdateStrategy`) patch datasets
+    PATCH = 1
+    #: (:class:`datasetIngestor.UpdateStrategy`) recreate datasets
+    CREATE = 2
+    #: (:class:`datasetIngestor.UpdateStrategy`) patch datasets only if
+    #       scientificMetadata changed otherwise recreate datasets
+    MIXED = 3
 
 
 class DatasetIngestor:
@@ -219,10 +225,10 @@ class DatasetIngestor:
                 self.__incd = fl.read().strip()
         if "ingestor_username" in self.__config.keys():
             self.__username = self.__config["ingestor_username"]
-        if "update_strategy" in self.__config.keys():
+        if "dataset_update_strategy" in self.__config.keys():
             try:
                 self.__strategy = UpdateStrategy[
-                    str(self.__config["update_strategy"]).upper()]
+                    str(self.__config["dataset_update_strategy"]).upper()]
             except Exception as e:
                 get_logger().warning(
                     'Wrong UpdateStrategy value: %s' % str(e))
@@ -789,7 +795,7 @@ class DatasetIngestor:
                         return mdct["pid"]
                     else:
                         raise Exception("%s" % response.text)
-                else:
+                elif self.__strategy != UpdateStrategy.NO:
                     # find dataset by pid
                     get_logger().info(
                         'DatasetIngestor: Find the dataset by id: %s' % (pid))
@@ -804,7 +810,8 @@ class DatasetIngestor:
                         mdic["pid"] = pid
                         if not self._metadataEqual(
                                 dsmeta, mdic, skip=self.__withoutsm):
-                            if self.__strategy == UpdateStrategy.PATCH:
+                            if self.__strategy in [
+                                    UpdateStrategy.PATCH, UpdateStrategy.NO]:
                                 nmeta = json.dumps(mdic)
                                 return self._patch_dataset(
                                     nmeta, pid, token, mdct)
@@ -826,6 +833,8 @@ class DatasetIngestor:
                                             nmeta, pid, token, mdct)
                     else:
                         raise Exception("%s" % resds.text)
+                else:
+                    return pid
             else:
                 raise Exception("%s" % resexists.text)
         except Exception as e:
@@ -942,7 +951,6 @@ class DatasetIngestor:
 
         sscan = scan.split(" ")
         self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
-
         rdss = glob.glob(
             "{metapath}/{scan}{postfix}".format(
                 scan=self.__dctfmt["scanname"],
@@ -1005,6 +1013,7 @@ class DatasetIngestor:
         reingest_origdatablock = False
         sscan = scan.split(" ")
         self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
+        rds = None
         rdss = glob.glob(
             "{metapath}/{scan}{postfix}".format(
                 scan=self.__dctfmt["scanname"],
@@ -1023,9 +1032,11 @@ class DatasetIngestor:
                     mtm > self.__sc_ingested_map[scan][-2]))
             if scan not in self.__sc_ingested_map.keys() \
                or mtm > self.__sc_ingested_map[scan][-2]:
-                reingest_dataset = True
+                if self.__strategy != UpdateStrategy.NO:
+                    reingest_dataset = True
         else:
-            rds = self._generate_rawdataset_metadata(self.__dctfmt["scanname"])
+            rds = self._generate_rawdataset_metadata(
+                self.__dctfmt["scanname"])
             get_logger().debug("DS No File: %s True" % (scan))
             reingest_dataset = True
         mtmds = 0
