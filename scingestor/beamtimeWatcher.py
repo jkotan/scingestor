@@ -448,7 +448,7 @@ class BeamtimeWatcher:
                             'Re-check beamtime file after %s s'
                             % self.__recheck_btfile_interval)
                         dds = []
-                        for (ph, fl) in self.__scandir_watchers.keys():
+                        for (ph, fl) in list(self.__scandir_watchers.keys()):
                             if not os.path.isfile(fl):
                                 ds = self.__scandir_watchers.pop((ph, fl))
                                 ds.running = False
