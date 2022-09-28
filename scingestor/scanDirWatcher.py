@@ -63,9 +63,9 @@ class ScanDirWatcher(threading.Thread):
         #: (:obj:`str`) beamline metadata
         self.__meta = meta
         #: (:obj:`str`) scicat dataset file pattern
-        self.__ds_pattern = "scicat-datasets-{bt}.lst"
+        self.__ds_pattern = "scicat-datasets-{beamtimeid}.lst"
         #: (:obj:`str`) indested scicat dataset file pattern
-        self.__ids_pattern = "scicat-ingested-datasets-{bt}.lst"
+        self.__ids_pattern = "scicat-ingested-datasets-{beamtimeid}.lst"
 
         #: (:obj:`int`) notifier ID
         self.__notifier = None
@@ -106,10 +106,10 @@ class ScanDirWatcher(threading.Thread):
 
         #: (:obj:`str`) datasets file name
         self.__dslist_filename = self.__ds_pattern.format(
-            bt=self.__beamtimeId)
+            beamtimeid=self.__beamtimeId)
         #: (:obj:`str`) ingescted datasets file name
         self.__idslist_filename = self.__ids_pattern.format(
-            bt=self.__beamtimeId)
+            beamtimeid=self.__beamtimeId)
         #: (:obj:`str`) datasets file name
         self.__dslist_fullname = os.path.join(
             self.__path, self.__dslist_filename)

@@ -225,8 +225,9 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'beamtime_filename_prefix: "bt-mt-"\n' \
             'beamtime_filename_postfix: ".jsn"\n' \
-            'datasets_filename_pattern: "sc-ds-{{bt}}.lst"\n' \
-            'ingested_datasets_filename_pattern: "sc-ids-{{bt}}.lst"\n' \
+            'datasets_filename_pattern: "sc-ds-{{beamtimeid}}.lst"\n' \
+            'ingested_datasets_filename_pattern: ' \
+            '"sc-ids-{{beamtimeid}}.lst"\n' \
             'inotify_timeout: 0.2\n' \
             'get_event_timeout: 0.02\n' \
             'ingestion_delay_time: 2\n' \

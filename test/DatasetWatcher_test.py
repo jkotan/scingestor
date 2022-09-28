@@ -491,8 +491,9 @@ class DatasetWatcherTest(unittest.TestCase):
             'request_headers:\n' \
             '  "Content-Type": "application/json"\n' \
             '  "Accept": "application/json"\n' \
-            'datasets_filename_pattern: "sc-ds-{{bt}}.lst"\n' \
-            'ingested_datasets_filename_pattern: "sc-ids-{{bt}}.lst"\n' \
+            'datasets_filename_pattern: "sc-ds-{{beamtimeid}}.lst"\n' \
+            'ingested_datasets_filename_pattern: ' \
+            '"sc-ids-{{beamtimeid}}.lst"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
