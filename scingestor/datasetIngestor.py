@@ -210,7 +210,9 @@ class DatasetIngestor:
         #: (:obj:`str`) ingestor log directory
         self.__log_dir = ""
         if "ingestor_log_dir" in self.__config.keys():
-            self.__log_dir = self.__config["ingestor_log_dir"]
+            self.__log_dir = str(
+                self.__config["ingestor_log_dir"]).format(
+                    beamtimeid=self.__bid)
         if self.__log_dir == "/":
             self.__log_dir = ""
         if self.__meta_in_log_dir and self.__log_dir:
