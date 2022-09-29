@@ -151,7 +151,8 @@ class DatasetIngest:
             get_logger().info("DatasetIngest: dataset list: %s" % str(fn))
             ifn = fn[:-(len(dslist_filename))] + idslist_filename
             if self.__log_dir:
-                ifn = "%s%s" % (self.__log_dir, ifn)
+                ifn = "%s%s" % (
+                    self.__log_dir.format(beamtimeid=beamtimeId), ifn)
             ipath, _ = os.path.split(ifn)
             if not os.path.isdir(ipath):
                 os.makedirs(ipath, exist_ok=True)

@@ -117,7 +117,9 @@ class ScanDirWatcher(threading.Thread):
         #: (:obj:`str`) ingestor log directory
         self.__log_dir = ""
         if "ingestor_log_dir" in self.__config.keys():
-            self.__log_dir = self.__config["ingestor_log_dir"]
+            self.__log_dir = str(
+                self.__config["ingestor_log_dir"]).format(
+                    beamtimeid=self.__beamtimeId)
         if self.__log_dir == "/":
             self.__log_dir = ""
 

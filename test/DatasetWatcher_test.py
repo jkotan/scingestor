@@ -2625,8 +2625,9 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
-        fidslist = "%s%s" % (logdir, fidslist)
+        logdir = "/tmp/scingestor_log_%s/{beamtimeid}" % uuid.uuid4().hex
+        llogdir = logdir.format(beamtimeid="99001236")
+        fidslist = "%s%s" % (llogdir, fidslist)
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -2768,7 +2769,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         .format(basedir=fdirname, btmeta=fullbtmeta,
                                 subdir=fsubdirname, subdir2=fsubdirname2,
                                 detdir1=fsubdirnamedet1,
-                                logdir=logdir,
+                                logdir=llogdir,
                                 detdir2=fsubdirnamedet2,
                                 dslist=fdslist, idslist=fidslist,
                                 cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
@@ -2882,8 +2883,8 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.assertEqual(paths, ['raw/lambda2/data2.dat'])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
-                if os.path.isdir(logdir):
-                    shutil.rmtree(logdir)
+                if os.path.isdir(llogdir):
+                    shutil.rmtree(llogdir)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)

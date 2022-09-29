@@ -3672,7 +3672,8 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
+        logdir = "/tmp/scingestor_log_%s/{beamtimeid}" % uuid.uuid4().hex
+        llogdir = logdir.format(beamtimeid="99001234")
         fidslist = "%s%s" % (logdir, fidslist)
         cred = "12342345"
         os.mkdir(fdirname)
@@ -3845,8 +3846,8 @@ class DatasetIngestTest(unittest.TestCase):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
-            if os.path.isdir(logdir):
-                shutil.rmtree(logdir)
+            if os.path.isdir(llogdir):
+                shutil.rmtree(llogdir)
 
     def test_datasetfile_repeat_log(self):
         fun = sys._getframe().f_code.co_name
@@ -4290,8 +4291,9 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
-        fidslist = "%s%s" % (logdir, fidslist)
+        logdir = "/tmp/scingestor_log_%s/{beamtimeid}" % uuid.uuid4().hex
+        llogdir = logdir.format(beamtimeid="99001234")
+        fidslist = "%s%s" % (llogdir, fidslist)
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -4371,7 +4373,7 @@ class DatasetIngestTest(unittest.TestCase):
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
                             dslist=fdslist,
-                            logdir=logdir,
+                            logdir=llogdir,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
                 self.assertEqual(
@@ -4466,15 +4468,15 @@ class DatasetIngestTest(unittest.TestCase):
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
-                if os.path.isdir("%s%s" % (logdir, fsubdirname)):
-                    shutil.rmtree("%s%s" % (logdir, fsubdirname))
+                if os.path.isdir("%s%s" % (llogdir, fsubdirname)):
+                    shutil.rmtree("%s%s" % (llogdir, fsubdirname))
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
-            if os.path.isdir(logdir):
-                shutil.rmtree(logdir)
+            if os.path.isdir(llogdir):
+                shutil.rmtree(llogdir)
 
     def test_datasetfile_repeat_log_meta(self):
         fun = sys._getframe().f_code.co_name
