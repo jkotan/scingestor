@@ -93,13 +93,13 @@ The configuration written in YAML can contain the following variables
 .IP \(bu 2
 \fBingested_datasets_filename_pattern\fP \fI(str)\fP , default: \fB"scicat\-ingested\-datasets\-{beamtimeid}.lst"\fP
 .IP \(bu 2
-\fBnxs_dataset_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo metadata  \-o {metapath}/{scanname}{scpostfix}  \-b {beamtimefile} \-p {beamtimeid}/{scanname}  \-w {ownergroup} \-c {accessgroups} {scanpath}/{scanname}.nxs"\fP
+\fBnxs_dataset_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo metadata  \-o {metapath}/{scanname}{scanpostfix}  \-b {beamtimefile} \-p {beamtimeid}/{scanname}  \-w {ownergroup} \-c {accessgroups} {scanpath}/{scanname}.nxs"\fP
 .IP \(bu 2
-\fBdataset_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo metadata  \-o {metapath}/{scanname}{scpostfix}  \-c {accessgroups} \-w {ownergroup} \-b {beamtimefile} \-p {beamtimeid}/{scanname}"\fP
+\fBdataset_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo metadata  \-o {metapath}/{scanname}{scanpostfix}  \-c {accessgroups} \-w {ownergroup} \-b {beamtimefile} \-p {beamtimeid}/{scanname}"\fP
 .IP \(bu 2
-\fBdatablock_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo origdatablock  \-s *.pyc,*{dbpostfix},*{scpostfix},*~  \-p {doiprefix}/{beamtimeid}/{scanname}  \-w {ownergroup} \-c {accessgroups} \-o {metapath}/{scanname}{dbpostfix} "\fP
+\fBdatablock_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo origdatablock  \-s *.pyc,*{datablockpostfix},*{scanpostfix},*~  \-p {doiprefix}/{beamtimeid}/{scanname}  \-w {ownergroup} \-c {accessgroups} \-o {metapath}/{scanname}{datablockpostfix} "\fP
 .IP \(bu 2
-\fBdatablock_metadata_stream_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo origdatablock  \-s *.pyc,*{dbpostfix},*{scpostfix},*~  \-w {ownergroup} \-c {accessgroups} \-p {doiprefix}/{beamtimeid}/{scanname} "\fP
+\fBdatablock_metadata_stream_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo origdatablock  \-s *.pyc,*{datablockpostfix},*{scanpostfix},*~  \-w {ownergroup} \-c {accessgroups} \-p {doiprefix}/{beamtimeid}/{scanname} "\fP
 .IP \(bu 2
 \fBdatablock_metadata_generator_scanpath_postfix\fP \fI(str)\fP , default: \fB" {scanpath}/{scanname} "\fP
 .IP \(bu 2
