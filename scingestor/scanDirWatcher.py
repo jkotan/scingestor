@@ -76,12 +76,12 @@ class ScanDirWatcher(threading.Thread):
         #: (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
         self.__wd_to_path = {}
         #: (:obj:`dict` <:obj:`int`, :obj:`str`>)
-        #                               beamtime watch description paths
+        #:                              beamtime watch description paths
         self.__wd_to_queue = {}
 
         #: (:obj:`dict` <(:obj:`str`, :obj:`str`),
-        #                :class:`scanDirWatcher.ScanDirWatcher`>)
-        #        dataset watchers instances for given path and beamtime file
+        #:               :class:`scanDirWatcher.ScanDirWatcher`>)
+        #:       dataset watchers instances for given path and beamtime file
         self.__dataset_watchers = {}
         #: (:class:`threading.Lock`) dataset watcher dictionary lock
         self.__dataset_lock = threading.Lock()
@@ -89,8 +89,8 @@ class ScanDirWatcher(threading.Thread):
         self.__timeout = 0.01
 
         #: (:obj:`dict` <(:obj:`str`, :obj:`str`),
-        #                :class:`scanDirWatcher.ScanDirWatcher`>)
-        #        scandir watchers instances for given path and beamtime file
+        #:               :class:`scanDirWatcher.ScanDirWatcher`>)
+        #:       scandir watchers instances for given path and beamtime file
         self.__scandir_watchers = {}
         #: (:class:`threading.Lock`) scandir watcher dictionary lock
         self.__scandir_lock = threading.Lock()

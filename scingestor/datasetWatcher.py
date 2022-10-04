@@ -67,7 +67,7 @@ class DatasetWatcher(threading.Thread):
         #: (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
         self.__wd_to_path = {}
         #: (:obj:`dict` <:obj:`int`, :obj:`str`>)
-        #                               beamtime watch description paths
+        #:                              beamtime watch description paths
         self.__wd_to_queue = {}
 
         #: (:obj:`float`) timeout value for inotifyx get events in s
@@ -95,7 +95,7 @@ class DatasetWatcher(threading.Thread):
                 get_logger().warning('%s' % (str(e)))
 
         #: (:class:`scingestor.datasetIngestor.DatasetIngestor`)
-        #  dataset ingestor
+        #: dataset ingestor
         self.__ingestor = DatasetIngestor(
             configuration, path, dsfile, idsfile, meta, beamtimefile)
 

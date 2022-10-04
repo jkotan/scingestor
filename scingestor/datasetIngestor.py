@@ -192,7 +192,7 @@ class DatasetIngestor:
         #: (:obj:`list`<:obj:`str`>) waiting scan names
         self.__sc_waiting = []
         #: (:obj:`dict`<:obj:`str`, :obj:`list`<:obj:`str`>>)
-        #   ingested scan names
+        #:   ingested scan names
         self.__sc_ingested_map = {}
 
         #: (:obj:`str`) access groups

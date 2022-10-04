@@ -76,7 +76,7 @@ class BeamtimeWatcher:
                 self.__config["owner_access_groups_from_proposal"]
 
         #: (:obj:`dict` <:obj:`str`, :obj:`str`>)
-        #                             beamtime path to watcher path map
+        #:                            beamtime path to watcher path map
         self.__wait_for_dirs = {}
 
         #: (:obj:`int`) maximal scandir depth
@@ -93,13 +93,13 @@ class BeamtimeWatcher:
         #: (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
         self.__wd_to_path = {}
         #: (:obj:`dict` <:obj:`int`, :obj:`str`>)
-        #                               beamtime watch description path queues
+        #:                              beamtime watch description path queues
         self.__wd_to_queue = {}
         #: (:obj:`dict` <:obj:`int`, :class:`queue.Queue`>)
-        #                               beamtime watch description base paths
+        #:                              beamtime watch description base paths
         self.__wd_to_bpath = {}
         #: (:obj:`dict` <:obj:`int`, :class:`queue.Queue`>)
-        #                        beamtime watch description base path queues
+        #:                       beamtime watch description base path queues
         self.__wd_to_bqueue = {}
 
         #: (:obj:`str`) beamtime file prefix
@@ -117,8 +117,8 @@ class BeamtimeWatcher:
                 get_logger().warning('%s' % (str(e)))
 
         #: (:obj:`dict` <(:obj:`str`, :obj:`str`),
-        #                :class:`scanDirWatcher.ScanDirWatcher`>)
-        #        scandir watchers instances for given path and beamtime file
+        #:               :class:`scanDirWatcher.ScanDirWatcher`>)
+        #:        scandir watchers instances for given path and beamtime file
         self.__scandir_watchers = {}
         #: (:class:`threading.Lock`) scandir watcher dictionary lock
         self.__scandir_lock = threading.Lock()

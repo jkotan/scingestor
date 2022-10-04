@@ -82,7 +82,7 @@ class SafeINotifier(threading.Thread):
         #: (:obj:`int`) notifier ID
         self.__notifier = None
         #: (:obj:`dict` <:obj:`int`, :obj:`queue.Queue`>)
-        # watch description queues
+        #: watch description queues
         self.__id_queue = {}
         #: (:obj:`dict` <:obj:`int`, :obj:`int`>)  queue ids watch description
         self.__qid_wd = {}
@@ -90,10 +90,10 @@ class SafeINotifier(threading.Thread):
         self.__id_queue_lock = threading.Lock()
 
         #: (:obj:`list` < (:obj:`int`, :obj:`path`, :obj:`int`) >)
-        # watch description to add i.e. (id, path, masks)
+        #:  watch description to add i.e. (id, path, masks)
         self.__wd_to_add = []
         #: (:obj:`list` < :obj:`int`>)
-        # queue id of watch description to remove
+        #: queue id of watch description to remove
         self.__wd_to_rm = []
 
         # start the thread
