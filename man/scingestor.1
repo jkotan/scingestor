@@ -155,11 +155,9 @@ ingestor_credential_file: /home/jkotan/gpfs/pwd
 .UNINDENT
 .SS Pattern keywords for configuration variables
 .sp
-The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_log_dir\fP can contain the \fB{beamtimeid}\fP keyword,  e.g. \fB"scicat\-ingested\-datasets\-{beamtimeid}.lst"\fP which is instantiated during the ingestor execution.
+The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_log_dir\fP can contain the \fI{beamtimeid}\fP keyword,  e.g. \fB"scicat\-ingested\-datasets\-{beamtimeid}.lst"\fP which is instantiated during the ingestor execution.
 .sp
-Similarly, \fBnxs_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fB{beamtimeid}\fP , \fB{scanname}\fP, \fB{chmod}\fP, \fB{scanpath}\fP, \fB{metapath}\fP, \fB{relpath}\fP, \fB{beamtimeid}\fP, \fB{beamline}\fP, \fB{doiprefix}\fP, \fB{beamtimefile}\fP, \fB{scanpostfix}\fP, \fB{datablockpostfix}\fP, \fB{ownergroup}\fP, \fB{accessgroups}\fP
-.sp
-Also **
+Similarly, \fBnxs_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP
 .SH SCICAT_DATASET_INGEST
 .sp
 Re\-ingestion script for SciCat RawDatasets and OrigDatablocks is usually
