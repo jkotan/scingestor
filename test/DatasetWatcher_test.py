@@ -2986,6 +2986,7 @@ class DatasetWatcherTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
+            'relative_path_generator_switch: " -r {{relpath}} "\n' \
             'owner_access_groups_from_proposal: true\n' \
             'metadata_in_log_dir: true\n' \
             'relative_path_in_datablock: true\n' \
@@ -3289,6 +3290,7 @@ class DatasetWatcherTest(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'metadata_in_log_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
+            'relative_path_generator_switch: " -r {{relpath}} "\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'relative_path_in_datablock: true\n' \
             'ingestor_username: "{username}"\n' \

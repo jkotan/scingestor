@@ -248,6 +248,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'chmod_json_files: "{chmod}"\n' \
+            'chmod_generator_switch: " -x {{chmod}} "\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, logdir=logdir,
@@ -649,6 +650,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'oned_in_metadata: true\n' \
+            'oned_dataset_generator_switch: " --oned "\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
