@@ -158,6 +158,13 @@ class DatasetIngestor:
         #: (:obj:`str`) datablock path postfix
         self.__datablockscanpath = " {scanpath}/{scanname} "
 
+        #: (:obj:`str`) oned generator switch
+        self.__oned_switch = " --oned  "
+        #: (:obj:`str`) chmod generator switch
+        self.__chmod_switch = " -x {chmod} "
+        #: (:obj:`str`) relpath generator switch
+        self.__relpath_switch = " -r {relpath} "
+
         #: (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
         self.__headers = {'Content-Type': 'application/json',
                           'Accept': 'application/json'}
@@ -278,44 +285,56 @@ class DatasetIngestor:
             self.__datablockscanpath = \
                 self.__config["datablock_metadata_generator_scanpath_postfix"]
 
+        if "chmod_generator_switch" in self.__config.keys():
+            self.__chmod_switch = \
+                self.__config["chmod_generator_switch"]
+
+        if "relative_path_generator_switch" in self.__config.keys():
+            self.__relpath_switch = \
+                self.__config["relative_path_generator_switch"]
+
+        if "oned_dataset_generator_switch" in self.__config.keys():
+            self.__oned_switch = \
+                self.__config["oned_dataset_generator_switch"]
+
         if self.__relpath_in_datablock:
             if "datablock_metadata_generator" not in self.__config.keys():
                 self.__datablockcommand = \
-                    self.__datablockcommand + " -r {relpath} "
+                    self.__datablockcommand + self.__relpath_switch
             if "datablock_metadata_stream_generator" \
                not in self.__config.keys():
                 self.__datablockmemcommand = \
-                    self.__datablockmemcommand + " -r {relpath} "
+                    self.__datablockmemcommand + self.__relpath_switch
         else:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
-                    self.__datasetcommand + " -r {relpath} "
+                    self.__datasetcommand + self.__relpath_switch
             if "nxs_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
-                    self.__datasetcommandnxs + " -r {relpath} "
+                    self.__datasetcommandnxs + self.__relpath_switch
 
         if self.__chmod is not None:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
-                    self.__datasetcommand + " -x {chmod} "
+                    self.__datasetcommand + self.__chmod_switch
             if "nxs_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
-                    self.__datasetcommandnxs + " -x {chmod} "
+                    self.__datasetcommandnxs + self.__chmod_switch
             if "datablock_metadata_generator" not in self.__config.keys():
                 self.__datablockcommand = \
-                    self.__datablockcommand + " -x {chmod} "
+                    self.__datablockcommand + self.__chmod_switch
             if "datablock_metadata_stream_generator" \
                not in self.__config.keys():
                 self.__datablockmemcommand = \
-                    self.__datablockmemcommand + " -x {chmod} "
+                    self.__datablockmemcommand + self.__chmod_switch
 
         if self.__oned:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
-                    self.__datasetcommand + " --oned "
+                    self.__datasetcommand + self.__oned_switch
             if "nxs_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
-                    self.__datasetcommandnxs + " --oned "
+                    self.__datasetcommandnxs + self.__oned_switch
 
         if "max_request_tries_number" in self.__config.keys():
             try:
