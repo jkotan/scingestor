@@ -79,6 +79,15 @@ class BeamtimeWatcher:
         #                             beamtime path to watcher path map
         self.__wait_for_dirs = {}
 
+        #: (:obj:`int`) maximal scandir depth
+        self.__scandir_depth = -1
+
+        if "max_scandir_depth" in self.__config.keys():
+            try:
+                self.__scandir_depth = int(self.__config["max_scandir_depth"])
+            except Exception as e:
+                get_logger().warning('%s' % (str(e)))
+
         #: (:obj:`int`) notifier id
         self.__notifier = None
         #: (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
@@ -515,7 +524,8 @@ class BeamtimeWatcher:
                             % (path, ffn))
                         btmd = self.__append_proposal_groups(btmd, path)
                         sdw = self.__scandir_watchers[(path, ffn)] =  \
-                            ScanDirWatcher(self.__config, path, btmd, ffn)
+                            ScanDirWatcher(self.__config, path, btmd, ffn,
+                                           self.__scandir_depth)
                 if sdw is not None:
                     sdw.start()
             except Exception as e:

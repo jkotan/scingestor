@@ -56,6 +56,7 @@ The configuration written in YAML can contain the following variables
 * **dataset_update_strategy** (``"no"``, ``"patch"``, ``"create"``, ``"mixed"``) , default: ``"patch"``
 * **relative_path_in_datablock** *(bool)* , default: ``False``
 * **chmod_json_files** *(str)* , default: ``None``
+* **max_scandir_depth** *(int)*, default: ``-1``
 * **oned_in_metadata** *(bool)* , default: ``False``
 * **scan_metadata_postfix** *(str)* , default: ``".scan.json"``
 * **datablock_metadata_postfix** *(str)* , default: ``".origdatablock.json"``
