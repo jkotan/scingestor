@@ -1603,17 +1603,17 @@ class DatasetWatcherTest(unittest.TestCase):
             cf.write(cred)
 
         dspostfix = ".dataset.json"
-        dbpostfix = ".datablock.json"
+        datablockpostfix = ".datablock.json"
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'scan_metadata_postfix: "{dspostfix}"\n' \
-            'datablock_metadata_postfix: "{dbpostfix}"\n' \
+            'datablock_metadata_postfix: "{datablockpostfix}"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'relative_path_in_datablock: true\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, logdir=logdir, credfile=credfile,
-                dspostfix=dspostfix, dbpostfix=dbpostfix)
+                dspostfix=dspostfix, datablockpostfix=datablockpostfix)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -2103,19 +2103,19 @@ class DatasetWatcherTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'dataset_metadata_generator: "nxsfileinfo metadata ' \
-            ' -o {{scanpath}}/{{scanname}}{{scpostfix}} ' \
+            ' -o {{scanpath}}/{{scanname}}{{scanpostfix}} ' \
             ' -x 0o662 ' \
             ' -b {{beamtimefile}} -p {{beamtimeid}}/{{scanname}} "\n' \
             'datablock_metadata_generator: "nxsfileinfo origdatablock ' \
-            ' -s *.pyc,*{{dbpostfix}},*{{scpostfix}},*~ ' \
+            ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
             ' -p {{doiprefix}}/{{beamtimeid}}/{{scanname}} ' \
             ' -x 0o662 ' \
             ' -r {{relpath}} ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt ' \
-            ' -o {{scanpath}}/{{scanname}}{{dbpostfix}} "\n' \
+            ' -o {{scanpath}}/{{scanname}}{{datablockpostfix}} "\n' \
             'datablock_metadata_stream_generator: ' \
             'nxsfileinfo origdatablock ' \
-            ' -s *.pyc,*{{dbpostfix}},*{{scpostfix}},*~ ' \
+            ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt' \
             ' -r {{relpath}} ' \
             ' -x 0o662 ' \

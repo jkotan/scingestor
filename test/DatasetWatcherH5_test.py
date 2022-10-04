@@ -1003,20 +1003,20 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'nxs_dataset_metadata_generator: "nxsfileinfo metadata ' \
-            ' -o {{scanpath}}/{{scanname}}{{scpostfix}} ' \
+            ' -o {{scanpath}}/{{scanname}}{{scanpostfix}} ' \
             ' -x 0o662 ' \
             ' -r {{relpath}} ' \
             ' -b {{beamtimefile}} -p {{beamtimeid}}/{{scanname}} ' \
             '{{scanpath}}/{{scanname}}.nxs"\n' \
             'datablock_metadata_generator: "nxsfileinfo origdatablock ' \
-            ' -s *.pyc,*{{dbpostfix}},*{{scpostfix}},*~ ' \
+            ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
             ' -x 0o662 ' \
             ' -p {{doiprefix}}/{{beamtimeid}}/{{scanname}} ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt ' \
-            ' -o {{scanpath}}/{{scanname}}{{dbpostfix}} "\n' \
+            ' -o {{scanpath}}/{{scanname}}{{datablockpostfix}} "\n' \
             'datablock_metadata_stream_generator: ' \
             'nxsfileinfo origdatablock ' \
-            ' -s *.pyc,*{{dbpostfix}},*{{scpostfix}},*~ ' \
+            ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
             ' -x 0o662 ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt' \
             ' -p {{doiprefix}}/{{beamtimeid}}/{{scanname}} "\n' \
@@ -1423,21 +1423,21 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'oned_in_metadata: true\n' \
             'nxs_dataset_metadata_generator: "nxsfileinfo metadata ' \
-            ' -o {{scanpath}}/{{scanname}}{{scpostfix}} ' \
+            ' -o {{scanpath}}/{{scanname}}{{scanpostfix}} ' \
             ' -x 0o662 ' \
             ' --oned ' \
             ' -r {{relpath}} ' \
             ' -b {{beamtimefile}} -p {{beamtimeid}}/{{scanname}} ' \
             '{{scanpath}}/{{scanname}}.nxs"\n' \
             'datablock_metadata_generator: "nxsfileinfo origdatablock ' \
-            ' -s *.pyc,*{{dbpostfix}},*{{scpostfix}},*~ ' \
+            ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
             ' -p {{doiprefix}}/{{beamtimeid}}/{{scanname}} ' \
             ' -x 0o662 ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt ' \
-            ' -o {{scanpath}}/{{scanname}}{{dbpostfix}} "\n' \
+            ' -o {{scanpath}}/{{scanname}}{{datablockpostfix}} "\n' \
             'datablock_metadata_stream_generator: ' \
             'nxsfileinfo origdatablock ' \
-            ' -s *.pyc,*{{dbpostfix}},*{{scpostfix}},*~ ' \
+            ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt' \
             ' -x 0o662 ' \
             ' -p {{doiprefix}}/{{beamtimeid}}/{{scanname}} "\n' \

@@ -131,27 +131,27 @@ class DatasetIngestor:
 
         #: (:obj:`str`) nexus dataset shell command
         self.__datasetcommandnxs = "nxsfileinfo metadata " \
-            " -o {metapath}/{scanname}{scpostfix} " \
+            " -o {metapath}/{scanname}{scanpostfix} " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
             " {scanpath}/{scanname}.nxs"
         #: (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata " \
-            " -o {metapath}/{scanname}{scpostfix} " \
+            " -o {metapath}/{scanname}{scanpostfix} " \
             " -c {accessgroups}" \
             " -w {ownergroup}" \
             " -b {beamtimefile} -p {beamtimeid}/{scanname}"
         #: (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
-            " -s *.pyc,*{dbpostfix},*{scpostfix},*~ " \
+            " -s *.pyc,*{datablockpostfix},*{scanpostfix},*~ " \
             " -p {doiprefix}/{beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
-            " -o {metapath}/{scanname}{dbpostfix} "
+            " -o {metapath}/{scanname}{datablockpostfix} "
         #: (:obj:`str`) datablock shell command
         self.__datablockmemcommand = "nxsfileinfo origdatablock " \
-            " -s *.pyc,*{dbpostfix},*{scpostfix},*~ " \
+            " -s *.pyc,*{datablockpostfix},*{scanpostfix},*~ " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
             " -p {doiprefix}/{beamtimeid}/{scanname} "
@@ -368,8 +368,8 @@ class DatasetIngestor:
             "beamline": self.__bl,
             "doiprefix": self.__doiprefix,
             "beamtimefile": self.__bfile,
-            "scpostfix": self.__scanpostfix,
-            "dbpostfix": self.__datablockpostfix,
+            "scanpostfix": self.__scanpostfix,
+            "datablockpostfix": self.__datablockpostfix,
             "ownergroup": self.__ownergroup,
             "accessgroups": self.__accessgroups
         }
@@ -413,7 +413,7 @@ class DatasetIngestor:
             get_logger().info(
                 'DatasetIngestor: Generating nxs metadata: %s %s' % (
                     scan,
-                    "{metapath}/{scanname}{scpostfix}".format(
+                    "{metapath}/{scanname}{scanpostfix}".format(
                         **self.__dctfmt)))
             get_logger().debug(
                 'DatasetIngestor: Generating dataset command: %s ' % (
@@ -425,7 +425,7 @@ class DatasetIngestor:
             get_logger().info(
                 'DatasetIngestor: Generating metadata: %s %s' % (
                     scan,
-                    "{metapath}/{scanname}{scpostfix}".format(
+                    "{metapath}/{scanname}{scanpostfix}".format(
                         **self.__dctfmt)))
             get_logger().debug(
                 'DatasetIngestor: Generating dataset command: %s ' % (
@@ -435,7 +435,7 @@ class DatasetIngestor:
                 check=True)
 
         rdss = glob.glob(
-            "{metapath}/{scanname}{scpostfix}".format(
+            "{metapath}/{scanname}{scanpostfix}".format(
                         **self.__dctfmt))
         if rdss and rdss[0]:
             return rdss[0]
@@ -452,7 +452,7 @@ class DatasetIngestor:
         get_logger().info(
             'DatasetIngestor: Generating origdatablock metadata: %s %s' % (
                 scan,
-                "{metapath}/{scanname}{dbpostfix}".format(
+                "{metapath}/{scanname}{datablockpostfix}".format(
                     **self.__dctfmt)))
         cmd = self.__datablockcommand.format(**self.__dctfmt)
         sscan = (scan or "").split(" ")
@@ -465,7 +465,7 @@ class DatasetIngestor:
         #     'DatasetIngestor: Generating origdatablock command: %s ' % cmd)
         subprocess.run(cmd.split(), check=True)
         odbs = glob.glob(
-            "{metapath}/{scanname}{dbpostfix}".format(
+            "{metapath}/{scanname}{datablockpostfix}".format(
                     **self.__dctfmt))
         if odbs and odbs[0]:
             return odbs[0]
@@ -481,7 +481,7 @@ class DatasetIngestor:
         :returns: a file name of generate file
         :rtype: :obj:`str`
         """
-        mfilename = "{metapath}/{scanname}{dbpostfix}".format(
+        mfilename = "{metapath}/{scanname}{datablockpostfix}".format(
             **self.__dctfmt)
         get_logger().info(
             'DatasetIngestor: Checking origdatablock metadata: %s %s' % (
@@ -530,13 +530,13 @@ class DatasetIngestor:
                         'DatasetIngestor: '
                         'Generating origdatablock metadata: %s %s' % (
                             scan,
-                            "{metapath}/{scanname}{dbpostfix}".format(
+                            "{metapath}/{scanname}{datablockpostfix}".format(
                                 **self.__dctfmt)))
                     with open(mfilename, "w") as mf:
                         mf.write(nwmeta)
 
         odbs = glob.glob(
-            "{metapath}/{scanname}{dbpostfix}".format(
+            "{metapath}/{scanname}{datablockpostfix}".format(
                     **self.__dctfmt))
         if odbs and odbs[0]:
             return odbs[0]
