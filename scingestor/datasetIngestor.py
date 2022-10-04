@@ -39,7 +39,7 @@ class UpdateStrategy(enum.Enum):
     #: (:class:`datasetIngestor.UpdateStrategy`) recreate datasets
     CREATE = 2
     #: (:class:`datasetIngestor.UpdateStrategy`) patch datasets only if
-    #       scientificMetadata changed otherwise recreate datasets
+    #:       scientificMetadata changed otherwise recreate datasets
     MIXED = 3
 
 
