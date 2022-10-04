@@ -106,12 +106,12 @@
         <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;) watch description paths</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_path</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;)</span>
-        <span class="c1">#                               beamtime watch description paths</span>
+        <span class="c1">#:                              beamtime watch description paths</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_queue</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1">#: (:obj:`dict` &lt;(:obj:`str`, :obj:`str`),</span>
-        <span class="c1">#                :class:`scanDirWatcher.ScanDirWatcher`&gt;)</span>
-        <span class="c1">#        dataset watchers instances for given path and beamtime file</span>
+        <span class="c1">#:               :class:`scanDirWatcher.ScanDirWatcher`&gt;)</span>
+        <span class="c1">#:       dataset watchers instances for given path and beamtime file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dataset_watchers</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1">#: (:class:`threading.Lock`) dataset watcher dictionary lock</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dataset_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
@@ -119,8 +119,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__timeout</span> <span class="o">=</span> <span class="mf">0.01</span>
 
         <span class="c1">#: (:obj:`dict` &lt;(:obj:`str`, :obj:`str`),</span>
-        <span class="c1">#                :class:`scanDirWatcher.ScanDirWatcher`&gt;)</span>
-        <span class="c1">#        scandir watchers instances for given path and beamtime file</span>
+        <span class="c1">#:               :class:`scanDirWatcher.ScanDirWatcher`&gt;)</span>
+        <span class="c1">#:       scandir watchers instances for given path and beamtime file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__scandir_watchers</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1">#: (:class:`threading.Lock`) scandir watcher dictionary lock</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__scandir_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>

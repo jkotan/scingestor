@@ -106,7 +106,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;owner_access_groups_from_proposal&quot;</span><span class="p">]</span>
 
         <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;)</span>
-        <span class="c1">#                             beamtime path to watcher path map</span>
+        <span class="c1">#:                            beamtime path to watcher path map</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__wait_for_dirs</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1">#: (:obj:`int`) maximal scandir depth</span>
@@ -123,13 +123,13 @@
         <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;) watch description paths</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_path</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, :obj:`str`&gt;)</span>
-        <span class="c1">#                               beamtime watch description path queues</span>
+        <span class="c1">#:                              beamtime watch description path queues</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_queue</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, :class:`queue.Queue`&gt;)</span>
-        <span class="c1">#                               beamtime watch description base paths</span>
+        <span class="c1">#:                              beamtime watch description base paths</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_bpath</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, :class:`queue.Queue`&gt;)</span>
-        <span class="c1">#                        beamtime watch description base path queues</span>
+        <span class="c1">#:                       beamtime watch description base path queues</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_bqueue</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1">#: (:obj:`str`) beamtime file prefix</span>
@@ -147,8 +147,8 @@
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
 
         <span class="c1">#: (:obj:`dict` &lt;(:obj:`str`, :obj:`str`),</span>
-        <span class="c1">#                :class:`scanDirWatcher.ScanDirWatcher`&gt;)</span>
-        <span class="c1">#        scandir watchers instances for given path and beamtime file</span>
+        <span class="c1">#:               :class:`scanDirWatcher.ScanDirWatcher`&gt;)</span>
+        <span class="c1">#:        scandir watchers instances for given path and beamtime file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__scandir_watchers</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1">#: (:class:`threading.Lock`) scandir watcher dictionary lock</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__scandir_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>

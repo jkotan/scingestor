@@ -112,7 +112,7 @@
         <span class="c1">#: (:obj:`int`) notifier ID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, :obj:`queue.Queue`&gt;)</span>
-        <span class="c1"># watch description queues</span>
+        <span class="c1">#: watch description queues</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1">#: (:obj:`dict` &lt;:obj:`int`, :obj:`int`&gt;)  queue ids watch description</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__qid_wd</span> <span class="o">=</span> <span class="p">{}</span>
@@ -120,10 +120,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__id_queue_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
 
         <span class="c1">#: (:obj:`list` &lt; (:obj:`int`, :obj:`path`, :obj:`int`) &gt;)</span>
-        <span class="c1"># watch description to add i.e. (id, path, masks)</span>
+        <span class="c1">#:  watch description to add i.e. (id, path, masks)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_add</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1">#: (:obj:`list` &lt; :obj:`int`&gt;)</span>
-        <span class="c1"># queue id of watch description to remove</span>
+        <span class="c1">#: queue id of watch description to remove</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_rm</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># start the thread</span>
