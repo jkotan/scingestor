@@ -1,19 +1,17 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>scingestor.datasetIngestor &#8212; SciCat Dataset Ingestor 0.0.4 documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>scingestor.datasetIngestor &#8212; SciCat Dataset Ingestor 0.0.5 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -57,16 +55,22 @@
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">enum</span>
 
-<span class="kn">from</span> <span class="nn">.logger</span> <span class="k">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">.logger</span> <span class="kn">import</span> <span class="n">get_logger</span>
 
 
 <div class="viewcode-block" id="UpdateStrategy"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.UpdateStrategy">[docs]</a><span class="k">class</span> <span class="nc">UpdateStrategy</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot; Update strategy</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">PATCH</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">CREATE</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">MIXED</span> <span class="o">=</span> <span class="mi">2</span></div>
+    <span class="c1">#: (:class:`datasetIngestor.UpdateStrategy`) leave datasets unchanged</span>
+    <span class="n">NO</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1">#: (:class:`datasetIngestor.UpdateStrategy`) patch datasets</span>
+    <span class="n">PATCH</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1">#: (:class:`datasetIngestor.UpdateStrategy`) recreate datasets</span>
+    <span class="n">CREATE</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="c1">#: (:class:`datasetIngestor.UpdateStrategy`) patch datasets only if</span>
+    <span class="c1">#       scientificMetadata changed otherwise recreate datasets</span>
+    <span class="n">MIXED</span> <span class="o">=</span> <span class="mi">3</span></div>
 
 
 <div class="viewcode-block" id="DatasetIngestor"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor">[docs]</a><span class="k">class</span> <span class="nc">DatasetIngestor</span><span class="p">:</span>
@@ -74,7 +78,7 @@
     <span class="sd">&quot;&quot;&quot; Dataset Ingestor</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span>
                  <span class="n">path</span><span class="p">,</span> <span class="n">dsfile</span><span class="p">,</span> <span class="n">idsfile</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">beamtimefile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
@@ -157,32 +161,39 @@
 
         <span class="c1">#: (:obj:`str`) nexus dataset shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata &quot;</span> \
-            <span class="s2">&quot; -o </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2"> &quot;</span> \
+            <span class="s2">&quot; -o </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scanpostfix}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot; -w </span><span class="si">{ownergroup}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -c </span><span class="si">{accessgroups}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.nxs&quot;</span>
         <span class="c1">#: (:obj:`str`) datablock shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata &quot;</span> \
-            <span class="s2">&quot; -o </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2"> &quot;</span> \
+            <span class="s2">&quot; -o </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scanpostfix}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot; -c </span><span class="si">{accessgroups}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -w </span><span class="si">{ownergroup}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">&quot;</span>
         <span class="c1">#: (:obj:`str`) datablock shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
-            <span class="s2">&quot; -s *.pyc,*</span><span class="si">{dbpostfix}</span><span class="s2">,*</span><span class="si">{scpostfix}</span><span class="s2">,*~ &quot;</span> \
+            <span class="s2">&quot; -s *.pyc,*</span><span class="si">{datablockpostfix}</span><span class="s2">,*</span><span class="si">{scanpostfix}</span><span class="s2">,*~ &quot;</span> \
             <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot; -w </span><span class="si">{ownergroup}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -c </span><span class="si">{accessgroups}</span><span class="s2">&quot;</span> \
-            <span class="s2">&quot; -o </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2"> &quot;</span>
+            <span class="s2">&quot; -o </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{datablockpostfix}</span><span class="s2"> &quot;</span>
         <span class="c1">#: (:obj:`str`) datablock shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
-            <span class="s2">&quot; -s *.pyc,*</span><span class="si">{dbpostfix}</span><span class="s2">,*</span><span class="si">{scpostfix}</span><span class="s2">,*~ &quot;</span> \
+            <span class="s2">&quot; -s *.pyc,*</span><span class="si">{datablockpostfix}</span><span class="s2">,*</span><span class="si">{scanpostfix}</span><span class="s2">,*~ &quot;</span> \
             <span class="s2">&quot; -w </span><span class="si">{ownergroup}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -c </span><span class="si">{accessgroups}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
         <span class="c1">#: (:obj:`str`) datablock path postfix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span> <span class="o">=</span> <span class="s2">&quot; </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
+
+        <span class="c1">#: (:obj:`str`) oned generator switch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__oned_switch</span> <span class="o">=</span> <span class="s2">&quot; --oned  &quot;</span>
+        <span class="c1">#: (:obj:`str`) chmod generator switch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__chmod_switch</span> <span class="o">=</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
+        <span class="c1">#: (:obj:`str`) relpath generator switch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_switch</span> <span class="o">=</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
 
         <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) request headers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
@@ -236,7 +247,9 @@
         <span class="c1">#: (:obj:`str`) ingestor log directory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__log_dir</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;ingestor_log_dir&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__log_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;ingestor_log_dir&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__log_dir</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;ingestor_log_dir&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">beamtimeid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__log_dir</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__log_dir</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__meta_in_log_dir</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__log_dir</span><span class="p">:</span>
@@ -251,10 +264,10 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__incd</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="k">if</span> <span class="s2">&quot;ingestor_username&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__username</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;ingestor_username&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s2">&quot;update_strategy&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s2">&quot;dataset_update_strategy&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__strategy</span> <span class="o">=</span> <span class="n">UpdateStrategy</span><span class="p">[</span>
-                    <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;update_strategy&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;dataset_update_strategy&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                     <span class="s1">&#39;Wrong UpdateStrategy value: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
@@ -302,44 +315,56 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;datablock_metadata_generator_scanpath_postfix&quot;</span><span class="p">]</span>
 
+        <span class="k">if</span> <span class="s2">&quot;chmod_generator_switch&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__chmod_switch</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;chmod_generator_switch&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;relative_path_generator_switch&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_switch</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;relative_path_generator_switch&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;oned_dataset_generator_switch&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__oned_switch</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;oned_dataset_generator_switch&quot;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_in_datablock</span><span class="p">:</span>
             <span class="k">if</span> <span class="s2">&quot;datablock_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> \
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_switch</span>
             <span class="k">if</span> <span class="s2">&quot;datablock_metadata_stream_generator&quot;</span> \
                <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> \
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_switch</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="s2">&quot;dataset_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> \
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_switch</span>
             <span class="k">if</span> <span class="s2">&quot;nxs_dataset_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="s2">&quot; -r </span><span class="si">{relpath}</span><span class="s2"> &quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_switch</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__chmod</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="s2">&quot;dataset_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> \
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__chmod_switch</span>
             <span class="k">if</span> <span class="s2">&quot;nxs_dataset_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__chmod_switch</span>
             <span class="k">if</span> <span class="s2">&quot;datablock_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> \
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__chmod_switch</span>
             <span class="k">if</span> <span class="s2">&quot;datablock_metadata_stream_generator&quot;</span> \
                <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">=</span> \
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">+</span> <span class="s2">&quot; -x </span><span class="si">{chmod}</span><span class="s2"> &quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datablockmemcommand</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__chmod_switch</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__oned</span><span class="p">:</span>
             <span class="k">if</span> <span class="s2">&quot;dataset_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> \
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="s2">&quot; --oned &quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__oned_switch</span>
             <span class="k">if</span> <span class="s2">&quot;nxs_dataset_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">=</span> \
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="s2">&quot; --oned &quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandnxs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__oned_switch</span>
 
         <span class="k">if</span> <span class="s2">&quot;max_request_tries_number&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">try</span><span class="p">:</span>
@@ -373,8 +398,8 @@
             <span class="s2">&quot;beamline&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bl</span><span class="p">,</span>
             <span class="s2">&quot;doiprefix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span><span class="p">,</span>
             <span class="s2">&quot;beamtimefile&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bfile</span><span class="p">,</span>
-            <span class="s2">&quot;scpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span><span class="p">,</span>
-            <span class="s2">&quot;dbpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span><span class="p">,</span>
+            <span class="s2">&quot;scanpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span><span class="p">,</span>
+            <span class="s2">&quot;datablockpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span><span class="p">,</span>
             <span class="s2">&quot;ownergroup&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ownergroup</span><span class="p">,</span>
             <span class="s2">&quot;accessgroups&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__accessgroups</span>
         <span class="p">}</span>
@@ -418,7 +443,7 @@
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                 <span class="s1">&#39;DatasetIngestor: Generating nxs metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
                     <span class="n">scan</span><span class="p">,</span>
-                    <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scanpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="s1">&#39;DatasetIngestor: Generating dataset command: </span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="p">(</span>
@@ -430,7 +455,7 @@
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                 <span class="s1">&#39;DatasetIngestor: Generating metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
                     <span class="n">scan</span><span class="p">,</span>
-                    <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scanpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="s1">&#39;DatasetIngestor: Generating dataset command: </span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="p">(</span>
@@ -440,7 +465,7 @@
                 <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">rdss</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scanpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">rdss</span> <span class="ow">and</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">return</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -457,7 +482,7 @@
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
             <span class="s1">&#39;DatasetIngestor: Generating origdatablock metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
                 <span class="n">scan</span><span class="p">,</span>
-                <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{datablockpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
         <span class="n">sscan</span> <span class="o">=</span> <span class="p">(</span><span class="n">scan</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
@@ -470,7 +495,7 @@
         <span class="c1">#     &#39;DatasetIngestor: Generating origdatablock command: %s &#39; % cmd)</span>
         <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">odbs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{datablockpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">odbs</span> <span class="ow">and</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">return</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -486,7 +511,7 @@
 <span class="sd">        :returns: a file name of generate file</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">mfilename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">mfilename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{datablockpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
             <span class="s1">&#39;DatasetIngestor: Checking origdatablock metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
@@ -535,13 +560,13 @@
                         <span class="s1">&#39;DatasetIngestor: &#39;</span>
                         <span class="s1">&#39;Generating origdatablock metadata: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
                             <span class="n">scan</span><span class="p">,</span>
-                            <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{datablockpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                                 <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)))</span>
                     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mfilename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mf</span><span class="p">:</span>
                         <span class="n">mf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">nwmeta</span><span class="p">)</span>
 
         <span class="n">odbs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{dbpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{datablockpostfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">odbs</span> <span class="ow">and</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">return</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -821,7 +846,7 @@
                         <span class="k">return</span> <span class="n">mdct</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__strategy</span> <span class="o">!=</span> <span class="n">UpdateStrategy</span><span class="o">.</span><span class="n">NO</span><span class="p">:</span>
                     <span class="c1"># find dataset by pid</span>
                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                         <span class="s1">&#39;DatasetIngestor: Find the dataset by id: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pid</span><span class="p">))</span>
@@ -836,7 +861,8 @@
                         <span class="n">mdic</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pid</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadataEqual</span><span class="p">(</span>
                                 <span class="n">dsmeta</span><span class="p">,</span> <span class="n">mdic</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__withoutsm</span><span class="p">):</span>
-                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__strategy</span> <span class="o">==</span> <span class="n">UpdateStrategy</span><span class="o">.</span><span class="n">PATCH</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__strategy</span> <span class="ow">in</span> <span class="p">[</span>
+                                    <span class="n">UpdateStrategy</span><span class="o">.</span><span class="n">PATCH</span><span class="p">,</span> <span class="n">UpdateStrategy</span><span class="o">.</span><span class="n">NO</span><span class="p">]:</span>
                                 <span class="n">nmeta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">mdic</span><span class="p">)</span>
                                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch_dataset</span><span class="p">(</span>
                                     <span class="n">nmeta</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mdct</span><span class="p">)</span>
@@ -858,6 +884,8 @@
                                             <span class="n">nmeta</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mdct</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">resds</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">pid</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">resexists</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -974,7 +1002,6 @@
 
         <span class="n">sscan</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
-
         <span class="n">rdss</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
             <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">scan</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">],</span>
@@ -1037,6 +1064,7 @@
         <span class="n">reingest_origdatablock</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">sscan</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">rds</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">rdss</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
             <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">scan</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">],</span>
@@ -1055,9 +1083,11 @@
                     <span class="n">mtm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">]))</span>
             <span class="k">if</span> <span class="n">scan</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> \
                <span class="ow">or</span> <span class="n">mtm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">]:</span>
-                <span class="n">reingest_dataset</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__strategy</span> <span class="o">!=</span> <span class="n">UpdateStrategy</span><span class="o">.</span><span class="n">NO</span><span class="p">:</span>
+                    <span class="n">reingest_dataset</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">rds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_rawdataset_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">])</span>
+            <span class="n">rds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_rawdataset_metadata</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">])</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;DS No File: </span><span class="si">%s</span><span class="s2"> True&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scan</span><span class="p">))</span>
             <span class="n">reingest_dataset</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">mtmds</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1236,17 +1266,15 @@
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1255,7 +1283,7 @@
       &copy;2022, DESY, Jan Kotanski.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
     </div>
