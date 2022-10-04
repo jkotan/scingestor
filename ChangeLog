@@ -3,6 +3,7 @@
 	* change {bt} format keyword to {beamtimeid} keyword (#104)
 	* change update_strategy to dataset_update_strategy and a add NO option (#106)
 	* add support for {beamtimeid} in the ingestor_dir_log configuration variable (#108)
+	* add max_scandir_depth configuration variable (#111)
 	* tagged as 0.0.5
 
 2021-09-23 Jan Kotanski <jan.kotanski@desy.de>

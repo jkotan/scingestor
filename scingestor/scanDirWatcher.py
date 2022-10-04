@@ -33,7 +33,7 @@ class ScanDirWatcher(threading.Thread):
     """
     def __init__(self,
                  configuration,
-                 path, meta, bpath):
+                 path, meta, bpath, depth):
         """ constructor
 
         :param configuration: dictionary with the ingestor configuration
@@ -44,6 +44,8 @@ class ScanDirWatcher(threading.Thread):
         :type meta: :obj:`dict` <:obj:`str`, `any`>
         :param bpath: beamtime file
         :type bpath: :obj:`str`
+        :param depth: scandir depth level
+        :type depth: :obj:`int`
         """
         threading.Thread.__init__(self)
 
@@ -58,6 +60,8 @@ class ScanDirWatcher(threading.Thread):
         self.__bpath = bpath
         #: (:obj:`dict` <:obj:`str`, `any`>) beamtime configuration
         self.__meta = meta
+        #: (:obj:`int`) scan dir depth
+        self.__depth = depth
         #: (:obj:`str`) beamtime id
         self.__beamtimeId = meta["beamtimeId"]
         #: (:obj:`str`) beamline metadata
@@ -171,25 +175,28 @@ class ScanDirWatcher(threading.Thread):
         :param path: list of subdirectories
         :type path: :obj:`list`<:obj:`str`>
         """
-        for path in sorted(paths):
-            sdw = None
-            try:
-                with self.__scandir_lock:
-                    if (path, self.__bpath) \
-                       not in self.__scandir_watchers.keys():
-                        sdw = \
-                            self.__scandir_watchers[(path, self.__bpath)] =  \
-                            ScanDirWatcher(self.__config,
-                                           path, self.__meta, self.__bpath)
-                        get_logger().info(
-                            'ScanDirWatcher: Create ScanDirWatcher %s %s'
-                            % (path, self.__bpath))
-                if sdw is not None:
-                    sdw.start()
-                time.sleep(self.__timeout/10.)
-            except Exception as e:
-                get_logger().warning(
-                    "%s cannot be watched: %s" % (path, str(e)))
+        if self.__depth != 0:
+            for path in sorted(paths):
+                sdw = None
+                try:
+                    with self.__scandir_lock:
+                        if (path, self.__bpath) \
+                           not in self.__scandir_watchers.keys():
+                            sdw = \
+                                self.__scandir_watchers[
+                                    (path, self.__bpath)] = ScanDirWatcher(
+                                        self.__config,
+                                        path, self.__meta, self.__bpath,
+                                        self.__depth - 1)
+                            get_logger().info(
+                                'ScanDirWatcher: Create ScanDirWatcher %s %s'
+                                % (path, self.__bpath))
+                    if sdw is not None:
+                        sdw.start()
+                    time.sleep(self.__timeout/10.)
+                except Exception as e:
+                    get_logger().warning(
+                        "%s cannot be watched: %s" % (path, str(e)))
 
     def run(self):
         """ scandir watcher thread

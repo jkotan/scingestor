@@ -808,6 +808,7 @@ class DatasetWatcherTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'max_scandir_depth: 2\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
@@ -968,6 +969,192 @@ class DatasetWatcherTest(unittest.TestCase):
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_datasetfile_exist_json_depth(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
+        btmeta = "beamtime-metadata-99001234.json"
+        dslist = "scicat-datasets-99001234.lst"
+        idslist = "scicat-ingested-datasets-99001234.lst"
+        wrongdslist = "scicat-datasets-99001235.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                "config",
+                                wrongdslist)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        # fdslist = os.path.join(fsubdirname2, dslist)
+        fds1 = os.path.join(fsubdirname2, "myscan_00001.scan.json")
+        fds2 = os.path.join(fsubdirname2, "myscan_00002.scan.json")
+        fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        logdir = "/"
+        cred = "12342345"
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        ds1 = {'contactEmail': 'BSName',
+               'createdAt': '2022-05-14 11:54:29',
+               'creationLocation': '/DESY/PETRA III/p00',
+               'description': 'H20 distribution',
+               'endTime': '2022-05-19 09:00:00',
+               'isPublished': False,
+               'techniques': [
+                   {
+                       'name': 'small angle x-ray scattering',
+                       'pid':
+                       'http://purl.org/pan-science/PaNET/PaNET01188'
+                   }
+               ],
+               'owner': 'Ouruser',
+               'ownerGroup': '99001234-part',
+               'ownerEmail': 'appuser@fake.com',
+               'pid': '99001234/myscan_00001',
+               'accessGroups': [
+                '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+               'datasetName': 'myscan_00001',
+               'principalInvestigator': 'appuser@fake.com',
+               'proposalId': '99001234',
+               'scientificMetadata': {
+                   'DOOR_proposalId': '99991173',
+                   'beamtimeId': '99001234'},
+               'sourceFolder':
+               '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+               'type': 'raw',
+               'updatedAt': '2022-05-14 11:54:29'}
+        ds2 = {'contactEmail': 'BSName',
+               'createdAt': '2022-05-14 11:54:29',
+               'creationLocation': '/DESY/PETRA III/p00',
+               'description': 'H20 distribution',
+               'endTime': '2022-05-19 09:00:00',
+               'isPublished': False,
+               'techniques': [
+                {
+                    'name': 'wide angle x-ray scattering',
+                    'pid':
+                    'http://purl.org/pan-science/PaNET/PaNET01191'
+                },
+                {
+                    'name': 'grazing incidence diffraction',
+                    'pid':
+                    'http://purl.org/pan-science/PaNET/PaNET01098'
+                }
+               ],
+               'owner': 'Ouruser',
+               'ownerGroup': '99001234-part',
+               'ownerEmail': 'appuser@fake.com',
+               'pid': '99001234/myscan_00002',
+               'accessGroups': [
+                   '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+               'datasetName': 'myscan_00002',
+               'principalInvestigator': 'appuser@fake.com',
+               'proposalId': '99001234',
+               'scientificMetadata': {
+                   'DOOR_proposalId': '99991173',
+                   'beamtimeId': '99001234'},
+               'sourceFolder':
+               '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+               'type': 'raw',
+               'updatedAt': '2022-05-14 11:54:29'}
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'max_scandir_depth: 1\n' \
+            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r10 --log debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r10 -l debug'
+                     % cfgfname).split()]
+        # commands.pop()
+        try:
+            for cmd in commands:
+                time.sleep(1)
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                os.mkdir(fsubdirname3)
+                with open(fds1, "w") as cf:
+                    cf.write(json.dumps(ds1))
+                with open(fds2, "w") as cf:
+                    cf.write(json.dumps(ds2))
+                shutil.copy(source, fdirname)
+                shutil.copy(lsource, fsubdirname2)
+                shutil.copy(wlsource, fsubdirname)
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                self.__server.reset()
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                vl, er = self.runtest(cmd)
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                dseri = [ln for ln in seri if "DEBUG :" not in ln]
+                # print(vl)
+                # print(er)
+
+                # nodebug = "\n".join([ee for ee in er.split("\n")
+                #                      if (("DEBUG :" not in ee) and
+                #                          (not ee.startswith("127.0.0.1")))])
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                        '{basedir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: '
+                        'Stopping ScanDirWatcher {btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt3}: '
+                        '{subdir}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                subdir=fsubdirname,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2)),
+                        '\n'.join(dseri))
+                except Exception:
+                    print(er)
+                    raise
+                self.assertEqual("", vl)
+                self.assertEqual(len(self.__server.userslogin), 0)
+                self.assertEqual(len(self.__server.datasets), 0)
+                self.assertEqual(len(self.__server.origdatablocks), 0)
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
     def test_datasetfile_add_json(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
@@ -1006,6 +1193,7 @@ class DatasetWatcherTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'max_scandir_depth: 2\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -1211,6 +1399,167 @@ class DatasetWatcherTest(unittest.TestCase):
                          'accessGroups': [
                              '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                          'size': 629}, skip=["dataFileList", "size"])
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
+    def test_datasetfile_add_json_depth(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
+        os.mkdir(fdirname)
+        btmeta = "beamtime-metadata-99001234.json"
+        dslist = "scicat-datasets-99001234.lst"
+        idslist = "scicat-ingested-datasets-99001234.lst"
+        # wrongdslist = "scicat-datasets-99001235.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        shutil.copy(source, fdirname)
+        # shutil.copy(lsource, fsubdirname2)
+        # shutil.copy(wlsource, fsubdirname)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        logdir = "/"
+        cred = "12342345"
+        username = "myingestor"
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'max_scandir_depth: 1\n' \
+            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_username: "{username}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, logdir=logdir,
+                username=username, credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+
+        dss = []
+        fdss = []
+        for i in range(4):
+            fdss.append(
+                os.path.join(fsubdirname2, 'myscan_%05i.scan.json' % (i + 1)))
+            dss.append(
+                {'contactEmail': 'BSName',
+                 'createdAt': '2022-05-14 11:54:29',
+                 'creationLocation': '/DESY/PETRA III/p00',
+                 'description': 'H20 distribution',
+                 'endTime': '2022-05-19 09:00:00',
+                 'isPublished': False,
+                 'owner': 'Ouruser',
+                 'techniques': [],
+                 'ownerEmail': 'appuser@fake.com',
+                 'pid': '99001234/myscan_%05i' % (i + 1),
+                 'datasetName': 'myscan_%05i' % (i + 1),
+                 'accessGroups': [
+                    '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                 'principalInvestigator': 'appuser@fake.com',
+                 'ownerGroup': '99001234-part',
+                 'proposalId': '99001234',
+                 'scientificMetadata': {
+                     'DOOR_proposalId': '99991173',
+                     'beamtimeId': '99001234'},
+                 'sourceFolder':
+                 '/asap3/petra3/gpfs/p00/2022/data/9901234/'
+                 'raw/special',
+                 'type': 'raw',
+                 'updatedAt': '2022-05-14 11:54:29'})
+
+        commands = [('scicat_dataset_ingestor -c %s -r36 --log debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r36 -l debug'
+                     % cfgfname).split()]
+
+        def test_thread():
+            """ test thread which adds and removes beamtime metadata file """
+            time.sleep(3)
+            shutil.copy(lsource, fsubdirname2)
+            time.sleep(5)
+            os.mkdir(fsubdirname3)
+            time.sleep(12)
+            with open(fdslist, "a+") as fds:
+                fds.write("myscan_00003\n")
+                fds.write("myscan_00004\n")
+
+        # commands.pop()
+        try:
+            for cmd in commands:
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                for i in range(4):
+                    with open(fdss[i], "w") as cf:
+                        cf.write(json.dumps(dss[i]))
+                # print(cmd)
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                self.__server.reset()
+                shutil.copy(lsource, fsubdirname2)
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                th = threading.Thread(target=test_thread)
+                th.start()
+                vl, er = self.runtest(cmd)
+                th.join()
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                dseri = [ln for ln in seri if "DEBUG :" not in ln]
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                # print(er)
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                        '{basedir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: '
+                        'Stopping ScanDirWatcher {btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt3}: '
+                        '{subdir}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                subdir=fsubdirname,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2)),
+                        "\n".join(dseri))
+                except Exception:
+                    print(er)
+                    raise
+                self.assertEqual("", vl)
+                self.assertEqual(len(self.__server.userslogin), 0)
+                self.assertEqual(len(self.__server.datasets), 0)
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
         finally:
