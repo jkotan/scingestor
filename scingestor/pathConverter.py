@@ -18,6 +18,8 @@
 
 # from .logger import get_logger
 
+import os
+
 
 class PathConverter:
     """ Path Converter
@@ -36,9 +38,9 @@ class PathConverter:
         self.__usecorepath = usecorepath
 
         #: (:obj:`str`) core path
-        self.__corepath = corepath
+        self.__corepath = os.path.abspath(corepath)
         #: (:obj:`str`) beamtime path
-        self.__bpath = blpath
+        self.__bpath = os.path.abspath(blpath)
 
         #: (:obj:`dict` <:obj:`str`, :obj:`str`>) core notify path dict
         self.__core_notify_path = {}
