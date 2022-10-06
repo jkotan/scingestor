@@ -71,6 +71,7 @@ class ScanDirWatcher(threading.Thread):
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
 
+        #: (:class:`scingestor.datasetWatcher.DatasetWatcher`) use core path
         self.__conv = PathConverter(
             self.__corepath, self.__bpath,
             self.__usecorepath and self.__corepath)

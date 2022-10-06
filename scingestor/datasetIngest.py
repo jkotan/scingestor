@@ -26,6 +26,7 @@ import json
 
 from .configuration import load_config
 from .datasetIngestor import DatasetIngestor
+from .pathConverter import PathConverter
 from .logger import get_logger, init_logger
 
 
@@ -45,6 +46,15 @@ class DatasetIngest:
         if options.config:
             self.__config = load_config(options.config) or {}
             get_logger().debug("CONFIGURATION: %s" % str(self.__config))
+
+        #: (:obj:`bool`) use core path
+        self.__usecorepath = False
+        if "use_corepath_as_scandir" in self.__config.keys():
+            try:
+                self.__usecorepath = bool(
+                    self.__config["use_corepath_as_scandir"])
+            except Exception as e:
+                get_logger().warning('%s' % (str(e)))
 
         #: (:obj:`list` <:obj:`str`>) beamtime directories
         self.__beamtime_dirs = [
@@ -135,6 +145,18 @@ class DatasetIngest:
         #: (:obj:`str`) beamtime id
         beamtimeId = meta["beamtimeId"]
 
+        #: (:obj:`str`) core path
+        corepath = meta.get("corePath", None)
+
+        #: (:obj:`str`) beamtime path
+        bpath = os.path.split(beamtimefile)[0]
+
+        conv = PathConverter(
+            corepath, bpath,
+            self.__usecorepath and corepath)
+
+        path = conv.to_core(path)
+
         #: (:obj:`str`) datasets file name
         dslist_filename = self.__ds_pattern.format(beamtimeid=beamtimeId)
         #: (:obj:`str`) ingescted datasets file name
@@ -153,7 +175,7 @@ class DatasetIngest:
             scpath, pfn = os.path.split(fn)
             ingestor = DatasetIngestor(
                 self.__config,
-                scpath, fn, ifn, meta, beamtimefile)
+                scpath, fn, ifn, meta, conv.to_core(beamtimefile))
             if self.__groups_from_proposal and \
                ("accessGroups" not in meta or "ownerGroup" not in meta):
                 meta = ingestor.append_proposal_groups()

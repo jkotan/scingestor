@@ -32,14 +32,15 @@ class UpdateStrategy(enum.Enum):
 
     """ Update strategy
     """
-    #: (:class:`datasetIngestor.UpdateStrategy`) leave datasets unchanged
+    #: (:class:`scingestor.datasetIngestor.UpdateStrategy`)
+    #:       leave datasets unchanged
     NO = 0
-    #: (:class:`datasetIngestor.UpdateStrategy`) patch datasets
+    #: (:class:`scingestor.datasetIngestor.UpdateStrategy`) patch datasets
     PATCH = 1
-    #: (:class:`datasetIngestor.UpdateStrategy`) recreate datasets
+    #: (:class:`scingestor.datasetIngestor.UpdateStrategy`) recreate datasets
     CREATE = 2
-    #: (:class:`datasetIngestor.UpdateStrategy`) patch datasets only if
-    #:       scientificMetadata changed otherwise recreate datasets
+    #: (:class:`scingestor.datasetIngestor.UpdateStrategy`) patch datasets only
+    #:       if scientificMetadata changed otherwise recreate datasets
     MIXED = 3
 
 
