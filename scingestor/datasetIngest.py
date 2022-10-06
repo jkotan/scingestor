@@ -122,22 +122,16 @@ class DatasetIngest:
                     get_logger().warning(
                         "%s cannot be ingested: %s" % (ffn, str(e)))
 
-    def _ingest_scandir(self, path, meta, bpath):
+    def _ingest_scandir(self, path, meta, beamtimefile):
         """ constructor
 
         :param path: scan dir path
         :type path: :obj:`str`
         :param meta: beamtime configuration
         :type meta: :obj:`dict` <:obj:`str`, `any`>
-        :param bpath: beamtime file
-        :type bpath: :obj:`str`
+        :param beamtimefile: beamtime file
+        :type beamtimefile: :obj:`str`
         """
-        # #: (:obj:`str`) scan dir path
-        # self.__path = path
-        # #: (:obj:`str`) beamtime path and file name
-        # self.__bpath = bpath
-        # #: (:obj:`dict` <:obj:`str`, `any`>) beamtime configuration
-        # self.__meta = meta
         #: (:obj:`str`) beamtime id
         beamtimeId = meta["beamtimeId"]
 
@@ -159,7 +153,7 @@ class DatasetIngest:
             scpath, pfn = os.path.split(fn)
             ingestor = DatasetIngestor(
                 self.__config,
-                scpath, fn, ifn, meta, bpath)
+                scpath, fn, ifn, meta, beamtimefile)
             if self.__groups_from_proposal and \
                ("accessGroups" not in meta or "ownerGroup" not in meta):
                 meta = ingestor.append_proposal_groups()

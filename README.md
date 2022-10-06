@@ -27,6 +27,7 @@ The configuration written in YAML can contain the following variables
 * **scan_metadata_postfix** *(str)* , default: `".scan.json"`
 * **datablock_metadata_postfix** *(str)* , default: `".origdatablock.json"`
 * **metadata_in_log_dir** *(bool)* , default: `False`
+* **use_corepath_as_scandir** *(bool)* , default: `False`
 * **beamtime_filename_postfix** *(str)* , default: `"beamtime-metadata-"`
 * **beamtime_filename_prefix** *(str)* , default: `".json"`
 * **datasets_filename_pattern** *(str)* , default: `"scicat-datasets-{beamtimeid}.lst"`
