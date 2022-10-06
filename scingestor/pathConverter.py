@@ -53,7 +53,7 @@ class PathConverter:
         :returns: core path
         :rtype: :obj:`str`
         """
-        if not self.__enabled:
+        if not self.__usecorepath:
             return path
         if path in self.__notify_core_path.keys():
             return self.__notify_core_path[path]
@@ -72,7 +72,7 @@ class PathConverter:
         :returns: notify path
         :rtype: :obj:`str`
         """
-        if not self.__usecorepath or not self.__corepath:
+        if not self.__usecorepath:
             return path
         if path in self.__core_notify_path.keys():
             return self.__core_notify_path[path]

@@ -78,8 +78,8 @@ class DatasetWatcher(threading.Thread):
                 get_logger().warning('%s' % (str(e)))
 
         self.__conv = PathConverter(
-            self.__corepath, self._bpath,
-            self.__usecorepath and self.__corePath)
+            self.__corepath, self.__bpath,
+            self.__usecorepath and self.__corepath)
 
         #: (:obj:`str`) file with a dataset list
         self.__dsfile = dsfile
