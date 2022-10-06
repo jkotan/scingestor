@@ -23,6 +23,7 @@ import queue
 
 from .datasetWatcher import DatasetWatcher
 from .safeINotifier import SafeINotifier
+from .pathConverter import PathConverter
 from .logger import get_logger
 
 import inotifyx
@@ -54,29 +55,35 @@ class ScanDirWatcher(threading.Thread):
 
         #: (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
         self.__config = configuration or {}
-        #: (:obj:`str`) scan dir path
-        self.__path = path
-        #: (:obj:`str`) beamtime path and file name
-        self.__btfile = beamtimefile
+
+        #: (:obj:`str`) core path
+        self.__corepath = meta.get("corePath", None)
+
         #: (:obj:`str`) beamtime path
         self.__bpath = os.path.split(beamtimefile)[0]
+
+        #: (:obj:`bool`) use core path
+        self.__usecorepath = False
+        if "use_corepath_as_scandir" in self.__config.keys():
+            try:
+                self.__usecorepath = bool(
+                    self.__config["use_corepath_as_scandir"])
+            except Exception as e:
+                get_logger().warning('%s' % (str(e)))
+
+        self.__conv = PathConverter(
+            self.__corepath, self._bpath,
+            self.__usecorepath and self.__corePath)
+        #: (:obj:`str`) scan dir path
+        self.__path = self.__conv.to_core(path)
+        #: (:obj:`str`) beamtime core path and file name
+        self.__btfile = self.__conv.to_core(beamtimefile)
         #: (:obj:`dict` <:obj:`str`, `any`>) beamtime configuration
         self.__meta = meta
         #: (:obj:`int`) scan dir depth
         self.__depth = depth
         #: (:obj:`str`) beamtime id
         self.__beamtimeId = meta["beamtimeId"]
-        #: (:obj:`str`) beamline metadata
-        self.__meta = meta
-
-        #: (:obj:`bool`) use core path
-        self.__usecorepath = False
-        #: (:obj:`str`) core path
-        self.__corepath = meta.get("corePath", None)
-        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) core notify path dict
-        self.__core_notify_path = {}
-        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) notify core path dict
-        self.__notify_core_path = {}
 
         #: (:obj:`str`) scicat dataset file pattern
         self.__ds_pattern = "scicat-datasets-{beamtimeid}.lst"
@@ -106,13 +113,6 @@ class ScanDirWatcher(threading.Thread):
         self.__scandir_watchers = {}
         #: (:class:`threading.Lock`) scandir watcher dictionary lock
         self.__scandir_lock = threading.Lock()
-
-        if "use_corepath_as_scandir" in self.__config.keys():
-            try:
-                self.__usecorepath = bool(
-                    self.__config["use_corepath_as_scandir"])
-            except Exception as e:
-                get_logger().warning('%s' % (str(e)))
 
         if "get_event_timeout" in self.__config.keys():
             try:
@@ -146,44 +146,6 @@ class ScanDirWatcher(threading.Thread):
         if self.__log_dir == "/":
             self.__log_dir = ""
 
-    def __to_core(self, path):
-        """ converts notify path to core path
-
-        :param path: notify path
-        :type path: :obj:`str`
-        :returns: core path
-        :rtype: :obj:`str`
-        """
-        if not self.__usecorepath or not self.__corepath:
-            return path
-        if path in self.__notify_core_path.keys():
-            return self.__notify_core_path[path]
-        if path.startswith(self.__bpath):
-            cpath = os.self.__corepath + path[len(self.__bpath):]
-            self.__notify_core_path[path] = cpath
-            self.__core_notify_path[cpath] = path
-            return cpath
-        return path
-
-    def __from_core(self, path):
-        """ converts core path to notify path
-
-        :param path: core path
-        :type path: :obj:`str`
-        :returns: notify path
-        :rtype: :obj:`str`
-        """
-        if not self.__usecorepath or not self.__corepath:
-            return path
-        if path in self.__core_notify_path.keys():
-            return self.__core_notify_path[path]
-        if path.startswith(self.__corepath):
-            bpath = os.self.__bpath + path[len(self.__corepath):]
-            self.__core_notify_path[path] = bpath
-            self.__notify_core_path[bpath] = path
-            return bpath
-        return path
-
     def _start_notifier(self, path):
         """ start notifier
 
@@ -201,7 +163,7 @@ class ScanDirWatcher(threading.Thread):
         """
         try:
             wqueue, watch_descriptor = self.__notifier.add_watch(
-                path,
+                self.__conv.from_core(path),
                 inotifyx.IN_ALL_EVENTS |
                 inotifyx.IN_CLOSE_WRITE | inotifyx.IN_DELETE |
                 inotifyx.IN_MOVE_SELF |
@@ -243,7 +205,9 @@ class ScanDirWatcher(threading.Thread):
                                 self.__scandir_watchers[
                                     (path, self.__btfile)] = ScanDirWatcher(
                                         self.__config,
-                                        path, self.__meta, self.__btfile,
+                                        self.__conv.from_core(path),
+                                        self.__meta,
+                                        self.__conv.from_core(self.__btfile),
                                         self.__depth - 1)
                             get_logger().info(
                                 'ScanDirWatcher: Create ScanDirWatcher %s %s'
@@ -277,7 +241,9 @@ class ScanDirWatcher(threading.Thread):
                             os.makedirs(ipath, exist_ok=True)
                         dw = self.__dataset_watchers[fn] = DatasetWatcher(
                             self.__config,
-                            self.__path, fn, ifn, self.__meta, self.__btfile)
+                            self.__path,
+                            fn, ifn, self.__meta,
+                            self.__conv.from_core(self.__btfile))
                         get_logger().info(
                             'ScanDirWatcher: Creating DatasetWatcher %s' % fn)
                 if dw is not None:

@@ -1,3 +1,7 @@
+2021-10-06 Jan Kotanski <jan.kotanski@desy.de>
+	* add use_corepath_as_scandir into the configuration variables (#117)
+	* tagged as 0.0.6
+
 2021-09-30 Jan Kotanski <jan.kotanski@desy.de>
 	* add rechecking beamtime files if exists (#100)
 	* change {bt} format keyword to {beamtimeid} keyword (#104)
