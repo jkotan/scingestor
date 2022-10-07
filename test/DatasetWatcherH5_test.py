@@ -969,17 +969,18 @@ class DatasetWatcherH5Test(unittest.TestCase):
             dirname = dirname + '_1'
         fdirname = os.path.abspath(dirname)
         fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirnames = os.path.abspath(os.path.join(dirname, "scratch"))
         fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
         fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
         coredir = "/tmp/scingestor_core_%s" % uuid.uuid4().hex
         cfsubdirname = os.path.abspath(os.path.join(coredir, "raw"))
+        cfsubdirnames = os.path.abspath(os.path.join(coredir, "scratch"))
         cfsubdirname2 = os.path.abspath(os.path.join(cfsubdirname, "special"))
         cfsubdirname3 = os.path.abspath(os.path.join(cfsubdirname2, "scansub"))
         btmeta = "beamtime-metadata-99001284.json"
         dslist = "scicat-datasets-99001284.lst"
         idslist = "scicat-ingested-datasets-99001284.lst"
         wrongdslist = "scicat-datasets-99001235.lst"
-        os.mkdir(coredir)
         source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                               "config",
                               btmeta)
@@ -1005,27 +1006,16 @@ class DatasetWatcherH5Test(unittest.TestCase):
         cred = "12342345"
         chmod = "0o662"
         os.mkdir(fdirname)
+        os.mkdir(fsubdirnames)
         os.makedirs(coredir, exist_ok=True)
+        os.mkdir(cfsubdirnames)
         with open(credfile, "w") as cf:
             cf.write(cred)
 
         wrmodule = WRITERS[self.writer]
         filewriter.writer = wrmodule
-
-        cfg = 'beamtime_dirs:\n' \
-            '  - "{basedir}"\n' \
-            'scicat_url: "{url}"\n' \
-            'chmod_json_files: "{chmod}"\n' \
-            'use_corepath_as_scandir: true\n' \
-            'chmod_generator_switch: " -x {{chmod}} "\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
-            'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir,
-                credfile=credfile, chmod=chmod)
-
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
-        with open(cfgfname, "w+") as cf:
-            cf.write(cfg)
+
         commands = [('scicat_dataset_ingestor -c %s -r10 --log debug'
                      % cfgfname).split(),
                     ('scicat_dataset_ingestor --config %s -r10 -l debug'
@@ -1044,6 +1034,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 "water",
                 "H20",
                 'technique: "saxs"',
+                cfsubdirnames,
             ],
             [
                 "myscan_00002.nxs",
@@ -1058,7 +1049,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 'techniques_pids:\n'
                 '  - "PaNET01191"\n'
                 '  - "PaNET01188"\n'
-                '  - "PaNET01098"\n'
+                '  - "PaNET01098"\n',
+                fsubdirnames,
             ],
         ]
         ltechs = [
@@ -1098,8 +1090,25 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 os.mkdir(cfsubdirname)
                 os.mkdir(cfsubdirname2)
                 os.mkdir(cfsubdirname3)
-
                 for k, arg in enumerate(args):
+                    cfg = 'beamtime_dirs:\n' \
+                        '  - "{basedir}"\n' \
+                        'scandir_blacklist:\n' \
+                        '  - "{scratchdir}"\n' \
+                        'scicat_url: "{url}"\n' \
+                        'chmod_json_files: "{chmod}"\n' \
+                        'use_corepath_as_scandir: true\n' \
+                        'chmod_generator_switch: " -x {{chmod}} "\n' \
+                        'ingestor_log_dir: "{logdir}"\n' \
+                        'ingestor_credential_file: "{credfile}"\n'.format(
+                            basedir=fdirname, url=url, logdir=logdir,
+                            # scratchdir=cfsubdirnames,
+                            scratchdir=arg[10],
+                            credfile=credfile, chmod=chmod)
+
+                    with open(cfgfname, "w+") as cf:
+                        cf.write(cfg)
+
                     nxsfilename = os.path.join(fsubdirname2, arg[0])
                     cnxsfilename = os.path.join(cfsubdirname2, arg[0])
                     # dsfilename = nxsfilename[:-4] + ".scan.json"
@@ -1411,9 +1420,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
         fdirname = os.path.abspath(dirname)
         coredir = "/tmp/scingestor_core_%s" % uuid.uuid4().hex
         fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirnames = os.path.abspath(os.path.join(dirname, "scratch"))
         fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
         fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
         cfsubdirname = os.path.abspath(os.path.join(coredir, "raw"))
+        cfsubdirnames = os.path.abspath(os.path.join(coredir, "scratch"))
         cfsubdirname2 = os.path.abspath(os.path.join(cfsubdirname, "special"))
         cfsubdirname3 = os.path.abspath(os.path.join(cfsubdirname2, "scansub"))
         os.mkdir(fdirname)
@@ -1455,21 +1466,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         with open(credfile, "w") as cf:
             cf.write(cred)
 
-        cfg = 'beamtime_dirs:\n' \
-            '  - "{basedir}"\n' \
-            'scicat_url: "{url}"\n' \
-            'oned_in_metadata: true\n' \
-            'use_corepath_as_scandir: true\n' \
-            'oned_dataset_generator_switch: " --oned "\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
-            'ingestor_username: "{username}"\n' \
-            'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir,
-                username=username, credfile=credfile)
-
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
-        with open(cfgfname, "w+") as cf:
-            cf.write(cfg)
 
         wrmodule = WRITERS[self.writer]
         filewriter.writer = wrmodule
@@ -1507,6 +1504,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
             time.sleep(5)
             os.mkdir(fsubdirname3)
             os.mkdir(cfsubdirname3)
+            os.mkdir(fsubdirnames)
+            os.mkdir(cfsubdirnames)
             time.sleep(12)
             with open(fdslist, "a+") as fds:
                 fds.write("myscan_00003\n")
@@ -1515,11 +1514,34 @@ class DatasetWatcherH5Test(unittest.TestCase):
 
         # commands.pop()
         try:
-            for cmd in commands:
+            for kk, cmd in enumerate(commands):
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
                 os.mkdir(cfsubdirname)
                 os.mkdir(cfsubdirname2)
+
+                if kk % 2:
+                    scratchdir = cfsubdirnames
+                else:
+                    scratchdir = fsubdirnames
+
+                cfg = 'beamtime_dirs:\n' \
+                    '  - "{basedir}"\n' \
+                    'scandir_blacklist:\n' \
+                    '  - "{scratchdir}"\n' \
+                    'scicat_url: "{url}"\n' \
+                    'oned_in_metadata: true\n' \
+                    'use_corepath_as_scandir: true\n' \
+                    'oned_dataset_generator_switch: " --oned "\n' \
+                    'ingestor_log_dir: "{logdir}"\n' \
+                    'ingestor_username: "{username}"\n' \
+                    'ingestor_credential_file: "{credfile}"\n'.format(
+                        scratchdir=scratchdir,
+                        basedir=fdirname, url=url, logdir=logdir,
+                        username=username, credfile=credfile)
+
+                with open(cfgfname, "w+") as cf:
+                    cf.write(cfg)
 
                 for k in range(4):
                     nxsfilename = os.path.join(
@@ -1644,8 +1666,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         '10.3204/99001284/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
                         '10.3204/99001284/{sc4}\n'
-                        'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
-                        '{basedir}\n'
+                        # 'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                        # '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
                         'Stopping ScanDirWatcher {btmeta}\n'
                         'INFO : ScanDirWatcher: Removing watch {cnt2}: '
@@ -1775,6 +1797,10 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     shutil.rmtree(fsubdirname)
                 if os.path.isdir(cfsubdirname):
                     shutil.rmtree(cfsubdirname)
+                if os.path.isdir(fsubdirnames):
+                    shutil.rmtree(fsubdirnames)
+                if os.path.isdir(cfsubdirnames):
+                    shutil.rmtree(cfsubdirnames)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)

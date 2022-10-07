@@ -53,6 +53,7 @@ class BeamtimeWatcher:
         if options.config:
             self.__config = load_config(options.config) or {}
             get_logger().debug("CONFIGURATION: %s" % str(self.__config))
+
         #: (:obj:`list` <:obj:`str`>) beamtime directories
         self.__beamtime_dirs = [
             # "/gpfs/current",
@@ -68,6 +69,16 @@ class BeamtimeWatcher:
            and self.__config["beamtime_base_dir"]:
             self.__beamtime_base_dir = os.path.abspath(
                 self.__config["beamtime_base_dir"])
+
+        #: (:obj:`list` <:obj:`str`>) scandir blacklist
+        self.__scandir_blacklist = [
+            "/gpfs/current/scratch_bl",
+            "/gpfs/current/processed",
+            "/gpfs/current/shared"
+        ]
+        if "scandir_blacklist" in self.__config.keys() \
+           and isinstance(self.__config["scandir_blacklist"], list):
+            self.__scandir_blacklist = self.__config["scandir_blacklist"]
 
         #: (:obj:`bool`) access groups from proposals
         self.__groups_from_proposal = False
@@ -506,6 +517,8 @@ class BeamtimeWatcher:
         :param path: beamtime files
         :type path: :obj:`list`<:obj:`str`>
         """
+        if path in self.__scandir_blacklist:
+            return
         for bt in files:
             ffn = os.path.abspath(os.path.join(path, bt))
             try:

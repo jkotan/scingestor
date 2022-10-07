@@ -75,6 +75,16 @@ class DatasetIngest:
         #: (:obj:`str`) ingestor log directory
         self.__log_dir = ""
 
+        #: (:obj:`list` <:obj:`str`>) scandir blacklist
+        self.__scandir_blacklist = [
+            "/gpfs/current/scratch_bl",
+            "/gpfs/current/processed",
+            "/gpfs/current/shared"
+        ]
+        if "scandir_blacklist" in self.__config.keys() \
+           and isinstance(self.__config["scandir_blacklist"], list):
+            self.__scandir_blacklist = self.__config["scandir_blacklist"]
+
         #: (:obj:`bool`) access groups from proposals
         self.__groups_from_proposal = False
         if "owner_access_groups_from_proposal" in self.__config.keys():
@@ -173,6 +183,9 @@ class DatasetIngest:
             if not os.path.isdir(ipath):
                 os.makedirs(ipath, exist_ok=True)
             scpath, pfn = os.path.split(fn)
+            if conv.to_core(scpath) in self.__scandir_blacklist or \
+               conv.from_core(scpath) in self.__scandir_blacklist:
+                continue
             ingestor = DatasetIngestor(
                 self.__config,
                 scpath, fn, ifn, meta, conv.to_core(beamtimefile))
