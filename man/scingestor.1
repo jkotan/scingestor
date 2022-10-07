@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "SCINGESTOR" "1" "Oct 04, 2022" "0.0" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "Oct 07, 2022" "0.0" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .
@@ -75,6 +75,8 @@ The configuration written in YAML can contain the following variables
 .IP \(bu 2
 \fBrelative_path_in_datablock\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
+\fBscandir_blacklist\fP \fI(list<str>)\fP , default: \fB["/gpfs/current/scratch_bl", "/gpfs/current/processed", "/gpfs/current/shared"]\fP
+.IP \(bu 2
 \fBchmod_json_files\fP \fI(str)\fP , default: \fBNone\fP
 .IP \(bu 2
 \fBmax_scandir_depth\fP \fI(int)\fP, default: \fB\-1\fP
@@ -86,6 +88,8 @@ The configuration written in YAML can contain the following variables
 \fBdatablock_metadata_postfix\fP \fI(str)\fP , default: \fB".origdatablock.json"\fP
 .IP \(bu 2
 \fBmetadata_in_log_dir\fP \fI(bool)\fP , default: \fBFalse\fP
+.IP \(bu 2
+\fBuse_corepath_as_scandir\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
 \fBbeamtime_filename_postfix\fP \fI(str)\fP , default: \fB"beamtime\-metadata\-"\fP
 .IP \(bu 2
@@ -349,13 +353,13 @@ scicat_dataset_ingestor [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG]
 .B \-h\fP,\fB  \-\-help
 show this help message and exit
 .TP
-.BI \-c \ CONFIG\fR,\fB \ \-\-configuration \ CONFIG
+.BI \-c \ CONFIG\fP,\fB \ \-\-configuration \ CONFIG
 configuration file name
 .TP
-.BI \-r \ RUNTIME\fR,\fB \ \-\-runtime \ RUNTIME
+.BI \-r \ RUNTIME\fP,\fB \ \-\-runtime \ RUNTIME
 stop program after runtime in seconds
 .TP
-.BI \-l \ LOG\fR,\fB \ \-\-log \ LOG
+.BI \-l \ LOG\fP,\fB \ \-\-log \ LOG
 logging level, i.e. debug, info, warning, error, critical
 .UNINDENT
 .UNINDENT
@@ -395,10 +399,10 @@ scicat_dataset_ingest [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG]
 .B \-h\fP,\fB  \-\-help
 show this help message and exit
 .TP
-.BI \-c \ CONFIG\fR,\fB \ \-\-configuration \ CONFIG
+.BI \-c \ CONFIG\fP,\fB \ \-\-configuration \ CONFIG
 configuration file name
 .TP
-.BI \-l \ LOG\fR,\fB \ \-\-log \ LOG
+.BI \-l \ LOG\fP,\fB \ \-\-log \ LOG
 logging level, i.e. debug, info, warning, error, critical
 .UNINDENT
 .UNINDENT
@@ -433,7 +437,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B running
+.B running = None
 (\fI\%bool\fP) running loop flag
 .UNINDENT
 .INDENT 7.0
@@ -634,28 +638,31 @@ waitings datasets list
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class scingestor.datasetIngestor.UpdateStrategy(value)
+.B class scingestor.datasetIngestor.UpdateStrategy
 Bases: \fI\%enum.Enum\fP
 .sp
 Update strategy
 .INDENT 7.0
 .TP
 .B CREATE = 2
-(\fBdatasetIngestor.UpdateStrategy\fP) recreate datasets
+(\fI\%scingestor.datasetIngestor.UpdateStrategy\fP) recreate datasets
 .UNINDENT
 .INDENT 7.0
 .TP
 .B MIXED = 3
+(\fI\%scingestor.datasetIngestor.UpdateStrategy\fP) patch datasets only
+if scientificMetadata changed otherwise recreate datasets
 .UNINDENT
 .INDENT 7.0
 .TP
 .B NO = 0
-(\fBdatasetIngestor.UpdateStrategy\fP) leave datasets unchanged
+(\fI\%scingestor.datasetIngestor.UpdateStrategy\fP)
+leave datasets unchanged
 .UNINDENT
 .INDENT 7.0
 .TP
 .B PATCH = 1
-(\fBdatasetIngestor.UpdateStrategy\fP) patch datasets
+(\fI\%scingestor.datasetIngestor.UpdateStrategy\fP) patch datasets
 .UNINDENT
 .UNINDENT
 .SS scingestor.datasetWatcher module
@@ -692,7 +699,7 @@ scandir watcher thread
 .UNINDENT
 .INDENT 7.0
 .TP
-.B running
+.B running = None
 (\fI\%bool\fP) running loop flag
 .UNINDENT
 .INDENT 7.0
@@ -732,18 +739,18 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B masks
+.B masks = None
 (\fI\%str\fP) mask
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) name
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class scingestor.safeINotifier.SafeINotifier(*args, **kwargs)
+.B class scingestor.safeINotifier.SafeINotifier(group=None, target=None, name=None, args=(), kwargs=None, *, daemon=None)
 Bases: \fI\%threading.Thread\fP
 .sp
 singleton wrapper for inotifyx
@@ -822,7 +829,7 @@ stop the watcher
 .SS scingestor.scanDirWatcher module
 .INDENT 0.0
 .TP
-.B class scingestor.scanDirWatcher.ScanDirWatcher(configuration, path, meta, bpath, depth)
+.B class scingestor.scanDirWatcher.ScanDirWatcher(configuration, path, meta, beamtimefile, depth)
 Bases: \fI\%threading.Thread\fP
 .sp
 ScanDir Watcher
@@ -839,7 +846,7 @@ constructor
 .IP \(bu 2
 \fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – beamtime configuration
 .IP \(bu 2
-\fBbpath\fP (\fI\%str\fP) – beamtime file
+\fBbeamtimefile\fP (\fI\%str\fP) – beamtime file
 .IP \(bu 2
 \fBdepth\fP (\fI\%int\fP) – scandir depth level
 .UNINDENT
@@ -851,7 +858,7 @@ scandir watcher thread
 .UNINDENT
 .INDENT 7.0
 .TP
-.B running
+.B running = None
 (\fI\%bool\fP) running loop flag
 .UNINDENT
 .INDENT 7.0
