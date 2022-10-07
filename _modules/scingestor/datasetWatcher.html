@@ -1,17 +1,19 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>scingestor.datasetWatcher &#8212; SciCat Dataset Ingestor 0.0.5 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>scingestor.datasetWatcher &#8212; SciCat Dataset Ingestor 0.0.6 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -53,16 +55,17 @@
 <span class="kn">import</span> <span class="nn">queue</span>
 <span class="kn">import</span> <span class="nn">inotifyx</span>
 
-<span class="kn">from</span> <span class="nn">.safeINotifier</span> <span class="kn">import</span> <span class="n">SafeINotifier</span>
-<span class="kn">from</span> <span class="nn">.datasetIngestor</span> <span class="kn">import</span> <span class="n">DatasetIngestor</span>
-<span class="kn">from</span> <span class="nn">.logger</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">.safeINotifier</span> <span class="k">import</span> <span class="n">SafeINotifier</span>
+<span class="kn">from</span> <span class="nn">.datasetIngestor</span> <span class="k">import</span> <span class="n">DatasetIngestor</span>
+<span class="kn">from</span> <span class="nn">.pathConverter</span> <span class="k">import</span> <span class="n">PathConverter</span>
+<span class="kn">from</span> <span class="nn">.logger</span> <span class="k">import</span> <span class="n">get_logger</span>
 
 
 <div class="viewcode-block" id="DatasetWatcher"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetWatcher.DatasetWatcher">[docs]</a><span class="k">class</span> <span class="nc">DatasetWatcher</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Dataset  Watcher</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span>
                  <span class="n">path</span><span class="p">,</span> <span class="n">dsfile</span><span class="p">,</span> <span class="n">idsfile</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">beamtimefile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
@@ -86,6 +89,31 @@
 
         <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, `any`&gt;) ingestor configuration</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__config</span> <span class="o">=</span> <span class="n">configuration</span> <span class="ow">or</span> <span class="p">{}</span>
+
+        <span class="c1">#: (:obj:`str`) core path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__corepath</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;corePath&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) core notify path dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__core_notify_path</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) notify core path dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__notify_core_path</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1">#: (:obj:`str`) beamtime path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__bpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">beamtimefile</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1">#: (:obj:`bool`) use core path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__usecorepath</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="s2">&quot;use_corepath_as_scandir&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__usecorepath</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;use_corepath_as_scandir&quot;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+
+        <span class="c1">#: (:class:`scingestor.datasetWatcher.DatasetWatcher`) use core path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__conv</span> <span class="o">=</span> <span class="n">PathConverter</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__corepath</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bpath</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__usecorepath</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__corepath</span><span class="p">)</span>
+
         <span class="c1">#: (:obj:`str`) file with a dataset list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span> <span class="o">=</span> <span class="n">dsfile</span>
         <span class="c1">#: (:obj:`str`) file with a ingested dataset list</span>
@@ -127,12 +155,51 @@
         <span class="c1">#: (:class:`scingestor.datasetIngestor.DatasetIngestor`)</span>
         <span class="c1">#: dataset ingestor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span> <span class="o">=</span> <span class="n">DatasetIngestor</span><span class="p">(</span>
-            <span class="n">configuration</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">dsfile</span><span class="p">,</span> <span class="n">idsfile</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">beamtimefile</span><span class="p">)</span>
+            <span class="n">configuration</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">dsfile</span><span class="p">,</span> <span class="n">idsfile</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__conv</span><span class="o">.</span><span class="n">to_core</span><span class="p">(</span><span class="n">beamtimefile</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__to_core</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converts notify path to core path</span>
+
+<span class="sd">        :param path: notify path</span>
+<span class="sd">        :type path: :obj:`str`</span>
+<span class="sd">        :returns: core path</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__usecorepath</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__corepath</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">path</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__notify_core_path</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__notify_core_path</span><span class="p">[</span><span class="n">path</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__bpath</span><span class="p">):</span>
+            <span class="n">cpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">self</span><span class="o">.</span><span class="n">__corepath</span> <span class="o">+</span> <span class="n">path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__bpath</span><span class="p">):]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__notify_core_path</span><span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpath</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__core_notify_path</span><span class="p">[</span><span class="n">cpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span>
+            <span class="k">return</span> <span class="n">cpath</span>
+        <span class="k">return</span> <span class="n">path</span>
+
+    <span class="k">def</span> <span class="nf">__from_core</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converts core path to notify path</span>
+
+<span class="sd">        :param path: core path</span>
+<span class="sd">        :type path: :obj:`str`</span>
+<span class="sd">        :returns: notify path</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__usecorepath</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__corepath</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">path</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__core_notify_path</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__core_notify_path</span><span class="p">[</span><span class="n">path</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__corepath</span><span class="p">):</span>
+            <span class="n">bpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">self</span><span class="o">.</span><span class="n">__bpath</span> <span class="o">+</span> <span class="n">path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__corepath</span><span class="p">):]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__core_notify_path</span><span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">=</span> <span class="n">bpath</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__notify_core_path</span><span class="p">[</span><span class="n">bpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span>
+            <span class="k">return</span> <span class="n">bpath</span>
+        <span class="k">return</span> <span class="n">path</span>
 
     <span class="k">def</span> <span class="nf">_start_notifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; start notifier</span>
 
-<span class="sd">        :param path: beamtime file subpath</span>
+<span class="sd">        :param path: beamtime file sub directory</span>
 <span class="sd">        :type path: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span> <span class="o">=</span> <span class="n">SafeINotifier</span><span class="p">()</span>
@@ -146,7 +213,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">wqueue</span><span class="p">,</span> <span class="n">watch_descriptor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span><span class="o">.</span><span class="n">add_watch</span><span class="p">(</span>
-                <span class="n">path</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__conv</span><span class="o">.</span><span class="n">from_core</span><span class="p">(</span><span class="n">path</span><span class="p">),</span>
                 <span class="n">inotifyx</span><span class="o">.</span><span class="n">IN_ALL_EVENTS</span> <span class="o">|</span>
                 <span class="n">inotifyx</span><span class="o">.</span><span class="n">IN_MODIFY</span> <span class="o">|</span>
                 <span class="n">inotifyx</span><span class="o">.</span><span class="n">IN_OPEN</span> <span class="o">|</span>
@@ -232,6 +299,7 @@
                             <span class="k">if</span> <span class="n">ffn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ffn</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span><span class="p">:</span>
                                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                                     <span class="s1">&#39;DatasetWatcher: Changed </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">ffn</span><span class="p">)</span>
+                                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__delay</span><span class="p">)</span>
                                 <span class="k">try</span><span class="p">:</span>
                                     <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">check_list</span><span class="p">()</span>
                                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -246,6 +314,7 @@
                                    <span class="n">ffn</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span><span class="p">:</span>
                                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                                         <span class="s1">&#39;DatasetWatcher: Changed </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">ffn</span><span class="p">)</span>
+                                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__delay</span><span class="p">)</span>
                                     <span class="k">try</span><span class="p">:</span>
                                         <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">check_list</span><span class="p">()</span>
                                     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -336,15 +405,17 @@
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -353,7 +424,7 @@
       &copy;2022, DESY, Jan Kotanski.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
     </div>

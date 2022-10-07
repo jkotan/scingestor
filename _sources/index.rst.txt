@@ -55,12 +55,14 @@ The configuration written in YAML can contain the following variables
 * **doi_prefix** *(str)* , default: ``"10.3204"``
 * **dataset_update_strategy** (``"no"``, ``"patch"``, ``"create"``, ``"mixed"``) , default: ``"patch"``
 * **relative_path_in_datablock** *(bool)* , default: ``False``
+* **scandir_blacklist** *(list\<str\>)* , default: ``["/gpfs/current/scratch_bl", "/gpfs/current/processed", "/gpfs/current/shared"]``
 * **chmod_json_files** *(str)* , default: ``None``
 * **max_scandir_depth** *(int)*, default: ``-1``
 * **oned_in_metadata** *(bool)* , default: ``False``
 * **scan_metadata_postfix** *(str)* , default: ``".scan.json"``
 * **datablock_metadata_postfix** *(str)* , default: ``".origdatablock.json"``
 * **metadata_in_log_dir** *(bool)* , default: ``False``
+* **use_corepath_as_scandir** *(bool)* , default: ``False``
 * **beamtime_filename_postfix** *(str)* , default: ``"beamtime-metadata-"``
 * **beamtime_filename_prefix** *(str)* , default: ``".json"``
 * **datasets_filename_pattern** *(str)* , default: ``"scicat-datasets-{beamtimeid}.lst"``
