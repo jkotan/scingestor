@@ -183,7 +183,7 @@ class DatasetIngest:
             if not os.path.isdir(ipath):
                 os.makedirs(ipath, exist_ok=True)
             scpath, pfn = os.path.split(fn)
-            if scpath in self.__scandir_blacklist or \
+            if conv.to_core(scpath) in self.__scandir_blacklist or \
                conv.from_core(scpath) in self.__scandir_blacklist:
                 continue
             ingestor = DatasetIngestor(

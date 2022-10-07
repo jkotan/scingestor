@@ -1098,9 +1098,11 @@ class DatasetIngestTest(unittest.TestCase):
             dirname = dirname + '_1'
         fdirname = os.path.abspath(dirname)
         fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirnames = os.path.abspath(os.path.join(dirname, "scratch"))
         fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
         coredir = "/tmp/scingestor_core_%s" % uuid.uuid4().hex
         cfsubdirname = os.path.abspath(os.path.join(coredir, "raw"))
+        cfsubdirnames = os.path.abspath(os.path.join(coredir, "scratch"))
         cfsubdirname2 = os.path.abspath(os.path.join(cfsubdirname, "special"))
         btmeta = "beamtime-metadata-99001284.json"
         fullbtmeta = os.path.join(fdirname, btmeta)
@@ -1131,27 +1133,37 @@ class DatasetIngestTest(unittest.TestCase):
         cred = "12342345"
         os.mkdir(fdirname)
         os.makedirs(coredir, exist_ok=True)
-        with open(credfile, "w") as cf:
-            cf.write(cred)
-
-        cfg = 'beamtime_dirs:\n' \
-            '  - "{basedir}"\n' \
-            'scicat_url: "{url}"\n' \
-            'use_corepath_as_scandir: true\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
-            'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
-
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
-        with open(cfgfname, "w+") as cf:
-            cf.write(cfg)
         commands = [('scicat_dataset_ingest -c %s'
                      % cfgfname).split(),
                     ('scicat_dataset_ingest --config %s'
                      % cfgfname).split()]
         # commands.pop()
         try:
-            for cmd in commands:
+            for kk, cmd in enumerate(commands):
+                with open(credfile, "w") as cf:
+                    cf.write(cred)
+                if kk % 2:
+                    scratchdir = cfsubdirnames
+                else:
+                    scratchdir = fsubdirnames
+
+                cfg = 'beamtime_dirs:\n' \
+                    '  - "{basedir}"\n' \
+                    'scicat_url: "{url}"\n' \
+                    'scandir_blacklist:\n' \
+                    '  - "{scratchdir}"\n' \
+                    'use_corepath_as_scandir: true\n' \
+                    'ingestor_log_dir: "{logdir}"\n' \
+                    'ingestor_credential_file: "{credfile}"\n'.format(
+                        scratchdir=scratchdir,
+                        basedir=fdirname, url=url,
+                        logdir=logdir, credfile=credfile)
+                with open(cfgfname, "w+") as cf:
+                    cf.write(cfg)
+
+                os.mkdir(fsubdirnames)
+                os.mkdir(cfsubdirnames)
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
                 os.mkdir(cfsubdirname)
@@ -1378,6 +1390,10 @@ class DatasetIngestTest(unittest.TestCase):
                     shutil.rmtree(fsubdirname)
                 if os.path.isdir(cfsubdirname):
                     shutil.rmtree(cfsubdirname)
+                if os.path.isdir(fsubdirnames):
+                    shutil.rmtree(fsubdirnames)
+                if os.path.isdir(cfsubdirnames):
+                    shutil.rmtree(cfsubdirnames)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)

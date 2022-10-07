@@ -207,7 +207,7 @@ class ScanDirWatcher(threading.Thread):
         """
         if self.__depth != 0:
             for path in sorted(paths):
-                if path in self.__scandir_blacklist or \
+                if self.__conv.from_core(path) in self.__scandir_blacklist or \
                    self.__conv.to_core(path) in self.__scandir_blacklist:
                     continue
                 sdw = None
