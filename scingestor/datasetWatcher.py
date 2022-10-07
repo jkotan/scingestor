@@ -267,6 +267,7 @@ class DatasetWatcher(threading.Thread):
                             if ffn is not None and ffn == self.__dsfile:
                                 get_logger().debug(
                                     'DatasetWatcher: Changed %s' % ffn)
+                                time.sleep(self.__delay)
                                 try:
                                     self.__ingestor.check_list()
                                 except Exception as e:
@@ -281,6 +282,7 @@ class DatasetWatcher(threading.Thread):
                                    ffn == self.__dsfile:
                                     get_logger().debug(
                                         'DatasetWatcher: Changed %s' % ffn)
+                                    time.sleep(self.__delay)
                                     try:
                                         self.__ingestor.check_list()
                                     except Exception as e:
