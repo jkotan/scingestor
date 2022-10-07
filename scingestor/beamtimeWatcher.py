@@ -517,8 +517,7 @@ class BeamtimeWatcher:
         :param path: beamtime files
         :type path: :obj:`list`<:obj:`str`>
         """
-        if path in self.__scandir_blacklist or \
-           self.__conv.to_core(path) in self.__scandir_blacklist:
+        if path in self.__scandir_blacklist:
             return
         for bt in files:
             ffn = os.path.abspath(os.path.join(path, bt))

@@ -184,8 +184,8 @@ class DatasetIngest:
                 os.makedirs(ipath, exist_ok=True)
             scpath, pfn = os.path.split(fn)
             if scpath in self.__scandir_blacklist or \
-                   self.__conv.from_core(scpath) in self.__scandir_blacklist:
-                    continue
+               conv.from_core(scpath) in self.__scandir_blacklist:
+                continue
             ingestor = DatasetIngestor(
                 self.__config,
                 scpath, fn, ifn, meta, conv.to_core(beamtimefile))
