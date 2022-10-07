@@ -1090,6 +1090,302 @@ class DatasetIngestTest(unittest.TestCase):
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_datasetfile_jsonchange_corepath(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        coredir = "/tmp/scingestor_core_%s" % uuid.uuid4().hex
+        cfsubdirname = os.path.abspath(os.path.join(coredir, "raw"))
+        cfsubdirname2 = os.path.abspath(os.path.join(cfsubdirname, "special"))
+        btmeta = "beamtime-metadata-99001284.json"
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        dslist = "scicat-datasets-99001284.lst"
+        idslist = "scicat-ingested-datasets-99001284.lst"
+        wrongdslist = "scicat-datasets-99001235.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        with open(source) as blf:
+            jblm = blf.read()
+            blm = json.loads(jblm)
+            blm["corePath"] = coredir
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                "config",
+                                wrongdslist)
+        # fullbtmeta = os.path.join(fdirname, btmeta)
+        fidslist = os.path.join(fsubdirname2, idslist)
+        cfullbtmeta = os.path.join(coredir, btmeta)
+        cfdslist = os.path.join(cfsubdirname2, dslist)
+        cfidslist = os.path.join(cfsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        logdir = "/"
+        cred = "12342345"
+        os.mkdir(fdirname)
+        os.makedirs(coredir, exist_ok=True)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'use_corepath_as_scandir: true\n' \
+            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingest -c %s'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingest --config %s'
+                     % cfgfname).split()]
+        # commands.pop()
+        try:
+            for cmd in commands:
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                os.mkdir(cfsubdirname)
+                os.mkdir(cfsubdirname2)
+                with open(cfullbtmeta, "w") as blf:
+                    blf.write(json.dumps(blm))
+                with open(fullbtmeta, "w") as blf:
+                    blf.write(json.dumps(blm))
+                # shutil.copy(source, fdirname)
+                shutil.copy(lsource, fsubdirname2)
+                shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource, cfsubdirname2)
+                shutil.copy(wlsource, cfsubdirname)
+                self.__server.reset()
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                if os.path.exists(cfidslist):
+                    os.remove(cfidslist)
+
+                vl, er = self.runtest(cmd)
+
+                scfname = "%s/%s.scan.json" % (cfsubdirname2, 'myscan_00001')
+                odbfname = "%s/%s.origdatablock.json" \
+                    % (cfsubdirname2, 'myscan_00002')
+
+                scdict = {}
+                with open(scfname, "r") as fl:
+                    scn = fl.read()
+                    scdict = json.loads(scn)
+                scdict["owner"] = "NewOwner"
+                scdict["contactEmail"] = "new.owner@ggg.gg"
+                scdict["techniques"] = [
+                   {
+                       'name': 'small angle x-ray scattering',
+                       'pid':
+                       'http://purl.org/pan-science/PaNET/PaNET01188'
+                   }
+                ]
+                with open(scfname, "w") as fl:
+                    fl.write(json.dumps(scdict))
+
+                scdict = {}
+                with open(odbfname, "r") as fl:
+                    scn = fl.read()
+                    scdict = json.loads(scn)
+                scdict["size"] = 123123
+                with open(odbfname, "w") as fl:
+                    fl.write(json.dumps(scdict))
+
+                vl, er = self.runtest(cmd)
+
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                # print(er)
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                self.assertEqual(
+                    'INFO : DatasetIngest: beamtime path: {basedir}\n'
+                    'INFO : DatasetIngest: beamtime file: '
+                    'beamtime-metadata-99001284.json\n'
+                    'INFO : DatasetIngest: dataset list: {dslist}\n'
+                    'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
+                    'INFO : DatasetIngestor: Checking origdatablock metadata:'
+                    ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: Check if dataset exists: '
+                    '10.3204/99001284/{sc1}\n'
+                    'INFO : DatasetIngestor: Find the dataset by id: '
+                    '10.3204/99001284/{sc1}\n'
+                    'INFO : DatasetIngestor: '
+                    'Patch scientificMetadata of dataset: '
+                    '10.3204/99001284/{sc1}\n'
+                    'INFO : DatasetIngestor: Ingest dataset: '
+                    '{subdir2}/{sc1}.scan.json\n'
+                    'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
+                    'INFO : DatasetIngestor: Checking origdatablock metadata:'
+                    ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock metadata:'
+                    ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: Ingest origdatablock:'
+                    ' {subdir2}/{sc2}.origdatablock.json\n'
+                    .format(basedir=fdirname,
+                            subdir2=cfsubdirname2,
+                            dslist=cfdslist,
+                            sc1='myscan_00001', sc2='myscan_00002'),
+                    "\n".join(seri))
+                self.assertEqual(
+                    "Login: ingestor\n"
+                    "RawDatasets: 10.3204/99001284/myscan_00001\n"
+                    "OrigDatablocks: 10.3204/99001284/myscan_00002\n",
+                    vl)
+                self.assertEqual(len(self.__server.userslogin), 2)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[1],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                # self.assertEqual(
+                #     self.__server.userslogin[2],
+                #     b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 3)
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[0]),
+                    {'contactEmail': 'BSName',
+                     'createdAt': '2022-05-14 11:54:29',
+                     'creationLocation': '/DESY/PETRA III/p00',
+                     'description': 'H20 distribution',
+                     'endTime': '2022-05-19 09:00:00',
+                     'isPublished': False,
+                     'techniques': [],
+                     'owner': 'Ouruser',
+                     'ownerGroup': '99001284-part',
+                     'ownerEmail': 'appuser@fake.com',
+                     'pid': '99001284/myscan_00001',
+                     'datasetName': 'myscan_00001',
+                     'accessGroups': [
+                         '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
+                     'principalInvestigator': 'appuser@fake.com',
+                     'proposalId': '99001284',
+                     'scientificMetadata': {
+                         'DOOR_proposalId': '99991173',
+                         'beamtimeId': '99001284'},
+                     'sourceFolder':
+                     '%s/raw/special' % coredir,
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'})
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[1]),
+                    {'contactEmail': 'BSName',
+                     'createdAt': '2022-05-14 11:54:29',
+                     'creationLocation': '/DESY/PETRA III/p00',
+                     'description': 'H20 distribution',
+                     'endTime': '2022-05-19 09:00:00',
+                     'isPublished': False,
+                     'owner': 'Ouruser',
+                     'techniques': [],
+                     'ownerEmail': 'appuser@fake.com',
+                     'ownerGroup': '99001284-part',
+                     'pid': '99001284/myscan_00002',
+                     'datasetName': 'myscan_00002',
+                     'accessGroups': [
+                         '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
+                     'principalInvestigator': 'appuser@fake.com',
+                     'proposalId': '99001284',
+                     'scientificMetadata': {
+                         'DOOR_proposalId': '99991173',
+                         'beamtimeId': '99001284'},
+                     'sourceFolder':
+                     '%s/raw/special' % coredir,
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'})
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[2]),
+                    {'contactEmail': 'new.owner@ggg.gg',
+                     'createdAt': '2022-05-14 11:54:29',
+                     'creationLocation': '/DESY/PETRA III/p00',
+                     'description': 'H20 distribution',
+                     'endTime': '2022-05-19 09:00:00',
+                     'isPublished': False,
+                     'techniques': [{
+                         'name': 'small angle x-ray scattering',
+                         'pid':
+                         'http://purl.org/pan-science/PaNET/PaNET01188'}],
+                     'owner': 'NewOwner',
+                     'ownerGroup': '99001284-part',
+                     'ownerEmail': 'appuser@fake.com',
+                     'pid': '10.3204/99001284/myscan_00001',
+                     'datasetName': 'myscan_00001',
+                     'accessGroups': [
+                         '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
+                     'principalInvestigator': 'appuser@fake.com',
+                     'proposalId': '99001284',
+                     'scientificMetadata': {
+                         'DOOR_proposalId': '99991173',
+                         'beamtimeId': '99001284'},
+                     'sourceFolder':
+                     '%s/raw/special' % coredir,
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'})
+                self.assertEqual(len(self.__server.origdatablocks), 3)
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[0]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'datasetId': '10.3204/99001284/myscan_00001',
+                     'accessGroups': [
+                         '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
+                     'ownerGroup': '99001284-part',
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[1]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'datasetId': '10.3204/99001284/myscan_00002',
+                     'accessGroups': [
+                         '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
+                     'ownerGroup': '99001284-part',
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[2]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'datasetId': '10.3204/99001284/myscan_00002',
+                     'accessGroups': [
+                         '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
+                     'ownerGroup': '99001284-part',
+                     'size': 629}, skip=["dataFileList", "size"])
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+                if os.path.isdir(cfsubdirname):
+                    shutil.rmtree(cfsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+            if os.path.isdir(coredir):
+                shutil.rmtree(coredir)
+
     def test_datasetfile_jsonchange_nods(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
