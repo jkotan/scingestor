@@ -115,6 +115,16 @@ class ScanDirWatcher(threading.Thread):
         #: (:class:`threading.Lock`) scandir watcher dictionary lock
         self.__scandir_lock = threading.Lock()
 
+        #: (:obj:`list` <:obj:`str`>) scandir blacklist
+        self.__scandir_blacklist = [
+            "/gpfs/current/scratch_bl",
+            "/gpfs/current/processed",
+            "/gpfs/current/shared"
+        ]
+        if "scandir_blacklist" in self.__config.keys() \
+           and isinstance(self.__config["scandir_blacklist"], list):
+            self.__scandir_blacklist = self.__config["scandir_blacklist"]
+
         if "get_event_timeout" in self.__config.keys():
             try:
                 self.__timeout = float(self.__config["get_event_timeout"])
@@ -197,6 +207,9 @@ class ScanDirWatcher(threading.Thread):
         """
         if self.__depth != 0:
             for path in sorted(paths):
+                if path in self.__scandir_blacklist or \
+                   self.__conv.to_core(path) in self.__scandir_blacklist:
+                    continue
                 sdw = None
                 try:
                     with self.__scandir_lock:
