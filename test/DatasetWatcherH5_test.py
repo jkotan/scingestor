@@ -477,20 +477,21 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 self.assertEqual(len(self.__server.datasets), 2)
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
-                    {'contactEmail': 'BSName',
+                    {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
                      'createdAt': '2022-05-14 11:54:29',
-                     'creationLocation': '/DESY/PETRA III/p00',
+                     'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
                      'endTime': args[0][6],
                      'isPublished': False,
                      'techniques': ltechs[0],
-                     'owner': 'Ouruser',
-                     'ownerGroup': '99001234-part',
-                     'ownerEmail': 'appuser@fake.com',
+                     'owner': 'Smithson',
+                     'ownerGroup': '99001234-dmgt',
+                     'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part',
+                         'p00dmgt', 'p00staff'],
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
@@ -527,20 +528,21 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
-                    {'contactEmail': 'BSName',
+                    {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
                      'createdAt': '2022-05-14 11:54:29',
-                     'creationLocation': '/DESY/PETRA III/p00',
+                     'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
                      'endTime': args[1][6],
                      'isPublished': False,
                      'techniques': ltechs[1],
-                     'owner': 'Ouruser',
-                     'ownerGroup': '99001234-part',
-                     'ownerEmail': 'appuser@fake.com',
+                     'owner': 'Smithson',
+                     'ownerGroup': '99001234-dmgt',
+                     'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part',
+                         'p00dmgt', 'p00staff'],
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
@@ -585,10 +587,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part',
+                         'p00dmgt', 'p00staff'],
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -599,10 +602,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part',
+                         'p00dmgt', 'p00staff'],
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -879,22 +883,23 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 for i in range(4):
                     self.myAssertDict(
                         json.loads(self.__server.datasets[i]),
-                        {'contactEmail': 'BSName',
+                        {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
                          'createdAt': '2022-05-14 11:54:29',
-                         'creationLocation': '/DESY/PETRA III/p00',
+                         'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
                          'endTime': arg[6],
                          'isPublished': False,
                          'techniques': ltech,
-                         'owner': 'Ouruser',
-                         'ownerEmail': 'appuser@fake.com',
+                         'owner': 'Smithson',
+                         'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                             '99001234-dmgt', '99001234-clbt', '99001234-part',
+                             'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'ownerGroup': '99001234-part',
+                         'ownerGroup': '99001234-dmgt',
                          'proposalId': '99001234',
                          'scientificMetadata':
                          {'NX_class': 'NXentry',
@@ -947,11 +952,12 @@ class DatasetWatcherH5Test(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'ownerGroup': '99001234-part',
+                         'ownerGroup': '99001234-dmgt',
                          'datasetId':
                          '/99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                             '99001234-dmgt', '99001234-clbt', '99001234-part',
+                             'p00dmgt', 'p00staff'],
                          'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -1272,20 +1278,21 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 self.assertEqual(len(self.__server.datasets), 2)
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
-                    {'contactEmail': 'BSName',
+                    {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
                      'createdAt': '2022-05-14 11:54:29',
-                     'creationLocation': '/DESY/PETRA III/p00',
+                     'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
                      'endTime': args[0][6],
                      'isPublished': False,
                      'techniques': ltechs[0],
-                     'owner': 'Ouruser',
-                     'ownerGroup': '99001284-part',
-                     'ownerEmail': 'appuser@fake.com',
+                     'owner': 'Smithson',
+                     'ownerGroup': '99001284-dmgt',
+                     'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001284/myscan_00001',
                      'accessGroups': [
-                         '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
+                         '99001284-dmgt', '99001284-clbt', '99001284-part',
+                         'p00dmgt', 'p00staff'],
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001284',
@@ -1322,20 +1329,21 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
-                    {'contactEmail': 'BSName',
+                    {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
                      'createdAt': '2022-05-14 11:54:29',
-                     'creationLocation': '/DESY/PETRA III/p00',
+                     'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
                      'endTime': args[1][6],
                      'isPublished': False,
                      'techniques': ltechs[1],
-                     'owner': 'Ouruser',
-                     'ownerGroup': '99001284-part',
-                     'ownerEmail': 'appuser@fake.com',
+                     'owner': 'Smithson',
+                     'ownerGroup': '99001284-dmgt',
+                     'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001284/myscan_00002',
                      'accessGroups': [
-                         '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
+                         '99001284-dmgt', '99001284-clbt', '99001284-part',
+                         'p00dmgt', 'p00staff'],
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001284',
@@ -1380,10 +1388,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001284-part',
+                     'ownerGroup': '99001284-dmgt',
                      'datasetId': '/99001284/myscan_00001',
                      'accessGroups': [
-                         '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
+                         '99001284-dmgt', '99001284-clbt', '99001284-part',
+                         'p00dmgt', 'p00staff'],
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -1394,10 +1403,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001284-part',
+                     'ownerGroup': '99001284-dmgt',
                      'datasetId': '/99001284/myscan_00002',
                      'accessGroups': [
-                         '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
+                         '99001284-dmgt', '99001284-clbt', '99001284-part',
+                         'p00dmgt', 'p00staff'],
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -1720,22 +1730,23 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 for i in range(4):
                     self.myAssertDict(
                         json.loads(self.__server.datasets[i]),
-                        {'contactEmail': 'BSName',
+                        {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
                          'createdAt': '2022-05-14 11:54:29',
-                         'creationLocation': '/DESY/PETRA III/p00',
+                         'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
                          'endTime': arg[6],
                          'isPublished': False,
                          'techniques': ltech,
-                         'owner': 'Ouruser',
-                         'ownerEmail': 'appuser@fake.com',
+                         'owner': 'Smithson',
+                         'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001284/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
+                             '99001284-dmgt', '99001284-clbt', '99001284-part',
+                             'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'ownerGroup': '99001284-part',
+                         'ownerGroup': '99001284-dmgt',
                          'proposalId': '99001284',
                          'scientificMetadata':
                          {'NX_class': 'NXentry',
@@ -1787,11 +1798,12 @@ class DatasetWatcherH5Test(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'ownerGroup': '99001284-part',
+                         'ownerGroup': '99001284-dmgt',
                          'datasetId':
                          '/99001284/myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
+                             '99001284-dmgt', '99001284-clbt', '99001284-part',
+                             'p00dmgt', 'p00staff'],
                          'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -2097,20 +2109,21 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 self.assertEqual(len(self.__server.datasets), 2)
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
-                    {'contactEmail': 'BSName',
+                    {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
                      'createdAt': '2022-05-14 11:54:29',
-                     'creationLocation': '/DESY/PETRA III/p00',
+                     'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
                      'endTime': args[0][6],
                      'isPublished': False,
                      'techniques': ltechs[0],
-                     'owner': 'Ouruser',
-                     'ownerGroup': '99001234-part',
-                     'ownerEmail': 'appuser@fake.com',
+                     'owner': 'Smithson',
+                     'ownerGroup': '99001234-dmgt',
+                     'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt',
+                         '99001234-part', 'p00dmgt', 'p00staff'],
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
@@ -2147,20 +2160,21 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
-                    {'contactEmail': 'BSName',
+                    {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
                      'createdAt': '2022-05-14 11:54:29',
-                     'creationLocation': '/DESY/PETRA III/p00',
+                     'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
                      'endTime': args[1][6],
                      'isPublished': False,
                      'techniques': ltechs[1],
-                     'owner': 'Ouruser',
-                     'ownerGroup': '99001234-part',
-                     'ownerEmail': 'appuser@fake.com',
+                     'owner': 'Smithson',
+                     'ownerGroup': '99001234-dmgt',
+                     'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt',
+                         '99001234-part', 'p00dmgt', 'p00staff'],
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
@@ -2205,7 +2219,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
@@ -2219,7 +2233,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
@@ -2519,22 +2533,23 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 for i in range(4):
                     self.myAssertDict(
                         json.loads(self.__server.datasets[i]),
-                        {'contactEmail': 'BSName',
+                        {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
                          'createdAt': '2022-05-14 11:54:29',
-                         'creationLocation': '/DESY/PETRA III/p00',
+                         'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
                          'endTime': arg[6],
                          'isPublished': False,
                          'techniques': ltech,
-                         'owner': 'Ouruser',
-                         'ownerEmail': 'appuser@fake.com',
+                         'owner': 'Smithson',
+                         'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                             '99001234-dmgt', '99001234-clbt',
+                             '99001234-part', 'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'ownerGroup': '99001234-part',
+                         'ownerGroup': '99001234-dmgt',
                          'proposalId': '99001234',
                          'scientificMetadata':
                          {'NX_class': 'NXentry',
@@ -2587,7 +2602,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'ownerGroup': '99001234-part',
+                         'ownerGroup': '99001234-dmgt',
                          'datasetId':
                          '/99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
