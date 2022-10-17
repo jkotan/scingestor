@@ -198,14 +198,15 @@ class DatasetIngestor:
 
         #: (:obj:`str`) access groups
         self.__accessgroups = \
-            "{beamtimeid}-clbt,{beamtimeid}-dmgt,{beamline}dmgt".format(
+            "{beamtimeid}-dmgt,{beamtimeid}-clbt,{beamtimeid}-part," \
+            "{beamline}dmgt,{beamline}staff".format(
                 beamtimeid=self.__bid, beamline=self.__bl)
         if "accessGroups" in self.__meta:
             self.__accessgroups = ",".join(self.__meta["accessGroups"])
 
         #: (:obj:`str`) owner group
         self.__ownergroup = \
-            "{beamtimeid}-part".format(
+            "{beamtimeid}-dmgt".format(
                 beamtimeid=self.__bid)
         if "ownerGroup" in self.__meta:
             self.__ownergroup = self.__meta["ownerGroup"]
@@ -228,7 +229,7 @@ class DatasetIngestor:
             if not os.path.isdir(self.__metapath):
                 os.makedirs(self.__metapath, exist_ok=True)
 
-        if "doiprefix" in self.__config.keys():
+        if "doi_prefix" in self.__config.keys():
             self.__doiprefix = self.__config["doi_prefix"]
         if "ingestor_credential_file" in self.__config.keys():
             with open(self.__config["ingestor_credential_file"]) as fl:
