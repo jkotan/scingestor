@@ -65,8 +65,8 @@ class DatasetIngestor:
         :type meta: :obj:`dict` <:obj:`str`, `any`>
         :param beamtimefile: beamtime filename
         :type beamtimefile: :obj:`str`
-        :param doiprefix: doiprefix
-        :type doiprefix: :obj:`str`
+        :param pidprefix: pidprefix
+        :type pidprefix: :obj:`str`
         :param ingestorcred: ingestor credential
         :type ingestorcred: :obj:`str`
         :param scicat_url: scicat_url
@@ -98,7 +98,8 @@ class DatasetIngestor:
         self.__relpath = os.path.relpath(path, bpath)
 
         #: (:obj:`str`) doi prefix
-        self.__doiprefix = "10.3204"
+        self.__pidprefix = ""
+        # self.__pidprefix = "10.3204"
         #: (:obj:`str`) username
         self.__username = 'ingestor'
         #: (:obj:`str`) update strategy
@@ -146,7 +147,7 @@ class DatasetIngestor:
         #: (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*{datablockpostfix},*{scanpostfix},*~ " \
-            " -p {doiprefix}/{beamtimeid}/{scanname} " \
+            " -p {pidprefix}/{beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
             " -o {metapath}/{scanname}{datablockpostfix} "
@@ -155,7 +156,7 @@ class DatasetIngestor:
             " -s *.pyc,*{datablockpostfix},*{scanpostfix},*~ " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
-            " -p {doiprefix}/{beamtimeid}/{scanname} "
+            " -p {pidprefix}/{beamtimeid}/{scanname} "
         #: (:obj:`str`) datablock path postfix
         self.__datablockscanpath = " {scanpath}/{scanname} "
 
@@ -228,8 +229,8 @@ class DatasetIngestor:
             if not os.path.isdir(self.__metapath):
                 os.makedirs(self.__metapath, exist_ok=True)
 
-        if "doiprefix" in self.__config.keys():
-            self.__doiprefix = self.__config["doi_prefix"]
+        if "dataset_pid_prefix" in self.__config.keys():
+            self.__pidprefix = self.__config["dataset_pid_prefix"]
         if "ingestor_credential_file" in self.__config.keys():
             with open(self.__config["ingestor_credential_file"]) as fl:
                 self.__incd = fl.read().strip()
@@ -367,7 +368,7 @@ class DatasetIngestor:
             "relpath": self.__relpath,
             "beamtimeid": self.__bid,
             "beamline": self.__bl,
-            "doiprefix": self.__doiprefix,
+            "pidprefix": self.__pidprefix,
             "beamtimefile": self.__bfile,
             "scanpostfix": self.__scanpostfix,
             "datablockpostfix": self.__datablockpostfix,
@@ -777,7 +778,7 @@ class DatasetIngestor:
         :rtype: :obj:`str`
         """
         try:
-            pid = "%s/%s" % (self.__doiprefix, mdct["pid"])
+            pid = "%s/%s" % (self.__pidprefix, mdct["pid"])
             # check if dataset with the pid exists
             get_logger().info(
                 'DatasetIngestor: Check if dataset exists: %s' % (pid))
@@ -942,12 +943,12 @@ class DatasetIngestor:
                 smt = fl.read()
                 mt = json.loads(smt)
             if not mt["datasetId"].startswith(
-                    "%s/%s/" % (self.__doiprefix, self.__bid)):
+                    "%s/%s/" % (self.__pidprefix, self.__bid)):
                 raise Exception(
                     "Wrong datasetId %s for DESY beamtimeId %s in  %s"
                     % (mt["pid"], self.__bid, metafile))
-            if mt["datasetId"] != "%s/%s" % (self.__doiprefix, pid):
-                mt["datasetId"] = "%s/%s" % (self.__doiprefix, pid)
+            if mt["datasetId"] != "%s/%s" % (self.__pidprefix, pid):
+                mt["datasetId"] = "%s/%s" % (self.__pidprefix, pid)
                 smt = json.dumps(mt)
                 with open(metafile, "w") as mf:
                     mf.write(smt)

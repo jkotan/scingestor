@@ -423,9 +423,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc1}\n'
+                        '/99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001234/{sc1}\n'
+                        '/99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
@@ -433,9 +433,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -467,9 +467,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
+                    "OrigDatablocks: /99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
+                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -586,7 +586,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-part',
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                      'size': 629}, skip=["dataFileList", "size"])
@@ -600,7 +600,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-part',
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                      'size': 629}, skip=["dataFileList", "size"])
@@ -795,9 +795,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc1}\n'
+                        '/99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001234/{sc1}\n'
+                        '/99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
@@ -805,9 +805,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc3}\n'
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
@@ -815,9 +815,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc3} {subdir2}/{sc3}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc3}\n'
+                        '/99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001234/{sc3}\n'
+                        '/99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc4}\n'
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
@@ -825,9 +825,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc4} {subdir2}/{sc4}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc4}\n'
+                        '/99001234/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001234/{sc4}\n'
+                        '/99001234/{sc4}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -860,14 +860,14 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 self.assertEqual(
                     'Login: myingestor\n'
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
+                    "OrigDatablocks: /99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n"
+                    "OrigDatablocks: /99001234/myscan_00002\n"
                     'Login: myingestor\n'
                     "RawDatasets: 99001234/myscan_00003\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00003\n"
+                    "OrigDatablocks: /99001234/myscan_00003\n"
                     "RawDatasets: 99001234/myscan_00004\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00004\n", vl)
+                    "OrigDatablocks: /99001234/myscan_00004\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -949,7 +949,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                              'uid': 'jkotan'}],
                          'ownerGroup': '99001234-part',
                          'datasetId':
-                         '10.3204/99001234/myscan_%05i' % (i + 1),
+                         '/99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
                              '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                          'size': 629}, skip=["dataFileList", "size"])
@@ -1216,9 +1216,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001284/{sc1}\n'
+                        '/99001284/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001284/{sc1}\n'
+                        '/99001284/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
@@ -1226,9 +1226,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001284/{sc2}\n'
+                        '/99001284/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001284/{sc2}\n'
+                        '/99001284/{sc2}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -1262,9 +1262,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001284/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001284/myscan_00001\n"
+                    "OrigDatablocks: /99001284/myscan_00001\n"
                     "RawDatasets: 99001284/myscan_00002\n"
-                    "OrigDatablocks: 10.3204/99001284/myscan_00002\n", vl)
+                    "OrigDatablocks: /99001284/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1381,7 +1381,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001284-part',
-                     'datasetId': '10.3204/99001284/myscan_00001',
+                     'datasetId': '/99001284/myscan_00001',
                      'accessGroups': [
                          '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
                      'size': 629}, skip=["dataFileList", "size"])
@@ -1395,7 +1395,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001284-part',
-                     'datasetId': '10.3204/99001284/myscan_00002',
+                     'datasetId': '/99001284/myscan_00002',
                      'accessGroups': [
                          '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
                      'size': 629}, skip=["dataFileList", "size"])
@@ -1633,9 +1633,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001284/{sc1}\n'
+                        '/99001284/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001284/{sc1}\n'
+                        '/99001284/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
@@ -1643,9 +1643,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001284/{sc2}\n'
+                        '/99001284/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001284/{sc2}\n'
+                        '/99001284/{sc2}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc3}\n'
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
@@ -1653,9 +1653,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc3} {subdir2}/{sc3}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001284/{sc3}\n'
+                        '/99001284/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001284/{sc3}\n'
+                        '/99001284/{sc3}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc4}\n'
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
@@ -1663,9 +1663,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc4} {subdir2}/{sc4}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001284/{sc4}\n'
+                        '/99001284/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001284/{sc4}\n'
+                        '/99001284/{sc4}\n'
                         # 'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         # '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -1701,14 +1701,14 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 self.assertEqual(
                     'Login: myingestor\n'
                     "RawDatasets: 99001284/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001284/myscan_00001\n"
+                    "OrigDatablocks: /99001284/myscan_00001\n"
                     "RawDatasets: 99001284/myscan_00002\n"
-                    "OrigDatablocks: 10.3204/99001284/myscan_00002\n"
+                    "OrigDatablocks: /99001284/myscan_00002\n"
                     'Login: myingestor\n'
                     "RawDatasets: 99001284/myscan_00003\n"
-                    "OrigDatablocks: 10.3204/99001284/myscan_00003\n"
+                    "OrigDatablocks: /99001284/myscan_00003\n"
                     "RawDatasets: 99001284/myscan_00004\n"
-                    "OrigDatablocks: 10.3204/99001284/myscan_00004\n", vl)
+                    "OrigDatablocks: /99001284/myscan_00004\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1789,7 +1789,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                              'uid': 'jkotan'}],
                          'ownerGroup': '99001284-part',
                          'datasetId':
-                         '10.3204/99001284/myscan_%05i' % (i + 1),
+                         '/99001284/myscan_%05i' % (i + 1),
                          'accessGroups': [
                              '99001284-clbt', '99001284-dmgt', 'p00dmgt'],
                          'size': 629}, skip=["dataFileList", "size"])
@@ -1860,7 +1860,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'datablock_metadata_generator: "nxsfileinfo origdatablock ' \
             ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
             ' -x 0o662 ' \
-            ' -p {{doiprefix}}/{{beamtimeid}}/{{scanname}} ' \
+            ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt ' \
             ' -o {{scanpath}}/{{scanname}}{{datablockpostfix}} "\n' \
             'datablock_metadata_stream_generator: ' \
@@ -1868,7 +1868,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
             ' -x 0o662 ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt' \
-            ' -p {{doiprefix}}/{{beamtimeid}}/{{scanname}} "\n' \
+            ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} "\n' \
             'datablock_metadata_generator_scanpath_postfix: '\
             '" {{scanpath}}/{{scanname}} "\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -2043,9 +2043,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc1}\n'
+                        '/99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001234/{sc1}\n'
+                        '/99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
@@ -2053,9 +2053,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -2087,9 +2087,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
+                    "OrigDatablocks: /99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
+                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -2206,7 +2206,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-part',
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                      'size': 629}, skip=["dataFileList", "size"])
@@ -2220,7 +2220,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-part',
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                      'size': 629}, skip=["dataFileList", "size"])
@@ -2280,7 +2280,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             '{{scanpath}}/{{scanname}}.nxs"\n' \
             'datablock_metadata_generator: "nxsfileinfo origdatablock ' \
             ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
-            ' -p {{doiprefix}}/{{beamtimeid}}/{{scanname}} ' \
+            ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} ' \
             ' -x 0o662 ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt ' \
             ' -o {{scanpath}}/{{scanname}}{{datablockpostfix}} "\n' \
@@ -2289,7 +2289,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt' \
             ' -x 0o662 ' \
-            ' -p {{doiprefix}}/{{beamtimeid}}/{{scanname}} "\n' \
+            ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} "\n' \
             'datablock_metadata_generator_scanpath_postfix: '\
             ' " {{scanpath}}/{{scanname}}"\n' \
             'ingestor_log_dir: "{logdir}"\n' \
@@ -2435,9 +2435,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc1}\n'
+                        '/99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001234/{sc1}\n'
+                        '/99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
@@ -2445,9 +2445,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc3}\n'
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
@@ -2455,9 +2455,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc3} {subdir2}/{sc3}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc3}\n'
+                        '/99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001234/{sc3}\n'
+                        '/99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc4}\n'
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
@@ -2465,9 +2465,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc4} {subdir2}/{sc4}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc4}\n'
+                        '/99001234/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '10.3204/99001234/{sc4}\n'
+                        '/99001234/{sc4}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -2500,14 +2500,14 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 self.assertEqual(
                     'Login: myingestor\n'
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
+                    "OrigDatablocks: /99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n"
+                    "OrigDatablocks: /99001234/myscan_00002\n"
                     'Login: myingestor\n'
                     "RawDatasets: 99001234/myscan_00003\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00003\n"
+                    "OrigDatablocks: /99001234/myscan_00003\n"
                     "RawDatasets: 99001234/myscan_00004\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00004\n", vl)
+                    "OrigDatablocks: /99001234/myscan_00004\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -2589,7 +2589,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                              'uid': 'jkotan'}],
                          'ownerGroup': '99001234-part',
                          'datasetId':
-                         '10.3204/99001234/myscan_%05i' % (i + 1),
+                         '/99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
                              '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                          'size': 629}, skip=["dataFileList", "size"])

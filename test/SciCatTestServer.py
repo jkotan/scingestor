@@ -101,7 +101,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             dt = json.loads(in_data)
             # print("Datasets: %s" % dt)
             print("RawDatasets: %s" % dt["pid"])
-            npid = self.server.doiprefix + dt["pid"]
+            npid = self.server.pidprefix + dt["pid"]
             dt["pid"] = npid
             self.server.pid_dataset[npid] = json.dumps(dt)
             message = "{}"
@@ -171,8 +171,9 @@ class SciCatTestServer(HTTPServer):
         self.pid_dataset = {}
         #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with proposals
         self.pid_proposal = {}
-        #: (:obj:`str`) doi prefix
-        self.doiprefix = "10.3204/"
+        #: (:obj:`str`) pid prefix
+        self.pidprefix = "/"
+        # self.pidprefix = "10.3204/"
 
     def reset(self):
         self.datasets = []

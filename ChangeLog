@@ -1,3 +1,7 @@
+2021-10-13 Jan Kotanski <jan.kotanski@desy.de>
+	* fix for doi_prefix
+	* tagged as 0.0.7
+
 2021-10-07 Jan Kotanski <jan.kotanski@desy.de>
 	* add use_corepath_as_scandir into the configuration variables (#117)
 	* add scandir_blacklist into the configuration variables (#119)
