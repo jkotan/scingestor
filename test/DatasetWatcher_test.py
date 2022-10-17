@@ -367,11 +367,11 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Ouruser',
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'appuser@fake.com',
                      'pid': '99001234/myscan_00001',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part'],
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
@@ -392,11 +392,11 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Ouruser',
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'appuser@fake.com',
                      'pid': '99001234/myscan_00002',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part'],
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
@@ -417,10 +417,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'datasetId': '10.3204/99001234/myscan_00001',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part'],
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -431,10 +431,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'datasetId': '10.3204/99001234/myscan_00002',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part'],
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -667,9 +667,9 @@ class DatasetWatcherTest(unittest.TestCase):
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                             '99001234-dmgt', '99001234-clbt', '99001234-part'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'ownerGroup': '99001234-part',
+                         'ownerGroup': '99001234-dmgt',
                          'proposalId': '99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
@@ -691,11 +691,11 @@ class DatasetWatcherTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'ownerGroup': '99001234-part',
+                         'ownerGroup': '99001234-dmgt',
                          'datasetId':
                          '10.3204/99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                             '99001234-dmgt', '99001234-clbt', '99001234-part'],
                          'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -755,11 +755,11 @@ class DatasetWatcherTest(unittest.TestCase):
                    }
                ],
                'owner': 'Ouruser',
-               'ownerGroup': '99001234-part',
+               'ownerGroup': '99001234-dmgt',
                'ownerEmail': 'appuser@fake.com',
                'pid': '99001234/myscan_00001',
                'accessGroups': [
-                '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                '99001234-dmgt', '99001234-clbt', '99001234-part'],
                'datasetName': 'myscan_00001',
                'principalInvestigator': 'appuser@fake.com',
                'proposalId': '99001234',
@@ -789,11 +789,11 @@ class DatasetWatcherTest(unittest.TestCase):
                 }
                ],
                'owner': 'Ouruser',
-               'ownerGroup': '99001234-part',
+               'ownerGroup': '99001234-dmgt',
                'ownerEmail': 'appuser@fake.com',
                'pid': '99001234/myscan_00002',
                'accessGroups': [
-                   '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                   '99001234-dmgt', '99001234-clbt', '99001234-part'],
                'datasetName': 'myscan_00002',
                'principalInvestigator': 'appuser@fake.com',
                'proposalId': '99001234',
@@ -942,10 +942,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'datasetId': '10.3204/99001234/myscan_00001',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part'],
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -956,10 +956,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'datasetId': '10.3204/99001234/myscan_00002',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part'],
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -1019,11 +1019,11 @@ class DatasetWatcherTest(unittest.TestCase):
                    }
                ],
                'owner': 'Ouruser',
-               'ownerGroup': '99001234-part',
+               'ownerGroup': '99001234-dmgt',
                'ownerEmail': 'appuser@fake.com',
                'pid': '99001234/myscan_00001',
                'accessGroups': [
-                '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                '99001234-dmgt', '99001234-clbt', '99001234-part'],
                'datasetName': 'myscan_00001',
                'principalInvestigator': 'appuser@fake.com',
                'proposalId': '99001234',
@@ -1053,11 +1053,11 @@ class DatasetWatcherTest(unittest.TestCase):
                 }
                ],
                'owner': 'Ouruser',
-               'ownerGroup': '99001234-part',
+               'ownerGroup': '99001234-dmgt',
                'ownerEmail': 'appuser@fake.com',
                'pid': '99001234/myscan_00002',
                'accessGroups': [
-                   '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                   '99001234-dmgt', '99001234-clbt', '99001234-part'],
                'datasetName': 'myscan_00002',
                'principalInvestigator': 'appuser@fake.com',
                'proposalId': '99001234',
@@ -1222,9 +1222,9 @@ class DatasetWatcherTest(unittest.TestCase):
                  'pid': '99001234/myscan_%05i' % (i + 1),
                  'datasetName': 'myscan_%05i' % (i + 1),
                  'accessGroups': [
-                    '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                    '99001234-dmgt', '99001234-clbt', '99001234-part'],
                  'principalInvestigator': 'appuser@fake.com',
-                 'ownerGroup': '99001234-part',
+                 'ownerGroup': '99001234-dmgt',
                  'proposalId': '99001234',
                  'scientificMetadata': {
                      'DOOR_proposalId': '99991173',
@@ -1393,11 +1393,11 @@ class DatasetWatcherTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'ownerGroup': '99001234-part',
+                         'ownerGroup': '99001234-dmgt',
                          'datasetId':
                          '10.3204/99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                             '99001234-dmgt', '99001234-clbt', '99001234-part'],
                          'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -1474,9 +1474,9 @@ class DatasetWatcherTest(unittest.TestCase):
                  'pid': '99001234/myscan_%05i' % (i + 1),
                  'datasetName': 'myscan_%05i' % (i + 1),
                  'accessGroups': [
-                    '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                    '99001234-dmgt', '99001234-clbt', '99001234-part'],
                  'principalInvestigator': 'appuser@fake.com',
-                 'ownerGroup': '99001234-part',
+                 'ownerGroup': '99001234-dmgt',
                  'proposalId': '99001234',
                  'scientificMetadata': {
                      'DOOR_proposalId': '99991173',
@@ -1736,11 +1736,11 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Ouruser',
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'appuser@fake.com',
                      'pid': '99001234/myscan_00001',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part'],
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
@@ -1761,11 +1761,11 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Ouruser',
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'appuser@fake.com',
                      'pid': '99001234/myscan_00002',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part'],
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
@@ -1787,10 +1787,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'datasetId': '10.3204/99001234/myscan_00001',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part'],
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -1801,10 +1801,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'datasetId': '10.3204/99001234/myscan_00002',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt', '99001234-part'],
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -2026,9 +2026,9 @@ class DatasetWatcherTest(unittest.TestCase):
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                             '99001234-dmgt', '99001234-clbt', '99001234-part'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'ownerGroup': '99001234-part',
+                         'ownerGroup': '99001234-dmgt',
                          'proposalId': '99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
@@ -2050,11 +2050,11 @@ class DatasetWatcherTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'ownerGroup': '99001234-part',
+                         'ownerGroup': '99001234-dmgt',
                          'datasetId':
                          '10.3204/99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                             '99001234-dmgt', '99001234-clbt', '99001234-part'],
                          'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -2532,11 +2532,11 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Ouruser',
-                     'ownerGroup': '99001236-part',
+                     'ownerGroup': '99001236-dmgt',
                      'ownerEmail': 'appuser@fake.com',
                      'pid': '99001236/myscan_00001',
                      'accessGroups': [
-                         '99001236-clbt', '99001236-dmgt', 'p00dmgt'],
+                         '99001236-dmgt', '99001236-clbt', '99001236-part'],
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001236',
@@ -2557,11 +2557,11 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Ouruser',
-                     'ownerGroup': '99001236-part',
+                     'ownerGroup': '99001236-dmgt',
                      'ownerEmail': 'appuser@fake.com',
                      'pid': '99001236/myscan_00002',
                      'accessGroups': [
-                         '99001236-clbt', '99001236-dmgt', 'p00dmgt'],
+                         '99001236-dmgt', '99001236-clbt', '99001236-part'],
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001236',
@@ -2582,10 +2582,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001236-part',
+                     'ownerGroup': '99001236-dmgt',
                      'datasetId': '10.3204/99001236/myscan_00001',
                      'accessGroups': [
-                         '99001236-clbt', '99001236-dmgt', 'p00dmgt'],
+                         '99001236-dmgt', '99001236-clbt', '99001236-part'],
                      'size': 629}, skip=["dataFileList", "size"])
                 dfl = json.loads(
                     self.__server.origdatablocks[0])["dataFileList"]
@@ -2600,10 +2600,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001236-part',
+                     'ownerGroup': '99001236-dmgt',
                      'datasetId': '10.3204/99001236/myscan_00002',
                      'accessGroups': [
-                         '99001236-clbt', '99001236-dmgt', 'p00dmgt'],
+                         '99001236-dmgt', '99001236-clbt', '99001236-part'],
                      'size': 629}, skip=["dataFileList", "size"])
                 dfl = json.loads(
                     self.__server.origdatablocks[1])["dataFileList"]
@@ -2898,9 +2898,9 @@ class DatasetWatcherTest(unittest.TestCase):
                          'pid': '99001236/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001236-clbt', '99001236-dmgt', 'p00dmgt'],
+                             '99001236-dmgt', '99001236-clbt', '99001236-part'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'ownerGroup': '99001236-part',
+                         'ownerGroup': '99001236-dmgt',
                          'proposalId': '99001236',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
@@ -2922,11 +2922,11 @@ class DatasetWatcherTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'ownerGroup': '99001236-part',
+                         'ownerGroup': '99001236-dmgt',
                          'datasetId':
                          '10.3204/99001236/myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001236-clbt', '99001236-dmgt', 'p00dmgt'],
+                             '99001236-dmgt', '99001236-clbt', '99001236-part'],
                          'size': 629}, skip=["dataFileList", "size"])
                     dfl = json.loads(
                         self.__server.origdatablocks[i])["dataFileList"]
