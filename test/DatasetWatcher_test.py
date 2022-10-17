@@ -2317,9 +2317,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                             '99001234-dmgt', '99001234-clbt',
+                             '99001234-part', 'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'ownerGroup': '99001234-part',
+                         'ownerGroup': '99001234-dmgt',
                          'proposalId': '99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
@@ -2341,7 +2342,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'ownerGroup': '99001234-part',
+                         'ownerGroup': '99001234-dmgt',
                          'datasetId':
                          '10.3204/99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [

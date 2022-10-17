@@ -2118,11 +2118,12 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'isPublished': False,
                      'techniques': ltechs[0],
                      'owner': 'Smithson',
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt',
+                         '99001234-part', 'p00dmgt', 'p00staff'],
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
@@ -2168,11 +2169,12 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'isPublished': False,
                      'techniques': ltechs[1],
                      'owner': 'Smithson',
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
                      'accessGroups': [
-                         '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                         '99001234-dmgt', '99001234-clbt',
+                         '99001234-part', 'p00dmgt', 'p00staff'],
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
@@ -2217,7 +2219,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'datasetId': '10.3204/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
@@ -2231,7 +2233,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-part',
+                     'ownerGroup': '99001234-dmgt',
                      'datasetId': '10.3204/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
@@ -2544,9 +2546,10 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
                          'accessGroups': [
-                             '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
+                             '99001234-dmgt', '99001234-clbt',
+                             '99001234-part', 'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'ownerGroup': '99001234-part',
+                         'ownerGroup': '99001234-dmgt',
                          'proposalId': '99001234',
                          'scientificMetadata':
                          {'NX_class': 'NXentry',
@@ -2599,7 +2602,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'ownerGroup': '99001234-part',
+                         'ownerGroup': '99001234-dmgt',
                          'datasetId':
                          '10.3204/99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
