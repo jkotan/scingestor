@@ -275,9 +275,9 @@ class DatasetIngestTest(unittest.TestCase):
                     'Generating origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -289,9 +289,9 @@ class DatasetIngestTest(unittest.TestCase):
                     'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '10.3204/99001234/{sc2}\n'
+                    '/99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '10.3204/99001234/{sc2}\n'
+                    '/99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -304,9 +304,9 @@ class DatasetIngestTest(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
+                    "OrigDatablocks: /99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
+                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -378,7 +378,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -389,7 +389,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -554,7 +554,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -569,7 +569,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -694,9 +694,9 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -714,7 +714,7 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
+                    "OrigDatablocks: /99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -789,7 +789,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -804,7 +804,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -819,7 +819,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -937,12 +937,12 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -960,8 +960,8 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 10.3204/99001234/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
+                    "RawDatasets: /99001234/myscan_00001\n"
+                    "OrigDatablocks: /99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -1041,7 +1041,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'owner': 'NewOwner',
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '10.3204/99001234/myscan_00001',
+                     'pid': '/99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -1065,7 +1065,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1080,7 +1080,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1095,7 +1095,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1247,12 +1247,12 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '10.3204/99001284/{sc1}\n'
+                    '/99001284/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '10.3204/99001284/{sc1}\n'
+                    '/99001284/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '10.3204/99001284/{sc1}\n'
+                    '/99001284/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -1270,8 +1270,8 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 10.3204/99001284/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001284/myscan_00002\n",
+                    "RawDatasets: /99001284/myscan_00001\n"
+                    "OrigDatablocks: /99001284/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -1351,7 +1351,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'owner': 'NewOwner',
                      'ownerGroup': '99001284-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '10.3204/99001284/myscan_00001',
+                     'pid': '/99001284/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
@@ -1375,7 +1375,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001284/myscan_00001',
+                     'datasetId': '/99001284/myscan_00001',
                      'accessGroups': [
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
                          'p00dmgt', 'p00staff'],
@@ -1390,7 +1390,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001284/myscan_00002',
+                     'datasetId': '/99001284/myscan_00002',
                      'accessGroups': [
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
                          'p00dmgt', 'p00staff'],
@@ -1405,7 +1405,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001284/myscan_00002',
+                     'datasetId': '/99001284/myscan_00002',
                      'accessGroups': [
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
                          'p00dmgt', 'p00staff'],
@@ -1546,7 +1546,7 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
+                    "OrigDatablocks: /99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -1621,7 +1621,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1636,7 +1636,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1651,7 +1651,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1770,11 +1770,11 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset with a new pid: '
-                    '10.3204/99001234/{sc1}/2\n'
+                    '/99001234/{sc1}/2\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: '
@@ -1798,8 +1798,8 @@ class DatasetIngestTest(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001/2\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00001/2\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
+                    "OrigDatablocks: /99001234/myscan_00001/2\n"
+                    "OrigDatablocks: /99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -1903,7 +1903,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1918,7 +1918,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1933,7 +1933,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00001/2',
+                     'datasetId': '/99001234/myscan_00001/2',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1948,7 +1948,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2084,12 +2084,12 @@ class DatasetIngestTest(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Patch scientificMetadata of dataset: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Ingest origdatablock:'
@@ -2101,8 +2101,8 @@ class DatasetIngestTest(unittest.TestCase):
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: 10.3204/99001234/myscan_00002\n"
-                        "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
+                        "RawDatasets: /99001234/myscan_00002\n"
+                        "OrigDatablocks: /99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -2181,7 +2181,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'techniques': [],
                          'owner': 'NewOwner',
                          'ownerEmail': 'peter.smithson@fake.de',
-                         'pid': '10.3204/99001234/myscan_00002',
+                         'pid': '/99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -2206,7 +2206,7 @@ class DatasetIngestTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '10.3204/99001234/myscan_00001',
+                         'datasetId': '/99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -2221,7 +2221,7 @@ class DatasetIngestTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '10.3204/99001234/myscan_00002',
+                         'datasetId': '/99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -2236,7 +2236,7 @@ class DatasetIngestTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '10.3204/99001234/myscan_00002',
+                         'datasetId': '/99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -2387,7 +2387,7 @@ class DatasetIngestTest(unittest.TestCase):
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
+                        "OrigDatablocks: /99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -2464,7 +2464,7 @@ class DatasetIngestTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '10.3204/99001234/myscan_00001',
+                         'datasetId': '/99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -2479,7 +2479,7 @@ class DatasetIngestTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '10.3204/99001234/myscan_00002',
+                         'datasetId': '/99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -2494,7 +2494,7 @@ class DatasetIngestTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '10.3204/99001234/myscan_00002',
+                         'datasetId': '/99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -2637,12 +2637,12 @@ class DatasetIngestTest(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Post the dataset with a new pid: '
-                        '10.3204/99001234/{sc2}/2\n'
+                        '/99001234/{sc2}/2\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: '
@@ -2658,7 +2658,7 @@ class DatasetIngestTest(unittest.TestCase):
                     self.assertEqual(
                         "Login: ingestor\n"
                         "RawDatasets: 99001234/myscan_00002/2\n"
-                        "OrigDatablocks: 10.3204/99001234/myscan_00002/2\n",
+                        "OrigDatablocks: /99001234/myscan_00002/2\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -2762,7 +2762,7 @@ class DatasetIngestTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '10.3204/99001234/myscan_00001',
+                         'datasetId': '/99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -2777,7 +2777,7 @@ class DatasetIngestTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '10.3204/99001234/myscan_00002',
+                         'datasetId': '/99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -2792,7 +2792,7 @@ class DatasetIngestTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '10.3204/99001234/myscan_00002/2',
+                         'datasetId': '/99001234/myscan_00002/2',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -2935,12 +2935,12 @@ class DatasetIngestTest(unittest.TestCase):
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '10.3204/99001234/{sc2}\n'
+                        '/99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Post the dataset with a new pid: '
-                        '10.3204/99001234/{sc2}/2\n'
+                        '/99001234/{sc2}/2\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: '
@@ -2956,7 +2956,7 @@ class DatasetIngestTest(unittest.TestCase):
                     self.assertEqual(
                         "Login: ingestor\n"
                         "RawDatasets: 99001234/myscan_00002/2\n"
-                        "OrigDatablocks: 10.3204/99001234/myscan_00002/2\n",
+                        "OrigDatablocks: /99001234/myscan_00002/2\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -3060,7 +3060,7 @@ class DatasetIngestTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '10.3204/99001234/myscan_00001',
+                         'datasetId': '/99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -3075,7 +3075,7 @@ class DatasetIngestTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '10.3204/99001234/myscan_00002',
+                         'datasetId': '/99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -3090,7 +3090,7 @@ class DatasetIngestTest(unittest.TestCase):
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '10.3204/99001234/myscan_00002/2',
+                         'datasetId': '/99001234/myscan_00002/2',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -3196,12 +3196,12 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -3214,7 +3214,7 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 10.3204/99001234/myscan_00001\n",
+                    "RawDatasets: /99001234/myscan_00001\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -3291,7 +3291,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'owner': 'Smithson',
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '10.3204/99001234/myscan_00001',
+                     'pid': '/99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -3316,7 +3316,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3331,7 +3331,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3515,7 +3515,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3530,7 +3530,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3631,12 +3631,12 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -3649,7 +3649,7 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 10.3204/99001234/myscan_00001\n",
+                    "RawDatasets: /99001234/myscan_00001\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -3726,7 +3726,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'owner': 'Smithson',
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '10.3204/99001234/myscan_00001',
+                     'pid': '/99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -3751,7 +3751,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3766,7 +3766,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3867,12 +3867,12 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Post the dataset with a new pid: '
-                    '10.3204/99001234/{sc1}/2\n'
+                    '/99001234/{sc1}/2\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: '
@@ -3891,7 +3891,7 @@ class DatasetIngestTest(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001/2\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00001/2\n",
+                    "OrigDatablocks: /99001234/myscan_00001/2\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -3993,7 +3993,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4008,7 +4008,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4023,7 +4023,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00001/2',
+                     'datasetId': '/99001234/myscan_00001/2',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4115,9 +4115,9 @@ class DatasetIngestTest(unittest.TestCase):
                     'Generating origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -4129,9 +4129,9 @@ class DatasetIngestTest(unittest.TestCase):
                     'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '10.3204/99001234/{sc2}\n'
+                    '/99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '10.3204/99001234/{sc2}\n'
+                    '/99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -4144,9 +4144,9 @@ class DatasetIngestTest(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
+                    "OrigDatablocks: /99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
+                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -4218,7 +4218,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -4229,7 +4229,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4397,7 +4397,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4412,7 +4412,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4528,9 +4528,9 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '10.3204/99001234/{sc1}\n'
+                    '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -4548,7 +4548,7 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
+                    "OrigDatablocks: /99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -4623,7 +4623,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00001',
+                     'datasetId': '/99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4638,7 +4638,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4653,7 +4653,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
+                     'datasetId': '/99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4711,6 +4711,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'dataset_pid_prefix: "10.3204"\n' \
             'metadata_in_log_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_log_dir: "{logdir}"\n' \
@@ -4726,6 +4727,8 @@ class DatasetIngestTest(unittest.TestCase):
                      % cfgfname).split()]
         # commands.pop()
         try:
+            oldpidprefix = self.__server.pidprefix
+            self.__server.pidprefix = "10.3204/"
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
@@ -4876,6 +4879,7 @@ class DatasetIngestTest(unittest.TestCase):
                 if os.path.isdir("%s%s" % (llogdir, fsubdirname)):
                     shutil.rmtree("%s%s" % (llogdir, fsubdirname))
         finally:
+            self.__server.pidprefix = oldpidprefix
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):
@@ -4927,6 +4931,7 @@ class DatasetIngestTest(unittest.TestCase):
             'metadata_in_log_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_log_dir: "{logdir}"\n' \
+            'dataset_pid_prefix: "10.3204"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
 
@@ -4939,6 +4944,8 @@ class DatasetIngestTest(unittest.TestCase):
                      % cfgfname).split()]
         # commands.pop()
         try:
+            oldpidprefix = self.__server.pidprefix
+            self.__server.pidprefix = "10.3204/"
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
@@ -5067,6 +5074,7 @@ class DatasetIngestTest(unittest.TestCase):
                 if os.path.isdir("%s%s" % (logdir, fsubdirname)):
                     shutil.rmtree("%s%s" % (logdir, fsubdirname))
         finally:
+            self.__server.pidprefix = oldpidprefix
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):
@@ -5114,6 +5122,7 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'metadata_in_log_dir: true\n' \
+            'dataset_pid_prefix: "10.3204"\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -5133,6 +5142,8 @@ class DatasetIngestTest(unittest.TestCase):
                      % cfgfname).split()]
         commands.pop()
         try:
+            oldpidprefix = self.__server.pidprefix
+            self.__server.pidprefix = "10.3204/"
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
@@ -5320,6 +5331,7 @@ class DatasetIngestTest(unittest.TestCase):
                 if os.path.isdir("%s%s" % (logdir, fsubdirname)):
                     shutil.rmtree("%s%s" % (logdir, fsubdirname))
         finally:
+            self.__server.pidprefix = oldpidprefix
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):

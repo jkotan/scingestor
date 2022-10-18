@@ -52,7 +52,7 @@ The configuration written in YAML can contain the following variables
 * **beamtime_base_dir** *(str)* , default: ``""``
 * **ingestor_log_dir** *(str)* , default: ``""``
 * **ingestor_username** *(str)* , default: ``"ingestor"``
-* **doi_prefix** *(str)* , default: ``"10.3204"``
+* **dataset_pid_prefix** *(str)* , default: ``""``
 * **dataset_update_strategy** (``"no"``, ``"patch"``, ``"create"``, ``"mixed"``) , default: ``"patch"``
 * **relative_path_in_datablock** *(bool)* , default: ``False``
 * **scandir_blacklist** *(list\<str\>)* , default: ``["/gpfs/current/scratch_bl", "/gpfs/current/processed", "/gpfs/current/shared"]``

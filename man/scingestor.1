@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "SCINGESTOR" "1" "Oct 07, 2022" "0.0" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "Oct 18, 2022" "0.0" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .
@@ -69,7 +69,7 @@ The configuration written in YAML can contain the following variables
 .IP \(bu 2
 \fBingestor_username\fP \fI(str)\fP , default: \fB"ingestor"\fP
 .IP \(bu 2
-\fBdoi_prefix\fP \fI(str)\fP , default: \fB"10.3204"\fP
+\fBdataset_pid_prefix\fP \fI(str)\fP , default: \fB""\fP
 .IP \(bu 2
 \fBdataset_update_strategy\fP (\fB"no"\fP, \fB"patch"\fP, \fB"create"\fP, \fB"mixed"\fP) , default: \fB"patch"\fP
 .IP \(bu 2
@@ -518,7 +518,7 @@ constructor
 .IP \(bu 2
 \fBbeamtimefile\fP (\fI\%str\fP) – beamtime filename
 .IP \(bu 2
-\fBdoiprefix\fP (\fI\%str\fP) – doiprefix
+\fBpidprefix\fP (\fI\%str\fP) – pidprefix
 .IP \(bu 2
 \fBingestorcred\fP (\fI\%str\fP) – ingestor credential
 .IP \(bu 2
