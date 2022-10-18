@@ -4711,6 +4711,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'dataset_pid_prefix: "10.3204"\n' \
             'metadata_in_log_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_log_dir: "{logdir}"\n' \
@@ -4726,6 +4727,8 @@ class DatasetIngestTest(unittest.TestCase):
                      % cfgfname).split()]
         # commands.pop()
         try:
+            oldpidprefix = self.__server.pidprefix
+            self.__server.pidprefix = "10.3204/"
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
@@ -4754,9 +4757,9 @@ class DatasetIngestTest(unittest.TestCase):
                     'Generating origdatablock metadata:'
                     ' {sc1} {logdir}{subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '10.3204/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '10.3204/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{logdir}{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -4768,9 +4771,9 @@ class DatasetIngestTest(unittest.TestCase):
                     'Generating origdatablock metadata:'
                     ' {sc2} {logdir}{subdir2}/{sc2}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '10.3204/99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '10.3204/99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{logdir}{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -4785,9 +4788,9 @@ class DatasetIngestTest(unittest.TestCase):
                     "Login: ingestor\n"
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
+                    "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -4856,7 +4859,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'uid': 'jkotan'}],
                      'ownerGroup': 'mygroup',
                      'accessGroups': ['group1', 'group2'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '10.3204/99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -4867,7 +4870,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '10.3204/99001234/myscan_00002',
                      'accessGroups': ['group1', 'group2'],
                      'ownerGroup': 'mygroup',
                      'size': 629}, skip=["dataFileList", "size"])
@@ -4876,6 +4879,7 @@ class DatasetIngestTest(unittest.TestCase):
                 if os.path.isdir("%s%s" % (llogdir, fsubdirname)):
                     shutil.rmtree("%s%s" % (llogdir, fsubdirname))
         finally:
+            self.__server.pidprefix = oldpidprefix
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):
@@ -4927,6 +4931,7 @@ class DatasetIngestTest(unittest.TestCase):
             'metadata_in_log_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_log_dir: "{logdir}"\n' \
+            'dataset_pid_prefix: "10.3204"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
 
@@ -4939,6 +4944,8 @@ class DatasetIngestTest(unittest.TestCase):
                      % cfgfname).split()]
         # commands.pop()
         try:
+            oldpidprefix = self.__server.pidprefix
+            self.__server.pidprefix = "10.3204/"
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
@@ -5045,7 +5052,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '10.3204/99001234/myscan_00001',
                      'accessGroups': ['group1', 'group2'],
                      'ownerGroup': 'mygroup',
                      'size': 629}, skip=["dataFileList", "size"])
@@ -5058,7 +5065,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '10.3204/99001234/myscan_00002',
                      'accessGroups': ['group1', 'group2'],
                      'ownerGroup': 'mygroup',
                      'size': 629}, skip=["dataFileList", "size"])
@@ -5067,6 +5074,7 @@ class DatasetIngestTest(unittest.TestCase):
                 if os.path.isdir("%s%s" % (logdir, fsubdirname)):
                     shutil.rmtree("%s%s" % (logdir, fsubdirname))
         finally:
+            self.__server.pidprefix = oldpidprefix
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):
@@ -5114,6 +5122,7 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'metadata_in_log_dir: true\n' \
+            'dataset_pid_prefix: "10.3204"\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_log_dir: "{logdir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -5133,6 +5142,8 @@ class DatasetIngestTest(unittest.TestCase):
                      % cfgfname).split()]
         commands.pop()
         try:
+            oldpidprefix = self.__server.pidprefix
+            self.__server.pidprefix = "10.3204/"
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
@@ -5182,9 +5193,9 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {logdir}{subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '10.3204/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '10.3204/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{logdir}{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -5204,7 +5215,7 @@ class DatasetIngestTest(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Login: ingestor\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 4)
                 self.assertEqual(
@@ -5282,7 +5293,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '10.3204/99001234/myscan_00001',
                      'accessGroups': [
                          'group1', 'group2'],
                      'ownerGroup': 'mygroup',
@@ -5296,7 +5307,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '10.3204/99001234/myscan_00002',
                      'accessGroups': [
                          'group1', 'group2'],
                      'ownerGroup': 'mygroup',
@@ -5310,7 +5321,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '10.3204/99001234/myscan_00002',
                      'accessGroups': [
                          'group1', 'group2'],
                      'ownerGroup': 'mygroup',
@@ -5320,6 +5331,7 @@ class DatasetIngestTest(unittest.TestCase):
                 if os.path.isdir("%s%s" % (logdir, fsubdirname)):
                     shutil.rmtree("%s%s" % (logdir, fsubdirname))
         finally:
+            self.__server.pidprefix = oldpidprefix
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):
