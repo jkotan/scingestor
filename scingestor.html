@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>scingestor package &#8212; SciCat Dataset Ingestor 0.0.6 documentation</title>
+    <title>scingestor package &#8212; SciCat Dataset Ingestor 0.0.7 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -145,7 +145,7 @@
 <li><strong>dsfile</strong> – file with a ingester dataset list</li>
 <li><strong>meta</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – beamtime configuration</li>
 <li><strong>beamtimefile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – beamtime filename</li>
-<li><strong>doiprefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – doiprefix</li>
+<li><strong>pidprefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – pidprefix</li>
 <li><strong>ingestorcred</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – ingestor credential</li>
 <li><strong>scicat_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – scicat_url</li>
 </ul>
@@ -368,6 +368,49 @@ leave datasets unchanged</p>
 </div>
 <div class="section" id="module-scingestor.logger">
 <span id="scingestor-logger-module"></span><h2>scingestor.logger module<a class="headerlink" href="#module-scingestor.logger" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="scingestor.logger.AccSecFormatter">
+<em class="property">class </em><code class="descclassname">scingestor.logger.</code><code class="descname">AccSecFormatter</code><span class="sig-paren">(</span><em>fmt=None</em>, <em>datefmt=None</em>, <em>style='%'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/logger.html#AccSecFormatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.logger.AccSecFormatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Formatter" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Formatter</span></code></a></p>
+<p>micro-second formatter</p>
+<p>Initialize the formatter with specified format strings.</p>
+<p>Initialize the formatter either with the specified format string, or a
+default as described above. Allow for specialized date formatting with
+the optional datefmt argument. If datefmt is omitted, you get an
+ISO8601-like (or RFC 3339-like) format.</p>
+<p>Use a style parameter of ‘%’, ‘{‘ or ‘$’ to specify that you want to
+use one of %-formatting, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str.format" title="(in Python v3.10)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">str.format()</span></code></a> (<code class="docutils literal notranslate"><span class="pre">{}</span></code>) formatting or
+<a class="reference external" href="https://docs.python.org/3/library/string.html#string.Template" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">string.Template</span></code></a> formatting in your format string.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 3.2: </span>Added the <code class="docutils literal notranslate"><span class="pre">style</span></code> parameter.</p>
+</div>
+<dl class="method">
+<dt id="scingestor.logger.AccSecFormatter.converter">
+<code class="descname">converter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scingestor.logger.AccSecFormatter.converter" title="Permalink to this definition">¶</a></dt>
+<dd><p>timestamp[, tz] -&gt; tz’s local time from POSIX timestamp.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scingestor.logger.AccSecFormatter.formatTime">
+<code class="descname">formatTime</code><span class="sig-paren">(</span><em>record</em>, <em>datefmt=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/logger.html#AccSecFormatter.formatTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.logger.AccSecFormatter.formatTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the creation time of the specified LogRecord as formatted text.</p>
+<p>This method should be called from format() by a formatter which
+wants to make use of a formatted time. This method can be overridden
+in formatters to provide for any specific requirement, but the
+basic behaviour is as follows: if datefmt (a string) is specified,
+it is used with time.strftime() to format the creation time of the
+record. Otherwise, an ISO8601-like (or RFC 3339-like) format is used.
+The resulting string is returned. This function uses a user-configurable
+function to convert the creation time to a tuple. By default,
+time.localtime() is used; to change this for a particular formatter
+instance, set the ‘converter’ attribute to a function with the same
+signature as time.localtime() or time.gmtime(). To change it for all
+formatters, for example if you want all logging times to be shown in GMT,
+set the ‘converter’ attribute in the Formatter class.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="function">
 <dt id="scingestor.logger.get_logger">
 <code class="descclassname">scingestor.logger.</code><code class="descname">get_logger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/logger.html#get_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.logger.get_logger" title="Permalink to this definition">¶</a></dt>
@@ -375,7 +418,7 @@ leave datasets unchanged</p>
 
 <dl class="function">
 <dt id="scingestor.logger.init_logger">
-<code class="descclassname">scingestor.logger.</code><code class="descname">init_logger</code><span class="sig-paren">(</span><em>name='scingestor.logger'</em>, <em>level='debug'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/logger.html#init_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.logger.init_logger" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">scingestor.logger.</code><code class="descname">init_logger</code><span class="sig-paren">(</span><em>name='scingestor.logger'</em>, <em>level='debug'</em>, <em>timestamps=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/logger.html#init_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.logger.init_logger" title="Permalink to this definition">¶</a></dt>
 <dd><p>init logger</p>
 </dd></dl>
 

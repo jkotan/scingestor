@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>scingestor.datasetIngest &#8212; SciCat Dataset Ingestor 0.0.6 documentation</title>
+    <title>scingestor.datasetIngest &#8212; SciCat Dataset Ingestor 0.0.7 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -288,7 +288,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
 
-    <span class="n">init_logger</span><span class="p">(</span><span class="s2">&quot;SciCatDatasetIngestor&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">log</span><span class="p">)</span>
+    <span class="n">init_logger</span><span class="p">(</span><span class="s2">&quot;SciCatDatasetIngestor&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
     <span class="n">di</span> <span class="o">=</span> <span class="n">DatasetIngest</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
     <span class="n">di</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>

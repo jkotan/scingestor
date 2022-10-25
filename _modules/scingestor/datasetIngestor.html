@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>scingestor.datasetIngestor &#8212; SciCat Dataset Ingestor 0.0.6 documentation</title>
+    <title>scingestor.datasetIngestor &#8212; SciCat Dataset Ingestor 0.0.7 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -97,8 +97,8 @@
 <span class="sd">        :type meta: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        :param beamtimefile: beamtime filename</span>
 <span class="sd">        :type beamtimefile: :obj:`str`</span>
-<span class="sd">        :param doiprefix: doiprefix</span>
-<span class="sd">        :type doiprefix: :obj:`str`</span>
+<span class="sd">        :param pidprefix: pidprefix</span>
+<span class="sd">        :type pidprefix: :obj:`str`</span>
 <span class="sd">        :param ingestorcred: ingestor credential</span>
 <span class="sd">        :type ingestorcred: :obj:`str`</span>
 <span class="sd">        :param scicat_url: scicat_url</span>
@@ -130,7 +130,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__relpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">bpath</span><span class="p">)</span>
 
         <span class="c1">#: (:obj:`str`) doi prefix</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span> <span class="o">=</span> <span class="s2">&quot;10.3204&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pidprefix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># self.__pidprefix = &quot;10.3204&quot;</span>
         <span class="c1">#: (:obj:`str`) username</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__username</span> <span class="o">=</span> <span class="s1">&#39;ingestor&#39;</span>
         <span class="c1">#: (:obj:`str`) update strategy</span>
@@ -178,7 +179,7 @@
         <span class="c1">#: (:obj:`str`) datablock shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
             <span class="s2">&quot; -s *.pyc,*</span><span class="si">{datablockpostfix}</span><span class="s2">,*</span><span class="si">{scanpostfix}</span><span class="s2">,*~ &quot;</span> \
-            <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
+            <span class="s2">&quot; -p </span><span class="si">{pidprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot; -w </span><span class="si">{ownergroup}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -c </span><span class="si">{accessgroups}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -o </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{datablockpostfix}</span><span class="s2"> &quot;</span>
@@ -187,7 +188,7 @@
             <span class="s2">&quot; -s *.pyc,*</span><span class="si">{datablockpostfix}</span><span class="s2">,*</span><span class="si">{scanpostfix}</span><span class="s2">,*~ &quot;</span> \
             <span class="s2">&quot; -w </span><span class="si">{ownergroup}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -c </span><span class="si">{accessgroups}</span><span class="s2">&quot;</span> \
-            <span class="s2">&quot; -p </span><span class="si">{doiprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
+            <span class="s2">&quot; -p </span><span class="si">{pidprefix}</span><span class="s2">/</span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
         <span class="c1">#: (:obj:`str`) datablock path postfix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datablockscanpath</span> <span class="o">=</span> <span class="s2">&quot; </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span>
 
@@ -230,14 +231,15 @@
 
         <span class="c1">#: (:obj:`str`) access groups</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__accessgroups</span> <span class="o">=</span> \
-            <span class="s2">&quot;</span><span class="si">{beamtimeid}</span><span class="s2">-clbt,</span><span class="si">{beamtimeid}</span><span class="s2">-dmgt,</span><span class="si">{beamline}</span><span class="s2">dmgt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{beamtimeid}</span><span class="s2">-dmgt,</span><span class="si">{beamtimeid}</span><span class="s2">-clbt,</span><span class="si">{beamtimeid}</span><span class="s2">-part,&quot;</span> \
+            <span class="s2">&quot;</span><span class="si">{beamline}</span><span class="s2">dmgt,</span><span class="si">{beamline}</span><span class="s2">staff&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">beamtimeid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">,</span> <span class="n">beamline</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__bl</span><span class="p">)</span>
         <span class="k">if</span> <span class="s2">&quot;accessGroups&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__meta</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__accessgroups</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__meta</span><span class="p">[</span><span class="s2">&quot;accessGroups&quot;</span><span class="p">])</span>
 
         <span class="c1">#: (:obj:`str`) owner group</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ownergroup</span> <span class="o">=</span> \
-            <span class="s2">&quot;</span><span class="si">{beamtimeid}</span><span class="s2">-part&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{beamtimeid}</span><span class="s2">-dmgt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">beamtimeid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">)</span>
         <span class="k">if</span> <span class="s2">&quot;ownerGroup&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__meta</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__ownergroup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__meta</span><span class="p">[</span><span class="s2">&quot;ownerGroup&quot;</span><span class="p">]</span>
@@ -260,8 +262,8 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__metapath</span><span class="p">):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__metapath</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s2">&quot;doiprefix&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;doi_prefix&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;dataset_pid_prefix&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__pidprefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;dataset_pid_prefix&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="s2">&quot;ingestor_credential_file&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;ingestor_credential_file&quot;</span><span class="p">])</span> <span class="k">as</span> <span class="n">fl</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__incd</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -399,7 +401,7 @@
             <span class="s2">&quot;relpath&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__relpath</span><span class="p">,</span>
             <span class="s2">&quot;beamtimeid&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">,</span>
             <span class="s2">&quot;beamline&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bl</span><span class="p">,</span>
-            <span class="s2">&quot;doiprefix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span><span class="p">,</span>
+            <span class="s2">&quot;pidprefix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pidprefix</span><span class="p">,</span>
             <span class="s2">&quot;beamtimefile&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bfile</span><span class="p">,</span>
             <span class="s2">&quot;scanpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span><span class="p">,</span>
             <span class="s2">&quot;datablockpostfix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__datablockpostfix</span><span class="p">,</span>
@@ -809,7 +811,7 @@
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">pid</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span><span class="p">,</span> <span class="n">mdct</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">])</span>
+            <span class="n">pid</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pidprefix</span><span class="p">,</span> <span class="n">mdct</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">])</span>
             <span class="c1"># check if dataset with the pid exists</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                 <span class="s1">&#39;DatasetIngestor: Check if dataset exists: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pid</span><span class="p">))</span>
@@ -974,12 +976,12 @@
                 <span class="n">smt</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
                 <span class="n">mt</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">smt</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;datasetId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
-                    <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">)):</span>
+                    <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pidprefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">)):</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                     <span class="s2">&quot;Wrong datasetId </span><span class="si">%s</span><span class="s2"> for DESY beamtimeId </span><span class="si">%s</span><span class="s2"> in  </span><span class="si">%s</span><span class="s2">&quot;</span>
                     <span class="o">%</span> <span class="p">(</span><span class="n">mt</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">,</span> <span class="n">metafile</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;datasetId&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span><span class="p">,</span> <span class="n">pid</span><span class="p">):</span>
-                <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;datasetId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__doiprefix</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;datasetId&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pidprefix</span><span class="p">,</span> <span class="n">pid</span><span class="p">):</span>
+                <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;datasetId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pidprefix</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
                 <span class="n">smt</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">mt</span><span class="p">)</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metafile</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mf</span><span class="p">:</span>
                     <span class="n">mf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">smt</span><span class="p">)</span>
