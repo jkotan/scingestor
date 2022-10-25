@@ -614,6 +614,7 @@ def main():
         "-l", "--log", dest="log",
         help="logging level, i.e. debug, info, warning, error, critical",
         default="info")
+
     try:
         options = parser.parse_args()
     except Exception as e:
@@ -623,7 +624,8 @@ def main():
         print("")
         sys.exit(255)
 
-    init_logger("SciCatDatasetIngestor", options.log)
+    init_logger("SciCatDatasetIngestor", options.log,
+                False if options.runtime else True)
 
     bw = BeamtimeWatcher(options)
     bw.start()

@@ -1,4 +1,5 @@
-2021-10-13 Jan Kotanski <jan.kotanski@desy.de>
+2021-10-26 Jan Kotanski <jan.kotanski@desy.de>
+	* add timestamps to logger
 	* update default ownerGroup and accessGroups (#123)
 	* change doi_prefix to dataset_pid_prefix (#124)
 	* tagged as 0.0.7
