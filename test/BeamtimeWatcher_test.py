@@ -179,9 +179,10 @@ optional arguments:
 
         vl, er, et = self.runtestexcept(
             ['scicat_dataset_ingestor'], SystemExit)
-        self.assertEqual(
-            'WARNING : BeamtimeWatcher: Beamtime directories not defined\n',
-            er)
+        self.assertTrue(
+            er.endswith(
+                'WARNING : BeamtimeWatcher: '
+                'Beamtime directories not defined\n'))
         self.assertEqual('', vl)
 
     def test_config_empty(self):
@@ -200,10 +201,10 @@ optional arguments:
             for cmd in commands:
                 vl, er, et = self.runtestexcept(
                     cmd, SystemExit)
-                self.assertEqual(
-                    'WARNING : BeamtimeWatcher: '
-                    'Beamtime directories not defined\n',
-                    er)
+                self.assertTrue(
+                    er.endswith(
+                        'WARNING : BeamtimeWatcher: '
+                        'Beamtime directories not defined\n'))
                 self.assertEqual('', vl)
         finally:
             if os.path.isfile(cfgfname):

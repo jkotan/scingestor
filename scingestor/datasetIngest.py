@@ -256,7 +256,7 @@ def main():
         print("")
         sys.exit(255)
 
-    init_logger("SciCatDatasetIngestor", options.log)
+    init_logger("SciCatDatasetIngestor", options.log, False)
 
     di = DatasetIngest(options)
     di.start()

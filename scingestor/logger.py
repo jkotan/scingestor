@@ -17,6 +17,7 @@
 #
 
 import logging
+import datetime
 
 levels = {'debug': logging.DEBUG,
           'info': logging.INFO,
@@ -27,7 +28,20 @@ levels = {'debug': logging.DEBUG,
 _logger = None
 
 
-def init_logger(name=__name__, level='debug'):
+class AccSecFormatter(logging.Formatter):
+    """ micro-second formatter
+    """
+
+    converter = datetime.datetime.fromtimestamp
+
+    def formatTime(self, record, datefmt=None):
+        currentdatatime = self.converter(record.created)
+        strftime = currentdatatime.strftime("%Y-%m-%d %H:%M:%S")
+        mstrftime = "%s.%04d" % (strftime, record.msecs * 10)
+        return mstrftime
+
+
+def init_logger(name=__name__, level='debug', timestamps=True):
     """ init logger
     """
     global _logger
@@ -36,10 +50,12 @@ def init_logger(name=__name__, level='debug'):
     _logger.setLevel(ll)
     stdout_handler = logging.StreamHandler()
     stdout_handler.setLevel(ll)
-    stdout_handler.setFormatter(
-        logging.Formatter('%(levelname)s : %(message)s'))
-    # logging.Formatter("%(created)s : %(levelname)s : %(message)s",
-    #                   "%Y-%m-%d %H:%M:%S"))
+    fmt = logging.Formatter('%(levelname)s : %(message)s')
+    if timestamps:
+        fmt = AccSecFormatter("%(asctime)s : %(levelname)s : %(message)s")
+    else:
+        fmt = logging.Formatter('%(levelname)s : %(message)s')
+    stdout_handler.setFormatter(fmt)
     _logger.addHandler(stdout_handler)
 
 
