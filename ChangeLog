@@ -1,5 +1,6 @@
 2021-10-26 Jan Kotanski <jan.kotanski@desy.de>
-	* add timestamps to logger
+	* impove checks for random test output (#128)
+	* add timestamps to logger (#127)
 	* update default ownerGroup and accessGroups (#123)
 	* change doi_prefix to dataset_pid_prefix (#124)
 	* tagged as 0.0.7
