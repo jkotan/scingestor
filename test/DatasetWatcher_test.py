@@ -28,6 +28,7 @@ import shutil
 import time
 import json
 import uuid
+import re
 
 from scingestor import beamtimeWatcher
 from scingestor import safeINotifier
@@ -188,13 +189,17 @@ class DatasetWatcherTest(unittest.TestCase):
         er = mystderr.getvalue()
         return vl, er, etxt
 
-    def sortmarkedlines(self, text, marks=None):
+    def sortmarkedlines(self, text, marks=None, replace=None):
+        replace = replace or {}
         marks = marks or []
         if isinstance(text, list):
             ltext = text
         else:
             ltext = text.split("\n")
         for bg, ed in marks:
+            for il in range(bg, ed):
+                for it, ot in replace.items():
+                    ltext[il] = re.sub(it, ot, ltext[il])
             ltext[bg:ed] = sorted(ltext[bg:ed])
         return "\n".join(ltext)
 
@@ -2527,9 +2532,10 @@ class DatasetWatcherTest(unittest.TestCase):
                                 cnt6=(cnt + 5), cnt7=(cnt + 6),
                                 det1="../lambda1/", det2="../lambda2/",
                                 sc1='myscan_00001', sc2='myscan_00002'),
-                        [(5, 11)])
+                        [(5, 11)], {'watch [0-9]:': 'watch:'})
                     self.assertEqual(
-                        pattern, self.sortmarkedlines(dseri, [(5, 11)]))
+                        pattern, self.sortmarkedlines(
+                            dseri, [(5, 11)], {'watch [0-9]:': 'watch:'}))
                 except Exception:
                     print(er)
                     raise
@@ -3155,9 +3161,10 @@ class DatasetWatcherTest(unittest.TestCase):
                                 cnt6=(cnt + 5), cnt7=(cnt + 6),
                                 det1="../lambda1/", det2="../lambda2/",
                                 sc1='myscan_00001', sc2='myscan_00002'),
-                        [(5, 11)])
+                        [(5, 11)], {'watch [0-9]:': 'watch:'})
                     self.assertEqual(
-                        pattern, self.sortmarkedlines(dseri, [(5, 11)]))
+                        pattern, self.sortmarkedlines(
+                            dseri, [(5, 11)], {'watch [0-9]:': 'watch:'}))
                 except Exception:
                     print(er)
                     raise
