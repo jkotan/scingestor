@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "SCINGESTOR" "1" "Oct 18, 2022" "0.0" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "Oct 25, 2022" "0.0" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .
@@ -711,11 +711,56 @@ stop the watcher
 .SS scingestor.logger module
 .INDENT 0.0
 .TP
+.B class scingestor.logger.AccSecFormatter(fmt=None, datefmt=None, style=\(aq%\(aq)
+Bases: \fI\%logging.Formatter\fP
+.sp
+micro\-second formatter
+.sp
+Initialize the formatter with specified format strings.
+.sp
+Initialize the formatter either with the specified format string, or a
+default as described above. Allow for specialized date formatting with
+the optional datefmt argument. If datefmt is omitted, you get an
+ISO8601\-like (or RFC 3339\-like) format.
+.sp
+Use a style parameter of ‘%’, ‘{‘ or ‘$’ to specify that you want to
+use one of %\-formatting, \fI\%str.format()\fP (\fB{}\fP) formatting or
+\fI\%string.Template\fP formatting in your format string.
+.sp
+Changed in version 3.2: Added the \fBstyle\fP parameter.
+
+.INDENT 7.0
+.TP
+.B converter()
+timestamp[, tz] \-> tz’s local time from POSIX timestamp.
+.UNINDENT
+.INDENT 7.0
+.TP
+.B formatTime(record, datefmt=None)
+Return the creation time of the specified LogRecord as formatted text.
+.sp
+This method should be called from format() by a formatter which
+wants to make use of a formatted time. This method can be overridden
+in formatters to provide for any specific requirement, but the
+basic behaviour is as follows: if datefmt (a string) is specified,
+it is used with time.strftime() to format the creation time of the
+record. Otherwise, an ISO8601\-like (or RFC 3339\-like) format is used.
+The resulting string is returned. This function uses a user\-configurable
+function to convert the creation time to a tuple. By default,
+time.localtime() is used; to change this for a particular formatter
+instance, set the ‘converter’ attribute to a function with the same
+signature as time.localtime() or time.gmtime(). To change it for all
+formatters, for example if you want all logging times to be shown in GMT,
+set the ‘converter’ attribute in the Formatter class.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
 .B scingestor.logger.get_logger()
 .UNINDENT
 .INDENT 0.0
 .TP
-.B scingestor.logger.init_logger(name=\(aqscingestor.logger\(aq, level=\(aqdebug\(aq)
+.B scingestor.logger.init_logger(name=\(aqscingestor.logger\(aq, level=\(aqdebug\(aq, timestamps=True)
 init logger
 .UNINDENT
 .SS scingestor.safeINotifier module
