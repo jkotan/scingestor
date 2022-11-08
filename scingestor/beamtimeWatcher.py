@@ -614,6 +614,9 @@ def main():
         "-l", "--log", dest="log",
         help="logging level, i.e. debug, info, warning, error, critical",
         default="info")
+    parser.add_argument(
+        "-f", "--log-file", dest="logfile",
+        help="log file name")
 
     try:
         options = parser.parse_args()
@@ -625,7 +628,8 @@ def main():
         sys.exit(255)
 
     init_logger("SciCatDatasetIngestor", options.log,
-                False if options.runtime else True)
+                False if options.runtime else True,
+                options.logfile)
 
     bw = BeamtimeWatcher(options)
     bw.start()

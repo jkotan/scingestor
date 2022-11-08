@@ -1,3 +1,7 @@
+2021-11-11 Jan Kotanski <jan.kotanski@desy.de>
+	* add rotating file logger (#133)
+	* tagged as 0.0.8
+
 2021-10-26 Jan Kotanski <jan.kotanski@desy.de>
 	* impove checks for random test output (#128)
 	* add timestamps to logger (#127)

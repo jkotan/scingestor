@@ -17,7 +17,10 @@
 #
 
 import logging
+import logging.handlers
 import datetime
+import os
+
 
 levels = {'debug': logging.DEBUG,
           'info': logging.INFO,
@@ -41,24 +44,52 @@ class AccSecFormatter(logging.Formatter):
         return mstrftime
 
 
-def init_logger(name=__name__, level='debug', timestamps=True):
+def init_logger(name=__name__, level='debug', timestamps=True, logfile=None):
     """ init logger
+
+    :param name: logger name
+    :type name: :obj:`str`
+    :param level: logging level
+    :type level: :obj:`str`
+    :param timestamps: timestamps flag
+    :type timestamps: :obj:`bool`
+    :param logfile: logger file name
+    :type logfile: :obj:`str`
     """
+
     global _logger
     _logger = logging.getLogger()
+
+    rollover = False
+    if logfile:
+        rollover = os.path.isfile(logfile)
+
     ll = levels.get(level, "debug")
     _logger.setLevel(ll)
-    stdout_handler = logging.StreamHandler()
-    stdout_handler.setLevel(ll)
+    if logfile:
+        handler = logging.handlers.RotatingFileHandler(
+            logfile, backupCount=5)
+    else:
+        handler = logging.StreamHandler()
+    handler.setLevel(ll)
     fmt = logging.Formatter('%(levelname)s : %(message)s')
     if timestamps:
         fmt = AccSecFormatter("%(asctime)s : %(levelname)s : %(message)s")
     else:
         fmt = logging.Formatter('%(levelname)s : %(message)s')
-    stdout_handler.setFormatter(fmt)
-    _logger.addHandler(stdout_handler)
+    handler.setFormatter(fmt)
+    _logger.addHandler(handler)
+    if logfile and rollover:
+        for h in _logger.handlers:
+            if isinstance(h, logging.handlers.BaseRotatingHandler):
+                h.doRollover()
 
 
 def get_logger():
+    """ provides logger object
+
+    :rtype: :class:`logging.logger`
+    :returns: logger object
+    """
     global _logger
     return _logger
