@@ -247,6 +247,9 @@ def main():
         "-l", "--log", dest="log",
         help="logging level, i.e. debug, info, warning, error, critical",
         default="info")
+    parser.add_argument(
+        "-f", "--log-file", dest="logfile",
+        help="log file name")
     try:
         options = parser.parse_args()
     except Exception as e:
@@ -256,7 +259,8 @@ def main():
         print("")
         sys.exit(255)
 
-    init_logger("SciCatDatasetIngestor", options.log, False)
+    init_logger("SciCatDatasetIngestor", options.log, False,
+                options.logfile)
 
     di = DatasetIngest(options)
     di.start()
