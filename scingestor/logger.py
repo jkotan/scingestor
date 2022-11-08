@@ -59,7 +59,11 @@ def init_logger(name=__name__, level='debug', timestamps=True, logfile=None):
 
     global _logger
     _logger = logging.getLogger()
-    rollover = os.path.isfile(logfile)
+
+    rollover = False
+    if logfile:
+        rollover = os.path.isfile(logfile)
+
     ll = levels.get(level, "debug")
     _logger.setLevel(ll)
     if logfile:
@@ -77,7 +81,8 @@ def init_logger(name=__name__, level='debug', timestamps=True, logfile=None):
     _logger.addHandler(handler)
     if logfile and rollover:
         for h in _logger.handlers:
-            h.doRollover()
+            if isinstance(h, logging.handlers.BaseRotatingHandler):
+                h.doRollover()
 
 
 def get_logger():
