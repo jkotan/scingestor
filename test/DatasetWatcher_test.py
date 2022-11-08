@@ -248,13 +248,17 @@ class DatasetWatcherTest(unittest.TestCase):
                 basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        logfname = "%s_%s.log" % (self.__class__.__name__, fun)
+        logfname1 = "%s_%s.log.1" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r10 --log debug'
-                     % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r10 -l debug'
-                     % cfgfname).split()]
+        commands = [('scicat_dataset_ingestor -c %s -f %s -r10 '
+                     % (cfgfname, logfname)).split(),
+                    ('scicat_dataset_ingestor --config %s --log-file %s '
+                     ' -r10 '
+                     % (cfgfname, logfname)).split()]
         # commands.pop()
+        lastlog = None
         try:
             for cmd in commands:
                 time.sleep(1)
@@ -270,6 +274,15 @@ class DatasetWatcherTest(unittest.TestCase):
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
+                with open(logfname) as lfl:
+                    er = lfl.read()
+
+                if lastlog:
+                    with open(logfname1) as lfl:
+                        er2 = lfl.read()
+                    self.assertEqual(er2, lastlog)
+                lastlog = er
+
                 ser = er.split("\n")
                 seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
                 dseri = [ln for ln in seri if "DEBUG :" not in ln]
@@ -450,6 +463,10 @@ class DatasetWatcherTest(unittest.TestCase):
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
+            if os.path.exists(logfname):
+                os.remove(logfname)
+            if os.path.exists(logfname1):
+                os.remove(logfname1)
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
