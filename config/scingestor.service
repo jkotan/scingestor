@@ -1,0 +1,13 @@
+[Unit]
+Description=SciCat Dataset Ingerstor
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/tmp/
+ExecStart=/usr/bin/python3 /usr/bin/scicat_dataset_ingestor -c /etc/scingestor/default.yaml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

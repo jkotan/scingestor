@@ -44,7 +44,7 @@ class AccSecFormatter(logging.Formatter):
         return mstrftime
 
 
-def init_logger(name=__name__, level='debug', timestamps=True, logfile=None):
+def init_logger(name=__name__, level='debug', timestamps=False, logfile=None):
     """ init logger
 
     :param name: logger name
