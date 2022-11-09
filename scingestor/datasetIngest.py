@@ -255,6 +255,11 @@ def main():
     parser.add_argument(
         "-f", "--log-file", dest="logfile",
         help="log file name")
+    parser.add_argument(
+        "-t", "--timestamps", action="store_true",
+        default=False, dest="timestamps",
+        help="timestamps in logs")
+
     try:
         options = parser.parse_args()
     except Exception as e:
@@ -264,8 +269,8 @@ def main():
         print("")
         sys.exit(255)
 
-    init_logger("SciCatDatasetIngestor", options.log, False,
-                options.logfile)
+    init_logger("SciCatDatasetIngest", options.log,
+                options.timestamps, options.logfile)
 
     di = DatasetIngest(options)
     di.start()

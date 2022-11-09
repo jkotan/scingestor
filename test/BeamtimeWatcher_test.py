@@ -69,7 +69,8 @@ class BeamtimeWatcherTest(unittest.TestCase):
         self.helperror = "Error: too few arguments\n"
 
         self.helpinfo = """usage: scicat_dataset_ingestor [-h]""" \
-            """[-c CONFIG] [-r RUNTIME] [-l LOG] [-f LOGFILE]
+            """[-c CONFIG] [-r RUNTIME] [-l LOG]
+                               [-f LOGFILE] [-t]
 
 BeamtimeWatcher service SciCat Dataset ingestior
 
@@ -83,6 +84,8 @@ optional arguments:
       """debug, info, warning, error, critical
   -f LOGFILE, --log-file LOGFILE
                         log file name
+  -t, --timestamps      timestamps in logs
+
  examples:
       scicat_dataset_ingestor -c ~/.scingestor.yaml
        scicat_dataset_ingestor -c ~/.scingestor.yaml -l debug

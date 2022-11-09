@@ -1,0 +1,13 @@
+beamtime_dirs:
+  - /gpfs/current
+chmod_json_files: 0o666
+scicat_url: http://localhost:8881/api/v3
+ingestor_credential_file: /root/.private/scingestor
+inotify_timeout: 1
+get_event_timeout: 0.1
+ingestor_log_dir: "/gpfs/current/scratch_bl/scingestor"
+metadata_in_log_dir: True
+dataset_update_strategy: create
+owner_access_groups_from_proposal: True
+max_scandir_depth: 1
+dataset_pid_prefix: ""

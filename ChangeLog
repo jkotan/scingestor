@@ -1,5 +1,6 @@
 2021-11-11 Jan Kotanski <jan.kotanski@desy.de>
 	* add rotating file logger (#133)
+	* add a switch for timestamps (#135)
 	* tagged as 0.0.8
 
 2021-10-26 Jan Kotanski <jan.kotanski@desy.de>
