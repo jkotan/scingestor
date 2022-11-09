@@ -19,7 +19,7 @@ import os
 import threading
 import time
 import queue
-
+import socket
 
 from .datasetWatcher import DatasetWatcher
 from .safeINotifier import SafeINotifier
@@ -90,10 +90,12 @@ class ScanDirWatcher(threading.Thread):
         self.__ds_pattern = "scicat-datasets-{beamtimeid}.lst"
         #: (:obj:`str`) indested scicat dataset file pattern
         self.__ids_pattern = "scicat-ingested-datasets-{beamtimeid}.lst"
+        #: (:obj:`str`) indested scicat dataset file pattern
+        self.__hostname = socket.hethostname()
 
         #: (:obj:`int`) notifier ID
         self.__notifier = None
-        #: (:obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
+        #: (obj:`dict` <:obj:`int`, :obj:`str`>) watch description paths
         self.__wd_to_path = {}
         #: (:obj:`dict` <:obj:`int`, :obj:`str`>)
         #:                              beamtime watch description paths
@@ -140,10 +142,10 @@ class ScanDirWatcher(threading.Thread):
 
         #: (:obj:`str`) datasets file name
         self.__dslist_filename = self.__ds_pattern.format(
-            beamtimeid=self.__beamtimeId)
+            beamtimeid=self.__beamtimeId, hostname=self.__hostname)
         #: (:obj:`str`) ingescted datasets file name
         self.__idslist_filename = self.__ids_pattern.format(
-            beamtimeid=self.__beamtimeId)
+            beamtimeid=self.__beamtimeId, hostname=self.__hostname)
         #: (:obj:`str`) datasets file name
         self.__dslist_fullname = os.path.join(
             self.__path, self.__dslist_filename)

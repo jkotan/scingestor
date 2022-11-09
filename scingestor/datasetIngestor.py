@@ -24,6 +24,7 @@ import subprocess
 import requests
 import time
 import enum
+import socket
 
 from .logger import get_logger
 
@@ -92,6 +93,8 @@ class DatasetIngestor:
         self.__bfile = beamtimefile
         #: (:obj:`dict` <:obj:`str`, `any`>) beamtime metadata
         self.__meta = meta
+        #: (:obj:`str`) indested scicat dataset file pattern
+        self.__hostname = socket.hethostname()
 
         bpath, _ = os.path.split(beamtimefile)
         #: (:obj:`str`) relative scan path to beamtime path
@@ -374,7 +377,8 @@ class DatasetIngestor:
             "scanpostfix": self.__scanpostfix,
             "datablockpostfix": self.__datablockpostfix,
             "ownergroup": self.__ownergroup,
-            "accessgroups": self.__accessgroups
+            "accessgroups": self.__accessgroups,
+            "hostname": self.__hostname
         }
 
         get_logger().debug(
