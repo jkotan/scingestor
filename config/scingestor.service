@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/tmp/
-ExecStart=/usr/bin/python3 /usr/bin/scicat_dataset_ingestor -c /home/jkotan/scicat/scingestor/test/config/myconfig.yaml
+ExecStart=/usr/bin/python3 /usr/bin/scicat_dataset_ingestor -c /etc/scingestor/default.yaml
 Restart=always
 
 [Install]

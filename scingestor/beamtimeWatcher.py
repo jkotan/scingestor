@@ -619,7 +619,7 @@ def main():
         help="log file name")
     parser.add_argument(
         "-t", "--timestamps", action="store_true",
-	default=False, dest="timestamps",
+        default=False, dest="timestamps",
         help="timestamps in logs")
 
     try:
