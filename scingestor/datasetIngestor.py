@@ -94,7 +94,7 @@ class DatasetIngestor:
         #: (:obj:`dict` <:obj:`str`, `any`>) beamtime metadata
         self.__meta = meta
         #: (:obj:`str`) indested scicat dataset file pattern
-        self.__hostname = socket.hethostname()
+        self.__hostname = socket.gethostname()
 
         bpath, _ = os.path.split(beamtimefile)
         #: (:obj:`str`) relative scan path to beamtime path

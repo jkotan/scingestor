@@ -91,7 +91,7 @@ class ScanDirWatcher(threading.Thread):
         #: (:obj:`str`) indested scicat dataset file pattern
         self.__ids_pattern = "scicat-ingested-datasets-{beamtimeid}.lst"
         #: (:obj:`str`) indested scicat dataset file pattern
-        self.__hostname = socket.hethostname()
+        self.__hostname = socket.gethostname()
 
         #: (:obj:`int`) notifier ID
         self.__notifier = None
