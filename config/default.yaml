@@ -11,3 +11,5 @@ dataset_update_strategy: create
 owner_access_groups_from_proposal: True
 max_scandir_depth: 1
 dataset_pid_prefix: ""
+datasets_filename_pattern: "scicat-datasets-{beamtimeid}-{hostname}.lst"
+ingested_datasets_filename_pattern: "scicat-datasets-{beamtimeid}-{hostname}.lst"
