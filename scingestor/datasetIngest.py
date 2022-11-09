@@ -23,6 +23,7 @@ import argparse
 import os
 import glob
 import json
+import socket
 
 from .configuration import load_config
 from .datasetIngestor import DatasetIngestor
@@ -71,6 +72,8 @@ class DatasetIngest:
         self.__ds_pattern = "scicat-datasets-{beamtimeid}.lst"
         #: (:obj:`str`) indested scicat dataset file pattern
         self.__ids_pattern = "scicat-ingested-datasets-{beamtimeid}.lst"
+        #: (:obj:`str`) indested scicat dataset file pattern
+        self.__hostname = socket.gethostname()
 
         #: (:obj:`str`) ingestor log directory
         self.__log_dir = ""
@@ -168,9 +171,11 @@ class DatasetIngest:
         path = conv.to_core(path)
 
         #: (:obj:`str`) datasets file name
-        dslist_filename = self.__ds_pattern.format(beamtimeid=beamtimeId)
+        dslist_filename = self.__ds_pattern.format(
+            beamtimeid=beamtimeId, hostname=self.__hostname)
         #: (:obj:`str`) ingescted datasets file name
-        idslist_filename = self.__ids_pattern.format(beamtimeid=beamtimeId)
+        idslist_filename = self.__ids_pattern.format(
+            beamtimeid=beamtimeId, hostname=self.__hostname)
         dslfiles = glob.glob(
             "%s/**/%s" % (path, dslist_filename), recursive=True)
         for fn in dslfiles:
