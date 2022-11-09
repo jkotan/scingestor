@@ -66,7 +66,7 @@ ingestor_credential_file: /home/jkotan/gpfs/pwd
 
 ### Pattern keywords for configuration variables
 
-The  **datasets_filename_pattern**, **ingested_datasets_filename_pattern**  and **ingestor_log_dir** can contain the *{beamtimeid}* and *{hostname}* keywords,  e.g. `"scicat-ingested-datasets-{beamtimeid}.lst"` or `"scicat-ingested-datasets-{beamtimeid}-{hostname}.lst"` which is instantiated during the ingestor execution.
+The  **datasets_filename_pattern**, **ingested_datasets_filename_pattern**  and **ingestor_log_dir** can contain the *{beamtimeid}* and *{hostname}* keywords,  e.g. `"scicat-ingested-datasets-{beamtimeid}.lst"` or `"scicat-ingested-datasets-{hostname}-{beamtimeid}.lst"` which is instantiated during the ingestor execution.
 
 Similarly, **nxs_dataset_metadata_generator**, **dataset_metadata_generator**, **datablock_metadata_generator**,  **datablock_metadata_stream_generator**, **datablock_metadata_generator_scanpath_postfix**, **chmod_generator_switch**, **relative_path_generator_switch** can contain the following keywords: *{beamtimeid}* , *{scanname}*, *{chmod}*, *{scanpath}*, *{metapath}*, *{relpath}*, *{beamtimeid}*, *{beamline}*, *{pidprefix}*, *{beamtimefile}*, *{scanpostfix}*, *{datablockpostfix}*, *{ownergroup}*, *{accessgroups}*, *{hostname}*
 
