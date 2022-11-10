@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "SCINGESTOR" "1" "Oct 25, 2022" "0.0" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "Nov 10, 2022" "0.0" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .
@@ -159,9 +159,9 @@ ingestor_credential_file: "{homepath}/gpfs/pwd"
 .UNINDENT
 .SS Pattern keywords for configuration variables
 .sp
-The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_var_dir\fP can contain the \fI{beamtimeid}\fP keyword,  e.g. \fB"scicat\-ingested\-datasets\-{beamtimeid}.lst"\fP which is instantiated during the ingestor execution.
+The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_var_dir\fP can contain the \fI{beamtimeid}\fP and \fI{hostname}\fP keywords,  e.g. \fB"scicat\-ingested\-datasets\-{beamtimeid}.lst"\fP or \fB"scicat\-ingested\-datasets\-{hostname}\-{beamtimeid}.lst"\fP  which is instantiated during the ingestor execution.
 .sp
-Similarly, \fBnxs_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP
+Similarly, \fBnxs_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP
 .SH SCICAT_DATASET_INGEST
 .sp
 Re\-ingestion script for SciCat RawDatasets and OrigDatablocks is usually
@@ -757,11 +757,34 @@ set the ‘converter’ attribute in the Formatter class.
 .INDENT 0.0
 .TP
 .B scingestor.logger.get_logger()
+provides logger object
+.INDENT 7.0
+.TP
+.B Return type
+\fBlogging.logger\fP
+.TP
+.B Returns
+logger object
+.UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B scingestor.logger.init_logger(name=\(aqscingestor.logger\(aq, level=\(aqdebug\(aq, timestamps=True)
+.B scingestor.logger.init_logger(name=\(aqscingestor.logger\(aq, level=\(aqdebug\(aq, timestamps=False, logfile=None)
 init logger
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fI\%str\fP) – logger name
+.IP \(bu 2
+\fBlevel\fP (\fI\%str\fP) – logging level
+.IP \(bu 2
+\fBtimestamps\fP (\fI\%bool\fP) – timestamps flag
+.IP \(bu 2
+\fBlogfile\fP (\fI\%str\fP) – logger file name
+.UNINDENT
+.UNINDENT
 .UNINDENT
 .SS scingestor.safeINotifier module
 .INDENT 0.0

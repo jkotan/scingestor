@@ -1,6 +1,9 @@
 include README.md
 include LICENSE
 include COPYRIGHT
+include config/default_template.yaml
+include config/format_default.sh
+include config/scingestor.service
 include man/scingestor.1
 include man/scicat_dataset_ingestor.1
 include man/scicat_dataset_ingest.1
