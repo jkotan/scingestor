@@ -6,8 +6,8 @@ scicat_url: http://localhost:8881
 ingestor_credential_file: /home/jkotan/gpfs/pwd
 inotify_timeout: 1
 get_event_timeout: 0.1
-ingestor_log_dir: "/home/jkotan/gpfs/current/scratch_bl/scingestor"
-metadata_in_log_dir: True
+ingestor_var_dir: "/home/jkotan/gpfs/current/scratch_bl/scingestor"
+metadata_in_var_dir: True
 dataset_update_strategy: create
 owner_access_groups_from_proposal: True
 max_scandir_depth: 1

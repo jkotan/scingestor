@@ -215,7 +215,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -235,9 +235,9 @@ class DatasetIngestTest(unittest.TestCase):
             'recheck_beamtime_file_interval: 1000\n' \
             'rrecheck_dataset_list_interval: 1000\n' \
             'scicat_url: "{url}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -430,7 +430,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -439,9 +439,9 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -610,7 +610,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -634,9 +634,9 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "version"\n' \
             '  - "scientificMetadata"\n' \
             '  - "endTime"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -860,7 +860,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -869,9 +869,9 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -1148,7 +1148,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfidslist = os.path.join(cfsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         os.makedirs(coredir, exist_ok=True)
@@ -1173,11 +1173,11 @@ class DatasetIngestTest(unittest.TestCase):
                     'scandir_blacklist:\n' \
                     '  - "{scratchdir}"\n' \
                     'use_corepath_as_scandir: true\n' \
-                    'ingestor_log_dir: "{logdir}"\n' \
+                    'ingestor_var_dir: "{vardir}"\n' \
                     'ingestor_credential_file: "{credfile}"\n'.format(
                         scratchdir=scratchdir,
                         basedir=fdirname, url=url,
-                        logdir=logdir, credfile=credfile)
+                        vardir=vardir, credfile=credfile)
                 with open(cfgfname, "w+") as cf:
                     cf.write(cfg)
 
@@ -1454,7 +1454,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -1464,9 +1464,9 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'dataset_update_strategy: "no"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -1692,7 +1692,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -1702,9 +1702,9 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'dataset_update_strategy: "mixed"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -1989,7 +1989,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         dfname = "%s/%s.dat" % (fsubdirname2, 'myscan_00002')
         os.mkdir(fdirname)
@@ -1999,9 +1999,9 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -2283,7 +2283,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         dfname = "%s/%s.dat" % (fsubdirname2, 'myscan_00002')
         os.mkdir(fdirname)
@@ -2294,9 +2294,9 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'dataset_update_strategy: "no"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -2541,7 +2541,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         dfname = "%s/%s.dat" % (fsubdirname2, 'myscan_00002')
         os.mkdir(fdirname)
@@ -2552,9 +2552,9 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'dataset_update_strategy: "mixed"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -2839,7 +2839,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         dfname = "%s/%s.dat" % (fsubdirname2, 'myscan_00002')
         os.mkdir(fdirname)
@@ -2850,9 +2850,9 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'dataset_update_strategy: "create"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -3137,7 +3137,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -3146,9 +3146,9 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -3372,7 +3372,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -3382,9 +3382,9 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'dataset_update_strategy: "no"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -3571,7 +3571,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -3581,9 +3581,9 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'dataset_update_strategy: "mixed"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -3807,7 +3807,7 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -3817,9 +3817,9 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'dataset_update_strategy: "create"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -4064,9 +4064,9 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/tmp/scingestor_log_%s/{beamtimeid}" % uuid.uuid4().hex
-        llogdir = logdir.format(beamtimeid="99001234")
-        fidslist = "%s%s" % (logdir, fidslist)
+        vardir = "/tmp/scingestor_log_%s/{beamtimeid}" % uuid.uuid4().hex
+        lvardir = vardir.format(beamtimeid="99001234")
+        fidslist = "%s%s" % (vardir, fidslist)
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -4075,9 +4075,9 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -4242,8 +4242,8 @@ class DatasetIngestTest(unittest.TestCase):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
-            if os.path.isdir(llogdir):
-                shutil.rmtree(llogdir)
+            if os.path.isdir(lvardir):
+                shutil.rmtree(lvardir)
 
     def test_datasetfile_repeat_log(self):
         fun = sys._getframe().f_code.co_name
@@ -4272,8 +4272,8 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
-        fidslist = "%s%s" % (logdir, fidslist)
+        vardir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
+        fidslist = "%s%s" % (vardir, fidslist)
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -4282,9 +4282,9 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -4425,8 +4425,8 @@ class DatasetIngestTest(unittest.TestCase):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
-            if os.path.isdir(logdir):
-                shutil.rmtree(logdir)
+            if os.path.isdir(vardir):
+                shutil.rmtree(vardir)
 
     def test_datasetfile_touch_log(self):
         fun = sys._getframe().f_code.co_name
@@ -4456,8 +4456,8 @@ class DatasetIngestTest(unittest.TestCase):
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
 
-        logdir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
-        fidslist = "%s%s" % (logdir, fidslist)
+        vardir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
+        fidslist = "%s%s" % (vardir, fidslist)
 
         cred = "12342345"
         os.mkdir(fdirname)
@@ -4467,9 +4467,9 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -4666,8 +4666,8 @@ class DatasetIngestTest(unittest.TestCase):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
-            if os.path.isdir(logdir):
-                shutil.rmtree(logdir)
+            if os.path.isdir(vardir):
+                shutil.rmtree(vardir)
 
     def test_datasetfile_exist_log_meta(self):
         fun = sys._getframe().f_code.co_name
@@ -4696,9 +4696,9 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/tmp/scingestor_log_%s/{beamtimeid}" % uuid.uuid4().hex
-        llogdir = logdir.format(beamtimeid="99001234")
-        fidslist = "%s%s" % (llogdir, fidslist)
+        vardir = "/tmp/scingestor_log_%s/{beamtimeid}" % uuid.uuid4().hex
+        lvardir = vardir.format(beamtimeid="99001234")
+        fidslist = "%s%s" % (lvardir, fidslist)
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -4712,11 +4712,11 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'dataset_pid_prefix: "10.3204"\n' \
-            'metadata_in_log_dir: true\n' \
+            'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -4752,36 +4752,36 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngest: dataset list: {dslist}\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Generating metadata: '
-                    '{sc1} {logdir}{subdir2}/{sc1}.scan.json\n'
+                    '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
-                    ' {sc1} {logdir}{subdir2}/{sc1}.origdatablock.json\n'
+                    ' {sc1} {vardir}{subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '10.3204/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
                     '10.3204/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
-                    '{logdir}{subdir2}/{sc1}.scan.json\n'
+                    '{vardir}{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
-                    '{logdir}{subdir2}/{sc1}.origdatablock.json\n'
+                    '{vardir}{subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Generating metadata: '
-                    '{sc2} {logdir}{subdir2}/{sc2}.scan.json\n'
+                    '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
-                    ' {sc2} {logdir}{subdir2}/{sc2}.origdatablock.json\n'
+                    ' {sc2} {vardir}{subdir2}/{sc2}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '10.3204/99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
                     '10.3204/99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
-                    '{logdir}{subdir2}/{sc2}.scan.json\n'
+                    '{vardir}{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
-                    '{logdir}{subdir2}/{sc2}.origdatablock.json\n'
+                    '{vardir}{subdir2}/{sc2}.origdatablock.json\n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
                             dslist=fdslist,
-                            logdir=llogdir,
+                            vardir=lvardir,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
                 self.assertEqual(
@@ -4876,16 +4876,16 @@ class DatasetIngestTest(unittest.TestCase):
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
-                if os.path.isdir("%s%s" % (llogdir, fsubdirname)):
-                    shutil.rmtree("%s%s" % (llogdir, fsubdirname))
+                if os.path.isdir("%s%s" % (lvardir, fsubdirname)):
+                    shutil.rmtree("%s%s" % (lvardir, fsubdirname))
         finally:
             self.__server.pidprefix = oldpidprefix
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
-            if os.path.isdir(llogdir):
-                shutil.rmtree(llogdir)
+            if os.path.isdir(lvardir):
+                shutil.rmtree(lvardir)
 
     def test_datasetfile_repeat_log_meta(self):
         fun = sys._getframe().f_code.co_name
@@ -4914,8 +4914,8 @@ class DatasetIngestTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
-        fidslist = "%s%s" % (logdir, fidslist)
+        vardir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
+        fidslist = "%s%s" % (vardir, fidslist)
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -4928,12 +4928,12 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'metadata_in_log_dir: true\n' \
+            'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'dataset_pid_prefix: "10.3204"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -4969,13 +4969,13 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngest: dataset list: {dslist}\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
-                    ' {sc1} {logdir}{subdir2}/{sc1}.origdatablock.json\n'
+                    ' {sc1} {vardir}{subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
-                    ' {sc2} {logdir}{subdir2}/{sc2}.origdatablock.json\n'
+                    ' {sc2} {vardir}{subdir2}/{sc2}.origdatablock.json\n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
-                            logdir=logdir,
+                            vardir=vardir,
                             dslist=fdslist,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
@@ -5071,16 +5071,16 @@ class DatasetIngestTest(unittest.TestCase):
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
-                if os.path.isdir("%s%s" % (logdir, fsubdirname)):
-                    shutil.rmtree("%s%s" % (logdir, fsubdirname))
+                if os.path.isdir("%s%s" % (vardir, fsubdirname)):
+                    shutil.rmtree("%s%s" % (vardir, fsubdirname))
         finally:
             self.__server.pidprefix = oldpidprefix
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
-            if os.path.isdir(logdir):
-                shutil.rmtree(logdir)
+            if os.path.isdir(vardir):
+                shutil.rmtree(vardir)
 
     def test_datasetfile_touch_log_meta(self):
         fun = sys._getframe().f_code.co_name
@@ -5110,8 +5110,8 @@ class DatasetIngestTest(unittest.TestCase):
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
 
-        logdir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
-        fidslist = "%s%s" % (logdir, fidslist)
+        vardir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
+        fidslist = "%s%s" % (vardir, fidslist)
 
         cred = "12342345"
         os.mkdir(fdirname)
@@ -5121,12 +5121,12 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'metadata_in_log_dir: true\n' \
+            'metadata_in_var_dir: true\n' \
             'dataset_pid_prefix: "10.3204"\n' \
             'owner_access_groups_from_proposal: true\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         prop = {
             "ownerGroup": "mygroup",
@@ -5159,9 +5159,9 @@ class DatasetIngestTest(unittest.TestCase):
                 # print(er)
 
                 dsfname1 = "%s%s/%s.scan.json" % \
-                           (logdir, fsubdirname2, 'myscan_00001')
+                           (vardir, fsubdirname2, 'myscan_00001')
                 dbfname2 = "%s%s/%s.origdatablock.json" % \
-                           (logdir, fsubdirname2, 'myscan_00002')
+                           (vardir, fsubdirname2, 'myscan_00002')
                 # print(dbfname2)
                 # import time
                 # mtmds = os.path.getmtime(dsfname1)
@@ -5191,25 +5191,25 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngest: dataset list: {dslist}\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
-                    ' {sc1} {logdir}{subdir2}/{sc1}.origdatablock.json\n'
+                    ' {sc1} {vardir}{subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '10.3204/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
                     '10.3204/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
-                    '{logdir}{subdir2}/{sc1}.scan.json\n'
+                    '{vardir}{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
-                    ' {sc2} {logdir}{subdir2}/{sc2}.origdatablock.json\n'
+                    ' {sc2} {vardir}{subdir2}/{sc2}.origdatablock.json\n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
-                    ' {sc2} {logdir}{subdir2}/{sc2}.origdatablock.json\n'
+                    ' {sc2} {vardir}{subdir2}/{sc2}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock:'
-                    ' {logdir}{subdir2}/{sc2}.origdatablock.json\n'
+                    ' {vardir}{subdir2}/{sc2}.origdatablock.json\n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
                             dslist=fdslist,
-                            logdir=logdir,
+                            vardir=vardir,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
                 self.assertEqual(
@@ -5328,16 +5328,16 @@ class DatasetIngestTest(unittest.TestCase):
                      'size': 629}, skip=["dataFileList", "size"])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
-                if os.path.isdir("%s%s" % (logdir, fsubdirname)):
-                    shutil.rmtree("%s%s" % (logdir, fsubdirname))
+                if os.path.isdir("%s%s" % (vardir, fsubdirname)):
+                    shutil.rmtree("%s%s" % (vardir, fsubdirname))
         finally:
             self.__server.pidprefix = oldpidprefix
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
-            if os.path.isdir(logdir):
-                shutil.rmtree(logdir)
+            if os.path.isdir(vardir):
+                shutil.rmtree(vardir)
 
 
 if __name__ == '__main__':

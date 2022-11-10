@@ -65,7 +65,7 @@ The configuration written in YAML can contain the following variables
 .IP \(bu 2
 \fBbeamtime_base_dir\fP \fI(str)\fP , default: \fB""\fP
 .IP \(bu 2
-\fBingestor_log_dir\fP \fI(str)\fP , default: \fB""\fP
+\fBingestor_var_dir\fP \fI(str)\fP , default: \fB""\fP
 .IP \(bu 2
 \fBingestor_username\fP \fI(str)\fP , default: \fB"ingestor"\fP
 .IP \(bu 2
@@ -87,7 +87,7 @@ The configuration written in YAML can contain the following variables
 .IP \(bu 2
 \fBdatablock_metadata_postfix\fP \fI(str)\fP , default: \fB".origdatablock.json"\fP
 .IP \(bu 2
-\fBmetadata_in_log_dir\fP \fI(bool)\fP , default: \fBFalse\fP
+\fBmetadata_in_var_dir\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
 \fBuse_corepath_as_scandir\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
@@ -159,7 +159,7 @@ ingestor_credential_file: /home/jkotan/gpfs/pwd
 .UNINDENT
 .SS Pattern keywords for configuration variables
 .sp
-The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_log_dir\fP can contain the \fI{beamtimeid}\fP keyword,  e.g. \fB"scicat\-ingested\-datasets\-{beamtimeid}.lst"\fP which is instantiated during the ingestor execution.
+The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_var_dir\fP can contain the \fI{beamtimeid}\fP keyword,  e.g. \fB"scicat\-ingested\-datasets\-{beamtimeid}.lst"\fP which is instantiated during the ingestor execution.
 .sp
 Similarly, \fBnxs_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP
 .SH SCICAT_DATASET_INGEST

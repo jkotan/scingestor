@@ -151,13 +151,13 @@ class ScanDirWatcher(threading.Thread):
             self.__path, self.__dslist_filename)
 
         #: (:obj:`str`) ingestor log directory
-        self.__log_dir = ""
-        if "ingestor_log_dir" in self.__config.keys():
-            self.__log_dir = str(
-                self.__config["ingestor_log_dir"]).format(
+        self.__var_dir = ""
+        if "ingestor_var_dir" in self.__config.keys():
+            self.__var_dir = str(
+                self.__config["ingestor_var_dir"]).format(
                     beamtimeid=self.__beamtimeId)
-        if self.__log_dir == "/":
-            self.__log_dir = ""
+        if self.__var_dir == "/":
+            self.__var_dir = ""
 
     def _start_notifier(self, path):
         """ start notifier
@@ -250,8 +250,8 @@ class ScanDirWatcher(threading.Thread):
                     if fn not in self.__dataset_watchers.keys():
                         ifn = fn[:-(len(self.__dslist_filename))] + \
                             self.__idslist_filename
-                        if self.__log_dir:
-                            ifn = "%s%s" % (self.__log_dir, ifn)
+                        if self.__var_dir:
+                            ifn = "%s%s" % (self.__var_dir, ifn)
                         ipath, _ = os.path.split(ifn)
                         if not os.path.isdir(ipath):
                             os.makedirs(ipath, exist_ok=True)
@@ -323,8 +323,8 @@ class ScanDirWatcher(threading.Thread):
                                     ifn = \
                                         fn[:-(len(self.__dslist_filename))] \
                                         + self.__idslist_filename
-                                    if self.__log_dir:
-                                        ifn = "%s%s" % (self.__log_dir, ifn)
+                                    if self.__var_dir:
+                                        ifn = "%s%s" % (self.__var_dir, ifn)
                                     ipath, _ = os.path.split(ifn)
                                     if not os.path.isdir(ipath):
                                         os.makedirs(ipath, exist_ok=True)

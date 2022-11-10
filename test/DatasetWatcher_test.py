@@ -231,7 +231,7 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -243,9 +243,9 @@ class DatasetWatcherTest(unittest.TestCase):
             'scicat_users_login_path: "Users/login"\n' \
             'scicat_datasets_path: "RawDatasets"\n' \
             'scicat_datablocks_path: "OrigDatablocks"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         logfname = "%s_%s.log" % (self.__class__.__name__, fun)
@@ -499,7 +499,7 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         username = "myingestor"
         with open(credfile, "w") as cf:
@@ -520,10 +520,10 @@ class DatasetWatcherTest(unittest.TestCase):
             'datasets_filename_pattern: "sc-ds-{{beamtimeid}}.lst"\n' \
             'ingested_datasets_filename_pattern: ' \
             '"sc-ids-{{beamtimeid}}.lst"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir,
+                basedir=fdirname, url=url, vardir=vardir,
                 username=username, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
@@ -763,7 +763,7 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -839,9 +839,9 @@ class DatasetWatcherTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'max_scandir_depth: 2\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -1031,7 +1031,7 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -1107,9 +1107,9 @@ class DatasetWatcherTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'max_scandir_depth: 1\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -1218,7 +1218,7 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         username = "myingestor"
         with open(credfile, "w") as cf:
@@ -1228,10 +1228,10 @@ class DatasetWatcherTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'max_scandir_depth: 2\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir,
+                basedir=fdirname, url=url, vardir=vardir,
                 username=username, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
@@ -1472,7 +1472,7 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         username = "myingestor"
         with open(credfile, "w") as cf:
@@ -1482,10 +1482,10 @@ class DatasetWatcherTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'max_scandir_depth: 1\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir,
+                basedir=fdirname, url=url, vardir=vardir,
                 username=username, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
@@ -1633,7 +1633,7 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -1646,10 +1646,10 @@ class DatasetWatcherTest(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'scan_metadata_postfix: "{dspostfix}"\n' \
             'datablock_metadata_postfix: "{datablockpostfix}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'relative_path_in_datablock: true\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile,
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile,
                 dspostfix=dspostfix, datablockpostfix=datablockpostfix)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
@@ -1884,7 +1884,7 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         username = "myingestor"
         with open(credfile, "w") as cf:
@@ -1893,11 +1893,11 @@ class DatasetWatcherTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'relative_path_in_datablock: true\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir,
+                basedir=fdirname, url=url, vardir=vardir,
                 username=username, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
@@ -2136,7 +2136,7 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         username = "myingestor"
         with open(credfile, "w") as cf:
@@ -2165,11 +2165,11 @@ class DatasetWatcherTest(unittest.TestCase):
             ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} "\n' \
             'datablock_metadata_generator_scanpath_postfix: '\
             ' " {{scanpath}}/{{scanname}}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'relative_path_in_datablock: true\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir,
+                basedir=fdirname, url=url, vardir=vardir,
                 username=username, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
@@ -2408,8 +2408,8 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
-        fidslist = "%s%s" % (logdir, fidslist)
+        vardir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
+        fidslist = "%s%s" % (vardir, fidslist)
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -2418,10 +2418,10 @@ class DatasetWatcherTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'relative_path_in_datablock: true\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -2660,8 +2660,8 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.assertEqual(paths, ['raw/lambda2/data2.dat'])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
-                if os.path.isdir(logdir):
-                    shutil.rmtree(logdir)
+                if os.path.isdir(vardir):
+                    shutil.rmtree(vardir)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
@@ -2701,8 +2701,8 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
-        fidslist = "%s%s" % (logdir, fidslist)
+        vardir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
+        fidslist = "%s%s" % (vardir, fidslist)
         cred = "12342345"
         username = "myingestor"
         with open(credfile, "w") as cf:
@@ -2711,11 +2711,11 @@ class DatasetWatcherTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'relative_path_in_datablock: true\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir,
+                basedir=fdirname, url=url, vardir=vardir,
                 username=username, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
@@ -2987,8 +2987,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         ['raw/lambda{ct}/data{ct}.dat'.format(ct=(i + 1))])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
-                if os.path.isdir(logdir):
-                    shutil.rmtree(logdir)
+                if os.path.isdir(vardir):
+                    shutil.rmtree(vardir)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
@@ -3025,9 +3025,9 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/tmp/scingestor_log_%s/{beamtimeid}" % uuid.uuid4().hex
-        llogdir = logdir.format(beamtimeid="99001236")
-        fidslist = "%s%s" % (llogdir, fidslist)
+        vardir = "/tmp/scingestor_log_%s/{beamtimeid}" % uuid.uuid4().hex
+        lvardir = vardir.format(beamtimeid="99001236")
+        fidslist = "%s%s" % (lvardir, fidslist)
         cred = "12342345"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
@@ -3036,13 +3036,13 @@ class DatasetWatcherTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'relative_path_generator_switch: " -r {{relpath}} "\n' \
             'owner_access_groups_from_proposal: true\n' \
-            'metadata_in_log_dir: true\n' \
+            'metadata_in_var_dir: true\n' \
             'relative_path_in_datablock: true\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir, credfile=credfile)
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
         prop = {
             "ownerGroup": "mygroup",
@@ -3120,11 +3120,11 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: '
                         'Ingesting: {dslist} {sc1} {det1}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
-                        '{sc1} {logdir}{subdir2}/{sc1}.scan.json\n'
+                        '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc1} {det1} '
-                        '{logdir}{subdir2}/{sc1}.origdatablock.json\n'
+                        '{vardir}{subdir2}/{sc1}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '/99001236/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
@@ -3132,11 +3132,11 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: '
                         'Ingesting: {dslist} {sc2} {det2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
-                        '{sc2} {logdir}{subdir2}/{sc2}.scan.json\n'
+                        '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {det2} '
-                        '{logdir}{subdir2}/{sc2}.origdatablock.json\n'
+                        '{vardir}{subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '/99001236/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
@@ -3170,7 +3170,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         .format(basedir=fdirname, btmeta=fullbtmeta,
                                 subdir=fsubdirname, subdir2=fsubdirname2,
                                 detdir1=fsubdirnamedet1,
-                                logdir=llogdir,
+                                vardir=lvardir,
                                 detdir2=fsubdirnamedet2,
                                 dslist=fdslist, idslist=fidslist,
                                 cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
@@ -3285,8 +3285,8 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.assertEqual(paths, ['raw/lambda2/data2.dat'])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
-                if os.path.isdir(llogdir):
-                    shutil.rmtree(llogdir)
+                if os.path.isdir(lvardir):
+                    shutil.rmtree(lvardir)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
@@ -3326,8 +3326,8 @@ class DatasetWatcherTest(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
-        fidslist = "%s%s" % (logdir, fidslist)
+        vardir = "/tmp/scingestor_log_%s" % uuid.uuid4().hex
+        fidslist = "%s%s" % (vardir, fidslist)
         cred = "12342345"
         username = "myingestor"
         with open(credfile, "w") as cf:
@@ -3340,14 +3340,14 @@ class DatasetWatcherTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'metadata_in_log_dir: true\n' \
+            'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
             'relative_path_generator_switch: " -r {{relpath}} "\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'relative_path_in_datablock: true\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir,
+                basedir=fdirname, url=url, vardir=vardir,
                 username=username, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
@@ -3444,11 +3444,11 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Ingesting: {dslist}'
                         ' {sc1} {det1}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
-                        '{sc1} {logdir}{subdir2}/{sc1}.scan.json\n'
+                        '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc1} {det1} '
-                        '{logdir}{subdir2}/{sc1}.origdatablock.json\n'
+                        '{vardir}{subdir2}/{sc1}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '/99001236/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
@@ -3456,11 +3456,11 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Ingesting: {dslist}'
                         ' {sc2} {det2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
-                        '{sc2} {logdir}{subdir2}/{sc2}.scan.json\n'
+                        '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {det2} '
-                        '{logdir}{subdir2}/{sc2}.origdatablock.json\n'
+                        '{vardir}{subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '/99001236/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
@@ -3476,11 +3476,11 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Ingesting: {dslist} '
                         '{sc3} {det3}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
-                        '{sc3} {logdir}{subdir2}/{sc3}.scan.json\n'
+                        '{sc3} {vardir}{subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc3} {det3} '
-                        '{logdir}{subdir2}/{sc3}.origdatablock.json\n'
+                        '{vardir}{subdir2}/{sc3}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '/99001236/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
@@ -3488,11 +3488,11 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Ingesting: {dslist} '
                         '{sc4} {det4}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
-                        '{sc4} {logdir}{subdir2}/{sc4}.scan.json\n'
+                        '{sc4} {vardir}{subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc4} {det4} '
-                        '{logdir}{subdir2}/{sc4}.origdatablock.json\n'
+                        '{vardir}{subdir2}/{sc4}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '/99001236/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
@@ -3533,7 +3533,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '{detdir4}\n'
                         .format(basedir=fdirname, btmeta=fullbtmeta,
                                 subdir=fsubdirname, subdir2=fsubdirname2,
-                                logdir=logdir,
+                                vardir=vardir,
                                 detdir1=fsubdirnamedet1,
                                 detdir2=fsubdirnamedet2,
                                 detdir3=fsubdirnamedet3,
@@ -3625,8 +3625,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         ['raw/lambda{ct}/data{ct}.dat'.format(ct=(i + 1))])
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
-                if os.path.isdir(logdir):
-                    shutil.rmtree(logdir)
+                if os.path.isdir(vardir):
+                    shutil.rmtree(vardir)
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
