@@ -111,8 +111,7 @@ class DatasetIngest:
                         homepath=self.__homepath))
 
         if "ingestor_var_dir" in self.__config.keys():
-            self.__var_dir = self.__config["ingestor_var_dir"].format(
-                homepath=self.__homepath)
+            self.__var_dir = self.__config["ingestor_var_dir"]
         if self.__var_dir == "/":
             self.__var_dir = ""
 
@@ -196,7 +195,9 @@ class DatasetIngest:
             ifn = fn[:-(len(dslist_filename))] + idslist_filename
             if self.__var_dir:
                 ifn = "%s%s" % (
-                    self.__var_dir.format(beamtimeid=beamtimeId), ifn)
+                    self.__var_dir.format(
+                        beamtimeid=beamtimeId,
+                        homepath=self.__homepath), ifn)
             ipath, _ = os.path.split(ifn)
             if not os.path.isdir(ipath):
                 os.makedirs(ipath, exist_ok=True)
