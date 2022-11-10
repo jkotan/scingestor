@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 0.0.7 documentation</title>
+    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 0.0.8 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -53,7 +53,7 @@ is finished. It can be executed by</p>
 <li><strong>ingestor_credential_file</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
 <li><strong>beamtime_dirs</strong> <em>(list&lt;str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">[]</span></code></li>
 <li><strong>beamtime_base_dir</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></li>
-<li><strong>ingestor_log_dir</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></li>
+<li><strong>ingestor_var_dir</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></li>
 <li><strong>ingestor_username</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;ingestor&quot;</span></code></li>
 <li><strong>dataset_pid_prefix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></li>
 <li><strong>dataset_update_strategy</strong> (<code class="docutils literal notranslate"><span class="pre">&quot;no&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;patch&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;create&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mixed&quot;</span></code>) , default: <code class="docutils literal notranslate"><span class="pre">&quot;patch&quot;</span></code></li>
@@ -64,7 +64,7 @@ is finished. It can be executed by</p>
 <li><strong>oned_in_metadata</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
 <li><strong>scan_metadata_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.scan.json&quot;</span></code></li>
 <li><strong>datablock_metadata_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.origdatablock.json&quot;</span></code></li>
-<li><strong>metadata_in_log_dir</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
+<li><strong>metadata_in_var_dir</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
 <li><strong>use_corepath_as_scandir</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
 <li><strong>beamtime_filename_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;beamtime-metadata-&quot;</span></code></li>
 <li><strong>beamtime_filename_prefix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.json&quot;</span></code></li>
@@ -94,17 +94,17 @@ is finished. It can be executed by</p>
 </ul>
 <p>e.g.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">beamtime_dirs</span><span class="p">:</span>
-  <span class="o">-</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">jkotan</span><span class="o">/</span><span class="n">gpfs</span><span class="o">/</span><span class="n">current</span>
-  <span class="o">-</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">jkotan</span><span class="o">/</span><span class="n">gpfs</span><span class="o">/</span><span class="n">commissioning</span>
+  <span class="o">-</span> <span class="s2">&quot;</span><span class="si">{homepath}</span><span class="s2">/gpfs/current&quot;</span>
+  <span class="o">-</span> <span class="s2">&quot;</span><span class="si">{homepath}</span><span class="s2">/gpfs/commissioning&quot;</span>
 <span class="n">scicat_url</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8881</span>
-<span class="n">ingestor_credential_file</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">jkotan</span><span class="o">/</span><span class="n">gpfs</span><span class="o">/</span><span class="n">pwd</span>
+<span class="n">ingestor_credential_file</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{homepath}</span><span class="s2">/gpfs/pwd&quot;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="pattern-keywords-for-configuration-variables">
 <h3>Pattern keywords for configuration variables<a class="headerlink" href="#pattern-keywords-for-configuration-variables" title="Permalink to this headline">¶</a></h3>
-<p>The  <strong>datasets_filename_pattern</strong>, <strong>ingested_datasets_filename_pattern</strong>  and <strong>ingestor_log_dir</strong> can contain the <em>{beamtimeid}</em> keyword,  e.g. <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{beamtimeid}.lst&quot;</span></code> which is instantiated during the ingestor execution.</p>
-<p>Similarly, <strong>nxs_dataset_metadata_generator</strong>, <strong>dataset_metadata_generator</strong>, <strong>datablock_metadata_generator</strong>,  <strong>datablock_metadata_stream_generator</strong>, <strong>datablock_metadata_generator_scanpath_postfix</strong>, <strong>chmod_generator_switch</strong>, <strong>relative_path_generator_switch</strong>  can contain the following keywords: <em>{beamtimeid}</em> , <em>{scanname}</em>, <em>{chmod}</em>, <em>{scanpath}</em>, <em>{metapath}</em>, <em>{relpath}</em>, <em>{beamtimeid}</em>, <em>{beamline}</em>, <em>{doiprefix}</em>, <em>{beamtimefile}</em>, <em>{scanpostfix}</em>, <em>{datablockpostfix}</em>, <em>{ownergroup}</em>, <em>{accessgroups}</em></p>
+<p>The  <strong>datasets_filename_pattern</strong>, <strong>ingested_datasets_filename_pattern</strong>  and <strong>ingestor_var_dir</strong> can contain the <em>{beamtimeid}</em> and <em>{hostname}</em> keywords,  e.g. <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{beamtimeid}.lst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{hostname}-{beamtimeid}.lst&quot;</span></code>  which is instantiated during the ingestor execution.</p>
+<p>Similarly, <strong>nxs_dataset_metadata_generator</strong>, <strong>dataset_metadata_generator</strong>, <strong>datablock_metadata_generator</strong>,  <strong>datablock_metadata_stream_generator</strong>, <strong>datablock_metadata_generator_scanpath_postfix</strong>, <strong>chmod_generator_switch</strong>, <strong>relative_path_generator_switch</strong>  can contain the following keywords: <em>{beamtimeid}</em> , <em>{scanname}</em>, <em>{chmod}</em>, <em>{scanpath}</em>, <em>{metapath}</em>, <em>{relpath}</em>, <em>{beamtimeid}</em>, <em>{beamline}</em>, <em>{doiprefix}</em>, <em>{beamtimefile}</em>, <em>{scanpostfix}</em>, <em>{datablockpostfix}</em>, <em>{ownergroup}</em>, <em>{accessgroups}</em>, <em>{hostname}</em></p>
 </div>
 </div>
 <div class="section" id="scicat-dataset-ingest">
