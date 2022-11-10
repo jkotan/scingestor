@@ -235,7 +235,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         chmod = "0o662"
         os.mkdir(fdirname)
@@ -250,9 +250,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'chmod_json_files: "{chmod}"\n' \
             'chmod_generator_switch: " -x {{chmod}} "\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir,
+                basedir=fdirname, url=url, vardir=vardir,
                 credfile=credfile, chmod=chmod)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
@@ -645,7 +645,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         username = "myingestor"
         with open(credfile, "w") as cf:
@@ -656,10 +656,10 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'oned_in_metadata: true\n' \
             'oned_dataset_generator_switch: " --oned "\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir,
+                basedir=fdirname, url=url, vardir=vardir,
                 username=username, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
@@ -1008,7 +1008,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         cfidslist = os.path.join(cfsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         chmod = "0o662"
         os.mkdir(fdirname)
@@ -1105,9 +1105,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'chmod_json_files: "{chmod}"\n' \
                         'use_corepath_as_scandir: true\n' \
                         'chmod_generator_switch: " -x {{chmod}} "\n' \
-                        'ingestor_log_dir: "{logdir}"\n' \
+                        'ingestor_var_dir: "{vardir}"\n' \
                         'ingestor_credential_file: "{credfile}"\n'.format(
-                            basedir=fdirname, url=url, logdir=logdir,
+                            basedir=fdirname, url=url, vardir=vardir,
                             # scratchdir=cfsubdirnames,
                             scratchdir=arg[10],
                             credfile=credfile, chmod=chmod)
@@ -1470,7 +1470,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         cfidslist = os.path.join(cfsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         username = "myingestor"
         with open(credfile, "w") as cf:
@@ -1543,11 +1543,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     'oned_in_metadata: true\n' \
                     'use_corepath_as_scandir: true\n' \
                     'oned_dataset_generator_switch: " --oned "\n' \
-                    'ingestor_log_dir: "{logdir}"\n' \
+                    'ingestor_var_dir: "{vardir}"\n' \
                     'ingestor_username: "{username}"\n' \
                     'ingestor_credential_file: "{credfile}"\n'.format(
                         scratchdir=scratchdir,
-                        basedir=fdirname, url=url, logdir=logdir,
+                        basedir=fdirname, url=url, vardir=vardir,
                         username=username, credfile=credfile)
 
                 with open(cfgfname, "w+") as cf:
@@ -1849,7 +1849,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         chmod = "0o662"
         os.mkdir(fdirname)
@@ -1866,7 +1866,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'dataset_pid_prefix: "10.3204"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'nxs_dataset_metadata_generator: "nxsfileinfo metadata ' \
             ' -o {{scanpath}}/{{scanname}}{{scanpostfix}} ' \
             ' -x 0o662 ' \
@@ -1888,7 +1888,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'datablock_metadata_generator_scanpath_postfix: '\
             '" {{scanpath}}/{{scanname}} "\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir,
+                basedir=fdirname, url=url, vardir=vardir,
                 credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
@@ -2280,7 +2280,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
-        logdir = "/"
+        vardir = "/"
         cred = "12342345"
         username = "myingestor"
         with open(credfile, "w") as cf:
@@ -2315,10 +2315,10 @@ class DatasetWatcherH5Test(unittest.TestCase):
             ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} "\n' \
             'datablock_metadata_generator_scanpath_postfix: '\
             ' " {{scanpath}}/{{scanname}}"\n' \
-            'ingestor_log_dir: "{logdir}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, logdir=logdir,
+                basedir=fdirname, url=url, vardir=vardir,
                 username=username, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)

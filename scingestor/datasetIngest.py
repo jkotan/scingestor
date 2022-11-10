@@ -76,7 +76,7 @@ class DatasetIngest:
         self.__hostname = socket.gethostname()
 
         #: (:obj:`str`) ingestor log directory
-        self.__log_dir = ""
+        self.__var_dir = ""
 
         #: (:obj:`list` <:obj:`str`>) scandir blacklist
         self.__scandir_blacklist = [
@@ -98,10 +98,10 @@ class DatasetIngest:
            and isinstance(self.__config["beamtime_dirs"], list):
             self.__beamtime_dirs = self.__config["beamtime_dirs"]
 
-        if "ingestor_log_dir" in self.__config.keys():
-            self.__log_dir = self.__config["ingestor_log_dir"]
-        if self.__log_dir == "/":
-            self.__log_dir = ""
+        if "ingestor_var_dir" in self.__config.keys():
+            self.__var_dir = self.__config["ingestor_var_dir"]
+        if self.__var_dir == "/":
+            self.__var_dir = ""
 
         if "beamtime_filename_prefix" in self.__config.keys():
             self.__bt_prefix = self.__config["beamtime_filename_prefix"]
@@ -181,9 +181,9 @@ class DatasetIngest:
         for fn in dslfiles:
             get_logger().info("DatasetIngest: dataset list: %s" % str(fn))
             ifn = fn[:-(len(dslist_filename))] + idslist_filename
-            if self.__log_dir:
+            if self.__var_dir:
                 ifn = "%s%s" % (
-                    self.__log_dir.format(beamtimeid=beamtimeId), ifn)
+                    self.__var_dir.format(beamtimeid=beamtimeId), ifn)
             ipath, _ = os.path.split(ifn)
             if not os.path.isdir(ipath):
                 os.makedirs(ipath, exist_ok=True)

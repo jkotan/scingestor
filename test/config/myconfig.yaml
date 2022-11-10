@@ -2,5 +2,5 @@ beamtime_dirs:
   - /home/jkotan/gpfs/current
   - /home/jkotan/gpfs/commissioning
 scicat_url: http://localhost:8881
-ingestor_log_dir: /
+ingestor_var_dir: /
 ingestor_credential_file: /home/jkotan/gpfs/pwd

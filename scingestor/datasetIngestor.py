@@ -216,20 +216,20 @@ class DatasetIngestor:
             self.__ownergroup = self.__meta["ownerGroup"]
 
         #: (:obj:`bool`) metadata in log dir flag
-        self.__meta_in_log_dir = False
-        if "metadata_in_log_dir" in self.__config.keys():
-            self.__meta_in_log_dir = self.__config["metadata_in_log_dir"]
+        self.__meta_in_var_dir = False
+        if "metadata_in_var_dir" in self.__config.keys():
+            self.__meta_in_var_dir = self.__config["metadata_in_var_dir"]
 
         #: (:obj:`str`) ingestor log directory
-        self.__log_dir = ""
-        if "ingestor_log_dir" in self.__config.keys():
-            self.__log_dir = str(
-                self.__config["ingestor_log_dir"]).format(
+        self.__var_dir = ""
+        if "ingestor_var_dir" in self.__config.keys():
+            self.__var_dir = str(
+                self.__config["ingestor_var_dir"]).format(
                     beamtimeid=self.__bid)
-        if self.__log_dir == "/":
-            self.__log_dir = ""
-        if self.__meta_in_log_dir and self.__log_dir:
-            self.__metapath = "%s%s" % (self.__log_dir, self.__metapath)
+        if self.__var_dir == "/":
+            self.__var_dir = ""
+        if self.__meta_in_var_dir and self.__var_dir:
+            self.__metapath = "%s%s" % (self.__var_dir, self.__metapath)
             if not os.path.isdir(self.__metapath):
                 os.makedirs(self.__metapath, exist_ok=True)
 

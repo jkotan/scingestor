@@ -50,7 +50,7 @@ The configuration written in YAML can contain the following variables
 * **ingestor_credential_file** *(str)* , default: ``None``
 * **beamtime_dirs** *(list\<str\>)* , default: ``[]``
 * **beamtime_base_dir** *(str)* , default: ``""``
-* **ingestor_log_dir** *(str)* , default: ``""``
+* **ingestor_var_dir** *(str)* , default: ``""``
 * **ingestor_username** *(str)* , default: ``"ingestor"``
 * **dataset_pid_prefix** *(str)* , default: ``""``
 * **dataset_update_strategy** (``"no"``, ``"patch"``, ``"create"``, ``"mixed"``) , default: ``"patch"``
@@ -61,7 +61,7 @@ The configuration written in YAML can contain the following variables
 * **oned_in_metadata** *(bool)* , default: ``False``
 * **scan_metadata_postfix** *(str)* , default: ``".scan.json"``
 * **datablock_metadata_postfix** *(str)* , default: ``".origdatablock.json"``
-* **metadata_in_log_dir** *(bool)* , default: ``False``
+* **metadata_in_var_dir** *(bool)* , default: ``False``
 * **use_corepath_as_scandir** *(bool)* , default: ``False``
 * **beamtime_filename_postfix** *(str)* , default: ``"beamtime-metadata-"``
 * **beamtime_filename_prefix** *(str)* , default: ``".json"``
@@ -102,7 +102,7 @@ e.g.
 Pattern keywords for configuration variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The  **datasets_filename_pattern**, **ingested_datasets_filename_pattern**  and **ingestor_log_dir** can contain the *{beamtimeid}* and *{hostname}* keywords,  e.g. ``"scicat-ingested-datasets-{beamtimeid}.lst"`` or ``"scicat-ingested-datasets-{hostname}-{beamtimeid}.lst"``  which is instantiated during the ingestor execution.
+The  **datasets_filename_pattern**, **ingested_datasets_filename_pattern**  and **ingestor_var_dir** can contain the *{beamtimeid}* and *{hostname}* keywords,  e.g. ``"scicat-ingested-datasets-{beamtimeid}.lst"`` or ``"scicat-ingested-datasets-{hostname}-{beamtimeid}.lst"``  which is instantiated during the ingestor execution.
 
 Similarly, **nxs_dataset_metadata_generator**, **dataset_metadata_generator**, **datablock_metadata_generator**,  **datablock_metadata_stream_generator**, **datablock_metadata_generator_scanpath_postfix**, **chmod_generator_switch**, **relative_path_generator_switch**  can contain the following keywords: *{beamtimeid}* , *{scanname}*, *{chmod}*, *{scanpath}*, *{metapath}*, *{relpath}*, *{beamtimeid}*, *{beamline}*, *{doiprefix}*, *{beamtimefile}*, *{scanpostfix}*, *{datablockpostfix}*, *{ownergroup}*, *{accessgroups}*, *{hostname}*
 

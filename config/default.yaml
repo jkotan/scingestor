@@ -1,12 +1,12 @@
 beamtime_dirs:
-  - /gpfs/current
+  - {BEAMTIME_DIR}
 chmod_json_files: 0o666
-scicat_url: http://localhost:8881/api/v3
-ingestor_credential_file: /root/.private/scingestor
+scicat_url: {SCICAT_URL}
+ingestor_credential_file: /var/lib/scingestor/.scingestor.cnf
 inotify_timeout: 1
 get_event_timeout: 0.1
-ingestor_log_dir: "/gpfs/current/scratch_bl/scingestor"
-metadata_in_log_dir: True
+ingestor_var_dir: {INGESTOR_VAR_DIR}
+metadata_in_var_dir: True
 dataset_update_strategy: create
 owner_access_groups_from_proposal: True
 max_scandir_depth: 1
