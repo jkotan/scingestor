@@ -16,7 +16,6 @@ import sys
 #
 if os.path.isfile('conf.py'):
     sys.path.insert(0, os.path.abspath('..'))
-# sys.path.insert(0, '/home/jkotan/ndts/scingestor/scingestor')
 
 
 # -- Project information -----------------------------------------------------

@@ -20,6 +20,7 @@ import threading
 import time
 import queue
 import socket
+import pathlib
 
 from .datasetWatcher import DatasetWatcher
 from .safeINotifier import SafeINotifier
@@ -55,6 +56,9 @@ class ScanDirWatcher(threading.Thread):
 
         #: (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
         self.__config = configuration or {}
+
+        #: (:obj:`str`) home directory
+        self.__homepath = str(pathlib.Path.home())
 
         #: (:obj:`str`) core path
         self.__corepath = meta.get("corePath", None)
@@ -125,7 +129,11 @@ class ScanDirWatcher(threading.Thread):
         ]
         if "scandir_blacklist" in self.__config.keys() \
            and isinstance(self.__config["scandir_blacklist"], list):
-            self.__scandir_blacklist = self.__config["scandir_blacklist"]
+            self.__scandir_blacklist = []
+            for sdir in self.__config["scandir_blacklist"]:
+                if sdir:
+                    self.__scandir_blacklist.append(sdir.format(
+                        homepath=self.__homepath))
 
         if "get_event_timeout" in self.__config.keys():
             try:
@@ -155,7 +163,8 @@ class ScanDirWatcher(threading.Thread):
         if "ingestor_var_dir" in self.__config.keys():
             self.__var_dir = str(
                 self.__config["ingestor_var_dir"]).format(
-                    beamtimeid=self.__beamtimeId)
+                    beamtimeid=self.__beamtimeId,
+                    homepath=self.__homepath)
         if self.__var_dir == "/":
             self.__var_dir = ""
 

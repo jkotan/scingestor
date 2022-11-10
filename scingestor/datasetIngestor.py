@@ -25,6 +25,7 @@ import requests
 import time
 import enum
 import socket
+import pathlib
 
 from .logger import get_logger
 
@@ -75,6 +76,8 @@ class DatasetIngestor:
         """
         #: (:obj:`dict` <:obj:`str`, `any`>) ingestor configuration
         self.__config = configuration or {}
+        #: (:obj:`str`) home directory
+        self.__homepath = str(pathlib.Path.home())
         #: (:obj:`str`) file with a dataset list
         self.__dsfile = dsfile
         #: (:obj:`str`) file with a ingested dataset list
@@ -225,7 +228,8 @@ class DatasetIngestor:
         if "ingestor_var_dir" in self.__config.keys():
             self.__var_dir = str(
                 self.__config["ingestor_var_dir"]).format(
-                    beamtimeid=self.__bid)
+                    beamtimeid=self.__bid,
+                    homepath=self.__homepath)
         if self.__var_dir == "/":
             self.__var_dir = ""
         if self.__meta_in_var_dir and self.__var_dir:
@@ -236,7 +240,8 @@ class DatasetIngestor:
         if "dataset_pid_prefix" in self.__config.keys():
             self.__pidprefix = self.__config["dataset_pid_prefix"]
         if "ingestor_credential_file" in self.__config.keys():
-            with open(self.__config["ingestor_credential_file"]) as fl:
+            with open(self.__config["ingestor_credential_file"].format(
+                    homepath=self.__homepath)) as fl:
                 self.__incd = fl.read().strip()
         if "ingestor_username" in self.__config.keys():
             self.__username = self.__config["ingestor_username"]
@@ -378,7 +383,8 @@ class DatasetIngestor:
             "datablockpostfix": self.__datablockpostfix,
             "ownergroup": self.__ownergroup,
             "accessgroups": self.__accessgroups,
-            "hostname": self.__hostname
+            "hostname": self.__hostname,
+            "homepath": self.__homepath
         }
 
         get_logger().debug(

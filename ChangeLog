@@ -3,6 +3,7 @@
 	* add a switch for timestamps (#135)
 	* add the hostname to the datatset list file patterns (#137)
 	* change ingestor_log_dir to ingestor_var_dir (#139)
+	* add the ingestor homepath to the dir  patterns (#141)
 	* tagged as 0.0.8
 
 2021-10-26 Jan Kotanski <jan.kotanski@desy.de>

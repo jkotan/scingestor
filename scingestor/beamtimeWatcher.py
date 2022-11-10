@@ -24,6 +24,7 @@ import threading
 import argparse
 import queue
 import inotifyx
+import pathlib
 
 from .scanDirWatcher import ScanDirWatcher
 from .safeINotifier import SafeINotifier
@@ -54,6 +55,9 @@ class BeamtimeWatcher:
             self.__config = load_config(options.config) or {}
             get_logger().debug("CONFIGURATION: %s" % str(self.__config))
 
+        #: (:obj:`str`) home directory
+        self.__homepath = str(pathlib.Path.home())
+
         #: (:obj:`list` <:obj:`str`>) beamtime directories
         self.__beamtime_dirs = [
             # "/gpfs/current",
@@ -61,14 +65,19 @@ class BeamtimeWatcher:
         ]
         if "beamtime_dirs" in self.__config.keys() \
            and isinstance(self.__config["beamtime_dirs"], list):
-            self.__beamtime_dirs = self.__config["beamtime_dirs"]
+            self.__beamtime_dirs = []
+            for bdir in self.__config["beamtime_dirs"]:
+                if bdir:
+                    self.__beamtime_dirs.append(bdir.format(
+                        homepath=self.__homepath))
 
         #: (:obj:`str`) beamtime base directories
         self.__beamtime_base_dir = ""
         if "beamtime_base_dir" in self.__config.keys() \
            and self.__config["beamtime_base_dir"]:
             self.__beamtime_base_dir = os.path.abspath(
-                self.__config["beamtime_base_dir"])
+                self.__config["beamtime_base_dir"].format(
+                    homepath=self.__homepath))
 
         #: (:obj:`list` <:obj:`str`>) scandir blacklist
         self.__scandir_blacklist = [
@@ -78,7 +87,11 @@ class BeamtimeWatcher:
         ]
         if "scandir_blacklist" in self.__config.keys() \
            and isinstance(self.__config["scandir_blacklist"], list):
-            self.__scandir_blacklist = self.__config["scandir_blacklist"]
+            self.__scandir_blacklist = []
+            for sdir in self.__config["scandir_blacklist"]:
+                if sdir:
+                    self.__scandir_blacklist.append(sdir.format(
+                        homepath=self.__homepath))
 
         #: (:obj:`bool`) access groups from proposals
         self.__groups_from_proposal = False
