@@ -58,10 +58,10 @@ The configuration written in YAML can contain the following variables
 e.g.
 ```
 beamtime_dirs:
-  - {homepath}/gpfs/current
-  - {homepath}/gpfs/commissioning
+  - "{homepath}/gpfs/current"
+  - "{homepath}/gpfs/commissioning"
 scicat_url: http://localhost:8881
-ingestor_credential_file: {homepath}/gpfs/pwd
+ingestor_credential_file: "{homepath}/gpfs/pwd"
 ```
 
 ### Pattern keywords for configuration variables
