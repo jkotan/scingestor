@@ -1,11 +1,11 @@
 beamtime_dirs:
-  - {BEAMTIME_DIR}
+  - "${BEAMTIME_DIR}"
 chmod_json_files: 0o666
-scicat_url: {SCICAT_URL}
+scicat_url: "${SCICAT_URL}"
 ingestor_credential_file: /var/lib/scingestor/.scingestor.cnf
 inotify_timeout: 1
 get_event_timeout: 0.1
-ingestor_var_dir: {INGESTOR_VAR_DIR}
+ingestor_var_dir: "${INGESTOR_VAR_DIR}"
 metadata_in_var_dir: True
 dataset_update_strategy: create
 owner_access_groups_from_proposal: True
