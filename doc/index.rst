@@ -94,10 +94,10 @@ e.g.
 ::
 
    beamtime_dirs:
-     - /home/jkotan/gpfs/current
-     - /home/jkotan/gpfs/commissioning
+     - {homepath}/gpfs/current
+     - {homepath}/gpfs/commissioning
    scicat_url: http://localhost:8881
-   ingestor_credential_file: /home/jkotan/gpfs/pwd
+   ingestor_credential_file: {homepath}/gpfs/pwd
 
 Pattern keywords for configuration variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

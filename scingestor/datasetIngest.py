@@ -24,6 +24,7 @@ import os
 import glob
 import json
 import socket
+import pathlib
 
 from .configuration import load_config
 from .datasetIngestor import DatasetIngestor
@@ -63,6 +64,9 @@ class DatasetIngest:
             # "/gpfs/commissioning",
         ]
 
+        #: (:obj:`str`) home directory
+        self.__homepath = str(pathlib.Path.home())
+
         #: (:obj:`str`) beamtime file prefix
         self.__bt_prefix = "beamtime-metadata-"
         #: (:obj:`str`) beamtime file postfix
@@ -86,7 +90,11 @@ class DatasetIngest:
         ]
         if "scandir_blacklist" in self.__config.keys() \
            and isinstance(self.__config["scandir_blacklist"], list):
-            self.__scandir_blacklist = self.__config["scandir_blacklist"]
+            self.__scandir_blacklist = []
+            for sdir in self.__config["scandir_blacklist"]:
+                if sdir:
+                    self.__scandir_blacklist.append(sdir.format(
+                        homepath=self.__homepath))
 
         #: (:obj:`bool`) access groups from proposals
         self.__groups_from_proposal = False
@@ -96,10 +104,15 @@ class DatasetIngest:
 
         if "beamtime_dirs" in self.__config.keys() \
            and isinstance(self.__config["beamtime_dirs"], list):
-            self.__beamtime_dirs = self.__config["beamtime_dirs"]
+            self.__beamtime_dirs = []
+            for bdir in self.__config["beamtime_dirs"]:
+                if bdir:
+                    self.__beamtime_dirs.append(bdir.format(
+                        homepath=self.__homepath))
 
         if "ingestor_var_dir" in self.__config.keys():
-            self.__var_dir = self.__config["ingestor_var_dir"]
+            self.__var_dir = self.__config["ingestor_var_dir"].format(
+                homepath=self.__homepath)
         if self.__var_dir == "/":
             self.__var_dir = ""
 
