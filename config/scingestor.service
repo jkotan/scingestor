@@ -5,6 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=root
+Nice=-20
 WorkingDirectory=/tmp/
 ExecStart=/usr/bin/python3 /usr/bin/scicat_dataset_ingestor -c /etc/scingestor/default.yaml
 Restart=always
