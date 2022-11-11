@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "SCINGESTOR" "1" "Nov 10, 2022" "0.0" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "Nov 11, 2022" "0.0" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .
@@ -353,13 +353,13 @@ scicat_dataset_ingestor [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG]
 .B \-h\fP,\fB  \-\-help
 show this help message and exit
 .TP
-.BI \-c \ CONFIG\fP,\fB \ \-\-configuration \ CONFIG
+.BI \-c \ CONFIG\fR,\fB \ \-\-configuration \ CONFIG
 configuration file name
 .TP
-.BI \-r \ RUNTIME\fP,\fB \ \-\-runtime \ RUNTIME
+.BI \-r \ RUNTIME\fR,\fB \ \-\-runtime \ RUNTIME
 stop program after runtime in seconds
 .TP
-.BI \-l \ LOG\fP,\fB \ \-\-log \ LOG
+.BI \-l \ LOG\fR,\fB \ \-\-log \ LOG
 logging level, i.e. debug, info, warning, error, critical
 .UNINDENT
 .UNINDENT
@@ -399,10 +399,10 @@ scicat_dataset_ingest [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG]
 .B \-h\fP,\fB  \-\-help
 show this help message and exit
 .TP
-.BI \-c \ CONFIG\fP,\fB \ \-\-configuration \ CONFIG
+.BI \-c \ CONFIG\fR,\fB \ \-\-configuration \ CONFIG
 configuration file name
 .TP
-.BI \-l \ LOG\fP,\fB \ \-\-log \ LOG
+.BI \-l \ LOG\fR,\fB \ \-\-log \ LOG
 logging level, i.e. debug, info, warning, error, critical
 .UNINDENT
 .UNINDENT
@@ -437,7 +437,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B running = None
+.B running
 (\fI\%bool\fP) running loop flag
 .UNINDENT
 .INDENT 7.0
@@ -638,7 +638,7 @@ waitings datasets list
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class scingestor.datasetIngestor.UpdateStrategy
+.B class scingestor.datasetIngestor.UpdateStrategy(value)
 Bases: \fI\%enum.Enum\fP
 .sp
 Update strategy
@@ -699,7 +699,7 @@ scandir watcher thread
 .UNINDENT
 .INDENT 7.0
 .TP
-.B running = None
+.B running
 (\fI\%bool\fP) running loop flag
 .UNINDENT
 .INDENT 7.0
@@ -711,7 +711,7 @@ stop the watcher
 .SS scingestor.logger module
 .INDENT 0.0
 .TP
-.B class scingestor.logger.AccSecFormatter(fmt=None, datefmt=None, style=\(aq%\(aq)
+.B class scingestor.logger.AccSecFormatter(fmt=None, datefmt=None, style=\(aq%\(aq, validate=True)
 Bases: \fI\%logging.Formatter\fP
 .sp
 micro\-second formatter
@@ -807,18 +807,18 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B masks = None
+.B masks
 (\fI\%str\fP) mask
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name = None
+.B name
 (\fI\%str\fP) name
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class scingestor.safeINotifier.SafeINotifier(group=None, target=None, name=None, args=(), kwargs=None, *, daemon=None)
+.B class scingestor.safeINotifier.SafeINotifier(*args, **kwargs)
 Bases: \fI\%threading.Thread\fP
 .sp
 singleton wrapper for inotifyx
@@ -926,7 +926,7 @@ scandir watcher thread
 .UNINDENT
 .INDENT 7.0
 .TP
-.B running = None
+.B running
 (\fI\%bool\fP) running loop flag
 .UNINDENT
 .INDENT 7.0

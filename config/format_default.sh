@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 # read parameters from the command-line
 if [[ -z $2 ]] ; then
@@ -34,7 +34,7 @@ fi
 
 rm -f ${OUTFILE} ${OUTFILE}.tmp
 
-( echo "cat <<EOF >default.yaml";
+( echo "cat <<EOF >${OUTFILE}";
   cat ${INFILE};
   echo "EOF";
 ) >${OUTFILE}.tmp
