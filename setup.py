@@ -119,6 +119,10 @@ SETUPDATA = dict(
         'scicat_dataset_ingestor',
         'scicat_dataset_ingest'
     ],
+    data_files=[('share/scingestor', ['config/default_template.yaml']),
+                ('share/scingestor', ['config/scingestor.service']),
+                ('share/scingestor', ['config/format_default.sh'])
+                ],
     cmdclass={
         # 'test': TestCommand,
         'build_sphinx': BuildDoc
