@@ -1,3 +1,7 @@
+2021-11-14 Jan Kotanski <jan.kotanski@desy.de>
+	* add hidden_attributes hidden_attributes_generator_switch into the configuration variables (#145)
+	* tagged as 0.1.0
+
 2021-11-11 Jan Kotanski <jan.kotanski@desy.de>
 	* impove files for systemd server (#133)
 	* add rotating file logger (#133)
