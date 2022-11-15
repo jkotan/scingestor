@@ -126,6 +126,8 @@ class DatasetIngestor:
         self.__scicat_datablocks = "OrigDatablocks"
         #: (:obj:`str`) chmod string for json metadata
         self.__chmod = None
+        #: (:obj:`str`) hidden attributes
+        self.__hiddenattributes = None
         #: (:obj:`bool`) oned metadata flag
         self.__oned = False
 
@@ -170,6 +172,8 @@ class DatasetIngestor:
         self.__oned_switch = " --oned  "
         #: (:obj:`str`) chmod generator switch
         self.__chmod_switch = " -x {chmod} "
+        #: (:obj:`str`) hidden attributes generator switch
+        self.__hiddenattributes_switch = " -n {hiddenattributes} "
         #: (:obj:`str`) relpath generator switch
         self.__relpath_switch = " -r {relpath} "
 
@@ -270,6 +274,8 @@ class DatasetIngestor:
                 self.__config["relative_path_in_datablock"]
         if "chmod_json_files" in self.__config.keys():
             self.__chmod = self.__config["chmod_json_files"]
+        if "hidden_attributes" in self.__config.keys():
+            self.__hiddenattributes = self.__config["hidden_attributes"]
         if "oned_in_metadata" in self.__config.keys():
             self.__oned = self.__config["oned_in_metadata"]
 
@@ -299,6 +305,10 @@ class DatasetIngestor:
         if "chmod_generator_switch" in self.__config.keys():
             self.__chmod_switch = \
                 self.__config["chmod_generator_switch"]
+
+        if "hidden_attributes_generator_switch" in self.__config.keys():
+            self.__hiddenattributes_switch = \
+                self.__config["hidden_attributes_generator_switch"]
 
         if "relative_path_generator_switch" in self.__config.keys():
             self.__relpath_switch = \
@@ -339,6 +349,13 @@ class DatasetIngestor:
                 self.__datablockmemcommand = \
                     self.__datablockmemcommand + self.__chmod_switch
 
+        if self.__hiddenattributes is not None:
+            if "dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommand = \
+                    self.__datasetcommand + self.__hiddenattributes_switch
+            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommandnxs = \
+                    self.__datasetcommandnxs + self.__hiddenattributes_switch
         if self.__oned:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
@@ -372,6 +389,7 @@ class DatasetIngestor:
         self.__dctfmt = {
             "scanname": None,
             "chmod": self.__chmod,
+            "hiddenattributes": self.__hiddenattributes,
             "scanpath": self.__path,
             "metapath": self.__metapath,
             "relpath": self.__relpath,
@@ -452,6 +470,7 @@ class DatasetIngestor:
                         **self.__dctfmt))
         if rdss and rdss[0]:
             return rdss[0]
+
         return ""
 
     def _generate_origdatablock_metadata(self, scan):
