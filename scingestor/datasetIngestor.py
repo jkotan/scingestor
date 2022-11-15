@@ -348,15 +348,14 @@ class DatasetIngestor:
                not in self.__config.keys():
                 self.__datablockmemcommand = \
                     self.__datablockmemcommand + self.__chmod_switch
-                
-        if self.__hiddenattributtes is not None:
+
+        if self.__hiddenattributes is not None:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
-                    self.__datasetcommand + self.__hiddenattributtes_switch
+                    self.__datasetcommand + self.__hiddenattributes_switch
             if "nxs_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
-                    self.__datasetcommandnxs + self.__hiddenattributtes_switch
-
+                    self.__datasetcommandnxs + self.__hiddenattributes_switch
         if self.__oned:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
@@ -471,6 +470,7 @@ class DatasetIngestor:
                         **self.__dctfmt))
         if rdss and rdss[0]:
             return rdss[0]
+
         return ""
 
     def _generate_origdatablock_metadata(self, scan):

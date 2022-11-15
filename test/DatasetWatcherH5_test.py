@@ -238,6 +238,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
         vardir = "/"
         cred = "12342345"
         chmod = "0o662"
+        hattr = "nexdatas_source,nexdatas_strategy,units,NX_class,source," \
+            "source_name,source_type,strategy,type"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
             cf.write(cred)
@@ -250,10 +252,13 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'chmod_json_files: "{chmod}"\n' \
             'chmod_generator_switch: " -x {{chmod}} "\n' \
+            'hidden_attributes: "{hattr}"\n' \
+            'hidden_attributes_generator_switch: ' \
+            '" -n {{hiddenattributes}} "\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir,
-                credfile=credfile, chmod=chmod)
+                credfile=credfile, chmod=chmod, hattr=hattr)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -496,25 +501,22 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata':
-                     {'NX_class': 'NXentry',
+                     {
                       'name': 'entry12345',
                       'experiment_description': {
                         'value': args[0][9]
                       },
-                      'data': {'NX_class': 'NXdata'},
+                      'data': {},
                       'end_time': {'value': '%s' % args[0][6]},
                       'experiment_identifier': {'value': '%s' % args[0][2]},
                       'instrument': {
-                          'NX_class': 'NXinstrument',
                           'detector': {
-                              'NX_class': 'NXdetector',
                               'intimage': {
                                   'shape': [0, 30]}},
                           'name': {
                             'short_name': '%s' % args[0][4],
                             'value': '%s' % args[0][3]}},
                       'sample': {
-                        'NX_class': 'NXsample',
                           'chemical_formula': {'value': '%s' % args[0][8]},
                           'name': {'value': '%s' % args[0][7]}},
                       'start_time': {
@@ -547,25 +549,22 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata':
-                     {'NX_class': 'NXentry',
+                     {
                       'name': 'entry12345',
                       'experiment_description': {
                         'value':  args[1][9]
                       },
-                      'data': {'NX_class': 'NXdata'},
+                      'data': {},
                       'end_time': {'value': '%s' % args[1][6]},
                       'experiment_identifier': {'value': '%s' % args[1][2]},
                       'instrument': {
-                          'NX_class': 'NXinstrument',
                           'detector': {
-                              'NX_class': 'NXdetector',
                               'intimage': {
                                   'shape': [0, 30]}},
                           'name': {
                               'short_name': '%s' % args[1][4],
                               'value': '%s' % args[1][3]}},
                       'sample': {
-                        'NX_class': 'NXsample',
                           'chemical_formula': {'value': '%s' % args[1][8]},
                           'name': {'value': '%s' % args[1][7]}},
                       'start_time': {
