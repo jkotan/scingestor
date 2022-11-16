@@ -1,5 +1,6 @@
-2021-11-14 Jan Kotanski <jan.kotanski@desy.de>
-	* add hidden_attributes hidden_attributes_generator_switch into the configuration variables (#145)
+2021-11-16 Jan Kotanski <jan.kotanski@desy.de>
+	* add hidden_attributes hidden_attributes_generator_switch into the configuration variables (#146)
+	* add add_empty_units add_empty_units_generator_switch into the configuration variables (#148)
 	* tagged as 0.1.0
 
 2021-11-11 Jan Kotanski <jan.kotanski@desy.de>

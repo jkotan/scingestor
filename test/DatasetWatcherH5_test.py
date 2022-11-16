@@ -252,6 +252,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'chmod_json_files: "{chmod}"\n' \
             'chmod_generator_switch: " -x {{chmod}} "\n' \
+            'add_empty_units: "False"\n' \
             'hidden_attributes: "{hattr}"\n' \
             'hidden_attributes_generator_switch: ' \
             '" -n {{hiddenattributes}} "\n' \
@@ -655,6 +656,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'oned_in_metadata: true\n' \
             'oned_dataset_generator_switch: " --oned "\n' \
+            'add_empty_units: "False"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -1103,6 +1105,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'scicat_url: "{url}"\n' \
                         'chmod_json_files: "{chmod}"\n' \
                         'use_corepath_as_scandir: true\n' \
+                        'add_empty_units: "True"\n' \
+                        'add_empty_units_generator_switch: ' \
+                        '" --add-empty-units "\n' \
                         'chmod_generator_switch: " -x {{chmod}} "\n' \
                         'ingestor_var_dir: "{vardir}"\n' \
                         'ingestor_credential_file: "{credfile}"\n'.format(
@@ -1299,11 +1304,16 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      {'NX_class': 'NXentry',
                       'name': 'entry12345',
                       'experiment_description': {
-                        'value': args[0][9]
+                          'value': args[0][9],
+                          'unit': '',
                       },
                       'data': {'NX_class': 'NXdata'},
-                      'end_time': {'value': '%s' % args[0][6]},
-                      'experiment_identifier': {'value': '%s' % args[0][2]},
+                      'end_time': {
+                          'value': '%s' % args[0][6],
+                          'unit': ''},
+                      'experiment_identifier': {
+                          'value': '%s' % args[0][2],
+                          'unit': ''},
                       'instrument': {
                           'NX_class': 'NXinstrument',
                           'detector': {
@@ -1311,15 +1321,24 @@ class DatasetWatcherH5Test(unittest.TestCase):
                               'intimage': {
                                   'shape': [0, 30]}},
                           'name': {
-                            'short_name': '%s' % args[0][4],
-                            'value': '%s' % args[0][3]}},
+                              'short_name': '%s' % args[0][4],
+                              'value': '%s' % args[0][3],
+                              'unit': ''
+                          }},
                       'sample': {
                         'NX_class': 'NXsample',
-                          'chemical_formula': {'value': '%s' % args[0][8]},
-                          'name': {'value': '%s' % args[0][7]}},
+                          'chemical_formula': {
+                              'value': '%s' % args[0][8],
+                              'unit': ''},
+                          'name': {
+                              'value': '%s' % args[0][7],
+                              'unit': ''}},
                       'start_time': {
-                          'value': '%s' % args[0][5]},
-                      'title': {'value': '%s' % args[0][1]},
+                          'value': '%s' % args[0][5],
+                          'unit': ''},
+                      'title': {
+                          'value': '%s' % args[0][1],
+                          'unit': ''},
                       'DOOR_proposalId': '99991173',
                       'beamtimeId': '99001284'},
                      'sourceFolder':
@@ -1350,11 +1369,14 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      {'NX_class': 'NXentry',
                       'name': 'entry12345',
                       'experiment_description': {
-                        'value':  args[1][9]
+                          'value':  args[1][9],
+                          'unit': ''
                       },
                       'data': {'NX_class': 'NXdata'},
-                      'end_time': {'value': '%s' % args[1][6]},
-                      'experiment_identifier': {'value': '%s' % args[1][2]},
+                      'end_time': {'value': '%s' % args[1][6],
+                                   'unit': ''},
+                      'experiment_identifier': {'value': '%s' % args[1][2],
+                                                'unit': ''},
                       'instrument': {
                           'NX_class': 'NXinstrument',
                           'detector': {
@@ -1363,14 +1385,19 @@ class DatasetWatcherH5Test(unittest.TestCase):
                                   'shape': [0, 30]}},
                           'name': {
                               'short_name': '%s' % args[1][4],
-                              'value': '%s' % args[1][3]}},
+                              'value': '%s' % args[1][3],
+                              'unit': ''}},
                       'sample': {
                         'NX_class': 'NXsample',
-                          'chemical_formula': {'value': '%s' % args[1][8]},
-                          'name': {'value': '%s' % args[1][7]}},
+                          'chemical_formula': {'value': '%s' % args[1][8],
+                                               'unit': ''},
+                          'name': {'value': '%s' % args[1][7],
+                                   'unit': ''}},
                       'start_time': {
-                          'value': '%s' % args[1][5]},
-                      'title': {'value': '%s' % args[1][1]},
+                          'value': '%s' % args[1][5],
+                          'unit': ''},
+                      'title': {'value': '%s' % args[1][1],
+                                'unit': ''},
                       'DOOR_proposalId': '99991173',
                       'beamtimeId': '99001284'},
                      'sourceFolder':
@@ -1751,11 +1778,16 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          {'NX_class': 'NXentry',
                           'name': 'entry12345',
                           'experiment_description': {
-                              'value': arg[9]
+                              'value': arg[9],
+                              'unit': ''
                           },
                           'data': {'NX_class': 'NXdata'},
-                          'end_time': {'value': '%s' % arg[6]},
-                          'experiment_identifier': {'value': '%s' % arg[2]},
+                          'end_time': {
+                              'value': '%s' % arg[6],
+                              'unit': ''},
+                          'experiment_identifier': {
+                              'value': '%s' % arg[2],
+                              'unit': ''},
                           'instrument': {
                               'NX_class': 'NXinstrument',
                               'detector': {
@@ -1765,20 +1797,29 @@ class DatasetWatcherH5Test(unittest.TestCase):
                                   },
                                   'spectrum': {
                                       'value': spectrum,
-                                      'shape': [10]
+                                      'shape': [10],
+                                      'unit': ''
                                   }
                               },
 
                               'name': {
                                   'short_name': '%s' % arg[4],
-                                  'value': '%s' % arg[3]}},
+                                  'value': '%s' % arg[3],
+                                  'unit': ''}},
                           'sample': {
                               'NX_class': 'NXsample',
-                              'chemical_formula': {'value': '%s' % arg[8]},
-                              'name': {'value': '%s' % arg[7]}},
+                              'chemical_formula': {
+                                  'value': '%s' % arg[8],
+                                  'unit': ''},
+                              'name': {
+                                  'value': '%s' % arg[7],
+                                  'unit': ''}},
                           'start_time': {
-                              'value': '%s' % arg[5]},
-                          'title': {'value': '%s' % arg[1]},
+                              'value': '%s' % arg[5],
+                              'unit': ''},
+                          'title': {
+                              'value': '%s' % arg[1],
+                              'unit': ''},
                           'DOOR_proposalId': '99991173',
                           'beamtimeId': '99001284'},
                          'sourceFolder':

@@ -43,6 +43,8 @@ The configuration written in YAML can contain the following variables
 * **oned_dataset_generator_switch** *(str)* , default: `" --oned "`
 * **hidden_attributes_generator_switch** *(str)* , default: `" -n {hiddenattributes} "`
 * **hidden_attributes** *(str)* , default: `"nexdatas_source,nexdatas_strategy,units"`
+* **add_empty_units_generator_switch** *(str)* , default: `" --add-empty-units "`
+* **add_empty_units** *(bool)* , default: `True`
 * **inotify_timeout** *(float)* , default: `0.1`
 * **get_event_timeout** *(float)* , default: `0.01`
 * **ingestion_delay_time** *(float)* , default: `5.0`

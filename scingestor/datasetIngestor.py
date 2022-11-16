@@ -130,6 +130,8 @@ class DatasetIngestor:
         self.__hiddenattributes = None
         #: (:obj:`bool`) oned metadata flag
         self.__oned = False
+        #: (:obj:`bool`) empty units flag
+        self.__emptyunits = True
 
         #: (:obj:`int`) maximal counter value for post tries
         self.__maxcounter = 100
@@ -170,6 +172,8 @@ class DatasetIngestor:
 
         #: (:obj:`str`) oned generator switch
         self.__oned_switch = " --oned  "
+        #: (:obj:`str`) empty units generator switch
+        self.__emptyunits_switch = " --add-empty-units  "
         #: (:obj:`str`) chmod generator switch
         self.__chmod_switch = " -x {chmod} "
         #: (:obj:`str`) hidden attributes generator switch
@@ -278,6 +282,8 @@ class DatasetIngestor:
             self.__hiddenattributes = self.__config["hidden_attributes"]
         if "oned_in_metadata" in self.__config.keys():
             self.__oned = self.__config["oned_in_metadata"]
+        if "add_empty_units" in self.__config.keys():
+            self.__emptyunits = self.__config["add_empty_units"]
 
         if "scan_metadata_postfix" in self.__config.keys():
             self.__scanpostfix = self.__config["scan_metadata_postfix"]
@@ -317,6 +323,10 @@ class DatasetIngestor:
         if "oned_dataset_generator_switch" in self.__config.keys():
             self.__oned_switch = \
                 self.__config["oned_dataset_generator_switch"]
+
+        if "add_empty_units_generator_switch" in self.__config.keys():
+            self.__emptyunits_switch = \
+                self.__config["add_empty_units_generator_switch"]
 
         if self.__relpath_in_datablock:
             if "datablock_metadata_generator" not in self.__config.keys():
@@ -363,6 +373,14 @@ class DatasetIngestor:
             if "nxs_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__oned_switch
+
+        if self.__emptyunits:
+            if "dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommand = \
+                    self.__datasetcommand + self.__emptyunits_switch
+            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommandnxs = \
+                    self.__datasetcommandnxs + self.__emptyunits_switch
 
         if "max_request_tries_number" in self.__config.keys():
             try:
