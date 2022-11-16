@@ -252,7 +252,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'chmod_json_files: "{chmod}"\n' \
             'chmod_generator_switch: " -x {{chmod}} "\n' \
-            'add_empty_units: "False"\n' \
+            'add_empty_units: False\n' \
             'hidden_attributes: "{hattr}"\n' \
             'hidden_attributes_generator_switch: ' \
             '" -n {{hiddenattributes}} "\n' \
@@ -656,7 +656,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'oned_in_metadata: true\n' \
             'oned_dataset_generator_switch: " --oned "\n' \
-            'add_empty_units: "False"\n' \
+            'add_empty_units: False\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -1105,7 +1105,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'scicat_url: "{url}"\n' \
                         'chmod_json_files: "{chmod}"\n' \
                         'use_corepath_as_scandir: true\n' \
-                        'add_empty_units: "True"\n' \
+                        'add_empty_units: True\n' \
                         'add_empty_units_generator_switch: ' \
                         '" --add-empty-units "\n' \
                         'chmod_generator_switch: " -x {{chmod}} "\n' \
