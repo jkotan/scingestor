@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "SCINGESTOR" "1" "Nov 11, 2022" "0.0" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "Nov 16, 2022" "0.1" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .
@@ -115,6 +115,14 @@ The configuration written in YAML can contain the following variables
 .IP \(bu 2
 \fBoned_dataset_generator_switch\fP \fI(str)\fP , default: \fB" \-\-oned "\fP
 .IP \(bu 2
+\fBhidden_attributes_generator_switch\fP \fI(str)\fP , default: \fB" \-n {hiddenattributes} "\fP
+.IP \(bu 2
+\fBhidden_attributes\fP \fI(str)\fP , default: \fB"nexdatas_source,nexdatas_strategy,units"\fP
+.IP \(bu 2
+\fBadd_empty_units_generator_switch\fP \fI(str)\fP , default: \fB" \-\-add\-empty\-units "\fP
+.IP \(bu 2
+\fBadd_empty_units\fP \fI(bool)\fP , default: \fBTrue\fP
+.IP \(bu 2
 \fBinotify_timeout\fP \fI(float)\fP , default: \fB0.1\fP
 .IP \(bu 2
 \fBget_event_timeout\fP \fI(float)\fP , default: \fB0.01\fP
@@ -161,7 +169,7 @@ ingestor_credential_file: "{homepath}/gpfs/pwd"
 .sp
 The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_var_dir\fP can contain the \fI{beamtimeid}\fP and \fI{hostname}\fP keywords,  e.g. \fB"scicat\-ingested\-datasets\-{beamtimeid}.lst"\fP or \fB"scicat\-ingested\-datasets\-{hostname}\-{beamtimeid}.lst"\fP  which is instantiated during the ingestor execution.
 .sp
-Similarly, \fBnxs_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP
+Similarly, \fBnxs_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP, \fI{hiddenattributes}\fP
 .SH SCICAT_DATASET_INGEST
 .sp
 Re\-ingestion script for SciCat RawDatasets and OrigDatablocks is usually
@@ -353,13 +361,13 @@ scicat_dataset_ingestor [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG]
 .B \-h\fP,\fB  \-\-help
 show this help message and exit
 .TP
-.BI \-c \ CONFIG\fR,\fB \ \-\-configuration \ CONFIG
+.BI \-c \ CONFIG\fP,\fB \ \-\-configuration \ CONFIG
 configuration file name
 .TP
-.BI \-r \ RUNTIME\fR,\fB \ \-\-runtime \ RUNTIME
+.BI \-r \ RUNTIME\fP,\fB \ \-\-runtime \ RUNTIME
 stop program after runtime in seconds
 .TP
-.BI \-l \ LOG\fR,\fB \ \-\-log \ LOG
+.BI \-l \ LOG\fP,\fB \ \-\-log \ LOG
 logging level, i.e. debug, info, warning, error, critical
 .UNINDENT
 .UNINDENT
@@ -399,10 +407,10 @@ scicat_dataset_ingest [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG]
 .B \-h\fP,\fB  \-\-help
 show this help message and exit
 .TP
-.BI \-c \ CONFIG\fR,\fB \ \-\-configuration \ CONFIG
+.BI \-c \ CONFIG\fP,\fB \ \-\-configuration \ CONFIG
 configuration file name
 .TP
-.BI \-l \ LOG\fR,\fB \ \-\-log \ LOG
+.BI \-l \ LOG\fP,\fB \ \-\-log \ LOG
 logging level, i.e. debug, info, warning, error, critical
 .UNINDENT
 .UNINDENT
@@ -437,7 +445,7 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B running
+.B running = None
 (\fI\%bool\fP) running loop flag
 .UNINDENT
 .INDENT 7.0
@@ -638,7 +646,7 @@ waitings datasets list
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class scingestor.datasetIngestor.UpdateStrategy(value)
+.B class scingestor.datasetIngestor.UpdateStrategy
 Bases: \fI\%enum.Enum\fP
 .sp
 Update strategy
@@ -699,7 +707,7 @@ scandir watcher thread
 .UNINDENT
 .INDENT 7.0
 .TP
-.B running
+.B running = None
 (\fI\%bool\fP) running loop flag
 .UNINDENT
 .INDENT 7.0
@@ -711,7 +719,7 @@ stop the watcher
 .SS scingestor.logger module
 .INDENT 0.0
 .TP
-.B class scingestor.logger.AccSecFormatter(fmt=None, datefmt=None, style=\(aq%\(aq, validate=True)
+.B class scingestor.logger.AccSecFormatter(fmt=None, datefmt=None, style=\(aq%\(aq)
 Bases: \fI\%logging.Formatter\fP
 .sp
 micro\-second formatter
@@ -807,18 +815,18 @@ constructor
 .UNINDENT
 .INDENT 7.0
 .TP
-.B masks
+.B masks = None
 (\fI\%str\fP) mask
 .UNINDENT
 .INDENT 7.0
 .TP
-.B name
+.B name = None
 (\fI\%str\fP) name
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class scingestor.safeINotifier.SafeINotifier(*args, **kwargs)
+.B class scingestor.safeINotifier.SafeINotifier(group=None, target=None, name=None, args=(), kwargs=None, *, daemon=None)
 Bases: \fI\%threading.Thread\fP
 .sp
 singleton wrapper for inotifyx
@@ -926,7 +934,7 @@ scandir watcher thread
 .UNINDENT
 .INDENT 7.0
 .TP
-.B running
+.B running = None
 (\fI\%bool\fP) running loop flag
 .UNINDENT
 .INDENT 7.0
