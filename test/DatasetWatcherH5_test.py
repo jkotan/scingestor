@@ -1327,12 +1327,12 @@ class DatasetWatcherH5Test(unittest.TestCase):
                           }},
                       'sample': {
                         'NX_class': 'NXsample',
-                          'chemical_formula': {
-                              'value': '%s' % args[0][8],
-                              'unit': ''},
-                          'name': {
-                              'value': '%s' % args[0][7],
-                              'unit': ''}},
+                        'chemical_formula': {
+                            'value': '%s' % args[0][8],
+                            'unit': ''},
+                        'name': {
+                            'value': '%s' % args[0][7],
+                            'unit': ''}},
                       'start_time': {
                           'value': '%s' % args[0][5],
                           'unit': ''},
