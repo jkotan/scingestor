@@ -1,0 +1,22 @@
+beamtime_dirs:
+  - "/gpfs/current"
+chmod_json_files: 0o666
+scicat_url: "http://scicat-p08-test1.desy.de/api/v3"
+ingestor_credential_file: /var/lib/scingestor/.scingestor.cnf
+inotify_timeout: 1
+get_event_timeout: 0.1
+ingestor_var_dir: "/gpfs/current/scratch_bl/scingestor"
+metadata_in_var_dir: True
+dataset_update_strategy: create
+owner_access_groups_from_proposal: True
+max_scandir_depth: 1
+dataset_pid_prefix: ""
+datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
+ingested_datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
+oned_in_metadata: true
+hidden_attributes: "nexdatas_source,nexdatas_strategy,units,NX_class"
+# relative_path_in_datablock: False
+# scandir_blacklist:
+#   - /gpfs/current/scratch_bl
+#   - /gpfs/current/processed
+#   - /gpfs/current/shared

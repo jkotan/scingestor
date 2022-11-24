@@ -1,5 +1,5 @@
 [Unit]
-Description=SciCat Dataset Ingerstor
+Description=SciCat Dataset Ingestor
 After=network.target
 
 [Service]
