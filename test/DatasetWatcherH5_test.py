@@ -903,8 +903,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'ownerGroup': '99001234-dmgt',
                          'proposalId': '99001234',
                          'scientificMetadata':
-                         {'NX_class': 'NXentry',
-                          'name': 'entry12345',
+                         {'name': 'entry12345',
                           'experiment_description': {
                               'value': arg[9]
                           },
@@ -1301,8 +1300,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001284',
                      'scientificMetadata':
-                     {'NX_class': 'NXentry',
-                      'name': 'entry12345',
+                     {'name': 'entry12345',
                       'experiment_description': {
                           'value': args[0][9],
                           'unit': '',
@@ -1366,8 +1364,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001284',
                      'scientificMetadata':
-                     {'NX_class': 'NXentry',
-                      'name': 'entry12345',
+                     {'name': 'entry12345',
                       'experiment_description': {
                           'value':  args[1][9],
                           'unit': ''
@@ -1775,8 +1772,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'ownerGroup': '99001284-dmgt',
                          'proposalId': '99001284',
                          'scientificMetadata':
-                         {'NX_class': 'NXentry',
-                          'name': 'entry12345',
+                         {'name': 'entry12345',
                           'experiment_description': {
                               'value': arg[9],
                               'unit': ''
@@ -2172,8 +2168,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata':
-                     {'NX_class': 'NXentry',
-                      'name': 'entry12345',
+                     {'name': 'entry12345',
                       'experiment_description': {
                         'value': args[0][9]
                       },
@@ -2223,8 +2218,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001234',
                      'scientificMetadata':
-                     {'NX_class': 'NXentry',
-                      'name': 'entry12345',
+                     {'name': 'entry12345',
                       'experiment_description': {
                         'value':  args[1][9]
                       },
@@ -2601,8 +2595,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'ownerGroup': '99001234-dmgt',
                          'proposalId': '99001234',
                          'scientificMetadata':
-                         {'NX_class': 'NXentry',
-                          'name': 'entry12345',
+                         {'name': 'entry12345',
                           'experiment_description': {
                               'value': arg[9]
                           },
