@@ -22,6 +22,8 @@ The configuration written in YAML can contain the following variables
 * **dataset_update_strategy** (`"no"`, `"patch"`, `"create"`, `"mixed"`) , default: `"patch"`
 * **relative_path_in_datablock** *(bool)* , default: `False`
 * **scandir_blacklist** *(list\<str\>)* , default: `["/gpfs/current/scratch_bl", "/gpfs/current/processed", "/gpfs/current/shared"]`
+* **beamtimeid_blacklist_file** *(str)* , default: `None`
+* **beamtime_type_blacklist** *(list\<str\>)* , default: `[]`
 * **chmod_json_files** *(str)* , default: `None`
 * **max_scandir_depth** *(int)*, default: `-1`
 * **oned_in_metadata** *(bool)* , default: `False`
