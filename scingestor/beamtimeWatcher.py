@@ -114,7 +114,7 @@ class BeamtimeWatcher:
                 self.__config["beamtimeid_blacklist_file"].format(
                     homepath=self.__homepath)
 
-            self._update_beamtime_blacklist()
+            self._update_beamtimeid_blacklist()
 
         #: (:obj:`bool`) access groups from proposals
         self.__groups_from_proposal = False
@@ -567,7 +567,7 @@ class BeamtimeWatcher:
                         time.sleep(0.1)
                         with open(ffn) as fl:
                             btmd = json.loads(fl.read())
-                    self._update_beamtime_blacklist()
+                    self._update_beamtimeid_blacklist()
                     if self._check_beamtime_not_in_blacklist(btmd):
                         if (path, ffn) not in self.__scandir_watchers.keys():
                             get_logger().info(

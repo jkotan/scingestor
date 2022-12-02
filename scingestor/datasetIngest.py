@@ -117,7 +117,7 @@ class DatasetIngest:
                 self.__config["beamtimeid_blacklist_file"].format(
                     homepath=self.__homepath)
 
-            self._update_beamtime_blacklist()
+            self._update_beamtimeid_blacklist()
 
         #: (:obj:`bool`) access groups from proposals
         self.__groups_from_proposal = False
