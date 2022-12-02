@@ -645,7 +645,7 @@ class DatasetIngestTest(unittest.TestCase):
                      % cfgfname).split(),
                     ('scicat_dataset_ingest --config %s'
                      % cfgfname).split()]
-        commands.pop()
+        # commands.pop()
         try:
             for cmd in commands:
                 os.mkdir(fsubdirname)
@@ -714,6 +714,7 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
+                    "OrigDatablocks: delete /99001234/myscan_00002\n"
                     "OrigDatablocks: /99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -961,6 +962,7 @@ class DatasetIngestTest(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: /99001234/myscan_00001\n"
+                    "OrigDatablocks: delete /99001234/myscan_00002\n"
                     "OrigDatablocks: /99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -1271,6 +1273,7 @@ class DatasetIngestTest(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: /99001284/myscan_00001\n"
+                    "OrigDatablocks: delete /99001284/myscan_00002\n"
                     "OrigDatablocks: /99001284/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -1546,6 +1549,7 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
+                    "OrigDatablocks: delete /99001234/myscan_00002\n"
                     "OrigDatablocks: /99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -1799,6 +1803,7 @@ class DatasetIngestTest(unittest.TestCase):
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001/2\n"
                     "OrigDatablocks: /99001234/myscan_00001/2\n"
+                    "OrigDatablocks: delete /99001234/myscan_00002\n"
                     "OrigDatablocks: /99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -2102,6 +2107,7 @@ class DatasetIngestTest(unittest.TestCase):
                     self.assertEqual(
                         "Login: ingestor\n"
                         "RawDatasets: /99001234/myscan_00002\n"
+                        "OrigDatablocks: delete /99001234/myscan_00002\n"
                         "OrigDatablocks: /99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
@@ -2387,6 +2393,7 @@ class DatasetIngestTest(unittest.TestCase):
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
+                        "OrigDatablocks: delete /99001234/myscan_00002\n"
                         "OrigDatablocks: /99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
@@ -4478,7 +4485,7 @@ class DatasetIngestTest(unittest.TestCase):
                      % cfgfname).split(),
                     ('scicat_dataset_ingest --config %s'
                      % cfgfname).split()]
-        commands.pop()
+        # commands.pop()
         try:
             for cmd in commands:
                 os.mkdir(fsubdirname)
@@ -4548,6 +4555,7 @@ class DatasetIngestTest(unittest.TestCase):
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
+                    "OrigDatablocks: delete /99001234/myscan_00002\n"
                     "OrigDatablocks: /99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -5140,7 +5148,7 @@ class DatasetIngestTest(unittest.TestCase):
                      % cfgfname).split(),
                     ('scicat_dataset_ingest --config %s'
                      % cfgfname).split()]
-        commands.pop()
+        # commands.pop()
         try:
             oldpidprefix = self.__server.pidprefix
             self.__server.pidprefix = "10.3204/"
@@ -5215,6 +5223,7 @@ class DatasetIngestTest(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Login: ingestor\n"
+                    "OrigDatablocks: delete 10.3204/99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 4)

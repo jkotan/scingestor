@@ -915,6 +915,9 @@ class DatasetIngestor:
 
     def _ingest_origdatablock(self, metadata, token):
         """ ingets origdatablock
+
+        :param token: ingestor token
+        :type token: :obj:`str`
         """
         try:
             response = requests.post(
@@ -929,6 +932,56 @@ class DatasetIngestor:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
         return False
+
+    def _get_id_first_origdatablock(self, datasetid, token):
+        """ get id of first origdatablock with datasetid
+
+        :param datasetid: dataset id
+        :type datasetid: :obj:`str`
+        :param token: ingestor token
+        :type token: :obj:`str`
+        :returns: origdatablock id
+        :rtype: :obj:`str`
+        """
+        try:
+            where = requests.utils.quote(
+                '{"where": {"datasetId":"%s"}}'
+                % datasetid.replace("/", "%2F"))
+            response = requests.get(
+                self.__datablockurl + "/findOne?filter=" + where
+                + "&access_token=" + token,
+                headers=self.__headers)
+            if response.ok:
+                js = response.json()
+                return js['id']
+        except Exception as e:
+            get_logger().error(
+                'DatasetIngestor: %s' % (str(e)))
+        return None
+
+    def _get_delete_origdatablock(self, did, token):
+        """ ingets origdatablock
+
+        :param did: origdatablock id
+        :type did: :obj:`str`
+        :param token: ingestor token
+        :type token: :obj:`str`
+        """
+        try:
+            response = requests.delete(
+                "{url}/{pid}?access_token={token}"
+                .format(
+                    url=self.__datablockurl,
+                    pid=did.replace("/", "%2F"),
+                    token=token))
+            if response.ok:
+                return True
+            else:
+                raise Exception("%s" % response.text)
+        except Exception as e:
+            get_logger().error(
+                'DatasetIngestor: %s' % (str(e)))
+        return None
 
     def _get_pid(self, metafile):
         """ ingest raw dataset metadata
@@ -953,6 +1006,8 @@ class DatasetIngestor:
 
         :param metafile: metadata file name
         :type metafile: :obj:`str`
+        :param token: ingestor token
+        :type token: :obj:`str`
         :returns: dataset id
         :rtype: :obj:`str`
         """
@@ -975,6 +1030,31 @@ class DatasetIngestor:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
         return None
+
+    def _delete_origdatablocks(self, pid, token):
+        """ delete origdatablock with given dataset pid
+
+        :param pid: dataset id
+        :type pid: :obj:`str`
+        :param token: ingestor token
+        :type token: :obj:`str`
+        :returns: dataset id
+        :rtype: :obj:`str`
+        """
+        try:
+            datasetid = "%s/%s" % (self.__pidprefix, pid)
+            did = self._get_id_first_origdatablock(datasetid, token)
+            lastdid = [did]
+            while did:
+                self._get_delete_origdatablock(did, token)
+                did = self._get_id_first_origdatablock(datasetid, token)
+                if did in lastdid:
+                    break
+                lastdid.append(did)
+        except Exception as e:
+            get_logger().error(
+                'DatasetIngestor: %s' % (str(e)))
+        return ""
 
     def _ingest_origdatablock_metadata(self, metafile, pid, token):
         """ ingest origdatablock metadata
@@ -1168,6 +1248,7 @@ class DatasetIngestor:
             if odb and odb[0] and reingest_origdatablock:
                 if pid is None and rdss and rdss[0]:
                     pid = self._get_pid(rdss[0])
+                self._delete_origdatablocks(pid, token)
                 dbstatus = self._ingest_origdatablock_metadata(
                     odb, pid, token)
                 get_logger().info(

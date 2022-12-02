@@ -24,6 +24,8 @@
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
+import uuid
+import requests
 
 
 class SciCatMockHandler(BaseHTTPRequestHandler):
@@ -112,6 +114,10 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             self.server.origdatablocks.append(in_data)
             dt = json.loads(in_data)
             print("OrigDatablocks: %s" % dt['datasetId'])
+            npid = str(uuid.uuid4())
+            dt["id"] = npid
+            self.server.id_origdatablock[npid] = json.dumps(dt)
+            message = "{}"
             message = "{}"
 
         else:
@@ -123,6 +129,67 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         """ implementation of action for http GET requests
         """
+
+        message = "SciCat mock server for tests!"
+        path = self.path
+        if "?access_token=" in path:
+            spath = path.split("?access_token=")
+        elif "&access_token=" in path:
+            spath = path.split("&access_token=")
+        else:
+            spath = [path]
+        dspath = spath[0].split("/")
+
+        if len(dspath) > 2 and dspath[1].lower() == "rawdatasets":
+            pid = dspath[2].replace("%2F", "/")
+            if len(dspath) == 4 and dspath[3].lower() == "exists":
+                message = json.dumps(
+                    {'exists': (pid in self.server.pid_dataset.keys())})
+            elif len(dspath) == 3:
+                message = self.server.pid_dataset[pid]
+        elif len(dspath) > 2 and dspath[1].lower() == "proposals":
+            pid = dspath[2].replace("%2F", "/")
+            if len(dspath) == 4 and dspath[3].lower() == "exists":
+                message = json.dumps(
+                    {'exists': (pid in self.server.pid_proposal.keys())})
+            elif len(dspath) == 3:
+                message = self.server.pid_proposal[pid]
+        elif len(dspath) > 2 and dspath[1].lower() == "origdatablocks":
+            pid = requests.utils.unquote(dspath[2])
+            if len(dspath) == 4 and dspath[3].lower() == "exists":
+                pid = dspath[2].replace("%2F", "/")
+                message = json.dumps(
+                    {'exists': (pid in self.server.id_origdatablock.keys())})
+            elif len(dspath) == 3 and \
+                    pid.startswith('findOne?filter={"where"'):
+                where = json.loads(pid[15:])["where"]
+                if "datasetId" in where.keys():
+                    pid = where["datasetId"]
+                    pid = pid.replace("%2F", "/")
+                    found = False
+                    for odb in self.server.id_origdatablock.values():
+                        jodb = json.loads(odb)
+                        if "datasetId" in jodb.keys() and \
+                           jodb["datasetId"] == pid:
+                            message = odb
+                            found = True
+                            # print("found", pid )
+                            break
+                if not found:
+                    self.send_error(
+                        404, 'Unknown "OrigDatablock" id "undefined"')
+                    return
+            elif len(dspath) == 3:
+                pid = dspath[2].replace("%2F", "/")
+                message = self.server.id_origdatablock[pid]
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        self.wfile.write(bytes(message, "utf8"))
+
+    def do_DELETE(self):
+        """ implementation of action for http DELETE requests
+        """
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
@@ -131,21 +198,31 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         path = self.path
         if "?access_token=" in path:
             spath = path.split("?access_token=")
+        elif "&access_token=" in path:
+            spath = path.split("&access_token=")
+        else:
+            spath = [path]
         dspath = spath[0].split("/")
+
         if len(dspath) > 2 and dspath[1].lower() == "rawdatasets":
             pid = dspath[2].replace("%2F", "/")
-            if len(dspath) == 4 and dspath[3].lower() == "exists":
-                message = json.dumps(
-                    {'exists': (pid in self.server.pid_dataset.keys())})
-            elif len(dspath) == 3:
-                message = self.server.pid_dataset[pid]
-        if len(dspath) > 2 and dspath[1].lower() == "proposals":
+            if len(dspath) == 3:
+                if pid in self.server.pid_dataset.keys():
+                    self.server.pid_dataset.pop(pid)
+                    print("RawDatasets: delete %s" % pid)
+        elif len(dspath) > 2 and dspath[1].lower() == "proposals":
             pid = dspath[2].replace("%2F", "/")
-            if len(dspath) == 4 and dspath[3].lower() == "exists":
-                message = json.dumps(
-                    {'exists': (pid in self.server.pid_proposal.keys())})
-            elif len(dspath) == 3:
-                message = self.server.pid_proposal[pid]
+            if len(dspath) == 3:
+                if pid in self.server.pid_proposal.keys():
+                    self.server.pid_proposal.pop(pid)
+                    print("Proposals: delete %s" % pid)
+        elif len(dspath) > 2 and dspath[1].lower() == "origdatablocks":
+            pid = dspath[2].replace("%2F", "/")
+            if len(dspath) == 3:
+                if pid in self.server.id_origdatablock.keys():
+                    dt = self.server.id_origdatablock.pop(pid)
+                    print("OrigDatablocks: delete %s"
+                          % json.loads(dt)['datasetId'])
         self.wfile.write(bytes(message, "utf8"))
 
 
@@ -171,6 +248,8 @@ class SciCatTestServer(HTTPServer):
         self.pid_dataset = {}
         #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with proposals
         self.pid_proposal = {}
+        #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with datablocks
+        self.id_origdatablock = {}
         #: (:obj:`str`) pid prefix
         self.pidprefix = "/"
         # self.pidprefix = "10.3204/"
@@ -182,6 +261,7 @@ class SciCatTestServer(HTTPServer):
         self.others = []
         self.pid_dataset = {}
         self.pid_proposal = {}
+        self.id_origdatablock = {}
 
     def run(self):
         try:
