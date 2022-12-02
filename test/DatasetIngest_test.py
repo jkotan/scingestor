@@ -1802,7 +1802,6 @@ class DatasetIngestTest(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001/2\n"
-                    # "OrigDatablocks: delete /99001234/myscan_00001/2\n"
                     "OrigDatablocks: /99001234/myscan_00001/2\n"
                     "OrigDatablocks: delete /99001234/myscan_00002\n"
                     "OrigDatablocks: /99001234/myscan_00002\n",
@@ -2964,7 +2963,6 @@ class DatasetIngestTest(unittest.TestCase):
                     self.assertEqual(
                         "Login: ingestor\n"
                         "RawDatasets: 99001234/myscan_00002/2\n"
-                        # "OrigDatablocks: delete /99001234/myscan_00002/2\n"
                         "OrigDatablocks: /99001234/myscan_00002/2\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
@@ -3900,7 +3898,6 @@ class DatasetIngestTest(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001/2\n"
-                    # "OrigDatablocks: delete /99001234/myscan_00001/2\n"
                     "OrigDatablocks: /99001234/myscan_00001/2\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -4799,10 +4796,8 @@ class DatasetIngestTest(unittest.TestCase):
                     "Login: ingestor\n"
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    # "OrigDatablocks: delete 10.3204/99001234/myscan_00001\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    # "OrigDatablocks: delete 10.3204/99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
