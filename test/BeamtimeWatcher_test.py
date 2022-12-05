@@ -422,7 +422,7 @@ optional arguments:
                     'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
                     'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                     '{basedir}\n'
-                    .format(basedir=fdirname, btmeta=fullbtmeta,
+                    .format(basedir=fdirname,
                             cnt1=cnt), er)
                 self.assertEqual('', vl)
         finally:
@@ -491,7 +491,7 @@ optional arguments:
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt2}: '
                         '{basedir}\n'
-                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                        .format(basedir=fdirname,
                                 cnt1=cnt, cnt2=(cnt + 1)), nodebug)
                 except Exception:
                     print(er)
@@ -538,7 +538,7 @@ optional arguments:
                     'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
                     'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                     '{basedir}\n'
-                    .format(basedir=fdirname, btmeta=fullbtmeta,
+                    .format(basedir=fdirname,
                             cnt1=cnt), er)
                 self.assertEqual('', vl)
         finally:
@@ -602,7 +602,7 @@ optional arguments:
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt2}: '
                         '{basedir}\n'
-                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                        .format(basedir=fdirname,
                                 cnt1=cnt, cnt2=(cnt + 1)), nodebug)
                 except Exception:
                     print(er)
