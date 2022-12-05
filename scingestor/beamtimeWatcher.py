@@ -94,7 +94,7 @@ class BeamtimeWatcher:
                         homepath=self.__homepath))
 
         #: (:obj:`list` <:obj:`str`>) beamtime type blacklist
-        self.__beamtime_type_blacklist = []
+        self.__beamtime_type_blacklist = ['P']
 
         if "beamtime_type_blacklist" in self.__config.keys() \
            and isinstance(self.__config["beamtime_type_blacklist"], list):
@@ -602,7 +602,7 @@ class BeamtimeWatcher:
         :rtype: :obj:`bool`
         """
         if self.__beamtime_type_blacklist:
-            proposalType = meta.get("beamtimeId", None)
+            proposalType = meta.get("proposalType", None)
             if proposalType and proposalType in self.__beamtime_type_blacklist:
                 return False
         if self.__beamtimeid_blacklist:

@@ -383,6 +383,240 @@ optional arguments:
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_config_beamtime_metadata_exist_black(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        os.mkdir(fdirname)
+        btmeta = "beamtime-metadata-99001234.json"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        blist = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                             "config",
+                             "beamtimeid_blacklist.lst")
+        shutil.copy(source, fdirname)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'beamtimeid_blacklist_file: "{blist}"'.format(
+                basedir=fdirname, blist=blist)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r3'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r3'
+                     % cfgfname).split()]
+        try:
+            for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                vl, er = self.runtest(cmd)
+                self.assertEqual(
+                    'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                    '{basedir}\n'
+                    .format(basedir=fdirname, btmeta=fullbtmeta,
+                            cnt1=cnt, cnt2=(cnt + 1)), er)
+                self.assertEqual('', vl)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
+    def test_config_beamtime_metadata_add_black(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        os.mkdir(fdirname)
+        btmeta = "bt-mt-99001234.jsn"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        blist = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                             "config",
+                             "beamtimeid_blacklist.lst")
+        fullbtmeta = os.path.join(fdirname, btmeta)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'beamtimeid_blacklist_file: "{blist}"\n' \
+            'beamtime_filename_prefix: "bt-mt-"\n' \
+            'beamtime_filename_postfix: ".jsn"\n'.format(
+                basedir=fdirname, blist=blist)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r4 --log debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r4 -l debug'
+                     % cfgfname).split()]
+
+        def test_thread():
+            """ test thread which adds and removes beamtime metadata file """
+            time.sleep(1)
+            shutil.copy(source, fdirname)
+            time.sleep(1)
+            os.remove(fullbtmeta)
+            time.sleep(1)
+            shutil.copy(source, fdirname)
+
+        try:
+            # commands.pop()
+            for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                th = threading.Thread(target=test_thread)
+                th.start()
+                vl, er = self.runtest(cmd)
+                th.join()
+                nodebug = "\n".join([ee for ee in er.split("\n")
+                                     if "DEBUG :" not in ee])
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                                cnt4=(cnt + 3)), nodebug)
+                except Exception:
+                    print(er)
+                    raise
+                #  print(er)
+                self.assertEqual('', vl)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
+    def test_config_beamtime_metadata_exist_priv(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        os.mkdir(fdirname)
+        btmeta = "beamtime-metadata-99001233.json"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        shutil.copy(source, fdirname)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"'.format(basedir=fdirname)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r3'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r3'
+                     % cfgfname).split()]
+        try:
+            for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                vl, er = self.runtest(cmd)
+                self.assertEqual(
+                    'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                    '{basedir}\n'
+                    .format(basedir=fdirname, btmeta=fullbtmeta,
+                            cnt1=cnt, cnt2=(cnt + 1)), er)
+                self.assertEqual('', vl)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
+    def test_config_beamtime_metadata_add_priv(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        os.mkdir(fdirname)
+        btmeta = "bt-mt-99001233.jsn"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'beamtime_filename_prefix: "bt-mt-"\n' \
+            'beamtime_filename_postfix: ".jsn"\n'.format(basedir=fdirname)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r4 --log debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r4 -l debug'
+                     % cfgfname).split()]
+
+        def test_thread():
+            """ test thread which adds and removes beamtime metadata file """
+            time.sleep(1)
+            shutil.copy(source, fdirname)
+            time.sleep(1)
+            os.remove(fullbtmeta)
+            time.sleep(1)
+            shutil.copy(source, fdirname)
+
+        try:
+            # commands.pop()
+            for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                th = threading.Thread(target=test_thread)
+                th.start()
+                vl, er = self.runtest(cmd)
+                th.join()
+                nodebug = "\n".join([ee for ee in er.split("\n")
+                                     if "DEBUG :" not in ee])
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                                cnt4=(cnt + 3)), nodebug)
+                except Exception:
+                    print(er)
+                    raise
+                #  print(er)
+                self.assertEqual('', vl)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
     def test_config_beamtime_metadata_exist_basedir(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
