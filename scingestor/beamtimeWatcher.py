@@ -93,6 +93,29 @@ class BeamtimeWatcher:
                     self.__scandir_blacklist.append(sdir.format(
                         homepath=self.__homepath))
 
+        #: (:obj:`list` <:obj:`str`>) beamtime type blacklist
+        self.__beamtime_type_blacklist = ['P']
+
+        if "beamtime_type_blacklist" in self.__config.keys() \
+           and isinstance(self.__config["beamtime_type_blacklist"], list):
+            self.__beamtime_type_blacklist = []
+            for btype in self.__config["beamtime_type_blacklist"]:
+                if btype:
+                    self.__beamtime_type_blacklist.append(btype)
+
+        #: (:obj:`list` <:obj:`str`>) beamtime type blacklist
+        self.__beamtimeid_blacklist = []
+
+        #: (:obj:`list` <:obj:`str`>) beamtime id blacklist file
+        self.__beamtimeid_blacklist_file = ""
+
+        if "beamtimeid_blacklist_file" in self.__config.keys():
+            self.__beamtimeid_blacklist_file = \
+                self.__config["beamtimeid_blacklist_file"].format(
+                    homepath=self.__homepath)
+
+            self._update_beamtimeid_blacklist()
+
         #: (:obj:`bool`) access groups from proposals
         self.__groups_from_proposal = False
         if "owner_access_groups_from_proposal" in self.__config.keys():
@@ -544,19 +567,49 @@ class BeamtimeWatcher:
                         time.sleep(0.1)
                         with open(ffn) as fl:
                             btmd = json.loads(fl.read())
-                    if (path, ffn) not in self.__scandir_watchers.keys():
-                        get_logger().info(
-                            'BeamtimeWatcher: Create ScanDirWatcher %s %s'
-                            % (path, ffn))
-                        btmd = self.__append_proposal_groups(btmd, path)
-                        sdw = self.__scandir_watchers[(path, ffn)] =  \
-                            ScanDirWatcher(self.__config, path, btmd, ffn,
-                                           self.__scandir_depth)
+                    self._update_beamtimeid_blacklist()
+                    if self._check_beamtime_not_in_blacklist(btmd):
+                        if (path, ffn) not in self.__scandir_watchers.keys():
+                            get_logger().info(
+                                'BeamtimeWatcher: Create ScanDirWatcher %s %s'
+                                % (path, ffn))
+                            btmd = self.__append_proposal_groups(btmd, path)
+                            sdw = self.__scandir_watchers[(path, ffn)] =  \
+                                ScanDirWatcher(self.__config, path, btmd, ffn,
+                                               self.__scandir_depth)
                 if sdw is not None:
                     sdw.start()
             except Exception as e:
                 get_logger().warning(
                     "%s cannot be watched: %s" % (ffn, str(e)))
+
+    def _update_beamtimeid_blacklist(self):
+        """ update beamtime meta
+        """
+        if self.__beamtimeid_blacklist_file and \
+           os.path.isfile(self.__beamtimeid_blacklist_file):
+            with open(self.__beamtimeid_blacklist_file) as fl:
+                btids = fl.read().strip().split("\n")
+            self.__beamtimeid_blacklist.extend(
+                [str(btid).strip() for btid in btids])
+
+    def _check_beamtime_not_in_blacklist(self, meta):
+        """ check if beamtime is not in blacklist
+
+        :param meta: beamtime configuration
+        :type meta: :obj:`dict` <:obj:`str`, `any`>
+        :returns: flag if beamtime not in blacklist
+        :rtype: :obj:`bool`
+        """
+        if self.__beamtime_type_blacklist:
+            proposalType = meta.get("proposalType", None)
+            if proposalType and proposalType in self.__beamtime_type_blacklist:
+                return False
+        if self.__beamtimeid_blacklist:
+            beamtimeId = meta.get("beamtimeId", None)
+            if beamtimeId and beamtimeId in self.__beamtimeid_blacklist:
+                return False
+        return True
 
     def __append_proposal_groups(self, meta, path):
         """ appends owner and access groups to beamtime

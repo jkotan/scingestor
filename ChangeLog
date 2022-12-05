@@ -1,6 +1,7 @@
 2021-12-01 Jan Kotanski <jan.kotanski@desy.de>
 	* remove old origdatablocks during reingestion (#153)
-	* tagged as 0.1.1
+	* add beamtime_blacklist_file and beamtime_type_blacklist into the configuration variables (#155)
+	* tagged as 0.2.0
 
 2021-11-16 Jan Kotanski <jan.kotanski@desy.de>
 	* add hidden_attributes hidden_attributes_generator_switch into the configuration variables (#146)
