@@ -399,7 +399,7 @@ optional arguments:
                              "config",
                              "beamtimeid_blacklist.lst")
         shutil.copy(source, fdirname)
-        fullbtmeta = os.path.join(fdirname, btmeta)
+        # fullbtmeta = os.path.join(fdirname, btmeta)
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
@@ -517,7 +517,7 @@ optional arguments:
                               "config",
                               btmeta)
         shutil.copy(source, fdirname)
-        fullbtmeta = os.path.join(fdirname, btmeta)
+        # fullbtmeta = os.path.join(fdirname, btmeta)
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"'.format(basedir=fdirname)
