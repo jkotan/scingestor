@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "SCINGESTOR" "1" "Nov 16, 2022" "0.1" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "Dec 05, 2022" "0.2" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .
@@ -76,6 +76,10 @@ The configuration written in YAML can contain the following variables
 \fBrelative_path_in_datablock\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
 \fBscandir_blacklist\fP \fI(list<str>)\fP , default: \fB["/gpfs/current/scratch_bl", "/gpfs/current/processed", "/gpfs/current/shared"]\fP
+.IP \(bu 2
+\fBbeamtimeid_blacklist_file\fP \fI(str)\fP , default: \fBNone\fP
+.IP \(bu 2
+\fBbeamtime_type_blacklist\fP \fI(list<str>)\fP , default: \fB["P"]\fP
 .IP \(bu 2
 \fBchmod_json_files\fP \fI(str)\fP , default: \fBNone\fP
 .IP \(bu 2
