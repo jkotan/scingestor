@@ -423,7 +423,7 @@ optional arguments:
                     'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                     '{basedir}\n'
                     .format(basedir=fdirname, btmeta=fullbtmeta,
-                            cnt1=cnt, cnt2=(cnt + 1)), er)
+                            cnt1=cnt), er)
                 self.assertEqual('', vl)
         finally:
             if os.path.exists(cfgfname):
@@ -492,8 +492,7 @@ optional arguments:
                         'INFO : BeamtimeWatcher: Removing watch {cnt2}: '
                         '{basedir}\n'
                         .format(basedir=fdirname, btmeta=fullbtmeta,
-                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
-                                cnt4=(cnt + 3)), nodebug)
+                                cnt1=cnt, cnt2=(cnt + 1)), nodebug)
                 except Exception:
                     print(er)
                     raise
@@ -540,7 +539,7 @@ optional arguments:
                     'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                     '{basedir}\n'
                     .format(basedir=fdirname, btmeta=fullbtmeta,
-                            cnt1=cnt, cnt2=(cnt + 1)), er)
+                            cnt1=cnt), er)
                 self.assertEqual('', vl)
         finally:
             if os.path.exists(cfgfname):
@@ -604,8 +603,7 @@ optional arguments:
                         'INFO : BeamtimeWatcher: Removing watch {cnt2}: '
                         '{basedir}\n'
                         .format(basedir=fdirname, btmeta=fullbtmeta,
-                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
-                                cnt4=(cnt + 3)), nodebug)
+                                cnt1=cnt, cnt2=(cnt + 1)), nodebug)
                 except Exception:
                     print(er)
                     raise
