@@ -247,6 +247,15 @@ class DatasetWatcherH5Test(unittest.TestCase):
         wrmodule = WRITERS[self.writer]
         filewriter.writer = wrmodule
 
+        copymap = 'scientificMetadata.instrument_name ' \
+            'scientificMetadata.instrument.name.value\n' \
+            'scientificMetadata.sample_name ' \
+            'scientificMetadata.sample.name.value\n' \
+            'scientificMetadata.instrument.detector.intimage\n'
+        cpmapname = "%s_%s.lst" % (self.__class__.__name__, fun)
+        with open(cpmapname, "w+") as cf:
+            cf.write(copymap)
+
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
@@ -256,10 +265,14 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'hidden_attributes: "{hattr}"\n' \
             'hidden_attributes_generator_switch: ' \
             '" -n {{hiddenattributes}} "\n' \
+            'metadata_copy_map_file: "{cpmapfile}"\n' \
+            'metadata_copy_map_file_generator_switch: ' \
+            '" --copy-map-file {{copymapfile}} "\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir,
-                credfile=credfile, chmod=chmod, hattr=hattr)
+                credfile=credfile, chmod=chmod, hattr=hattr,
+                cpmapfile=cpmapname)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -510,10 +523,10 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'data': {},
                       'end_time': {'value': '%s' % args[0][6]},
                       'experiment_identifier': {'value': '%s' % args[0][2]},
+                      'instrument_name': args[0][3],
+                      'sample_name': args[0][7],
                       'instrument': {
-                          'detector': {
-                              'intimage': {
-                                  'shape': [0, 30]}},
+                          'detector': {},
                           'name': {
                             'short_name': '%s' % args[0][4],
                             'value': '%s' % args[0][3]}},
@@ -558,10 +571,10 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'data': {},
                       'end_time': {'value': '%s' % args[1][6]},
                       'experiment_identifier': {'value': '%s' % args[1][2]},
+                      'instrument_name': args[1][3],
+                      'sample_name': args[1][7],
                       'instrument': {
-                          'detector': {
-                              'intimage': {
-                                  'shape': [0, 30]}},
+                          'detector': {},
                           'name': {
                               'short_name': '%s' % args[1][4],
                               'value': '%s' % args[1][3]}},
@@ -613,6 +626,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
         finally:
             if os.path.exists(cfgfname):
                 os.remove(cfgfname)
+            if os.path.exists(cpmapname):
+                os.remove(cpmapname)
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 

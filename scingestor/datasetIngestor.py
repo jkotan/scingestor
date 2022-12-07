@@ -128,6 +128,8 @@ class DatasetIngestor:
         self.__chmod = None
         #: (:obj:`str`) hidden attributes
         self.__hiddenattributes = None
+        #: (:obj:`str`) metadata copy map file
+        self.__copymapfile = None
         #: (:obj:`bool`) oned metadata flag
         self.__oned = False
         #: (:obj:`bool`) empty units flag
@@ -172,6 +174,8 @@ class DatasetIngestor:
 
         #: (:obj:`str`) oned generator switch
         self.__oned_switch = " --oned  "
+        #: (:obj:`str`) oned generator switch
+        self.__copymapfile_switch = " --copy-map-file {copymapfile}  "
         #: (:obj:`str`) empty units generator switch
         self.__emptyunits_switch = " --add-empty-units  "
         #: (:obj:`str`) chmod generator switch
@@ -280,6 +284,8 @@ class DatasetIngestor:
             self.__chmod = self.__config["chmod_json_files"]
         if "hidden_attributes" in self.__config.keys():
             self.__hiddenattributes = self.__config["hidden_attributes"]
+        if "metadata_copy_map_file" in self.__config.keys():
+            self.__copymapfile = self.__config["metadata_copy_map_file"]
         if "oned_in_metadata" in self.__config.keys():
             self.__oned = self.__config["oned_in_metadata"]
         if "add_empty_units" in self.__config.keys():
@@ -315,6 +321,10 @@ class DatasetIngestor:
         if "hidden_attributes_generator_switch" in self.__config.keys():
             self.__hiddenattributes_switch = \
                 self.__config["hidden_attributes_generator_switch"]
+
+        if "metadata_copy_map_file_generator_switch" in self.__config.keys():
+            self.__copymapfile_switch = \
+                self.__config["metadata_copy_map_file_generator_switch"]
 
         if "relative_path_generator_switch" in self.__config.keys():
             self.__relpath_switch = \
@@ -366,6 +376,13 @@ class DatasetIngestor:
             if "nxs_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__hiddenattributes_switch
+        if self.__copymapfile is not None:
+            if "dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommand = \
+                    self.__datasetcommand + self.__copymapfile_switch
+            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommandnxs = \
+                    self.__datasetcommandnxs + self.__copymapfile_switch
         if self.__oned:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
@@ -408,6 +425,7 @@ class DatasetIngestor:
             "scanname": None,
             "chmod": self.__chmod,
             "hiddenattributes": self.__hiddenattributes,
+            "copymapfile": self.__copymapfile,
             "scanpath": self.__path,
             "metapath": self.__metapath,
             "relpath": self.__relpath,
@@ -467,6 +485,9 @@ class DatasetIngestor:
             get_logger().debug(
                 'DatasetIngestor: Generating dataset command: %s ' % (
                     self.__datasetcommandnxs.format(**self.__dctfmt)))
+            # get_logger().info(
+            #     'DatasetIngestor: Generating dataset command: %s ' % (
+            #         self.__datasetcommandnxs.format(**self.__dctfmt)))
             subprocess.run(
                 self.__datasetcommandnxs.format(**self.__dctfmt).split(),
                 check=True)

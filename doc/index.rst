@@ -81,6 +81,8 @@ The configuration written in YAML can contain the following variables
 * **hidden_attributes** *(str)* , default: ``"nexdatas_source,nexdatas_strategy,units"``
 * **add_empty_units_generator_switch** *(str)* , default: ``" --add-empty-units "``
 * **add_empty_units** *(bool)* , default: ``True``
+* **metadata_copy_map_file** *(str)* , default: ``None``
+* **metadata_copy_map_file_generator_switch** *(str)* , default: ``" --copy-map-file {copymapfile} "``
 * **inotify_timeout** *(float)* , default: ``0.1``
 * **get_event_timeout** *(float)* , default: ``0.01``
 * **ingestion_delay_time** *(float)* , default: ``5.0``
