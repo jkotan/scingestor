@@ -1,17 +1,19 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>scingestor package &#8212; SciCat Dataset Ingestor 0.0.9 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>scingestor package &#8212; SciCat Dataset Ingestor 0.3.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="scicat_dataset_ingest" href="scicat_dataset_ingest.html" />
@@ -35,253 +37,284 @@
 </div>
 <div class="section" id="module-scingestor.beamtimeWatcher">
 <span id="scingestor-beamtimewatcher-module"></span><h2>scingestor.beamtimeWatcher module<a class="headerlink" href="#module-scingestor.beamtimeWatcher" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
+<dl class="class">
 <dt id="scingestor.beamtimeWatcher.BeamtimeWatcher">
-<em class="property">class </em><code class="sig-prename descclassname">scingestor.beamtimeWatcher.</code><code class="sig-name descname">BeamtimeWatcher</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">options</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/beamtimeWatcher.html#BeamtimeWatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.beamtimeWatcher.BeamtimeWatcher" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scingestor.beamtimeWatcher.</code><code class="descname">BeamtimeWatcher</code><span class="sig-paren">(</span><em>options</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/beamtimeWatcher.html#BeamtimeWatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.beamtimeWatcher.BeamtimeWatcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Beamtime Watcher</p>
 <p>constructor</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>options</strong> (<a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">argparse.Namespace</span></code></a>) – parser options</p>
-</dd>
-</dl>
-<dl class="py attribute">
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>options</strong> (<a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">argparse.Namespace</span></code></a>) – parser options</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
 <dt id="scingestor.beamtimeWatcher.BeamtimeWatcher.running">
-<code class="sig-name descname">running</code><a class="headerlink" href="#scingestor.beamtimeWatcher.BeamtimeWatcher.running" title="Permalink to this definition">¶</a></dt>
+<code class="descname">running</code><em class="property"> = None</em><a class="headerlink" href="#scingestor.beamtimeWatcher.BeamtimeWatcher.running" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) running loop flag</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.beamtimeWatcher.BeamtimeWatcher.start">
-<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/beamtimeWatcher.html#BeamtimeWatcher.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.beamtimeWatcher.BeamtimeWatcher.start" title="Permalink to this definition">¶</a></dt>
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/beamtimeWatcher.html#BeamtimeWatcher.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.beamtimeWatcher.BeamtimeWatcher.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>start beamtime watcher</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.beamtimeWatcher.BeamtimeWatcher.stop">
-<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/beamtimeWatcher.html#BeamtimeWatcher.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.beamtimeWatcher.BeamtimeWatcher.stop" title="Permalink to this definition">¶</a></dt>
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/beamtimeWatcher.html#BeamtimeWatcher.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.beamtimeWatcher.BeamtimeWatcher.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>stop beamtime watcher</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="scingestor.beamtimeWatcher.main">
-<code class="sig-prename descclassname">scingestor.beamtimeWatcher.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/beamtimeWatcher.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.beamtimeWatcher.main" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">scingestor.beamtimeWatcher.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/beamtimeWatcher.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.beamtimeWatcher.main" title="Permalink to this definition">¶</a></dt>
 <dd><p>the main program function</p>
 </dd></dl>
 
 </div>
 <div class="section" id="module-scingestor.configuration">
 <span id="scingestor-configuration-module"></span><h2>scingestor.configuration module<a class="headerlink" href="#module-scingestor.configuration" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
+<dl class="function">
 <dt id="scingestor.configuration.load_config">
-<code class="sig-prename descclassname">scingestor.configuration.</code><code class="sig-name descname">load_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">configfile</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/configuration.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.configuration.load_config" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">scingestor.configuration.</code><code class="descname">load_config</code><span class="sig-paren">(</span><em>configfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/configuration.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.configuration.load_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>load config file</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>configfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – configuration file name</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>configfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – configuration file name</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
 <div class="section" id="module-scingestor.datasetIngest">
 <span id="scingestor-datasetingest-module"></span><h2>scingestor.datasetIngest module<a class="headerlink" href="#module-scingestor.datasetIngest" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
+<dl class="class">
 <dt id="scingestor.datasetIngest.DatasetIngest">
-<em class="property">class </em><code class="sig-prename descclassname">scingestor.datasetIngest.</code><code class="sig-name descname">DatasetIngest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">options</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngest.html#DatasetIngest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngest.DatasetIngest" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scingestor.datasetIngest.</code><code class="descname">DatasetIngest</code><span class="sig-paren">(</span><em>options</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngest.html#DatasetIngest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngest.DatasetIngest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Dataset Ingest command</p>
 <p>constructor</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>options</strong> (<a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">argparse.Namespace</span></code></a>) – parser options</p>
-</dd>
-</dl>
-<dl class="py method">
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>options</strong> (<a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">argparse.Namespace</span></code></a>) – parser options</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
 <dt id="scingestor.datasetIngest.DatasetIngest.start">
-<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngest.html#DatasetIngest.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngest.DatasetIngest.start" title="Permalink to this definition">¶</a></dt>
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngest.html#DatasetIngest.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngest.DatasetIngest.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>start ingestion</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="scingestor.datasetIngest.main">
-<code class="sig-prename descclassname">scingestor.datasetIngest.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngest.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngest.main" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">scingestor.datasetIngest.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngest.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngest.main" title="Permalink to this definition">¶</a></dt>
 <dd><p>the main program function</p>
 </dd></dl>
 
 </div>
 <div class="section" id="module-scingestor.datasetIngestor">
 <span id="scingestor-datasetingestor-module"></span><h2>scingestor.datasetIngestor module<a class="headerlink" href="#module-scingestor.datasetIngestor" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
+<dl class="class">
 <dt id="scingestor.datasetIngestor.DatasetIngestor">
-<em class="property">class </em><code class="sig-prename descclassname">scingestor.datasetIngestor.</code><code class="sig-name descname">DatasetIngestor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">configuration</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">dsfile</span></em>, <em class="sig-param"><span class="n">idsfile</span></em>, <em class="sig-param"><span class="n">meta</span></em>, <em class="sig-param"><span class="n">beamtimefile</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scingestor.datasetIngestor.</code><code class="descname">DatasetIngestor</code><span class="sig-paren">(</span><em>configuration</em>, <em>path</em>, <em>dsfile</em>, <em>idsfile</em>, <em>meta</em>, <em>beamtimefile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Dataset Ingestor</p>
 <p>constructor</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>configuration</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – dictionary with the ingestor configuration</p></li>
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – scan dir path</p></li>
-<li><p><strong>dsfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – file with a dataset list</p></li>
-<li><p><strong>dsfile</strong> – file with a ingester dataset list</p></li>
-<li><p><strong>meta</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – beamtime configuration</p></li>
-<li><p><strong>beamtimefile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – beamtime filename</p></li>
-<li><p><strong>pidprefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – pidprefix</p></li>
-<li><p><strong>ingestorcred</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – ingestor credential</p></li>
-<li><p><strong>scicat_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – scicat_url</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>configuration</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – dictionary with the ingestor configuration</li>
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – scan dir path</li>
+<li><strong>dsfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – file with a dataset list</li>
+<li><strong>dsfile</strong> – file with a ingester dataset list</li>
+<li><strong>meta</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – beamtime configuration</li>
+<li><strong>beamtimefile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – beamtime filename</li>
+<li><strong>pidprefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – pidprefix</li>
+<li><strong>ingestorcred</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – ingestor credential</li>
+<li><strong>scicat_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – scicat_url</li>
 </ul>
-</dd>
-</dl>
-<dl class="py method">
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
 <dt id="scingestor.datasetIngestor.DatasetIngestor.append_proposal_groups">
-<code class="sig-name descname">append_proposal_groups</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.append_proposal_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.append_proposal_groups" title="Permalink to this definition">¶</a></dt>
+<code class="descname">append_proposal_groups</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.append_proposal_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.append_proposal_groups" title="Permalink to this definition">¶</a></dt>
 <dd><p>appends owner and access groups to beamtime</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>meta</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – beamtime configuration</p></li>
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – base file path</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>meta</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – beamtime configuration</li>
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – base file path</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>updated beamtime configuration</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">updated beamtime configuration</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.datasetIngestor.DatasetIngestor.check_list">
-<code class="sig-name descname">check_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reingest</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.check_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.check_list" title="Permalink to this definition">¶</a></dt>
+<code class="descname">check_list</code><span class="sig-paren">(</span><em>reingest=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.check_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.check_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>update waiting and ingested datasets</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.datasetIngestor.DatasetIngestor.clear_tmpfile">
-<code class="sig-name descname">clear_tmpfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.clear_tmpfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.clear_tmpfile" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clear_tmpfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.clear_tmpfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.clear_tmpfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>clear waitings datasets</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.datasetIngestor.DatasetIngestor.clear_waiting_datasets">
-<code class="sig-name descname">clear_waiting_datasets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.clear_waiting_datasets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.clear_waiting_datasets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clear_waiting_datasets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.clear_waiting_datasets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.clear_waiting_datasets" title="Permalink to this definition">¶</a></dt>
 <dd><p>clear waitings datasets</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.datasetIngestor.DatasetIngestor.get_token">
-<code class="sig-name descname">get_token</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.get_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.get_token" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_token</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.get_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.get_token" title="Permalink to this definition">¶</a></dt>
 <dd><p>provides ingestor token</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>ingestor token</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">ingestor token</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.datasetIngestor.DatasetIngestor.ingest">
-<code class="sig-name descname">ingest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scan</span></em>, <em class="sig-param"><span class="n">token</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.ingest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.ingest" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ingest</code><span class="sig-paren">(</span><em>scan</em>, <em>token</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.ingest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.ingest" title="Permalink to this definition">¶</a></dt>
 <dd><p>ingest scan</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>scan</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – scan name</p></li>
-<li><p><strong>token</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – access token</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>scan</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – scan name</li>
+<li><strong>token</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – access token</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.datasetIngestor.DatasetIngestor.ingested_datasets">
-<code class="sig-name descname">ingested_datasets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.ingested_datasets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.ingested_datasets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ingested_datasets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.ingested_datasets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.ingested_datasets" title="Permalink to this definition">¶</a></dt>
 <dd><p>provides ingested datasets</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>ingested datasets list</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">ingested datasets list</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.datasetIngestor.DatasetIngestor.reingest">
-<code class="sig-name descname">reingest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scan</span></em>, <em class="sig-param"><span class="n">token</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.reingest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.reingest" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reingest</code><span class="sig-paren">(</span><em>scan</em>, <em>token</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.reingest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.reingest" title="Permalink to this definition">¶</a></dt>
 <dd><p>ingest scan</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>scan</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – scan name</p></li>
-<li><p><strong>token</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – access token</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>scan</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – scan name</li>
+<li><strong>token</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – access token</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.datasetIngestor.DatasetIngestor.update_from_tmpfile">
-<code class="sig-name descname">update_from_tmpfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.update_from_tmpfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.update_from_tmpfile" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update_from_tmpfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.update_from_tmpfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.update_from_tmpfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>clear waitings datasets</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.datasetIngestor.DatasetIngestor.waiting_datasets">
-<code class="sig-name descname">waiting_datasets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.waiting_datasets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.waiting_datasets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">waiting_datasets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#DatasetIngestor.waiting_datasets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.DatasetIngestor.waiting_datasets" title="Permalink to this definition">¶</a></dt>
 <dd><p>provides waitings datasets</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>waitings datasets list</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">waitings datasets list</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>&gt;</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="py class">
+<dl class="class">
 <dt id="scingestor.datasetIngestor.UpdateStrategy">
-<em class="property">class </em><code class="sig-prename descclassname">scingestor.datasetIngestor.</code><code class="sig-name descname">UpdateStrategy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#UpdateStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.UpdateStrategy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scingestor.datasetIngestor.</code><code class="descname">UpdateStrategy</code><a class="reference internal" href="_modules/scingestor/datasetIngestor.html#UpdateStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetIngestor.UpdateStrategy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Update strategy</p>
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="scingestor.datasetIngestor.UpdateStrategy.CREATE">
-<code class="sig-name descname">CREATE</code><em class="property"> = 2</em><a class="headerlink" href="#scingestor.datasetIngestor.UpdateStrategy.CREATE" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CREATE</code><em class="property"> = 2</em><a class="headerlink" href="#scingestor.datasetIngestor.UpdateStrategy.CREATE" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference internal" href="#scingestor.datasetIngestor.UpdateStrategy" title="scingestor.datasetIngestor.UpdateStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">scingestor.datasetIngestor.UpdateStrategy</span></code></a>) recreate datasets</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="scingestor.datasetIngestor.UpdateStrategy.MIXED">
-<code class="sig-name descname">MIXED</code><em class="property"> = 3</em><a class="headerlink" href="#scingestor.datasetIngestor.UpdateStrategy.MIXED" title="Permalink to this definition">¶</a></dt>
+<code class="descname">MIXED</code><em class="property"> = 3</em><a class="headerlink" href="#scingestor.datasetIngestor.UpdateStrategy.MIXED" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference internal" href="#scingestor.datasetIngestor.UpdateStrategy" title="scingestor.datasetIngestor.UpdateStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">scingestor.datasetIngestor.UpdateStrategy</span></code></a>) patch datasets only
 if scientificMetadata changed otherwise recreate datasets</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="scingestor.datasetIngestor.UpdateStrategy.NO">
-<code class="sig-name descname">NO</code><em class="property"> = 0</em><a class="headerlink" href="#scingestor.datasetIngestor.UpdateStrategy.NO" title="Permalink to this definition">¶</a></dt>
+<code class="descname">NO</code><em class="property"> = 0</em><a class="headerlink" href="#scingestor.datasetIngestor.UpdateStrategy.NO" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference internal" href="#scingestor.datasetIngestor.UpdateStrategy" title="scingestor.datasetIngestor.UpdateStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">scingestor.datasetIngestor.UpdateStrategy</span></code></a>)
 leave datasets unchanged</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="scingestor.datasetIngestor.UpdateStrategy.PATCH">
-<code class="sig-name descname">PATCH</code><em class="property"> = 1</em><a class="headerlink" href="#scingestor.datasetIngestor.UpdateStrategy.PATCH" title="Permalink to this definition">¶</a></dt>
+<code class="descname">PATCH</code><em class="property"> = 1</em><a class="headerlink" href="#scingestor.datasetIngestor.UpdateStrategy.PATCH" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference internal" href="#scingestor.datasetIngestor.UpdateStrategy" title="scingestor.datasetIngestor.UpdateStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">scingestor.datasetIngestor.UpdateStrategy</span></code></a>) patch datasets</p>
 </dd></dl>
 
@@ -290,39 +323,43 @@ leave datasets unchanged</p>
 </div>
 <div class="section" id="module-scingestor.datasetWatcher">
 <span id="scingestor-datasetwatcher-module"></span><h2>scingestor.datasetWatcher module<a class="headerlink" href="#module-scingestor.datasetWatcher" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
+<dl class="class">
 <dt id="scingestor.datasetWatcher.DatasetWatcher">
-<em class="property">class </em><code class="sig-prename descclassname">scingestor.datasetWatcher.</code><code class="sig-name descname">DatasetWatcher</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">configuration</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">dsfile</span></em>, <em class="sig-param"><span class="n">idsfile</span></em>, <em class="sig-param"><span class="n">meta</span></em>, <em class="sig-param"><span class="n">beamtimefile</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetWatcher.html#DatasetWatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetWatcher.DatasetWatcher" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scingestor.datasetWatcher.</code><code class="descname">DatasetWatcher</code><span class="sig-paren">(</span><em>configuration</em>, <em>path</em>, <em>dsfile</em>, <em>idsfile</em>, <em>meta</em>, <em>beamtimefile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetWatcher.html#DatasetWatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetWatcher.DatasetWatcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Thread" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></a></p>
 <p>Dataset  Watcher</p>
 <p>constructor</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>configuration</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – dictionary with the ingestor configuration</p></li>
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – scan dir path</p></li>
-<li><p><strong>dsfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – file with a dataset list</p></li>
-<li><p><strong>dsfile</strong> – file with a ingester dataset list</p></li>
-<li><p><strong>meta</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – beamtime configuration</p></li>
-<li><p><strong>beamtimefile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – beamtime filename</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>configuration</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – dictionary with the ingestor configuration</li>
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – scan dir path</li>
+<li><strong>dsfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – file with a dataset list</li>
+<li><strong>dsfile</strong> – file with a ingester dataset list</li>
+<li><strong>meta</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – beamtime configuration</li>
+<li><strong>beamtimefile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – beamtime filename</li>
 </ul>
-</dd>
-</dl>
-<dl class="py method">
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
 <dt id="scingestor.datasetWatcher.DatasetWatcher.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetWatcher.html#DatasetWatcher.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetWatcher.DatasetWatcher.run" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetWatcher.html#DatasetWatcher.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetWatcher.DatasetWatcher.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>scandir watcher thread</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="scingestor.datasetWatcher.DatasetWatcher.running">
-<code class="sig-name descname">running</code><a class="headerlink" href="#scingestor.datasetWatcher.DatasetWatcher.running" title="Permalink to this definition">¶</a></dt>
+<code class="descname">running</code><em class="property"> = None</em><a class="headerlink" href="#scingestor.datasetWatcher.DatasetWatcher.running" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) running loop flag</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.datasetWatcher.DatasetWatcher.stop">
-<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetWatcher.html#DatasetWatcher.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetWatcher.DatasetWatcher.stop" title="Permalink to this definition">¶</a></dt>
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/datasetWatcher.html#DatasetWatcher.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.datasetWatcher.DatasetWatcher.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>stop the watcher</p>
 </dd></dl>
 
@@ -331,9 +368,9 @@ leave datasets unchanged</p>
 </div>
 <div class="section" id="module-scingestor.logger">
 <span id="scingestor-logger-module"></span><h2>scingestor.logger module<a class="headerlink" href="#module-scingestor.logger" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
+<dl class="class">
 <dt id="scingestor.logger.AccSecFormatter">
-<em class="property">class </em><code class="sig-prename descclassname">scingestor.logger.</code><code class="sig-name descname">AccSecFormatter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fmt</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">datefmt</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">'%'</span></em>, <em class="sig-param"><span class="n">validate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/logger.html#AccSecFormatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.logger.AccSecFormatter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scingestor.logger.</code><code class="descname">AccSecFormatter</code><span class="sig-paren">(</span><em>fmt=None</em>, <em>datefmt=None</em>, <em>style='%'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/logger.html#AccSecFormatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.logger.AccSecFormatter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Formatter" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Formatter</span></code></a></p>
 <p>micro-second formatter</p>
 <p>Initialize the formatter with specified format strings.</p>
@@ -345,17 +382,17 @@ ISO8601-like (or RFC 3339-like) format.</p>
 use one of %-formatting, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str.format" title="(in Python v3.11)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">str.format()</span></code></a> (<code class="docutils literal notranslate"><span class="pre">{}</span></code>) formatting or
 <a class="reference external" href="https://docs.python.org/3/library/string.html#string.Template" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">string.Template</span></code></a> formatting in your format string.</p>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 3.2: </span>Added the <code class="docutils literal notranslate"><span class="pre">style</span></code> parameter.</p>
+<p><span class="versionmodified">Changed in version 3.2: </span>Added the <code class="docutils literal notranslate"><span class="pre">style</span></code> parameter.</p>
 </div>
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.logger.AccSecFormatter.converter">
-<code class="sig-name descname">converter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scingestor.logger.AccSecFormatter.converter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">converter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scingestor.logger.AccSecFormatter.converter" title="Permalink to this definition">¶</a></dt>
 <dd><p>timestamp[, tz] -&gt; tz’s local time from POSIX timestamp.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.logger.AccSecFormatter.formatTime">
-<code class="sig-name descname">formatTime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">record</span></em>, <em class="sig-param"><span class="n">datefmt</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/logger.html#AccSecFormatter.formatTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.logger.AccSecFormatter.formatTime" title="Permalink to this definition">¶</a></dt>
+<code class="descname">formatTime</code><span class="sig-paren">(</span><em>record</em>, <em>datefmt=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/logger.html#AccSecFormatter.formatTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.logger.AccSecFormatter.formatTime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the creation time of the specified LogRecord as formatted text.</p>
 <p>This method should be called from format() by a formatter which
 wants to make use of a formatted time. This method can be overridden
@@ -374,70 +411,80 @@ set the ‘converter’ attribute in the Formatter class.</p>
 
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="scingestor.logger.get_logger">
-<code class="sig-prename descclassname">scingestor.logger.</code><code class="sig-name descname">get_logger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/logger.html#get_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.logger.get_logger" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">scingestor.logger.</code><code class="descname">get_logger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/logger.html#get_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.logger.get_logger" title="Permalink to this definition">¶</a></dt>
 <dd><p>provides logger object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.logger</span></code></p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>logger object</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.logger</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">logger object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="scingestor.logger.init_logger">
-<code class="sig-prename descclassname">scingestor.logger.</code><code class="sig-name descname">init_logger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'scingestor.logger'</span></em>, <em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">'debug'</span></em>, <em class="sig-param"><span class="n">timestamps</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">logfile</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/logger.html#init_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.logger.init_logger" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">scingestor.logger.</code><code class="descname">init_logger</code><span class="sig-paren">(</span><em>name='scingestor.logger'</em>, <em>level='debug'</em>, <em>timestamps=False</em>, <em>logfile=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/logger.html#init_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.logger.init_logger" title="Permalink to this definition">¶</a></dt>
 <dd><p>init logger</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – logger name</p></li>
-<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – logging level</p></li>
-<li><p><strong>timestamps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – timestamps flag</p></li>
-<li><p><strong>logfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – logger file name</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – logger name</li>
+<li><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – logging level</li>
+<li><strong>timestamps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – timestamps flag</li>
+<li><strong>logfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – logger file name</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
 <div class="section" id="module-scingestor.safeINotifier">
 <span id="scingestor-safeinotifier-module"></span><h2>scingestor.safeINotifier module<a class="headerlink" href="#module-scingestor.safeINotifier" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
+<dl class="class">
 <dt id="scingestor.safeINotifier.EventData">
-<em class="property">class </em><code class="sig-prename descclassname">scingestor.safeINotifier.</code><code class="sig-name descname">EventData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">masks</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#EventData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.EventData" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scingestor.safeINotifier.</code><code class="descname">EventData</code><span class="sig-paren">(</span><em>name</em>, <em>masks</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#EventData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.EventData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>event data</p>
 <p>constructor</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – name</p></li>
-<li><p><strong>masks</strong> – mask description</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – name</li>
+<li><strong>masks</strong> – mask description</li>
 </ul>
-</dd>
-</dl>
-<dl class="py attribute">
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
 <dt id="scingestor.safeINotifier.EventData.masks">
-<code class="sig-name descname">masks</code><a class="headerlink" href="#scingestor.safeINotifier.EventData.masks" title="Permalink to this definition">¶</a></dt>
+<code class="descname">masks</code><em class="property"> = None</em><a class="headerlink" href="#scingestor.safeINotifier.EventData.masks" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) mask</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="scingestor.safeINotifier.EventData.name">
-<code class="sig-name descname">name</code><a class="headerlink" href="#scingestor.safeINotifier.EventData.name" title="Permalink to this definition">¶</a></dt>
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#scingestor.safeINotifier.EventData.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) name</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="py class">
+<dl class="class">
 <dt id="scingestor.safeINotifier.SafeINotifier">
-<em class="property">class </em><code class="sig-prename descclassname">scingestor.safeINotifier.</code><code class="sig-name descname">SafeINotifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#SafeINotifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scingestor.safeINotifier.</code><code class="descname">SafeINotifier</code><span class="sig-paren">(</span><em>group=None</em>, <em>target=None</em>, <em>name=None</em>, <em>args=()</em>, <em>kwargs=None</em>, <em>*</em>, <em>daemon=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#SafeINotifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Thread" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></a></p>
 <p>singleton wrapper for inotifyx</p>
 <p>This constructor should always be called with keyword arguments. Arguments are:</p>
@@ -453,58 +500,65 @@ invocation. Defaults to {}.</p>
 <p>If a subclass overrides the constructor, it must make sure to invoke
 the base class constructor (Thread.__init__()) before doing anything
 else to the thread.</p>
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.safeINotifier.SafeINotifier.add_watch">
-<code class="sig-name descname">add_watch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">masks</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#SafeINotifier.add_watch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier.add_watch" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_watch</code><span class="sig-paren">(</span><em>path</em>, <em>masks</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#SafeINotifier.add_watch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier.add_watch" title="Permalink to this definition">¶</a></dt>
 <dd><p>add watch to notifier</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – watch path</p></li>
-<li><p><strong>mask</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – watch mask</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – watch path</li>
+<li><strong>mask</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – watch mask</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>queue providing events and its id</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>[<a class="reference external" href="https://docs.python.org/3/library/queue.html#queue.Queue" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">queue.Queue</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>]</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">queue providing events and its id</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">[<a class="reference external" href="https://docs.python.org/3/library/queue.html#queue.Queue" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">queue.Queue</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="scingestor.safeINotifier.SafeINotifier.daemon">
-<code class="sig-name descname">daemon</code><em class="property"> = True</em><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier.daemon" title="Permalink to this definition">¶</a></dt>
+<code class="descname">daemon</code><em class="property"> = True</em><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier.daemon" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) make notifier to be a daemon</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.safeINotifier.SafeINotifier.init">
-<code class="sig-name descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#SafeINotifier.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier.init" title="Permalink to this definition">¶</a></dt>
+<code class="descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#SafeINotifier.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier.init" title="Permalink to this definition">¶</a></dt>
 <dd><p>constructor</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.safeINotifier.SafeINotifier.rm_watch">
-<code class="sig-name descname">rm_watch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">qid</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#SafeINotifier.rm_watch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier.rm_watch" title="Permalink to this definition">¶</a></dt>
+<code class="descname">rm_watch</code><span class="sig-paren">(</span><em>qid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#SafeINotifier.rm_watch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier.rm_watch" title="Permalink to this definition">¶</a></dt>
 <dd><p>remove watch from notifier</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>qid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – queue id</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>qid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – queue id</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.safeINotifier.SafeINotifier.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#SafeINotifier.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier.run" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#SafeINotifier.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>scandir watcher thread</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.safeINotifier.SafeINotifier.stop">
-<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#SafeINotifier.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier.stop" title="Permalink to this definition">¶</a></dt>
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/safeINotifier.html#SafeINotifier.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.safeINotifier.SafeINotifier.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>stop the watcher</p>
 </dd></dl>
 
@@ -513,38 +567,42 @@ else to the thread.</p>
 </div>
 <div class="section" id="module-scingestor.scanDirWatcher">
 <span id="scingestor-scandirwatcher-module"></span><h2>scingestor.scanDirWatcher module<a class="headerlink" href="#module-scingestor.scanDirWatcher" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
+<dl class="class">
 <dt id="scingestor.scanDirWatcher.ScanDirWatcher">
-<em class="property">class </em><code class="sig-prename descclassname">scingestor.scanDirWatcher.</code><code class="sig-name descname">ScanDirWatcher</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">configuration</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">meta</span></em>, <em class="sig-param"><span class="n">beamtimefile</span></em>, <em class="sig-param"><span class="n">depth</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/scanDirWatcher.html#ScanDirWatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.scanDirWatcher.ScanDirWatcher" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scingestor.scanDirWatcher.</code><code class="descname">ScanDirWatcher</code><span class="sig-paren">(</span><em>configuration</em>, <em>path</em>, <em>meta</em>, <em>beamtimefile</em>, <em>depth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/scanDirWatcher.html#ScanDirWatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.scanDirWatcher.ScanDirWatcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Thread" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></a></p>
 <p>ScanDir Watcher</p>
 <p>constructor</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>configuration</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – dictionary with the ingestor configuration</p></li>
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – scan dir path</p></li>
-<li><p><strong>meta</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – beamtime configuration</p></li>
-<li><p><strong>beamtimefile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – beamtime file</p></li>
-<li><p><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – scandir depth level</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>configuration</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – dictionary with the ingestor configuration</li>
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – scan dir path</li>
+<li><strong>meta</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> &lt;<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <cite>any</cite>&gt;) – beamtime configuration</li>
+<li><strong>beamtimefile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – beamtime file</li>
+<li><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – scandir depth level</li>
 </ul>
-</dd>
-</dl>
-<dl class="py method">
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
 <dt id="scingestor.scanDirWatcher.ScanDirWatcher.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/scanDirWatcher.html#ScanDirWatcher.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.scanDirWatcher.ScanDirWatcher.run" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/scanDirWatcher.html#ScanDirWatcher.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.scanDirWatcher.ScanDirWatcher.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>scandir watcher thread</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="scingestor.scanDirWatcher.ScanDirWatcher.running">
-<code class="sig-name descname">running</code><a class="headerlink" href="#scingestor.scanDirWatcher.ScanDirWatcher.running" title="Permalink to this definition">¶</a></dt>
+<code class="descname">running</code><em class="property"> = None</em><a class="headerlink" href="#scingestor.scanDirWatcher.ScanDirWatcher.running" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) running loop flag</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="scingestor.scanDirWatcher.ScanDirWatcher.stop">
-<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/scanDirWatcher.html#ScanDirWatcher.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.scanDirWatcher.ScanDirWatcher.stop" title="Permalink to this definition">¶</a></dt>
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/scanDirWatcher.html#ScanDirWatcher.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.scanDirWatcher.ScanDirWatcher.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>stop the watcher</p>
 </dd></dl>
 
@@ -600,15 +658,17 @@ else to the thread.</p>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -617,7 +677,7 @@ else to the thread.</p>
       &copy;2022, DESY, Jan Kotanski.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |

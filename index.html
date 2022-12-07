@@ -1,17 +1,19 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 0.0.9 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 0.3.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="scicat_dataset_ingestor" href="scicat_dataset_ingestor.html" />
@@ -47,48 +49,56 @@ is finished. It can be executed by</p>
 <h3>Configuration variables<a class="headerlink" href="#configuration-variables" title="Permalink to this headline">¶</a></h3>
 <p>The configuration written in YAML can contain the following variables</p>
 <ul class="simple">
-<li><p><strong>scicat_url</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;http://localhost:8881&quot;</span></code></p></li>
-<li><p><strong>ingestor_credential_file</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
-<li><p><strong>beamtime_dirs</strong> <em>(list&lt;str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">[]</span></code></p></li>
-<li><p><strong>beamtime_base_dir</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></li>
-<li><p><strong>ingestor_var_dir</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></li>
-<li><p><strong>ingestor_username</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;ingestor&quot;</span></code></p></li>
-<li><p><strong>dataset_pid_prefix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></li>
-<li><p><strong>dataset_update_strategy</strong> (<code class="docutils literal notranslate"><span class="pre">&quot;no&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;patch&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;create&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mixed&quot;</span></code>) , default: <code class="docutils literal notranslate"><span class="pre">&quot;patch&quot;</span></code></p></li>
-<li><p><strong>relative_path_in_datablock</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
-<li><p><strong>scandir_blacklist</strong> <em>(list&lt;str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">[&quot;/gpfs/current/scratch_bl&quot;,</span> <span class="pre">&quot;/gpfs/current/processed&quot;,</span> <span class="pre">&quot;/gpfs/current/shared&quot;]</span></code></p></li>
-<li><p><strong>chmod_json_files</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
-<li><p><strong>max_scandir_depth</strong> <em>(int)</em>, default: <code class="docutils literal notranslate"><span class="pre">-1</span></code></p></li>
-<li><p><strong>oned_in_metadata</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
-<li><p><strong>scan_metadata_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.scan.json&quot;</span></code></p></li>
-<li><p><strong>datablock_metadata_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.origdatablock.json&quot;</span></code></p></li>
-<li><p><strong>metadata_in_var_dir</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
-<li><p><strong>use_corepath_as_scandir</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
-<li><p><strong>beamtime_filename_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;beamtime-metadata-&quot;</span></code></p></li>
-<li><p><strong>beamtime_filename_prefix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.json&quot;</span></code></p></li>
-<li><p><strong>datasets_filename_pattern</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;scicat-datasets-{beamtimeid}.lst&quot;</span></code></p></li>
-<li><p><strong>ingested_datasets_filename_pattern</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{beamtimeid}.lst&quot;</span></code></p></li>
-<li><p><strong>nxs_dataset_metadata_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">metadata</span>&#160; <span class="pre">-o</span> <span class="pre">{metapath}/{scanname}{scanpostfix}</span>&#160; <span class="pre">-b</span> <span class="pre">{beamtimefile}</span> <span class="pre">-p</span> <span class="pre">{beamtimeid}/{scanname}</span>&#160; <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">{scanpath}/{scanname}.nxs&quot;</span></code></p></li>
-<li><p><strong>dataset_metadata_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">metadata</span>&#160; <span class="pre">-o</span> <span class="pre">{metapath}/{scanname}{scanpostfix}</span>&#160; <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-b</span> <span class="pre">{beamtimefile}</span> <span class="pre">-p</span> <span class="pre">{beamtimeid}/{scanname}&quot;</span></code></p></li>
-<li><p><strong>datablock_metadata_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">origdatablock</span>&#160; <span class="pre">-s</span> <span class="pre">*.pyc,*{datablockpostfix},*{scanpostfix},*~</span>&#160; <span class="pre">-p</span> <span class="pre">{doiprefix}/{beamtimeid}/{scanname}</span>&#160; <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">-o</span> <span class="pre">{metapath}/{scanname}{datablockpostfix}</span> <span class="pre">&quot;</span></code></p></li>
-<li><p><strong>datablock_metadata_stream_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">origdatablock</span>&#160; <span class="pre">-s</span> <span class="pre">*.pyc,*{datablockpostfix},*{scanpostfix},*~</span>&#160; <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">-p</span> <span class="pre">{doiprefix}/{beamtimeid}/{scanname}</span> <span class="pre">&quot;</span></code></p></li>
-<li><p><strong>datablock_metadata_generator_scanpath_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">{scanpath}/{scanname}</span> <span class="pre">&quot;</span></code></p></li>
-<li><p><strong>chmod_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">-x</span> <span class="pre">{chmod}</span> <span class="pre">&quot;</span></code></p></li>
-<li><p><strong>relative_path_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">-r</span> <span class="pre">{relpath}</span> <span class="pre">&quot;</span></code></p></li>
-<li><p><strong>oned_dataset_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">--oned</span> <span class="pre">&quot;</span></code></p></li>
-<li><p><strong>inotify_timeout</strong> <em>(float)</em> , default: <code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></li>
-<li><p><strong>get_event_timeout</strong> <em>(float)</em> , default: <code class="docutils literal notranslate"><span class="pre">0.01</span></code></p></li>
-<li><p><strong>ingestion_delay_time</strong> <em>(float)</em> , default: <code class="docutils literal notranslate"><span class="pre">5.0</span></code></p></li>
-<li><p><strong>max_request_tries_number</strong> <em>(int)</em> , default: <code class="docutils literal notranslate"><span class="pre">100</span></code></p></li>
-<li><p><strong>recheck_dataset_list_interval</strong> <em>(int)</em> , default: <code class="docutils literal notranslate"><span class="pre">1000</span></code></p></li>
-<li><p><strong>recheck_beamtime_file_interval</strong> <em>(int)</em> , default: <code class="docutils literal notranslate"><span class="pre">1000</span></code></p></li>
-<li><p><strong>request_headers</strong> <em>(dict&lt;str,str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">{&quot;Content-Type&quot;:</span> <span class="pre">&quot;application/json&quot;,</span> <span class="pre">&quot;Accept&quot;:</span> <span class="pre">&quot;application/json&quot;}</span></code></p></li>
-<li><p><strong>scicat_datasets_path</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;RawDatasets&quot;</span></code></p></li>
-<li><p><strong>scicat_proposals_path</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;Proposals&quot;</span></code></p></li>
-<li><p><strong>scicat_datablocks_path</strong> <em>(str)</em>, default: <code class="docutils literal notranslate"><span class="pre">&quot;OrigDatablocks&quot;</span></code></p></li>
-<li><p><strong>scicat_users_login_path</strong> <em>(str)</em>, default: <code class="docutils literal notranslate"><span class="pre">&quot;Users/login&quot;</span></code></p></li>
-<li><p><strong>owner_access_groups_from_proposal</strong> <em>(bool)</em>, default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
-<li><p><strong>metadata_keywords_without_checks</strong> <em>(list&lt;str&gt;)</em>, default: <code class="docutils literal notranslate"><span class="pre">[&quot;techniques&quot;,</span> <span class="pre">&quot;classification&quot;,</span> <span class="pre">&quot;createdBy&quot;,</span> <span class="pre">&quot;updatedBy&quot;,</span> <span class="pre">&quot;datasetlifecycle&quot;,</span> <span class="pre">&quot;numberOfFiles&quot;,</span> <span class="pre">&quot;size&quot;,</span> <span class="pre">&quot;createdAt&quot;,</span> <span class="pre">&quot;updatedAt&quot;,</span> <span class="pre">&quot;history&quot;,</span> <span class="pre">&quot;creationTime&quot;,</span> <span class="pre">&quot;version&quot;,</span> <span class="pre">&quot;scientificMetadata&quot;,</span> <span class="pre">&quot;endTime&quot;]</span></code></p></li>
+<li><strong>scicat_url</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;http://localhost:8881&quot;</span></code></li>
+<li><strong>ingestor_credential_file</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>beamtime_dirs</strong> <em>(list&lt;str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">[]</span></code></li>
+<li><strong>beamtime_base_dir</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></li>
+<li><strong>ingestor_var_dir</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></li>
+<li><strong>ingestor_username</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;ingestor&quot;</span></code></li>
+<li><strong>dataset_pid_prefix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></li>
+<li><strong>dataset_update_strategy</strong> (<code class="docutils literal notranslate"><span class="pre">&quot;no&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;patch&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;create&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mixed&quot;</span></code>) , default: <code class="docutils literal notranslate"><span class="pre">&quot;patch&quot;</span></code></li>
+<li><strong>relative_path_in_datablock</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
+<li><strong>scandir_blacklist</strong> <em>(list&lt;str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">[&quot;/gpfs/current/scratch_bl&quot;,</span> <span class="pre">&quot;/gpfs/current/processed&quot;,</span> <span class="pre">&quot;/gpfs/current/shared&quot;]</span></code></li>
+<li><strong>beamtimeid_blacklist_file</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>beamtime_type_blacklist</strong> <em>(list&lt;str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">[&quot;P&quot;]</span></code></li>
+<li><strong>chmod_json_files</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>max_scandir_depth</strong> <em>(int)</em>, default: <code class="docutils literal notranslate"><span class="pre">-1</span></code></li>
+<li><strong>oned_in_metadata</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
+<li><strong>scan_metadata_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.scan.json&quot;</span></code></li>
+<li><strong>datablock_metadata_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.origdatablock.json&quot;</span></code></li>
+<li><strong>metadata_in_var_dir</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
+<li><strong>use_corepath_as_scandir</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
+<li><strong>beamtime_filename_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;beamtime-metadata-&quot;</span></code></li>
+<li><strong>beamtime_filename_prefix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.json&quot;</span></code></li>
+<li><strong>datasets_filename_pattern</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;scicat-datasets-{beamtimeid}.lst&quot;</span></code></li>
+<li><strong>ingested_datasets_filename_pattern</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{beamtimeid}.lst&quot;</span></code></li>
+<li><strong>nxs_dataset_metadata_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">metadata</span>&#160; <span class="pre">-o</span> <span class="pre">{metapath}/{scanname}{scanpostfix}</span>&#160; <span class="pre">-b</span> <span class="pre">{beamtimefile}</span> <span class="pre">-p</span> <span class="pre">{beamtimeid}/{scanname}</span>&#160; <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">{scanpath}/{scanname}.nxs&quot;</span></code></li>
+<li><strong>dataset_metadata_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">metadata</span>&#160; <span class="pre">-o</span> <span class="pre">{metapath}/{scanname}{scanpostfix}</span>&#160; <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-b</span> <span class="pre">{beamtimefile}</span> <span class="pre">-p</span> <span class="pre">{beamtimeid}/{scanname}&quot;</span></code></li>
+<li><strong>datablock_metadata_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">origdatablock</span>&#160; <span class="pre">-s</span> <span class="pre">*.pyc,*{datablockpostfix},*{scanpostfix},*~</span>&#160; <span class="pre">-p</span> <span class="pre">{doiprefix}/{beamtimeid}/{scanname}</span>&#160; <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">-o</span> <span class="pre">{metapath}/{scanname}{datablockpostfix}</span> <span class="pre">&quot;</span></code></li>
+<li><strong>datablock_metadata_stream_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">origdatablock</span>&#160; <span class="pre">-s</span> <span class="pre">*.pyc,*{datablockpostfix},*{scanpostfix},*~</span>&#160; <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">-p</span> <span class="pre">{doiprefix}/{beamtimeid}/{scanname}</span> <span class="pre">&quot;</span></code></li>
+<li><strong>datablock_metadata_generator_scanpath_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">{scanpath}/{scanname}</span> <span class="pre">&quot;</span></code></li>
+<li><strong>chmod_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">-x</span> <span class="pre">{chmod}</span> <span class="pre">&quot;</span></code></li>
+<li><strong>relative_path_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">-r</span> <span class="pre">{relpath}</span> <span class="pre">&quot;</span></code></li>
+<li><strong>oned_dataset_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">--oned</span> <span class="pre">&quot;</span></code></li>
+<li><strong>hidden_attributes_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">-n</span> <span class="pre">{hiddenattributes}</span> <span class="pre">&quot;</span></code></li>
+<li><strong>hidden_attributes</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nexdatas_source,nexdatas_strategy,units&quot;</span></code></li>
+<li><strong>add_empty_units_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">--add-empty-units</span> <span class="pre">&quot;</span></code></li>
+<li><strong>add_empty_units</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">True</span></code></li>
+<li><strong>metadata_copy_map_file</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>metadata_copy_map_file_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">--copy-map-file</span> <span class="pre">{copymapfile}</span> <span class="pre">&quot;</span></code></li>
+<li><strong>inotify_timeout</strong> <em>(float)</em> , default: <code class="docutils literal notranslate"><span class="pre">0.1</span></code></li>
+<li><strong>get_event_timeout</strong> <em>(float)</em> , default: <code class="docutils literal notranslate"><span class="pre">0.01</span></code></li>
+<li><strong>ingestion_delay_time</strong> <em>(float)</em> , default: <code class="docutils literal notranslate"><span class="pre">5.0</span></code></li>
+<li><strong>max_request_tries_number</strong> <em>(int)</em> , default: <code class="docutils literal notranslate"><span class="pre">100</span></code></li>
+<li><strong>recheck_dataset_list_interval</strong> <em>(int)</em> , default: <code class="docutils literal notranslate"><span class="pre">1000</span></code></li>
+<li><strong>recheck_beamtime_file_interval</strong> <em>(int)</em> , default: <code class="docutils literal notranslate"><span class="pre">1000</span></code></li>
+<li><strong>request_headers</strong> <em>(dict&lt;str,str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">{&quot;Content-Type&quot;:</span> <span class="pre">&quot;application/json&quot;,</span> <span class="pre">&quot;Accept&quot;:</span> <span class="pre">&quot;application/json&quot;}</span></code></li>
+<li><strong>scicat_datasets_path</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;RawDatasets&quot;</span></code></li>
+<li><strong>scicat_proposals_path</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;Proposals&quot;</span></code></li>
+<li><strong>scicat_datablocks_path</strong> <em>(str)</em>, default: <code class="docutils literal notranslate"><span class="pre">&quot;OrigDatablocks&quot;</span></code></li>
+<li><strong>scicat_users_login_path</strong> <em>(str)</em>, default: <code class="docutils literal notranslate"><span class="pre">&quot;Users/login&quot;</span></code></li>
+<li><strong>owner_access_groups_from_proposal</strong> <em>(bool)</em>, default: <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
+<li><strong>metadata_keywords_without_checks</strong> <em>(list&lt;str&gt;)</em>, default: <code class="docutils literal notranslate"><span class="pre">[&quot;techniques&quot;,</span> <span class="pre">&quot;classification&quot;,</span> <span class="pre">&quot;createdBy&quot;,</span> <span class="pre">&quot;updatedBy&quot;,</span> <span class="pre">&quot;datasetlifecycle&quot;,</span> <span class="pre">&quot;numberOfFiles&quot;,</span> <span class="pre">&quot;size&quot;,</span> <span class="pre">&quot;createdAt&quot;,</span> <span class="pre">&quot;updatedAt&quot;,</span> <span class="pre">&quot;history&quot;,</span> <span class="pre">&quot;creationTime&quot;,</span> <span class="pre">&quot;version&quot;,</span> <span class="pre">&quot;scientificMetadata&quot;,</span> <span class="pre">&quot;endTime&quot;]</span></code></li>
 </ul>
 <p>e.g.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">beamtime_dirs</span><span class="p">:</span>
@@ -102,7 +112,7 @@ is finished. It can be executed by</p>
 <div class="section" id="pattern-keywords-for-configuration-variables">
 <h3>Pattern keywords for configuration variables<a class="headerlink" href="#pattern-keywords-for-configuration-variables" title="Permalink to this headline">¶</a></h3>
 <p>The  <strong>datasets_filename_pattern</strong>, <strong>ingested_datasets_filename_pattern</strong>  and <strong>ingestor_var_dir</strong> can contain the <em>{beamtimeid}</em> and <em>{hostname}</em> keywords,  e.g. <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{beamtimeid}.lst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{hostname}-{beamtimeid}.lst&quot;</span></code>  which is instantiated during the ingestor execution.</p>
-<p>Similarly, <strong>nxs_dataset_metadata_generator</strong>, <strong>dataset_metadata_generator</strong>, <strong>datablock_metadata_generator</strong>,  <strong>datablock_metadata_stream_generator</strong>, <strong>datablock_metadata_generator_scanpath_postfix</strong>, <strong>chmod_generator_switch</strong>, <strong>relative_path_generator_switch</strong>  can contain the following keywords: <em>{beamtimeid}</em> , <em>{scanname}</em>, <em>{chmod}</em>, <em>{scanpath}</em>, <em>{metapath}</em>, <em>{relpath}</em>, <em>{beamtimeid}</em>, <em>{beamline}</em>, <em>{doiprefix}</em>, <em>{beamtimefile}</em>, <em>{scanpostfix}</em>, <em>{datablockpostfix}</em>, <em>{ownergroup}</em>, <em>{accessgroups}</em>, <em>{hostname}</em></p>
+<p>Similarly, <strong>nxs_dataset_metadata_generator</strong>, <strong>dataset_metadata_generator</strong>, <strong>datablock_metadata_generator</strong>,  <strong>datablock_metadata_stream_generator</strong>, <strong>datablock_metadata_generator_scanpath_postfix</strong>, <strong>chmod_generator_switch</strong>, <strong>relative_path_generator_switch</strong>  can contain the following keywords: <em>{beamtimeid}</em> , <em>{scanname}</em>, <em>{chmod}</em>, <em>{scanpath}</em>, <em>{metapath}</em>, <em>{relpath}</em>, <em>{beamtimeid}</em>, <em>{beamline}</em>, <em>{doiprefix}</em>, <em>{beamtimefile}</em>, <em>{scanpostfix}</em>, <em>{datablockpostfix}</em>, <em>{ownergroup}</em>, <em>{accessgroups}</em>, <em>{hostname}</em>, <em>{hiddenattributes}</em></p>
 </div>
 </div>
 <div class="section" id="scicat-dataset-ingest">
@@ -117,14 +127,14 @@ Installation</p>
 <div class="section" id="required-packages">
 <h3>Required packages<a class="headerlink" href="#required-packages" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p>python3 &gt;= 3.7</p></li>
-<li><p>nxstools &gt;= 3.28.0</p></li>
-<li><p>inotifyx (python3 version)</p></li>
-<li><p>requests</p></li>
-<li><p>setuptools</p></li>
-<li><p>pyyaml</p></li>
-<li><p>pytest (to run tests)</p></li>
-<li><p>sphinx (to build the documentation)</p></li>
+<li>python3 &gt;= 3.7</li>
+<li>nxstools &gt;= 3.28.0</li>
+<li>inotifyx (python3 version)</li>
+<li>requests</li>
+<li>setuptools</li>
+<li>pyyaml</li>
+<li>pytest (to run tests)</li>
+<li>sphinx (to build the documentation)</li>
 </ul>
 </div>
 <div class="section" id="install-from-sources">
@@ -173,7 +183,7 @@ can be found in the HDRI repository.</p>
 <span class="nn">chmod</span> <span class="mi">644</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">trusted</span><span class="o">.</span><span class="n">gpg</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">debian</span><span class="o">-</span><span class="n">hdri</span><span class="o">-</span><span class="n">repo</span><span class="o">.</span><span class="n">gpg</span>
 </pre></div>
 </div>
-<p>and then download the corresponding source list, e.g. for <code class="docutils literal notranslate"><span class="pre">bullseye</span></code></p>
+<p>and then download the corresponding source list, e.g.&nbsp;for <code class="docutils literal notranslate"><span class="pre">bullseye</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">sources</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">d</span>
 <span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">repos</span><span class="o">.</span><span class="n">pni</span><span class="o">-</span><span class="n">hdri</span><span class="o">.</span><span class="n">de</span><span class="o">/</span><span class="n">bullseye</span><span class="o">-</span><span class="n">pni</span><span class="o">-</span><span class="n">hdri</span><span class="o">.</span><span class="n">list</span>
 </pre></div>
@@ -228,9 +238,9 @@ can be found in the HDRI repository.</p>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
 </div>
 
@@ -266,15 +276,17 @@ can be found in the HDRI repository.</p>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -283,7 +295,7 @@ can be found in the HDRI repository.</p>
       &copy;2022, DESY, Jan Kotanski.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |

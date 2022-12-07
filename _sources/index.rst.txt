@@ -56,6 +56,8 @@ The configuration written in YAML can contain the following variables
 * **dataset_update_strategy** (``"no"``, ``"patch"``, ``"create"``, ``"mixed"``) , default: ``"patch"``
 * **relative_path_in_datablock** *(bool)* , default: ``False``
 * **scandir_blacklist** *(list\<str\>)* , default: ``["/gpfs/current/scratch_bl", "/gpfs/current/processed", "/gpfs/current/shared"]``
+* **beamtimeid_blacklist_file** *(str)* , default: ``None``
+* **beamtime_type_blacklist** *(list\<str\>)* , default: ``["P"]``
 * **chmod_json_files** *(str)* , default: ``None``
 * **max_scandir_depth** *(int)*, default: ``-1``
 * **oned_in_metadata** *(bool)* , default: ``False``
@@ -75,6 +77,12 @@ The configuration written in YAML can contain the following variables
 * **chmod_generator_switch** *(str)* , default: ``" -x {chmod} "``
 * **relative_path_generator_switch** *(str)* , default: ``" -r {relpath} "``
 * **oned_dataset_generator_switch** *(str)* , default: ``" --oned "``
+* **hidden_attributes_generator_switch** *(str)* , default: ``" -n {hiddenattributes} "``
+* **hidden_attributes** *(str)* , default: ``"nexdatas_source,nexdatas_strategy,units"``
+* **add_empty_units_generator_switch** *(str)* , default: ``" --add-empty-units "``
+* **add_empty_units** *(bool)* , default: ``True``
+* **metadata_copy_map_file** *(str)* , default: ``None``
+* **metadata_copy_map_file_generator_switch** *(str)* , default: ``" --copy-map-file {copymapfile} "``
 * **inotify_timeout** *(float)* , default: ``0.1``
 * **get_event_timeout** *(float)* , default: ``0.01``
 * **ingestion_delay_time** *(float)* , default: ``5.0``
@@ -104,7 +112,7 @@ Pattern keywords for configuration variables
 
 The  **datasets_filename_pattern**, **ingested_datasets_filename_pattern**  and **ingestor_var_dir** can contain the *{beamtimeid}* and *{hostname}* keywords,  e.g. ``"scicat-ingested-datasets-{beamtimeid}.lst"`` or ``"scicat-ingested-datasets-{hostname}-{beamtimeid}.lst"``  which is instantiated during the ingestor execution.
 
-Similarly, **nxs_dataset_metadata_generator**, **dataset_metadata_generator**, **datablock_metadata_generator**,  **datablock_metadata_stream_generator**, **datablock_metadata_generator_scanpath_postfix**, **chmod_generator_switch**, **relative_path_generator_switch**  can contain the following keywords: *{beamtimeid}* , *{scanname}*, *{chmod}*, *{scanpath}*, *{metapath}*, *{relpath}*, *{beamtimeid}*, *{beamline}*, *{doiprefix}*, *{beamtimefile}*, *{scanpostfix}*, *{datablockpostfix}*, *{ownergroup}*, *{accessgroups}*, *{hostname}*
+Similarly, **nxs_dataset_metadata_generator**, **dataset_metadata_generator**, **datablock_metadata_generator**,  **datablock_metadata_stream_generator**, **datablock_metadata_generator_scanpath_postfix**, **chmod_generator_switch**, **relative_path_generator_switch**  can contain the following keywords: *{beamtimeid}* , *{scanname}*, *{chmod}*, *{scanpath}*, *{metapath}*, *{relpath}*, *{beamtimeid}*, *{beamline}*, *{doiprefix}*, *{beamtimefile}*, *{scanpostfix}*, *{datablockpostfix}*, *{ownergroup}*, *{accessgroups}*, *{hostname}*, *{hiddenattributes}*
 
 
 scicat_dataset_ingest
