@@ -1,3 +1,7 @@
+2021-12-08 Jan Kotanski <jan.kotanski@desy.de>
+	* add metadata_copy_map_file and metadata_copy_map_file_generator_switch into the configuration variables (#158)
+	* tagged as 0.3.0
+
 2021-12-01 Jan Kotanski <jan.kotanski@desy.de>
 	* remove old origdatablocks during reingestion (#153)
 	* add beamtime_blacklist_file and beamtime_type_blacklist into the configuration variables (#155)
