@@ -18,3 +18,4 @@ max_scandir_depth: 1
 dataset_pid_prefix: ""
 datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
 ingested_datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
+# metadata_copy_map_file: "/home/jkotan/scicat/scingestor/test/config/metadata-copy-map.lst"

@@ -1,0 +1,12 @@
+scientificMetadata.instrument_name scientificMetadata.instrument.name.value
+scientificMetadata.sample_name scientificMetadata.sample.name.value
+scientificMetadata.instrument
+scientificMetadata.sample
+scientificMetadata.data
+scientificMetadata.experiment_description
+scientificMetadata.experiment_identifier
+scientificMetadata.end_time scientificMetadata.end_time.value
+scientificMetadata.start_time scientificMetadata.start_time.value
+scientificMetadata.title scientificMetadata.title.value
+scientificMetadata.program_name
+
