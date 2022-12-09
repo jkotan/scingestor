@@ -299,9 +299,9 @@ class DatasetIngestor:
             self.__datablockpostfix = \
                 self.__config["datablock_metadata_postfix"]
 
-        if "nxs_dataset_metadata_generator" in self.__config.keys():
+        if "file_dataset_metadata_generator" in self.__config.keys():
             self.__datasetcommandnxs = \
-                self.__config["nxs_dataset_metadata_generator"]
+                self.__config["file_dataset_metadata_generator"]
         if "dataset_metadata_generator" in self.__config.keys():
             self.__datasetcommand = \
                 self.__config["dataset_metadata_generator"]
@@ -352,7 +352,7 @@ class DatasetIngestor:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__relpath_switch
-            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+            if "file_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__relpath_switch
 
@@ -360,7 +360,7 @@ class DatasetIngestor:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__chmod_switch
-            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+            if "file_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__chmod_switch
             if "datablock_metadata_generator" not in self.__config.keys():
@@ -375,21 +375,21 @@ class DatasetIngestor:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__hiddenattributes_switch
-            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+            if "file_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__hiddenattributes_switch
         if self.__copymapfile is not None:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__copymapfile_switch
-            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+            if "file_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__copymapfile_switch
         if self.__oned:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__oned_switch
-            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+            if "file_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__oned_switch
 
@@ -397,7 +397,7 @@ class DatasetIngestor:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__emptyunits_switch
-            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+            if "file_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__emptyunits_switch
 

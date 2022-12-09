@@ -103,7 +103,7 @@ The configuration written in YAML can contain the following variables
 .IP \(bu 2
 \fBingested_datasets_filename_pattern\fP \fI(str)\fP , default: \fB"scicat\-ingested\-datasets\-{beamtimeid}.lst"\fP
 .IP \(bu 2
-\fBnxs_dataset_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo metadata  \-o {metapath}/{scanname}{scanpostfix}  \-b {beamtimefile} \-p {beamtimeid}/{scanname}  \-w {ownergroup} \-c {accessgroups} {scanpath}/{scanname}.nxs"\fP
+\fBfile_dataset_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo metadata  \-o {metapath}/{scanname}{scanpostfix}  \-b {beamtimefile} \-p {beamtimeid}/{scanname}  \-w {ownergroup} \-c {accessgroups} {scanpath}/{scanname}.nxs"\fP
 .IP \(bu 2
 \fBdataset_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo metadata  \-o {metapath}/{scanname}{scanpostfix}  \-c {accessgroups} \-w {ownergroup} \-b {beamtimefile} \-p {beamtimeid}/{scanname}"\fP
 .IP \(bu 2
@@ -177,7 +177,7 @@ ingestor_credential_file: "{homepath}/gpfs/pwd"
 .sp
 The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_var_dir\fP can contain the \fI{beamtimeid}\fP and \fI{hostname}\fP keywords,  e.g. \fB"scicat\-ingested\-datasets\-{beamtimeid}.lst"\fP or \fB"scicat\-ingested\-datasets\-{hostname}\-{beamtimeid}.lst"\fP  which is instantiated during the ingestor execution.
 .sp
-Similarly, \fBnxs_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP, \fI{hiddenattributes}\fP
+Similarly, \fBfile_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP, \fI{hiddenattributes}\fP
 .SH SCICAT_DATASET_INGEST
 .sp
 Re\-ingestion script for SciCat RawDatasets and OrigDatablocks is usually

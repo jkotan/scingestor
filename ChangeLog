@@ -1,5 +1,6 @@
 2021-12-09 Jan Kotanski <jan.kotanski@desy.de>
 	* add support for extracting metadata from fio files (#161)
+	* rename nxs_dataset_metadata_generator configuration variable to file_dataset_metadata_generator (#161)
 	* tagged as 0.4.0
 
 2021-12-08 Jan Kotanski <jan.kotanski@desy.de>
