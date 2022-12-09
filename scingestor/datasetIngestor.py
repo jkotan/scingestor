@@ -478,13 +478,15 @@ class DatasetIngestor:
         :returns: a file name of generate file
         :rtype: :obj:`str`
         """
-        self.__ext = None
+        self.__ext = ""
+
         if os.path.isfile(
                 "{scanpath}/{scanname}.nxs".format(**self.__dctfmt)):
             self.__ext = "nxs"
         elif os.path.isfile(
                 "{scanpath}/{scanname}.fio".format(**self.__dctfmt)):
             self.__ext = "fio"
+        self.__dctfmt["ext"] = self.__ext
         if self.__ext:
             get_logger().info(
                 'DatasetIngestor: Generating %s metadata: %s %s' % (

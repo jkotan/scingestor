@@ -27,6 +27,7 @@ import BeamtimeWatcher_test
 import ScanDirWatcher_test
 import DatasetWatcher_test
 import DatasetIngest_test
+import DatasetWatcherFIO_test
 
 try:
     __import__("h5py")
@@ -67,12 +68,16 @@ def main():
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             DatasetWatcher_test))
-    basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(
-            DatasetWatcherH5_test))
+    if H5CPP_AVAILABLE or H5PY_AVAILABLE:
+        basicsuite.addTests(
+            unittest.defaultTestLoader.loadTestsFromModule(
+                DatasetWatcherH5_test))
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             DatasetIngest_test))
+    basicsuite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(
+            DatasetWatcherFIO_test))
 
     # test runner
     runner = unittest.TextTestRunner()
