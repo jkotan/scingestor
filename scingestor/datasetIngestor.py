@@ -479,10 +479,11 @@ class DatasetIngestor:
         :rtype: :obj:`str`
         """
         self.__ext = None
-        nxsmasterfile = "{scanpath}/{scanname}.nxs".format(**self.__dctfmt)
-        if os.path.isfile("{scanpath}/{scanname}.nxs".format(**self.__dctfmt)):
+        if os.path.isfile(
+                "{scanpath}/{scanname}.nxs".format(**self.__dctfmt)):
             self.__ext = "nxs"
-        elif os.path.isfile("{scanpath}/{scanname}.fio".format(**self.__dctfmt)):
+        elif os.path.isfile(
+                "{scanpath}/{scanname}.fio".format(**self.__dctfmt)):
             self.__ext = "fio"
         if self.__ext:
             get_logger().info(
