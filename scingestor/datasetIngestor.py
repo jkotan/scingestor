@@ -78,6 +78,8 @@ class DatasetIngestor:
         self.__config = configuration or {}
         #: (:obj:`str`) home directory
         self.__homepath = str(pathlib.Path.home())
+        #: (:obj:`str`) master file extension
+        self.__ext = 'nxs'
         #: (:obj:`str`) file with a dataset list
         self.__dsfile = dsfile
         #: (:obj:`str`) file with a ingested dataset list
@@ -149,7 +151,7 @@ class DatasetIngestor:
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
-            " {scanpath}/{scanname}.nxs"
+            " {scanpath}/{scanname}.{ext}"
         #: (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata " \
             " -o {metapath}/{scanname}{scanpostfix} " \
@@ -297,9 +299,9 @@ class DatasetIngestor:
             self.__datablockpostfix = \
                 self.__config["datablock_metadata_postfix"]
 
-        if "nxs_dataset_metadata_generator" in self.__config.keys():
+        if "file_dataset_metadata_generator" in self.__config.keys():
             self.__datasetcommandnxs = \
-                self.__config["nxs_dataset_metadata_generator"]
+                self.__config["file_dataset_metadata_generator"]
         if "dataset_metadata_generator" in self.__config.keys():
             self.__datasetcommand = \
                 self.__config["dataset_metadata_generator"]
@@ -350,7 +352,7 @@ class DatasetIngestor:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__relpath_switch
-            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+            if "file_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__relpath_switch
 
@@ -358,7 +360,7 @@ class DatasetIngestor:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__chmod_switch
-            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+            if "file_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__chmod_switch
             if "datablock_metadata_generator" not in self.__config.keys():
@@ -373,21 +375,21 @@ class DatasetIngestor:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__hiddenattributes_switch
-            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+            if "file_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__hiddenattributes_switch
         if self.__copymapfile is not None:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__copymapfile_switch
-            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+            if "file_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__copymapfile_switch
         if self.__oned:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__oned_switch
-            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+            if "file_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__oned_switch
 
@@ -395,7 +397,7 @@ class DatasetIngestor:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__emptyunits_switch
-            if "nxs_dataset_metadata_generator" not in self.__config.keys():
+            if "file_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandnxs = \
                     self.__datasetcommandnxs + self.__emptyunits_switch
 
@@ -438,7 +440,8 @@ class DatasetIngestor:
             "ownergroup": self.__ownergroup,
             "accessgroups": self.__accessgroups,
             "hostname": self.__hostname,
-            "homepath": self.__homepath
+            "homepath": self.__homepath,
+            "ext": self.__ext,
         }
 
         get_logger().debug(
@@ -475,11 +478,19 @@ class DatasetIngestor:
         :returns: a file name of generate file
         :rtype: :obj:`str`
         """
-        nxsmasterfile = "{scanpath}/{scanname}.nxs".format(**self.__dctfmt)
-        if os.path.isfile(nxsmasterfile):
+        self.__ext = ""
+
+        if os.path.isfile(
+                "{scanpath}/{scanname}.nxs".format(**self.__dctfmt)):
+            self.__ext = "nxs"
+        elif os.path.isfile(
+                "{scanpath}/{scanname}.fio".format(**self.__dctfmt)):
+            self.__ext = "fio"
+        self.__dctfmt["ext"] = self.__ext
+        if self.__ext:
             get_logger().info(
-                'DatasetIngestor: Generating nxs metadata: %s %s' % (
-                    scan,
+                'DatasetIngestor: Generating %s metadata: %s %s' % (
+                    self.__ext, scan,
                     "{metapath}/{scanname}{scanpostfix}".format(
                         **self.__dctfmt)))
             get_logger().debug(

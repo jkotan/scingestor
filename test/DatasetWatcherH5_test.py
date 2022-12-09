@@ -1918,7 +1918,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'dataset_pid_prefix: "10.3204"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
-            'nxs_dataset_metadata_generator: "nxsfileinfo metadata ' \
+            'file_dataset_metadata_generator: "nxsfileinfo metadata ' \
             ' -o {{scanpath}}/{{scanname}}{{scanpostfix}} ' \
             ' -x 0o662 ' \
             ' -r {{relpath}} ' \
@@ -2343,7 +2343,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'dataset_pid_prefix: "10.3204"\n' \
             'oned_in_metadata: true\n' \
-            'nxs_dataset_metadata_generator: "nxsfileinfo metadata ' \
+            'file_dataset_metadata_generator: "nxsfileinfo metadata ' \
             ' -o {{scanpath}}/{{scanname}}{{scanpostfix}} ' \
             ' -x 0o662 ' \
             ' --oned ' \
