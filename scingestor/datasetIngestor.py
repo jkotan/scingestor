@@ -484,6 +484,15 @@ class DatasetIngestor:
                 "{scanpath}/{scanname}.nxs".format(**self.__dctfmt)):
             self.__ext = "nxs"
         elif os.path.isfile(
+                "{scanpath}/{scanname}.h5".format(**self.__dctfmt)):
+            self.__ext = "h5"
+        elif os.path.isfile(
+                "{scanpath}/{scanname}.ndf".format(**self.__dctfmt)):
+            self.__ext = "ndf"
+        elif os.path.isfile(
+                "{scanpath}/{scanname}.nx".format(**self.__dctfmt)):
+            self.__ext = "nx"
+        elif os.path.isfile(
                 "{scanpath}/{scanname}.fio".format(**self.__dctfmt)):
             self.__ext = "fio"
         self.__dctfmt["ext"] = self.__ext
