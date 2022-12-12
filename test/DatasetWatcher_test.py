@@ -2549,10 +2549,10 @@ class DatasetWatcherTest(unittest.TestCase):
                                 cnt6=(cnt + 5), cnt7=(cnt + 6),
                                 det1="../lambda1/", det2="../lambda2/",
                                 sc1='myscan_00001', sc2='myscan_00002'),
-                        [(5, 11)], {'watch [0-9]:': 'watch:'})
+                        [(5, 39)], {'watch [0-9]:': 'watch:'})
                     self.assertEqual(
                         pattern, self.sortmarkedlines(
-                            dseri, [(5, 11)], {'watch [0-9]:': 'watch:'}))
+                            dseri, [(5, 39)], {'watch [0-9]:': 'watch:'}))
                 except Exception:
                     print(er)
                     raise
@@ -3178,10 +3178,10 @@ class DatasetWatcherTest(unittest.TestCase):
                                 cnt6=(cnt + 5), cnt7=(cnt + 6),
                                 det1="../lambda1/", det2="../lambda2/",
                                 sc1='myscan_00001', sc2='myscan_00002'),
-                        [(5, 11)], {'watch [0-9]:': 'watch:'})
+                        [(5, 39)], {'watch [0-9]:': 'watch:'})
                     self.assertEqual(
                         pattern, self.sortmarkedlines(
-                            dseri, [(5, 11)], {'watch [0-9]:': 'watch:'}))
+                            dseri, [(5, 39)], {'watch [0-9]:': 'watch:'}))
                 except Exception:
                     print(er)
                     raise
