@@ -146,7 +146,7 @@ class DatasetIngestor:
         self.__datablockpostfix = ".origdatablock.json"
 
         #: (:obj:`str`) nexus dataset shell command
-        self.__datasetcommandnxs = "nxsfileinfo metadata " \
+        self.__datasetcommandfile = "nxsfileinfo metadata " \
             " -o {metapath}/{scanname}{scanpostfix} " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
@@ -216,6 +216,18 @@ class DatasetIngestor:
         #: (:obj:`dict`<:obj:`str`, :obj:`list`<:obj:`str`>>)
         #:   ingested scan names
         self.__sc_ingested_map = {}
+
+        #: (:obj:`list` <:obj:`str`>) beamtime type blacklist
+        self.__master_file_extension_list = ["nxs", "h5", "ndf", "nx", "fio"]
+
+        if "master_file_extension_list" in self.__config.keys() \
+           and isinstance(self.__config["master_file_extension_list"], list):
+            self.__master_file_extension_list = []
+            for ext in self.__config["master_file_extension_list"]:
+                if ext:
+                    self.__master_file_extension_list.append(ext)
+            if self.__master_file_extension_list:
+                self.__ext = self.__master_file_extension_list[0]
 
         #: (:obj:`str`) access groups
         self.__accessgroups = \
@@ -300,7 +312,7 @@ class DatasetIngestor:
                 self.__config["datablock_metadata_postfix"]
 
         if "file_dataset_metadata_generator" in self.__config.keys():
-            self.__datasetcommandnxs = \
+            self.__datasetcommandfile = \
                 self.__config["file_dataset_metadata_generator"]
         if "dataset_metadata_generator" in self.__config.keys():
             self.__datasetcommand = \
@@ -353,16 +365,16 @@ class DatasetIngestor:
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__relpath_switch
             if "file_dataset_metadata_generator" not in self.__config.keys():
-                self.__datasetcommandnxs = \
-                    self.__datasetcommandnxs + self.__relpath_switch
+                self.__datasetcommandfile = \
+                    self.__datasetcommandfile + self.__relpath_switch
 
         if self.__chmod is not None:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__chmod_switch
             if "file_dataset_metadata_generator" not in self.__config.keys():
-                self.__datasetcommandnxs = \
-                    self.__datasetcommandnxs + self.__chmod_switch
+                self.__datasetcommandfile = \
+                    self.__datasetcommandfile + self.__chmod_switch
             if "datablock_metadata_generator" not in self.__config.keys():
                 self.__datablockcommand = \
                     self.__datablockcommand + self.__chmod_switch
@@ -376,30 +388,30 @@ class DatasetIngestor:
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__hiddenattributes_switch
             if "file_dataset_metadata_generator" not in self.__config.keys():
-                self.__datasetcommandnxs = \
-                    self.__datasetcommandnxs + self.__hiddenattributes_switch
+                self.__datasetcommandfile = \
+                    self.__datasetcommandfile + self.__hiddenattributes_switch
         if self.__copymapfile is not None:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__copymapfile_switch
             if "file_dataset_metadata_generator" not in self.__config.keys():
-                self.__datasetcommandnxs = \
-                    self.__datasetcommandnxs + self.__copymapfile_switch
+                self.__datasetcommandfile = \
+                    self.__datasetcommandfile + self.__copymapfile_switch
         if self.__oned:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__oned_switch
             if "file_dataset_metadata_generator" not in self.__config.keys():
-                self.__datasetcommandnxs = \
-                    self.__datasetcommandnxs + self.__oned_switch
+                self.__datasetcommandfile = \
+                    self.__datasetcommandfile + self.__oned_switch
 
         if self.__emptyunits:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__emptyunits_switch
             if "file_dataset_metadata_generator" not in self.__config.keys():
-                self.__datasetcommandnxs = \
-                    self.__datasetcommandnxs + self.__emptyunits_switch
+                self.__datasetcommandfile = \
+                    self.__datasetcommandfile + self.__emptyunits_switch
 
         if "max_request_tries_number" in self.__config.keys():
             try:
@@ -480,22 +492,15 @@ class DatasetIngestor:
         """
         self.__ext = ""
 
-        if os.path.isfile(
-                "{scanpath}/{scanname}.nxs".format(**self.__dctfmt)):
-            self.__ext = "nxs"
-        elif os.path.isfile(
-                "{scanpath}/{scanname}.h5".format(**self.__dctfmt)):
-            self.__ext = "h5"
-        elif os.path.isfile(
-                "{scanpath}/{scanname}.ndf".format(**self.__dctfmt)):
-            self.__ext = "ndf"
-        elif os.path.isfile(
-                "{scanpath}/{scanname}.nx".format(**self.__dctfmt)):
-            self.__ext = "nx"
-        elif os.path.isfile(
-                "{scanpath}/{scanname}.fio".format(**self.__dctfmt)):
-            self.__ext = "fio"
+        for ext in self.__master_file_extension_list:
+            self.__dctfmt["ext"] = ext
+
+            if os.path.isfile(
+                    "{scanpath}/{scanname}.{ext}".format(**self.__dctfmt)):
+                self.__ext = ext
+                break
         self.__dctfmt["ext"] = self.__ext
+
         if self.__ext:
             get_logger().info(
                 'DatasetIngestor: Generating %s metadata: %s %s' % (
@@ -504,12 +509,12 @@ class DatasetIngestor:
                         **self.__dctfmt)))
             get_logger().debug(
                 'DatasetIngestor: Generating dataset command: %s ' % (
-                    self.__datasetcommandnxs.format(**self.__dctfmt)))
+                    self.__datasetcommandfile.format(**self.__dctfmt)))
             # get_logger().info(
             #     'DatasetIngestor: Generating dataset command: %s ' % (
-            #         self.__datasetcommandnxs.format(**self.__dctfmt)))
+            #         self.__datasetcommandfile.format(**self.__dctfmt)))
             subprocess.run(
-                self.__datasetcommandnxs.format(**self.__dctfmt).split(),
+                self.__datasetcommandfile.format(**self.__dctfmt).split(),
                 check=True)
         else:
             get_logger().info(

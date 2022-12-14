@@ -40,6 +40,7 @@ The configuration written in YAML can contain the following variables
 * **datablock_metadata_generator** *(str)* , default: `"nxsfileinfo origdatablock  -s *.pyc,*{datablockpostfix},*{scanpostfix},*~  -p {pidprefix}/{beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} -o {metapath}/{scanname}{datablockpostfix} "`
 * **datablock_metadata_stream_generator** *(str)* , default: `"nxsfileinfo origdatablock  -s *.pyc,*{datablockpostfix},*{scanpostfix},*~  -w {ownergroup} -c {accessgroups} -p {pidprefix}/{beamtimeid}/{scanname} "`
 * **datablock_metadata_generator_scanpath_postfix** *(str)* , default: `" {scanpath}/{scanname} "`
+* **master_file_extension_list** *(list\<str\>)* , default: `["nxs", "h5", "ndf", "nx", "fio"]`
 * **chmod_generator_switch** *(str)* , default: `" -x {chmod} "`
 * **relative_path_generator_switch** *(str)* , default: `" -r {relpath} "`
 * **oned_dataset_generator_switch** *(str)* , default: `" --oned "`
