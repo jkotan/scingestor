@@ -299,7 +299,9 @@ class DatasetIngestor:
         if "hidden_attributes" in self.__config.keys():
             self.__hiddenattributes = self.__config["hidden_attributes"]
         if "metadata_copy_map_file" in self.__config.keys():
-            self.__copymapfile = self.__config["metadata_copy_map_file"]
+            self.__copymapfile = \
+                self.__config["metadata_copy_map_file"].format(
+                    homepath=self.__homepath)
         if "oned_in_metadata" in self.__config.keys():
             self.__oned = self.__config["oned_in_metadata"]
         if "add_empty_units" in self.__config.keys():
