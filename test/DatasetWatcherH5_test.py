@@ -269,6 +269,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'metadata_copy_map_file_generator_switch: ' \
             '" --copy-map-file {{copymapfile}} "\n' \
             'ingestor_var_dir: "{vardir}"\n' \
+            'master_file_extension_list:\n' \
+            '  - "nxs"\n' \
+            '  - "fio"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir,
                 credfile=credfile, chmod=chmod, hattr=hattr,

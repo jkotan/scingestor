@@ -611,6 +611,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'oned_in_metadata: true\n' \
             'oned_dataset_generator_switch: " --oned "\n' \
+            'master_file_extension_list:\n' \
+            '  - "fio"\n' \
             'add_empty_units: False\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_username: "{username}"\n' \
