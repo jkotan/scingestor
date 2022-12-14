@@ -4,6 +4,7 @@
 	* improve tests (#163)
 	* add support for .nx, .h5, .ndf NeXus extensions (#165)
 	* add master_file_extension_list to the file configuration (#168)
+	* allow to use {homepath} in metadata_copy_map_file (#172)
 	* tagged as 0.4.0
 
 2021-12-08 Jan Kotanski <jan.kotanski@desy.de>
