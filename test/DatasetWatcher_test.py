@@ -1904,9 +1904,9 @@ class DatasetWatcherTest(unittest.TestCase):
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
 
-        commands = [('scicat_dataset_ingestor -c %s -r36 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r38 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r36 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r38 -l debug'
                      % cfgfname).split()]
 
         def test_thread():
@@ -1942,7 +1942,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
                 # print(er)
                 try:
-                    self.assertEqual(
+                    pattern = self.sortmarkedlines(
                         'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: Create ScanDirWatcher '
@@ -2029,7 +2029,10 @@ class DatasetWatcherTest(unittest.TestCase):
                                 cnt4=(cnt + 3), cnt5=(cnt + 4),
                                 sc1='myscan_00001', sc2='myscan_00002',
                                 sc3='myscan_00003', sc4='myscan_00004'),
-                        "\n".join(dseri))
+                        [(30, 39)], {'watch [0-9]:': 'watch:'})
+                    self.assertEqual(
+                        pattern, self.sortmarkedlines(
+                            dseri, [(30, 39)], {'watch [0-9]:': 'watch:'}))
                 except Exception:
                     print(er)
                     raise
