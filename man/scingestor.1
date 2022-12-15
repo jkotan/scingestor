@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "SCINGESTOR" "1" "Dec 09, 2022" "0.4" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "Dec 15, 2022" "0.4" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .
@@ -112,6 +112,8 @@ The configuration written in YAML can contain the following variables
 \fBdatablock_metadata_stream_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo origdatablock  \-s *.pyc,*{datablockpostfix},*{scanpostfix},*~  \-w {ownergroup} \-c {accessgroups} \-p {doiprefix}/{beamtimeid}/{scanname} "\fP
 .IP \(bu 2
 \fBdatablock_metadata_generator_scanpath_postfix\fP \fI(str)\fP , default: \fB" {scanpath}/{scanname} "\fP
+.IP \(bu 2
+\fBmaster_file_extension_list\fP \fI(list<str>)\fP , default: \fB["nxs", "h5", "ndf", "nx", "fio"]\fP
 .IP \(bu 2
 \fBchmod_generator_switch\fP \fI(str)\fP , default: \fB" \-x {chmod} "\fP
 .IP \(bu 2
