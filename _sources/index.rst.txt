@@ -69,11 +69,12 @@ The configuration written in YAML can contain the following variables
 * **beamtime_filename_prefix** *(str)* , default: ``".json"``
 * **datasets_filename_pattern** *(str)* , default: ``"scicat-datasets-{beamtimeid}.lst"``
 * **ingested_datasets_filename_pattern** *(str)* , default: ``"scicat-ingested-datasets-{beamtimeid}.lst"``
-* **nxs_dataset_metadata_generator** *(str)* , default: ``"nxsfileinfo metadata  -o {metapath}/{scanname}{scanpostfix}  -b {beamtimefile} -p {beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} {scanpath}/{scanname}.nxs"``
+* **file_dataset_metadata_generator** *(str)* , default: ``"nxsfileinfo metadata  -o {metapath}/{scanname}{scanpostfix}  -b {beamtimefile} -p {beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} {scanpath}/{scanname}.{ext}"``
 * **dataset_metadata_generator** *(str)* , default: ``"nxsfileinfo metadata  -o {metapath}/{scanname}{scanpostfix}  -c {accessgroups} -w {ownergroup} -b {beamtimefile} -p {beamtimeid}/{scanname}"``
 * **datablock_metadata_generator** *(str)* , default: ``"nxsfileinfo origdatablock  -s *.pyc,*{datablockpostfix},*{scanpostfix},*~  -p {doiprefix}/{beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} -o {metapath}/{scanname}{datablockpostfix} "``
 * **datablock_metadata_stream_generator** *(str)* , default: ``"nxsfileinfo origdatablock  -s *.pyc,*{datablockpostfix},*{scanpostfix},*~  -w {ownergroup} -c {accessgroups} -p {doiprefix}/{beamtimeid}/{scanname} "``
 * **datablock_metadata_generator_scanpath_postfix** *(str)* , default: ``" {scanpath}/{scanname} "``
+* **master_file_extension_list** *(list\<str\>)* , default: ``["nxs", "h5", "ndf", "nx", "fio"]``
 * **chmod_generator_switch** *(str)* , default: ``" -x {chmod} "``
 * **relative_path_generator_switch** *(str)* , default: ``" -r {relpath} "``
 * **oned_dataset_generator_switch** *(str)* , default: ``" --oned "``
@@ -112,7 +113,7 @@ Pattern keywords for configuration variables
 
 The  **datasets_filename_pattern**, **ingested_datasets_filename_pattern**  and **ingestor_var_dir** can contain the *{beamtimeid}* and *{hostname}* keywords,  e.g. ``"scicat-ingested-datasets-{beamtimeid}.lst"`` or ``"scicat-ingested-datasets-{hostname}-{beamtimeid}.lst"``  which is instantiated during the ingestor execution.
 
-Similarly, **nxs_dataset_metadata_generator**, **dataset_metadata_generator**, **datablock_metadata_generator**,  **datablock_metadata_stream_generator**, **datablock_metadata_generator_scanpath_postfix**, **chmod_generator_switch**, **relative_path_generator_switch**  can contain the following keywords: *{beamtimeid}* , *{scanname}*, *{chmod}*, *{scanpath}*, *{metapath}*, *{relpath}*, *{beamtimeid}*, *{beamline}*, *{doiprefix}*, *{beamtimefile}*, *{scanpostfix}*, *{datablockpostfix}*, *{ownergroup}*, *{accessgroups}*, *{hostname}*, *{hiddenattributes}*
+Similarly, **file_dataset_metadata_generator**, **dataset_metadata_generator**, **datablock_metadata_generator**,  **datablock_metadata_stream_generator**, **datablock_metadata_generator_scanpath_postfix**, **chmod_generator_switch**, **relative_path_generator_switch**  can contain the following keywords: *{beamtimeid}* , *{scanname}*, *{chmod}*, *{scanpath}*, *{metapath}*, *{relpath}*, *{beamtimeid}*, *{beamline}*, *{doiprefix}*, *{beamtimefile}*, *{scanpostfix}*, *{datablockpostfix}*, *{ownergroup}*, *{accessgroups}*, *{hostname}*, *{hiddenattributes}*, *{ext}*
 
 
 scicat_dataset_ingest
@@ -132,7 +133,7 @@ Required packages
 ~~~~~~~~~~~~~~~~~
 
 -  python3 >= 3.7
--  nxstools >= 3.28.0
+-  nxstools >= 3.38.0
 -  inotifyx (python3 version)
 -  requests
 -  setuptools
