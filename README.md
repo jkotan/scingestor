@@ -95,7 +95,7 @@ Its configuration written YAML like for `scicat_dataset_ingestor`
 ### Required packages
 
 * python3 >= 3.7
-* nxstools >= 3.28.0
+* nxstools >= 3.38.0
 * inotifyx (python3 version)
 * requests
 * setuptools
