@@ -18,4 +18,7 @@ max_scandir_depth: 1
 dataset_pid_prefix: ""
 datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
 ingested_datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
+master_file_extension_list:
+  - "nxs"
+  - "fio"
 # metadata_copy_map_file: "{homepath}/scicat/scingestor/test/config/metadata-copy-map.lst"
