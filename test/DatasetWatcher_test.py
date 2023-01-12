@@ -2587,8 +2587,8 @@ class DatasetWatcherTest(unittest.TestCase):
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
                      'createdAt': '2022-05-14 11:54:29',
-                     'creationLocation': '/DESY/PETRA III/P00',
-                     'instrumentId': '/petra3/p00',
+                     'creationLocation': '/DESY/FS-SC/SDD01',
+                     'instrumentId': '/fs-sc/sdd01',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
@@ -2607,15 +2607,15 @@ class DatasetWatcherTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001236'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901236',
+                     '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
                      'createdAt': '2022-05-14 11:54:29',
-                     'instrumentId': '/petra3/p00',
-                     'creationLocation': '/DESY/PETRA III/P00',
+                     'instrumentId': '/fs-sc/sdd01',
+                     'creationLocation': '/DESY/FS-SC/SDD01',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
@@ -2634,7 +2634,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001236'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901236',
+                     '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
@@ -2955,8 +2955,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
                          'createdAt': '2022-05-14 11:54:29',
-                         'creationLocation': '/DESY/PETRA III/P00',
-                         'instrumentId': '/petra3/p00',
+                         'creationLocation': '/DESY/FS-SC/SDD01',
+                         'instrumentId': '/fs-sc/sdd01',
                          'description': 'H20 distribution',
                          'endTime': '2022-05-19 09:00:00',
                          'isPublished': False,
@@ -2975,7 +2975,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001236'},
                          'sourceFolder':
-                         '/asap3/petra3/gpfs/p00/2022/data/9901236',
+                         '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
                          'type': 'raw',
                          'updatedAt': '2022-05-14 11:54:29'})
 
@@ -3223,8 +3223,8 @@ class DatasetWatcherTest(unittest.TestCase):
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
                      'createdAt': '2022-05-14 11:54:29',
-                     'creationLocation': '/DESY/PETRA III/P00',
-                     'instrumentId': '/petra3/p00',
+                     'creationLocation': '/DESY/FS-SC/SDD01',
+                     'instrumentId': '/fs-sc/sdd01',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
@@ -3241,15 +3241,15 @@ class DatasetWatcherTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001236'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901236',
+                     '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
                      'createdAt': '2022-05-14 11:54:29',
-                     'instrumentId': '/petra3/p00',
-                     'creationLocation': '/DESY/PETRA III/P00',
+                     'instrumentId': '/fs-sc/sdd01',
+                     'creationLocation': '/DESY/FS-SC/SDD01',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
@@ -3266,7 +3266,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001236'},
                      'sourceFolder':
-                     '/asap3/petra3/gpfs/p00/2022/data/9901236',
+                     '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
                      'type': 'raw',
                      'updatedAt': '2022-05-14 11:54:29'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
@@ -3603,8 +3603,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
                          'createdAt': '2022-05-14 11:54:29',
-                         'instrumentId': '/petra3/p00',
-                         'creationLocation': '/DESY/PETRA III/P00',
+                         'instrumentId': '/fs-sc/sdd01',
+                         'creationLocation': '/DESY/FS-SC/SDD01',
                          'description': 'H20 distribution',
                          'endTime': '2022-05-19 09:00:00',
                          'isPublished': False,
@@ -3621,7 +3621,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001236'},
                          'sourceFolder':
-                         '/asap3/petra3/gpfs/p00/2022/data/9901236',
+                         '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
                          'type': 'raw',
                          'updatedAt': '2022-05-14 11:54:29'})
 
