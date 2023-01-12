@@ -2599,7 +2599,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'pid': '99001236/myscan_00001',
                      'accessGroups': [
                          '99001236-dmgt', '99001236-clbt', '99001236-part',
-                         'p00dmgt', 'p00staff'],
+                         'sdd01dmgt', 'sdd01staff'],
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001236',
@@ -2626,7 +2626,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'pid': '99001236/myscan_00002',
                      'accessGroups': [
                          '99001236-dmgt', '99001236-clbt', '99001236-part',
-                         'p00dmgt', 'p00staff'],
+                         'sdd01dmgt', 'sdd01staff'],
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'proposalId': '99001236',
@@ -2651,7 +2651,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'datasetId': '/99001236/myscan_00001',
                      'accessGroups': [
                          '99001236-dmgt', '99001236-clbt', '99001236-part',
-                         'p00dmgt', 'p00staff'],
+                         'sdd01dmgt', 'sdd01staff'],
                      'size': 629}, skip=["dataFileList", "size"])
                 dfl = json.loads(
                     self.__server.origdatablocks[0])["dataFileList"]
@@ -2670,7 +2670,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'datasetId': '/99001236/myscan_00002',
                      'accessGroups': [
                          '99001236-dmgt', '99001236-clbt', '99001236-part',
-                         'p00dmgt', 'p00staff'],
+                         'sdd01dmgt', 'sdd01staff'],
                      'size': 629}, skip=["dataFileList", "size"])
                 dfl = json.loads(
                     self.__server.origdatablocks[1])["dataFileList"]
@@ -2967,7 +2967,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'datasetName': 'myscan_%05i' % (i + 1),
                          'accessGroups': [
                              '99001236-dmgt', '99001236-clbt', '99001236-part',
-                             'p00dmgt', 'p00staff'],
+                             'sdd01dmgt', 'sdd01staff'],
                          'principalInvestigator': 'appuser@fake.com',
                          'ownerGroup': '99001236-dmgt',
                          'proposalId': '99001236',
@@ -2996,7 +2996,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          '/99001236/myscan_%05i' % (i + 1),
                          'accessGroups': [
                              '99001236-dmgt', '99001236-clbt', '99001236-part',
-                             'p00dmgt', 'p00staff'],
+                             'sdd01dmgt', 'sdd01staff'],
                          'size': 629}, skip=["dataFileList", "size"])
                     dfl = json.loads(
                         self.__server.origdatablocks[i])["dataFileList"]
