@@ -2459,7 +2459,7 @@ class DatasetIngestTest(unittest.TestCase):
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
                          'createdAt': '2022-05-14 11:54:29',
-                         'instrumentId': '/petra3/p00', 
+                         'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
                          'endTime': '2022-05-19 09:00:00',
@@ -4201,7 +4201,7 @@ class DatasetIngestTest(unittest.TestCase):
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29', 
+                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
