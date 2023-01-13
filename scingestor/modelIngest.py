@@ -120,9 +120,8 @@ class ModelIngest:
                 token = fl.read().strip()
         else:
             token = self.get_token()
-
         for metafile in self.__metafiles:
-            self._ingest_metadata(metafile, token)
+            self._ingest_model_metadata(metafile, token)
 
     def _ingest_model_metadata(self, metafile, token):
         """ ingest metadata from file
@@ -137,7 +136,7 @@ class ModelIngest:
                 smt = fl.read()
             get_logger().info(
                 'ModelIngestor: Post the %s from %s'
-                % (self.__model, metafile))
+                % (self.__scicat_model, metafile))
             status = self._ingest_model(smt, token)
             if status:
                 return status
@@ -194,15 +193,15 @@ def main():
 
     epilog = "" \
         " examples:\n" \
-        "      scicat_ingest -m Sample -c ~/.scingestor.yaml \n " \
-        "      scicat_ingest -m Attachment -c ~/.scingestor.yaml -l debug\n" \
+        "      scicat_ingest -m Samples -c ~/.scingestor.yaml \n " \
+        "      scicat_ingest -m Attachments -c ~/.scingestor.yaml -l debug\n" \
         "\n"
     parser = argparse.ArgumentParser(
         description=description, epilog=epilog,
         formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
         "-m", "--model", dest="model",
-        help="SciCat model name")
+        help="SciCat model name in plural")
     parser.add_argument(
         "-c", "--configuration", dest="config",
         help="configuration file name")
