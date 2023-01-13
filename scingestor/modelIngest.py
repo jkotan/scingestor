@@ -194,7 +194,8 @@ def main():
     epilog = "" \
         " examples:\n" \
         "      scicat_ingest -m Samples -c ~/.scingestor.yaml \n " \
-        "      scicat_ingest -m Attachments -c ~/.scingestor.yaml -l debug\n" \
+        "      scicat_ingest -m Attachments -c ~/.scingestor.yaml " \
+        "-p ~/.mytoken.cfg\n" \
         "\n"
     parser = argparse.ArgumentParser(
         description=description, epilog=epilog,
