@@ -2,7 +2,7 @@ FROM ubuntu:22.04
 
 MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
 
-RUN /bin/bash -c 'echo "deb http://de.archive.ubuntu.com/ubuntu/ jammy main restricted" > /etc/apt/sources.list.d/demirror.list'
+RUN sed -i 's/http:\/\/archive.ubuntu/http:\/\/de.archive.ubuntu/g' /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get install -y base-passwd  -y
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
