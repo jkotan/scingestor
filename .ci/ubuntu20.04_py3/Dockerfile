@@ -2,6 +2,7 @@ FROM ubuntu:20.04
 
 MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
 
+RUN /bin/bash -c 'echo "deb http://us.archive.ubuntu.com/ubuntu/ focal main" > /etc/apt/sources.list.d/demirror.list'
 RUN apt-get update
 RUN apt-get install -y base-passwd apt-utils dialog -y
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
