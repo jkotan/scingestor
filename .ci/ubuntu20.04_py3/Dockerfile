@@ -11,7 +11,7 @@ RUN curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-key
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
 RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian focal main" -y
 RUN apt-get -qq update && export DEBIAN_FRONTEND=noninteractive && apt-get -qq dist-upgrade
-RUN apt-get -qq update && apt-get -qq install -y  apt-utils net-tools git python3-inotifyx python3-setuptools python3-pytest python3-yaml nxstools python3-requests python3-pytest-cov
+RUN apt-get -qq update && apt-get -qq install -y net-tools git python3-inotifyx python3-setuptools python3-pytest python3-yaml nxstools python3-requests python3-pytest-cov
 
 RUN useradd -ms /bin/bash scuser
 USER scuser
