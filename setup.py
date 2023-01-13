@@ -117,7 +117,8 @@ SETUPDATA = dict(
     packages=["scingestor"],
     scripts=[
         'scicat_dataset_ingestor',
-        'scicat_dataset_ingest'
+        'scicat_dataset_ingest',
+        'scicat_ingest',
     ],
     data_files=[('share/scingestor', ['config/default_template.yaml']),
                 ('share/scingestor', ['config/scingestor.service']),

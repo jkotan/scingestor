@@ -779,7 +779,7 @@ class DatasetIngestor:
         :type token: :obj:`str`
         :param mdct: metadata in dct
         :type mdct: :obj:`dct` <:obj:`str`, `any`>
-        :returns: a file name of generate file
+        :returns: dataset pid
         :rtype: :obj:`str`
         """
         # create a new dataset since
@@ -841,7 +841,7 @@ class DatasetIngestor:
         :type token: :obj:`str`
         :param mdct: metadata in dct
         :type mdct: :obj:`dct` <:obj:`str`, `any`>
-        :returns: a file name of generate file
+        :returns: dataset pid
         :rtype: :obj:`str`
         """
         get_logger().info(
@@ -870,7 +870,7 @@ class DatasetIngestor:
         :type token: :obj:`str`
         :param mdct: metadata in dct
         :type mdct: :obj:`dct` <:obj:`str`, `any`>
-        :returns: a file name of generate file
+        :returns: dataset pid
         :rtype: :obj:`str`
         """
         try:
@@ -964,8 +964,12 @@ class DatasetIngestor:
     def _ingest_origdatablock(self, metadata, token):
         """ ingets origdatablock
 
+        :param metadata: metadata in json string
+        :type metadata: :obj:`str`
         :param token: ingestor token
         :type token: :obj:`str`
+        :returns: rewquest startus
+        :rtype: :obj:`bool`
         """
         try:
             response = requests.post(
