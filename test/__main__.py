@@ -27,6 +27,7 @@ import BeamtimeWatcher_test
 import ScanDirWatcher_test
 import DatasetWatcher_test
 import DatasetIngest_test
+import ModelIngest_test
 import DatasetWatcherFIO_test
 
 try:
@@ -75,6 +76,9 @@ def main():
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             DatasetIngest_test))
+    basicsuite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(
+            ModelIngest_test))
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
             DatasetWatcherFIO_test))
