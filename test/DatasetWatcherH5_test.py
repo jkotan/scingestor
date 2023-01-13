@@ -298,6 +298,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 "water",
                 "H20",
                 'technique: "saxs"',
+                'sample_id: "H2O/1232"',
             ],
             [
                 "myscan_00002.nxs",
@@ -312,9 +313,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 'techniques_pids:\n'
                 '  - "PaNET01191"\n'
                 '  - "PaNET01188"\n'
-                '  - "PaNET01098"\n'
+                '  - "PaNET01098"\n',
+                'water/21232',
             ],
         ]
+        sids = ["H2O/1232", 'water/21232']
         ltechs = [
             [
                 {
@@ -362,6 +365,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     etime = arg[6]
                     smpl = arg[7]
                     formula = arg[8]
+                    sdesc = arg[10]
 
                     nxsfile = filewriter.create_file(
                         nxsfilename, overwrite=True)
@@ -386,6 +390,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     sattr.write(inssname)
                     sname = sample.create_field("name", "string")
                     sname.write(smpl)
+                    sdes = sample.create_field("description", "string")
+                    sdes.write(sdesc)
                     sfml = sample.create_field("chemical_formula", "string")
                     sfml.write(formula)
                     nxsfile.close()
@@ -502,11 +508,13 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
                      'createdAt': '2022-05-14 11:54:29',
+                     'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
                      'endTime': args[0][6],
                      'isPublished': False,
                      'techniques': ltechs[0],
+                     'sampleId': sids[0],
                      'owner': 'Smithson',
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
@@ -535,6 +543,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                             'value': '%s' % args[0][3]}},
                       'sample': {
                           'chemical_formula': {'value': '%s' % args[0][8]},
+                          'description': {'value': '%s' % args[0][10]},
                           'name': {'value': '%s' % args[0][7]}},
                       'start_time': {
                           'value': '%s' % args[0][5]},
@@ -550,11 +559,13 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
                      'createdAt': '2022-05-14 11:54:29',
+                     'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
                      'endTime': args[1][6],
                      'isPublished': False,
                      'techniques': ltechs[1],
+                     'sampleId': sids[1],
                      'owner': 'Smithson',
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
@@ -583,6 +594,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                               'value': '%s' % args[1][3]}},
                       'sample': {
                           'chemical_formula': {'value': '%s' % args[1][8]},
+                          'description': {'value': '%s' % args[1][10]},
                           'name': {'value': '%s' % args[1][7]}},
                       'start_time': {
                           'value': '%s' % args[1][5]},
@@ -905,6 +917,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
                          'createdAt': '2022-05-14 11:54:29',
+                         'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
                          'endTime': arg[6],
@@ -1302,6 +1315,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
                      'createdAt': '2022-05-14 11:54:29',
+                     'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
                      'endTime': args[0][6],
@@ -1366,6 +1380,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
                      'createdAt': '2022-05-14 11:54:29',
+                     'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
                      'endTime': args[1][6],
@@ -1774,6 +1789,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
                          'createdAt': '2022-05-14 11:54:29',
+                         'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
                          'endTime': arg[6],
@@ -2170,6 +2186,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
                      'createdAt': '2022-05-14 11:54:29',
+                     'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
                      'endTime': args[0][6],
@@ -2220,6 +2237,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
                      'createdAt': '2022-05-14 11:54:29',
+                     'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
                      'endTime': args[1][6],
@@ -2396,6 +2414,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             "water",
             "H20",
             'technique: "saxs"',
+            'sampleId: "water/hh/1231321"',
         ]
         ltech = [
             {
@@ -2404,6 +2423,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 'http://purl.org/pan-science/PaNET/PaNET01188'
             }
         ]
+        sid = "water/hh/1231321"
 
         def test_thread():
             """ test thread which adds and removes beamtime metadata file """
@@ -2433,6 +2453,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     etime = arg[6]
                     smpl = arg[7]
                     formula = arg[8]
+                    sdesc = arg[10]
                     spectrum = [243, 34, 34, 23, 334, 34, 34, 33, 32, 11]
 
                     nxsfile = filewriter.create_file(
@@ -2460,6 +2481,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     sattr.write(inssname)
                     sname = sample.create_field("name", "string")
                     sname.write(smpl)
+                    sde = sample.create_field("description", "string")
+                    sde.write(sdesc)
                     sfml = sample.create_field("chemical_formula", "string")
                     sfml.write(formula)
                     nxsfile.close()
@@ -2597,11 +2620,13 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
                          'createdAt': '2022-05-14 11:54:29',
+                         'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
                          'endTime': arg[6],
                          'isPublished': False,
                          'techniques': ltech,
+                         'sampleId': sid,
                          'owner': 'Smithson',
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
@@ -2639,7 +2664,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                           'sample': {
                               'NX_class': 'NXsample',
                               'chemical_formula': {'value': '%s' % arg[8]},
-                              'name': {'value': '%s' % arg[7]}},
+                              'name': {'value': '%s' % arg[7]},
+                              'description': {'value': '%s' % arg[10]}},
                           'start_time': {
                               'value': '%s' % arg[5]},
                           'title': {'value': '%s' % arg[1]},
