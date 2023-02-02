@@ -530,15 +530,16 @@ class DatasetIngestor:
             "beamtimefile": self.__bfile,
             "scanpostfix": self.__scanpostfix,
             "datablockpostfix": self.__datablockpostfix,
+            "attachmentpostfix": self.__attachmentpostfix,
             "ownergroup": self.__ownergroup,
             "accessgroups": self.__accessgroups,
             "hostname": self.__hostname,
             "homepath": self.__homepath,
             "ext": self.__ext,
             "plotext": self.__plotext,
-            "signals": self.__signals,
-            "axes": self.__axes,
-            "frame": self.__frame,
+            "signals": self.__attachmentsignals,
+            "axes": self.__attachmentaxes,
+            "frame": self.__attachmentframe,
         }
 
         get_logger().debug(
@@ -1369,7 +1370,7 @@ class DatasetIngestor:
         if odb:
             mtmdb = os.path.getmtime(odb)
 
-        if self.__ingest_attachnemt:
+        if self.__ingest_attachment:
             adss = glob.glob(
                 "{metapath}/{scan}{postfix}".format(
                     scan=self.__dctfmt["scanname"],
@@ -1394,7 +1395,7 @@ class DatasetIngestor:
                     pid = self._get_pid(rdss[0])
                 dbstatus = self._ingest_origdatablock_metadata(
                     odb, pid, token)
-            if self.__ingest_attachnemt and ads and ads[0] and pid:
+            if self.__ingest_attachment and ads and ads[0] and pid:
                 if pid is None and adss and adss[0]:
                     pid = self._get_pid(rdss[0])
                 dastatus = self._ingest_attachment_metadata(
@@ -1498,7 +1499,7 @@ class DatasetIngestor:
         if odb:
             mtmdb = os.path.getmtime(odb)
 
-        if self.__ingest_attachnemt:
+        if self.__ingest_attachment:
             adss = glob.glob(
                 "{metapath}/{scan}{postfix}".format(
                     scan=self.__dctfmt["scanname"],
@@ -1552,7 +1553,7 @@ class DatasetIngestor:
                 get_logger().info(
                     "DatasetIngestor: Ingest origdatablock: %s" % (odb))
 
-            if self.__ingest_attachnemt:
+            if self.__ingest_attachment:
                 if ads and ads[0] and reingest_attachment:
                     if pid is None and adss and adss[0]:
                         pid = self._get_pid(adss[0])
