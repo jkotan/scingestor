@@ -1611,7 +1611,7 @@ class DatasetIngestor:
             self.__sc_ingested_map = {}
             for sc in self.__sc_ingested:
                 try:
-                    if len(sc) > 3 and float(sc[-1]) > 0 \
+                    if len(sc) > 3 and float(sc[-1]) >= 0 \
                        and float(sc[-2]) > 0 and float(sc[-3]) > 0:
                         sc[-1] = float(sc[-1])
                         sc[-2] = float(sc[-2])
