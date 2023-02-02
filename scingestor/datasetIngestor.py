@@ -80,6 +80,8 @@ class DatasetIngestor:
         self.__homepath = str(pathlib.Path.home())
         #: (:obj:`str`) master file extension
         self.__ext = 'nxs'
+        #: (:obj:`str`) plot file extension
+        self.__plotext = 'png'
         #: (:obj:`str`) file with a dataset list
         self.__dsfile = dsfile
         #: (:obj:`str`) file with a ingested dataset list
@@ -126,10 +128,20 @@ class DatasetIngestor:
         self.__scicat_proposals = "Proposals"
         #: (:obj:`str`) scicat datablock class
         self.__scicat_datablocks = "OrigDatablocks"
+        #: (:obj:`str`) scicat attachment class
+        self.__scicat_attachments = "Attachments"
         #: (:obj:`str`) chmod string for json metadata
         self.__chmod = None
         #: (:obj:`str`) hidden attributes
         self.__hiddenattributes = None
+        #: (:obj:`str`) attachment signals
+        self.__attachmentsignals = None
+        #: (:obj:`str`) attachment axes
+        self.__attachmentaxes = None
+        #: (:obj:`str`) attachment frame
+        self.__attachmentframe = None
+        #: (:obj:`bool`) ingest attachment flag
+        self.__ingest_attachment = False
         #: (:obj:`str`) metadata copy map file
         self.__copymapfile = None
         #: (:obj:`bool`) oned metadata flag
@@ -144,6 +156,8 @@ class DatasetIngestor:
         self.__scanpostfix = ".scan.json"
         #: (:obj:`str`) origin datablock scan postfix
         self.__datablockpostfix = ".origdatablock.json"
+        #: (:obj:`str`) origin datablock scan postfix
+        self.__attachmentpostfix = ".attachment.json"
 
         #: (:obj:`str`) nexus dataset shell command
         self.__datasetcommandfile = "nxsfileinfo metadata " \
@@ -160,19 +174,27 @@ class DatasetIngestor:
             " -b {beamtimefile} -p {beamtimeid}/{scanname}"
         #: (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
-            " -s *.pyc,*{datablockpostfix},*{scanpostfix},*~ " \
+            " -s *.pyc,*{datablockpostfix},*{scanpostfix}," \
+            "*{attachmentpostfix},*~ " \
             " -p {pidprefix}/{beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
             " -o {metapath}/{scanname}{datablockpostfix} "
         #: (:obj:`str`) datablock shell command
         self.__datablockmemcommand = "nxsfileinfo origdatablock " \
-            " -s *.pyc,*{datablockpostfix},*{scanpostfix},*~ " \
+            " -s *.pyc,*{datablockpostfix},*{scanpostfix}," \
+            "*{attachmentpostfix},*~ " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
             " -p {pidprefix}/{beamtimeid}/{scanname} "
         #: (:obj:`str`) datablock path postfix
         self.__datablockscanpath = " {scanpath}/{scanname} "
+        #: (:obj:`str`) attachment shell command
+        self.__attachmentcommand = "nxsfileinfo attachment " \
+            " -s '{signals}' -e '{axes}' -m '{frame}' " \
+            " -w {ownergroup} -c {accessgroups} " \
+            "-o {metapath}/{scanname}{attachmentpostfix} " \
+            " {scanpath}/{scanname}.{plotext}"
 
         #: (:obj:`str`) oned generator switch
         self.__oned_switch = " --oned  "
@@ -186,6 +208,12 @@ class DatasetIngestor:
         self.__hiddenattributes_switch = " -n {hiddenattributes} "
         #: (:obj:`str`) relpath generator switch
         self.__relpath_switch = " -r {relpath} "
+        #: (:obj:`str`) attachament signals generator switch
+        self.__attachmentsignals_switch = " -s {signals} "
+        #: (:obj:`str`) attachament axes generator switch
+        self.__attachmentaxes_switch = " -e {axes} "
+        #: (:obj:`str`) attachament frame generator switch
+        self.__attachmentframe_switch = " -m {frame} "
 
         #: (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
         self.__headers = {'Content-Type': 'application/json',
@@ -217,8 +245,12 @@ class DatasetIngestor:
         #:   ingested scan names
         self.__sc_ingested_map = {}
 
-        #: (:obj:`list` <:obj:`str`>) beamtime type blacklist
+        #: (:obj:`list` <:obj:`str`>) master file extension list
         self.__master_file_extension_list = ["nxs", "h5", "ndf", "nx", "fio"]
+
+        #: (:obj:`list` <:obj:`str`>) plot file extension list
+        self.__plot_file_extension_list = \
+            ["png", "nxs", "h5", "ndf", "nx", "fio"]
 
         if "master_file_extension_list" in self.__config.keys() \
            and isinstance(self.__config["master_file_extension_list"], list):
@@ -228,6 +260,15 @@ class DatasetIngestor:
                     self.__master_file_extension_list.append(ext)
             if self.__master_file_extension_list:
                 self.__ext = self.__master_file_extension_list[0]
+
+        if "plot_file_extension_list" in self.__config.keys() \
+           and isinstance(self.__config["plot_file_extension_list"], list):
+            self.__plot_file_extension_list = []
+            for ext in self.__config["plot_file_extension_list"]:
+                if ext:
+                    self.__plot_file_extension_list.append(ext)
+            if self.__plot_file_extension_list:
+                self.__plotext = self.__plot_file_extension_list[0]
 
         #: (:obj:`str`) access groups
         self.__accessgroups = \
@@ -287,6 +328,9 @@ class DatasetIngestor:
             self.__scicat_proposals = self.__config["scicat_proposals_path"]
         if "scicat_datablocks_path" in self.__config.keys():
             self.__scicat_datablocks = self.__config["scicat_datablocks_path"]
+        if "scicat_attachments_path" in self.__config.keys():
+            self.__scicat_attachments = \
+                self.__config["scicat_attachments_path"]
         if "scicat_users_login_path" in self.__config.keys():
             self.__scicat_users_login = \
                 self.__config["scicat_users_login_path"]
@@ -304,6 +348,8 @@ class DatasetIngestor:
                     homepath=self.__homepath)
         if "oned_in_metadata" in self.__config.keys():
             self.__oned = self.__config["oned_in_metadata"]
+        if "ingest_attachment" in self.__config.keys():
+            self.__ingest_attachment = self.__config["ingest_attachment"]
         if "add_empty_units" in self.__config.keys():
             self.__emptyunits = self.__config["add_empty_units"]
 
@@ -312,6 +358,9 @@ class DatasetIngestor:
         if "datablock_metadata_postfix" in self.__config.keys():
             self.__datablockpostfix = \
                 self.__config["datablock_metadata_postfix"]
+        if "attachment_metadata_postfix" in self.__config.keys():
+            self.__attachmentpostfix = \
+                self.__config["attachment_metadata_postfix"]
 
         if "file_dataset_metadata_generator" in self.__config.keys():
             self.__datasetcommandfile = \
@@ -329,6 +378,9 @@ class DatasetIngestor:
            in self.__config.keys():
             self.__datablockscanpath = \
                 self.__config["datablock_metadata_generator_scanpath_postfix"]
+        if "attachment_metadata_generator" in self.__config.keys():
+            self.__attachmentcommand = \
+                self.__config["attachment_metadata_generator"]
 
         if "chmod_generator_switch" in self.__config.keys():
             self.__chmod_switch = \
@@ -337,6 +389,18 @@ class DatasetIngestor:
         if "hidden_attributes_generator_switch" in self.__config.keys():
             self.__hiddenattributes_switch = \
                 self.__config["hidden_attributes_generator_switch"]
+
+        if "attachment_signals_generator_switch" in self.__config.keys():
+            self.__attachmentsignals_switch = \
+                self.__config["attachment_signals_generator_switch"]
+
+        if "attachment_axes_generator_switch" in self.__config.keys():
+            self.__attachmentaxes_switch = \
+                self.__config["attachment_axes_generator_switch"]
+
+        if "attachment_frame_generator_switch" in self.__config.keys():
+            self.__attachmentframe_switch = \
+                self.__config["attachment_frame_generator_switch"]
 
         if "metadata_copy_map_file_generator_switch" in self.__config.keys():
             self.__copymapfile_switch = \
@@ -415,6 +479,21 @@ class DatasetIngestor:
                 self.__datasetcommandfile = \
                     self.__datasetcommandfile + self.__emptyunits_switch
 
+        if self.__attachmentsignals is not None:
+            if "attachment_metadata_generator" not in self.__config.keys():
+                self.__attachmentcommand = \
+                    self.__attachmentcommand + self.__attachmentsignals_switch
+
+        if self.__attachmentaxes is not None:
+            if "attachment_metadata_generator" not in self.__config.keys():
+                self.__attachmentcommand = \
+                    self.__attachmentcommand + self.__attachmentaxes_switch
+
+        if self.__attachmentframe is not None:
+            if "attachment_metadata_generator" not in self.__config.keys():
+                self.__attachmentcommand = \
+                    self.__attachmentcommand + self.__attachmentframe_switch
+
         if "max_request_tries_number" in self.__config.keys():
             try:
                 self.__maxcounter = int(
@@ -456,6 +535,10 @@ class DatasetIngestor:
             "hostname": self.__hostname,
             "homepath": self.__homepath,
             "ext": self.__ext,
+            "plotext": self.__plotext,
+            "signals": self.__signals,
+            "axes": self.__axes,
+            "frame": self.__frame,
         }
 
         get_logger().debug(
@@ -483,6 +566,7 @@ class DatasetIngestor:
         self.__datablockurl = self.__scicat_url + self.__scicat_datablocks
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #     "OrigDatablocks"
+        #: (:obj:`str`) origdatablock url
 
     def _generate_rawdataset_metadata(self, scan):
         """ generate raw dataset metadata
@@ -569,8 +653,46 @@ class DatasetIngestor:
             return odbs[0]
         return ""
 
+    def _generate_attachment_metadata(self, scan):
+        """ generate origdatablock metadata
+
+        :param scan: scan name
+        :type scan: :obj:`str`
+        :returns: a file name of generate file
+        :rtype: :obj:`str`
+        """
+        self.__plotext = ""
+
+        for ext in self.__plot_file_extension_list:
+            self.__dctfmt["plotext"] = ext
+
+            if os.path.isfile(
+                    "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)):
+                self.__plotext = ext
+                break
+        self.__dctfmt["plotext"] = self.__plotext
+
+        if self.__dctfmt["plotext"]:
+            get_logger().info(
+                'DatasetIngestor: Generating attachment metadata: %s %s' % (
+                    scan,
+                    "{metapath}/{scanname}{attachmentpostfix}".format(
+                        **self.__dctfmt)))
+            cmd = self.__attachmentcommand.format(**self.__dctfmt)
+            get_logger().debug(
+                'DatasetIngestor: Generating attachment command: %s ' % cmd)
+            # get_logger().info(
+            #     'DatasetIngestor: Generating attachment command: %s ' % cmd)
+            subprocess.run(cmd.split(), check=True)
+            adss = glob.glob(
+                "{metapath}/{scanname}{attachmentpostfix}".format(
+                    **self.__dctfmt))
+            if adss and adss[0]:
+                return adss[0]
+        return ""
+
     def _regenerate_origdatablock_metadata(self, scan, force=False):
-        """o generate origdatablock metadata
+        """regenerate origdatablock metadata
 
         :param scan: scan name
         :type scan: :obj:`str`
@@ -985,6 +1107,37 @@ class DatasetIngestor:
                 'DatasetIngestor: %s' % (str(e)))
         return False
 
+    def _ingest_attachment(self, metadata, datasetid, token):
+        """ ingets origdatablock
+
+        :param metadata: metadata in json string
+        :type metadata: :obj:`str`
+        :param datasetid: dataset id
+        :type datasetid: :obj:`str`
+        :param token: ingestor token
+        :type token: :obj:`str`
+        :returns: rewquest startus
+        :rtype: :obj:`bool`
+        """
+        try:
+            dsid = datasetid.replace("/", "%2F")
+            response = requests.post(
+                "{url}/{dsid}/{atpath}?access_token={token}".format(
+                    url=self.__dataseturl,
+                    dsid=dsid,
+                    atpath=self.__scicat_attachments,
+                    token=token),
+                headers=self.__headers,
+                data=metadata)
+            if response.ok:
+                return True
+            else:
+                raise Exception("%s" % response.text)
+        except Exception as e:
+            get_logger().error(
+                'DatasetIngestor: %s' % (str(e)))
+        return False
+
     def _get_id_first_origdatablock(self, datasetid, token):
         """ get id of first origdatablock with datasetid
 
@@ -1036,10 +1189,12 @@ class DatasetIngestor:
         return None
 
     def _get_pid(self, metafile):
-        """ ingest raw dataset metadata
+        """ get pid from raw dataset metadata
 
         :param metafile: metadata file name
         :type metafile: :obj:`str`
+        :returns: dataset pid
+        :rtype: :obj:`str`
         """
         pid = None
         try:
@@ -1140,6 +1295,40 @@ class DatasetIngestor:
                 'DatasetIngestor: %s' % (str(e)))
         return ""
 
+    def _ingest_attachment_metadata(self, metafile, pid, token):
+        """ ingest attachment metadata
+
+        :param metafile: metadata file name
+        :type metafile: :obj:`str`
+        :param pid: dataset id
+        :type pid: :obj:`str`
+        :returns: dataset id
+        :rtype: :obj:`str`
+        """
+        try:
+            with open(metafile) as fl:
+                smt = fl.read()
+                mt = json.loads(smt)
+            if "datasetId" in mt:
+                if not mt["datasetId"].startswith(
+                        "%s/%s/" % (self.__pidprefix, self.__bid)):
+                    raise Exception(
+                        "Wrong datasetId %s for DESY beamtimeId %s in  %s"
+                        % (mt["pid"], self.__bid, metafile))
+                if mt["datasetId"] != "%s/%s" % (self.__pidprefix, pid):
+                    mt["datasetId"] = "%s/%s" % (self.__pidprefix, pid)
+                    smt = json.dumps(mt)
+                    with open(metafile, "w") as mf:
+                        mf.write(smt)
+            dsid = "%s/%s" % (self.__pidprefix, pid)
+            status = self._ingest_attachment(smt, pid, token)
+            if status:
+                return dsid
+        except Exception as e:
+            get_logger().error(
+                'DatasetIngestor: %s' % (str(e)))
+        return ""
+
     def ingest(self, scan, token):
         """ ingest scan
 
@@ -1179,8 +1368,23 @@ class DatasetIngestor:
         mtmdb = 0
         if odb:
             mtmdb = os.path.getmtime(odb)
-        dbstatus = None
 
+        if self.__ingest_attachnemt:
+            adss = glob.glob(
+                "{metapath}/{scan}{postfix}".format(
+                    scan=self.__dctfmt["scanname"],
+                    postfix=self.__attachmentpostfix,
+                    metapath=self.__dctfmt["metapath"]))
+            if adss and adss[0]:
+                ads = adss[0]
+            else:
+                ads = self._generate_attachment_metadata(
+                    self.__dctfmt["scanname"])
+            if ads:
+                mtmda = os.path.getmtime(rds)
+
+        dbstatus = None
+        dastatus = None
         pid = None
         if rds and odb:
             if rds and rds[0]:
@@ -1190,18 +1394,25 @@ class DatasetIngestor:
                     pid = self._get_pid(rdss[0])
                 dbstatus = self._ingest_origdatablock_metadata(
                     odb, pid, token)
+            if self.__ingest_attachnemt and ads and ads[0] and pid:
+                if pid is None and adss and adss[0]:
+                    pid = self._get_pid(rdss[0])
+                dastatus = self._ingest_attachment_metadata(
+                    ads, pid, token)
         if pid is None:
             mtmds = 0
         if dbstatus is None:
             mtmdb = 0
+        if dastatus is None:
+            mtmda = 0
 
-        sscan.extend([str(mtmds), str(mtmdb)])
+        sscan.extend([str(mtmds), str(mtmdb), str(mtmda)])
         self.__sc_ingested.append(sscan)
         with open(self.__idsfile, 'a+') as f:
-            f.write("%s %s %s\n" % (scan, mtmds, mtmdb))
+            f.write("%s %s %s %s\n" % (scan, mtmds, mtmdb, mtmda))
 
     def reingest(self, scan, token):
-        """ ingest scan
+        """ re-ingest scan
 
         :param scan: scan name
         :type scan: :obj:`str`
@@ -1214,6 +1425,7 @@ class DatasetIngestor:
 
         reingest_dataset = False
         reingest_origdatablock = False
+        reingest_attachment = False
         sscan = scan.split(" ")
         self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
         rds = None
@@ -1231,10 +1443,10 @@ class DatasetIngestor:
             if scan in self.__sc_ingested_map.keys():
                 get_logger().debug("DS Timestamps: %s %s %s %s" % (
                     scan,
-                    mtm, self.__sc_ingested_map[scan][-2],
-                    mtm > self.__sc_ingested_map[scan][-2]))
+                    mtm, self.__sc_ingested_map[scan][-3],
+                    mtm > self.__sc_ingested_map[scan][-3]))
             if scan not in self.__sc_ingested_map.keys() \
-               or mtm > self.__sc_ingested_map[scan][-2]:
+               or mtm > self.__sc_ingested_map[scan][-3]:
                 if self.__strategy != UpdateStrategy.NO:
                     reingest_dataset = True
         else:
@@ -1256,13 +1468,13 @@ class DatasetIngestor:
 
             mtm0 = os.path.getmtime(odb)
             if scan not in self.__sc_ingested_map.keys() \
-               or mtm0 > self.__sc_ingested_map[scan][-1]:
+               or mtm0 > self.__sc_ingested_map[scan][-2]:
                 reingest_origdatablock = True
             if scan in self.__sc_ingested_map.keys():
                 get_logger().debug("DB0 Timestamps: %s %s %s %s %s" % (
                     scan,
-                    mtm0, self.__sc_ingested_map[scan][-1],
-                    mtm0 - self.__sc_ingested_map[scan][-1],
+                    mtm0, self.__sc_ingested_map[scan][-2],
+                    mtm0 - self.__sc_ingested_map[scan][-2],
                     reingest_origdatablock)
                 )
             self._regenerate_origdatablock_metadata(
@@ -1272,11 +1484,11 @@ class DatasetIngestor:
             if scan in self.__sc_ingested_map.keys():
                 get_logger().debug("DB Timestamps: %s %s %s %s" % (
                     scan,
-                    mtm, self.__sc_ingested_map[scan][-1],
-                    mtm > self.__sc_ingested_map[scan][-1]))
+                    mtm, self.__sc_ingested_map[scan][-2],
+                    mtm > self.__sc_ingested_map[scan][-2]))
 
             if scan not in self.__sc_ingested_map.keys() \
-               or mtm > self.__sc_ingested_map[scan][-1]:
+               or mtm > self.__sc_ingested_map[scan][-2]:
                 reingest_origdatablock = True
         else:
             odb = self._generate_origdatablock_metadata(scan)
@@ -1285,7 +1497,41 @@ class DatasetIngestor:
         mtmdb = 0
         if odb:
             mtmdb = os.path.getmtime(odb)
+
+        if self.__ingest_attachnemt:
+            adss = glob.glob(
+                "{metapath}/{scan}{postfix}".format(
+                    scan=self.__dctfmt["scanname"],
+                    postfix=self.__attachmentpostfix,
+                    metapath=self.__dctfmt["metapath"]))
+            if adss and adss[0]:
+                ads = adss[0]
+                mtm0 = os.path.getmtime(ads)
+
+                if scan not in self.__sc_ingested_map.keys() \
+                   or mtm0 > self.__sc_ingested_map[scan][-1]:
+                    reingest_attachment = True
+                mtm = os.path.getmtime(ads)
+                if scan in self.__sc_ingested_map.keys():
+                    get_logger().debug("DB Timestamps: %s %s %s %s" % (
+                        scan,
+                        mtm, self.__sc_ingested_map[scan][-1],
+                        mtm > self.__sc_ingested_map[scan][-1]))
+
+                if scan not in self.__sc_ingested_map.keys() \
+                   or mtm > self.__sc_ingested_map[scan][-1]:
+                    if self.__strategy != UpdateStrategy.NO:
+                        reingest_attachment = True
+            else:
+                ads = self._generate_attachment_metadata(scan)
+                get_logger().debug("DB No File: %s True" % (scan))
+                reingest_attachment = True
+            mtmda = 0
+            if ads:
+                mtmda = os.path.getmtime(ads)
+
         dbstatus = None
+        dastatus = None
         pid = None
         if rds and odb:
             if rds and rds[0] and reingest_dataset:
@@ -1305,23 +1551,41 @@ class DatasetIngestor:
                     odb, pid, token)
                 get_logger().info(
                     "DatasetIngestor: Ingest origdatablock: %s" % (odb))
+
+            if self.__ingest_attachnemt:
+                if ads and ads[0] and reingest_attachment:
+                    if pid is None and adss and adss[0]:
+                        pid = self._get_pid(adss[0])
+                    self._delete_origdatablocks(pid, token)
+                    dbstatus = self._ingest_origdatablock_metadata(
+                        odb, pid, token)
+                    get_logger().info(
+                        "DatasetIngestor: Ingest origdatablock: %s" % (odb))
+
         if (pid and reingest_dataset):
             pass
         elif scan in self.__sc_ingested_map.keys():
-            mtmds = self.__sc_ingested_map[scan][-2]
+            mtmds = self.__sc_ingested_map[scan][-3]
         else:
             mtmds = 0
         if (dbstatus and reingest_origdatablock):
             pass
         elif scan in self.__sc_ingested_map.keys():
-            mtmdb = self.__sc_ingested_map[scan][-1]
+            mtmdb = self.__sc_ingested_map[scan][-2]
         else:
             mtmdb = 0
 
-        sscan.extend([str(mtmds), str(mtmdb)])
+        if (dastatus and reingest_attachment):
+            pass
+        elif scan in self.__sc_ingested_map.keys():
+            mtmda = self.__sc_ingested_map[scan][-1]
+        else:
+            mtmda = 0
+
+        sscan.extend([str(mtmds), str(mtmdb), str(mtmda)])
         self.__sc_ingested.append(sscan)
         with open(self.__idsfiletmp, 'a+') as f:
-            f.write("%s %s %s\n" % (scan, mtmds, mtmdb))
+            f.write("%s %s %s %s\n" % (scan, mtmds, mtmdb, mtmda))
 
     def check_list(self, reingest=False):
         """ update waiting and ingested datasets
@@ -1337,7 +1601,7 @@ class DatasetIngestor:
                     for sc in idsf.read().split("\n")
                     if sc.strip()]
         if not reingest:
-            ingested = [(" ".join(sc[:-2]) if len(sc) > 2 else sc[0])
+            ingested = [(" ".join(sc[:-3]) if len(sc) > 3 else sc[0])
                         for sc in self.__sc_ingested]
             self.__sc_waiting = [
                 sc for sc in scans if sc not in ingested]
@@ -1346,11 +1610,12 @@ class DatasetIngestor:
             self.__sc_ingested_map = {}
             for sc in self.__sc_ingested:
                 try:
-                    if len(sc) > 2 and float(sc[-1]) > 0 \
-                       and float(sc[-2]) > 0:
+                    if len(sc) > 3 and float(sc[-1]) > 0 \
+                       and float(sc[-2]) > 0 and float(sc[-3]) > 0:
                         sc[-1] = float(sc[-1])
                         sc[-2] = float(sc[-2])
-                        self.__sc_ingested_map[" ".join(sc[:-2])] = sc
+                        sc[-3] = float(sc[-3])
+                        self.__sc_ingested_map[" ".join(sc[:-3])] = sc
                 except Exception as e:
                     get_logger().debug("%s" % str(e))
 

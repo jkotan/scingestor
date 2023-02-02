@@ -63,6 +63,7 @@ The configuration written in YAML can contain the following variables
 * **oned_in_metadata** *(bool)* , default: ``False``
 * **scan_metadata_postfix** *(str)* , default: ``".scan.json"``
 * **datablock_metadata_postfix** *(str)* , default: ``".origdatablock.json"``
+* **attachemnt_metadata_postfix** *(str)* , default: ``".attachment.json"``
 * **metadata_in_var_dir** *(bool)* , default: ``False``
 * **use_corepath_as_scandir** *(bool)* , default: ``False``
 * **beamtime_filename_postfix** *(str)* , default: ``"beamtime-metadata-"``
@@ -74,12 +75,21 @@ The configuration written in YAML can contain the following variables
 * **datablock_metadata_generator** *(str)* , default: ``"nxsfileinfo origdatablock  -s *.pyc,*{datablockpostfix},*{scanpostfix},*~  -p {doiprefix}/{beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} -o {metapath}/{scanname}{datablockpostfix} "``
 * **datablock_metadata_stream_generator** *(str)* , default: ``"nxsfileinfo origdatablock  -s *.pyc,*{datablockpostfix},*{scanpostfix},*~  -w {ownergroup} -c {accessgroups} -p {doiprefix}/{beamtimeid}/{scanname} "``
 * **datablock_metadata_generator_scanpath_postfix** *(str)* , default: ``" {scanpath}/{scanname} "``
+* **attachment_metadata_generator** *(str)* , default: ``"nxsfileinfo attachment  -w {ownergroup} -c {accessgroups} -o {metapath}/{scanname}{attachmentpostfix} "``
+* **plot_file_extension_list** *(list\<str\>)* , default: ``["png", "nxs", "h5", "ndf", "nx", "fio"]``
 * **master_file_extension_list** *(list\<str\>)* , default: ``["nxs", "h5", "ndf", "nx", "fio"]``
 * **chmod_generator_switch** *(str)* , default: ``" -x {chmod} "``
 * **relative_path_generator_switch** *(str)* , default: ``" -r {relpath} "``
 * **oned_dataset_generator_switch** *(str)* , default: ``" --oned "``
 * **hidden_attributes_generator_switch** *(str)* , default: ``" -n {hiddenattributes} "``
 * **hidden_attributes** *(str)* , default: ``"nexdatas_source,nexdatas_strategy,units"``
+* **attachment_signals_generator_switch** *(str)* , default: ``" -s {signals} "``
+* **attachment_axes_generator_switch** *(str)* , default: ``" -e {axes} "``
+* **attachment_frame_generator_switch** *(str)* , default: ``" -m {frame} "``
+* **attachemnt_signal_names** *(str)* , default: ``""``
+* **attachment_axes_names** *(str)* , default: ``""``
+* **attachment_image_frame_number** *(str)* , default: ``""``
+* **ingest_dataset_attachment** *(bool)* , default: ``False``
 * **add_empty_units_generator_switch** *(str)* , default: ``" --add-empty-units "``
 * **add_empty_units** *(bool)* , default: ``True``
 * **metadata_copy_map_file** *(str)* , default: ``None``
@@ -95,6 +105,7 @@ The configuration written in YAML can contain the following variables
 * **scicat_proposals_path** *(str)* , default: ``"Proposals"``
 * **scicat_datablocks_path** *(str)*, default: ``"OrigDatablocks"``
 * **scicat_users_login_path** *(str)*, default: ``"Users/login"``
+* **scicat_attachments_path** *(str)*, default: ``"Attachments"``
 * **owner_access_groups_from_proposal** *(bool)*, default: ``False``
 * **metadata_keywords_without_checks** *(list\<str\>)*, default: ``["techniques", "classification", "createdBy", "updatedBy", "datasetlifecycle", "numberOfFiles", "size", "createdAt", "updatedAt", "history", "creationTime", "version", "scientificMetadata", "endTime"]``
 
