@@ -105,7 +105,7 @@ The configuration written in YAML can contain the following variables
 * **scicat_proposals_path** *(str)* , default: ``"Proposals"``
 * **scicat_datablocks_path** *(str)*, default: ``"OrigDatablocks"``
 * **scicat_users_login_path** *(str)*, default: ``"Users/login"``
-* **scicat_attachments_path** *(str)*, default: ``"Attachments"``
+* **scicat_attachments_path** *(str)*, default: ``"Datasets/{pid}/Attachments"``
 * **owner_access_groups_from_proposal** *(bool)*, default: ``False``
 * **metadata_keywords_without_checks** *(list\<str\>)*, default: ``["techniques", "classification", "createdBy", "updatedBy", "datasetlifecycle", "numberOfFiles", "size", "createdAt", "updatedAt", "history", "creationTime", "version", "scientificMetadata", "endTime"]``
 

@@ -129,7 +129,7 @@ class DatasetIngestor:
         #: (:obj:`str`) scicat datablock class
         self.__scicat_datablocks = "OrigDatablocks"
         #: (:obj:`str`) scicat attachment class
-        self.__scicat_attachments = "Attachments"
+        self.__scicat_attachments = "Datasets/{pid}/Attachments"
         #: (:obj:`str`) chmod string for json metadata
         self.__chmod = None
         #: (:obj:`str`) hidden attributes
@@ -567,6 +567,12 @@ class DatasetIngestor:
         self.__datablockurl = self.__scicat_url + self.__scicat_datablocks
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #     "OrigDatablocks"
+        #: (:obj:`str`) origdatablock url
+
+        #: (:obj:`str`) attachement url
+        self.__attachmenturl = self.__scicat_url + self.__scicat_attachments
+        # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
+        #     "Datasets/{pid}/Attachments"
         #: (:obj:`str`) origdatablock url
 
     def _generate_rawdataset_metadata(self, scan):
@@ -1122,12 +1128,9 @@ class DatasetIngestor:
         """
         try:
             dsid = datasetid.replace("/", "%2F")
+            url = self.__attachmenturl + "?access_token={token}"
             response = requests.post(
-                "{url}/{dsid}/{atpath}?access_token={token}".format(
-                    url=self.__dataseturl,
-                    dsid=dsid,
-                    atpath=self.__scicat_attachments,
-                    token=token),
+                url.format(pid=dsid, token=token),
                 headers=self.__headers,
                 data=metadata)
             if response.ok:
