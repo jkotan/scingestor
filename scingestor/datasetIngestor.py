@@ -348,8 +348,9 @@ class DatasetIngestor:
                     homepath=self.__homepath)
         if "oned_in_metadata" in self.__config.keys():
             self.__oned = self.__config["oned_in_metadata"]
-        if "ingest_attachment" in self.__config.keys():
-            self.__ingest_attachment = self.__config["ingest_attachment"]
+        if "ingest_dataset_attachment" in self.__config.keys():
+            self.__ingest_attachment = \
+                self.__config["ingest_dataset_attachment"]
         if "add_empty_units" in self.__config.keys():
             self.__emptyunits = self.__config["add_empty_units"]
 
@@ -1129,6 +1130,9 @@ class DatasetIngestor:
         try:
             dsid = datasetid.replace("/", "%2F")
             url = self.__attachmenturl + "?access_token={token}"
+            # get_logger().debug(
+            #     'DatasetIngestor: ingest attachemnt %s' % (
+            #         url.format(pid=dsid, token=token)))
             response = requests.post(
                 url.format(pid=dsid, token=token),
                 headers=self.__headers,
@@ -1325,7 +1329,7 @@ class DatasetIngestor:
                     with open(metafile, "w") as mf:
                         mf.write(smt)
             dsid = "%s/%s" % (self.__pidprefix, pid)
-            status = self._ingest_attachment(smt, pid, token)
+            status = self._ingest_attachment(smt, dsid, token)
             if status:
                 return dsid
         except Exception as e:

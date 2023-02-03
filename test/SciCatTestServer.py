@@ -114,9 +114,10 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             spath = self.path.lower().split("?access_token=")
             if len(spath) == 2:
                 lpath = spath[0].split("/")
-                if len(lpath) == 3 and lpath[2] == "attachments":
-                    pid = lpath[1]
-                    pid = pid.replace("%2F", "/")
+                if len(lpath) == 4 and lpath[3] == "attachments":
+                    pid = lpath[2]
+                    pid = pid.replace("%2f", "/")
+                    print("Datasets Attachments: %s" % pid)
                     self.server.attachments.append((pid, in_data))
                     message = "{}"
         elif self.path.lower().startswith(
