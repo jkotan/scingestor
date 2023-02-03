@@ -537,7 +537,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     ('scicat_dataset_ingestor --config %s -r36 -l debug'
                      % cfgfname).split()]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
@@ -560,7 +560,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
@@ -1283,7 +1283,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     ('scicat_dataset_ingestor --config %s -r36 -l debug'
                      % cfgfname).split()]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
@@ -1309,7 +1309,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
@@ -1538,7 +1538,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     ('scicat_dataset_ingestor --config %s -r36 -l debug'
                      % cfgfname).split()]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
@@ -1564,7 +1564,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
@@ -1920,7 +1920,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     ('scicat_dataset_ingestor --config %s -r38 -l debug'
                      % cfgfname).split()]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
@@ -1943,7 +1943,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
@@ -2196,7 +2196,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     ('scicat_dataset_ingestor --config %s -r36 -l debug'
                      % cfgfname).split()]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
@@ -2219,7 +2219,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
@@ -2745,7 +2745,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     ('scicat_dataset_ingestor --config %s -r36 -l debug'
                      % cfgfname).split()]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
@@ -2786,7 +2786,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
@@ -3380,7 +3380,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     ('scicat_dataset_ingestor --config %s -r36 -l debug'
                      % cfgfname).split()]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
@@ -3422,7 +3422,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()

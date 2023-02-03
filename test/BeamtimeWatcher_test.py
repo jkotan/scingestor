@@ -325,7 +325,7 @@ optional arguments:
                     ('scicat_dataset_ingestor --config %s -r4 -l debug'
                      % cfgfname).split()]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(1)
             shutil.copy(source, fdirname)
@@ -339,7 +339,7 @@ optional arguments:
             for cmd in commands:
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
@@ -463,7 +463,7 @@ optional arguments:
                     ('scicat_dataset_ingestor --config %s -r4 -l debug'
                      % cfgfname).split()]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(1)
             shutil.copy(source, fdirname)
@@ -477,7 +477,7 @@ optional arguments:
             for cmd in commands:
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
@@ -574,7 +574,7 @@ optional arguments:
                     ('scicat_dataset_ingestor --config %s -r4 -l debug'
                      % cfgfname).split()]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(1)
             shutil.copy(source, fdirname)
@@ -588,7 +588,7 @@ optional arguments:
             for cmd in commands:
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
@@ -700,7 +700,7 @@ optional arguments:
                     ('scicat_dataset_ingestor --config %s -r4 -l debug'
                      % cfgfname).split()]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(1)
             shutil.copy(source, fdirname)
@@ -714,7 +714,7 @@ optional arguments:
             for cmd in commands:
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
@@ -791,7 +791,7 @@ optional arguments:
                     ('scicat_dataset_ingestor --config %s -r5 -l debug'
                      % cfgfname).split()]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(1)
             os.mkdir(fdirname)
@@ -807,7 +807,7 @@ optional arguments:
             for cmd in commands:
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()

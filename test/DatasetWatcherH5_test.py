@@ -725,7 +725,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             }
         ]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
@@ -791,7 +791,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
@@ -1562,7 +1562,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             }
         ]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
@@ -1660,7 +1660,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 shutil.copy(lsource, cfsubdirname2)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
@@ -2425,7 +2425,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         ]
         sid = "water/hh/1231321"
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
@@ -2494,7 +2494,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
