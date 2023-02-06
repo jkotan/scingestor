@@ -644,9 +644,9 @@ class DatasetWatcherFIOTest(unittest.TestCase):
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r10 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r15 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r10 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r15 -l debug'
                      % cfgfname).split()]
         # commands.pop()
 
