@@ -191,7 +191,6 @@ class DatasetIngestor:
         self.__datablockscanpath = " {scanpath}/{scanname} "
         #: (:obj:`str`) attachment shell command
         self.__attachmentcommand = "nxsfileinfo attachment " \
-            " -s '{signals}' -e '{axes}' -m '{frame}' " \
             " -w {ownergroup} -c {accessgroups} " \
             "-o {metapath}/{scanname}{attachmentpostfix} " \
             " {scanpath}/{scanname}.{plotext}"
@@ -342,6 +341,12 @@ class DatasetIngestor:
             self.__chmod = self.__config["chmod_json_files"]
         if "hidden_attributes" in self.__config.keys():
             self.__hiddenattributes = self.__config["hidden_attributes"]
+        if "attachment_signal_names" in self.__config.keys():
+            self.__attachmentsignals = self.__config["attachment_signal_names"]
+        if "attachment_axes_names" in self.__config.keys():
+            self.__attachmentaxes = self.__config["attachment_axes_names"]
+        if "attachment_frame_number" in self.__config.keys():
+            self.__attachmentframe = self.__config["attachment_frame_number"]
         if "metadata_copy_map_file" in self.__config.keys():
             self.__copymapfile = \
                 self.__config["metadata_copy_map_file"].format(
@@ -449,6 +454,9 @@ class DatasetIngestor:
                not in self.__config.keys():
                 self.__datablockmemcommand = \
                     self.__datablockmemcommand + self.__chmod_switch
+            if "attachment_metadata_generator" not in self.__config.keys():
+                self.__attachmentcommand = \
+                    self.__attachmentcommand + self.__chmod_switch
 
         if self.__hiddenattributes is not None:
             if "dataset_metadata_generator" not in self.__config.keys():
