@@ -1139,7 +1139,7 @@ class DatasetIngestor:
             dsid = datasetid.replace("/", "%2F")
             url = self.__attachmenturl + "?access_token={token}"
             # get_logger().debug(
-            #     'DatasetIngestor: ingest attachemnt %s' % (
+            #     'DatasetIngestor: ingest attachment %s' % (
             #         url.format(pid=dsid, token=token)))
             response = requests.post(
                 url.format(pid=dsid, token=token),

@@ -63,7 +63,7 @@ The configuration written in YAML can contain the following variables
 * **oned_in_metadata** *(bool)* , default: ``False``
 * **scan_metadata_postfix** *(str)* , default: ``".scan.json"``
 * **datablock_metadata_postfix** *(str)* , default: ``".origdatablock.json"``
-* **attachemnt_metadata_postfix** *(str)* , default: ``".attachment.json"``
+* **attachment_metadata_postfix** *(str)* , default: ``".attachment.json"``
 * **metadata_in_var_dir** *(bool)* , default: ``False``
 * **use_corepath_as_scandir** *(bool)* , default: ``False``
 * **beamtime_filename_postfix** *(str)* , default: ``"beamtime-metadata-"``
@@ -86,7 +86,7 @@ The configuration written in YAML can contain the following variables
 * **attachment_signals_generator_switch** *(str)* , default: ``" -s {signals} "``
 * **attachment_axes_generator_switch** *(str)* , default: ``" -e {axes} "``
 * **attachment_frame_generator_switch** *(str)* , default: ``" -m {frame} "``
-* **attachemnt_signal_names** *(str)* , default: ``""``
+* **attachment_signal_names** *(str)* , default: ``""``
 * **attachment_axes_names** *(str)* , default: ``""``
 * **attachment_image_frame_number** *(str)* , default: ``""``
 * **ingest_dataset_attachment** *(bool)* , default: ``False``
