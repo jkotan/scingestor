@@ -569,6 +569,416 @@ class DatasetWatcherFIOTest(unittest.TestCase):
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_datasetfile_exist_fio_attachment(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
+        btmeta = "beamtime-metadata-99001234.json"
+        dslist = "scicat-datasets-99001234.lst"
+        idslist = "scicat-ingested-datasets-99001234.lst"
+        wrongdslist = "scicat-datasets-99001235.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                "config",
+                                wrongdslist)
+        fiofile = "mymeta2_00011.fio"
+        fiosource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                 "config",
+                                 fiofile)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        chmod = "0o662"
+        hattr = "nexdatas_source,nexdatas_strategy,units,NX_class,source," \
+            "source_name,source_type,strategy,type"
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        wrmodule = WRITERS[self.writer]
+        filewriter.writer = wrmodule
+
+        copymap = 'scientificMetadata.instrument_name ' \
+            'scientificMetadata.instrument.name.value\n' \
+            'scientificMetadata.sample_name ' \
+            'scientificMetadata.sample.name.value\n' \
+            'scientificMetadata.instrument.detector.intimage\n'
+        cpmapname = "%s_%s.lst" % (self.__class__.__name__, fun)
+        with open(cpmapname, "w+") as cf:
+            cf.write(copymap)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'chmod_json_files: "{chmod}"\n' \
+            'chmod_generator_switch: " -x {{chmod}} "\n' \
+            'add_empty_units: False\n' \
+            'hidden_attributes: "{hattr}"\n' \
+            'hidden_attributes_generator_switch: ' \
+            '" -n {{hiddenattributes}} "\n' \
+            'metadata_copy_map_file: "{cpmapfile}"\n' \
+            'metadata_copy_map_file_generator_switch: ' \
+            '" --copy-map-file {{copymapfile}} "\n' \
+            'ingest_dataset_attachment: true\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, vardir=vardir,
+                credfile=credfile, chmod=chmod, hattr=hattr,
+                cpmapfile=cpmapname)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r15 --log debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r15 -l debug'
+                     % cfgfname).split()]
+        # commands.pop()
+
+        args = [
+            [
+                "myscan_00001.fio",
+            ],
+            [
+                "myscan_00002.fio",
+            ],
+        ]
+
+        try:
+            for cmd in commands:
+                time.sleep(1)
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                os.mkdir(fsubdirname3)
+
+                for k, arg in enumerate(args):
+                    fiofilename = os.path.join(fsubdirname2, arg[0])
+                    dsfilename = fiofilename[:-4] + ".scan.json"
+                    dbfilename = fiofilename[:-4] + ".origdatablock.json"
+                    atfilename = fiofilename[:-4] + ".attachment.json"
+
+                    shutil.copy(fiosource, fiofilename)
+
+                shutil.copy(source, fdirname)
+                shutil.copy(lsource, fsubdirname2)
+                shutil.copy(wlsource, fsubdirname)
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                self.__server.reset()
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                vl, er = self.runtest(cmd)
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                dseri = [ln for ln in seri if "DEBUG :" not in ln]
+
+                status = os.stat(dsfilename)
+                self.assertEqual(chmod, str(oct(status.st_mode & 0o777)))
+                status = os.stat(dbfilename)
+                self.assertEqual(chmod, str(oct(status.st_mode & 0o777)))
+                status = os.stat(atfilename)
+                self.assertEqual(chmod, str(oct(status.st_mode & 0o777)))
+
+                # print(vl)
+                # print(er)
+
+                # nodebug = "\n".join([ee for ee in er.split("\n")
+                #                      if (("DEBUG :" not in ee) and
+                #                          (not ee.startswith("127.0.0.1")))])
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                        '{basedir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir2} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Creating DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : DatasetWatcher: Adding watch {cnt5}: '
+                        '{dslist} {idslist}\n'
+                        'INFO : DatasetWatcher: Waiting datasets: '
+                        '[\'{sc1}\', \'{sc2}\']\n'
+                        'INFO : DatasetWatcher: Ingested datasets: []\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
+                        'INFO : DatasetIngestor: Generating fio metadata: '
+                        '{sc1} {subdir2}/{sc1}.scan.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment metadata:'
+                        ' {sc1} {subdir2}/{sc1}.attachment.json\n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc1}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '/99001234/{sc1}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
+                        'INFO : DatasetIngestor: Generating fio metadata: '
+                        '{sc2} {subdir2}/{sc2}.scan.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment metadata:'
+                        ' {sc2} {subdir2}/{sc2}.attachment.json\n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc2}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '/99001234/{sc2}\n'
+                        'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: '
+                        'Stopping ScanDirWatcher {btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Stopping DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt5}: '
+                        '{dslist}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                subdir=fsubdirname, subdir2=fsubdirname2,
+                                dslist=fdslist, idslist=fidslist,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                                cnt4=(cnt + 3), cnt5=(cnt + 4),
+                                sc1='myscan_00001', sc2='myscan_00002'),
+                        '\n'.join(dseri))
+                except Exception:
+                    print(er)
+                    raise
+                self.assertEqual(
+                    "Login: ingestor\n"
+                    "RawDatasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: /99001234/myscan_00001\n"
+                    "Datasets Attachments: /99001234/myscan_00001\n"
+                    "RawDatasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: /99001234/myscan_00002\n"
+                    "Datasets Attachments: /99001234/myscan_00002\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 1)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 2)
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[0]),
+                    {'accessGroups': [
+                        '99001234-dmgt',
+                        '99001234-clbt',
+                        '99001234-part',
+                        'p00dmgt',
+                        'p00staff'],
+                     'contactEmail': 'appuser@fake.com',
+                     'createdAt': '2022-05-14 11:54:29',
+                     'instrumentId': '/petra3/p00',
+                     'creationLocation': '/DESY/PETRA III/P00',
+                     'datasetName': 'myscan_00001',
+                     'description': 'H20 distribution',
+                     'endTime': '2022-05-19 09:00:00',
+                     'isPublished': False,
+                     'owner': 'Smithson',
+                     'ownerEmail': 'peter.smithson@fake.de',
+                     'ownerGroup': '99001234-dmgt',
+                     'pid': '99001234/myscan_00001',
+                     'principalInvestigator': 'appuser@fake.com',
+                     'proposalId': '99001234',
+                     'scientificMetadata': {
+                         'DOOR_proposalId': '99991173',
+                         'ScanCommand': 'ascan exp_mot04 0.0 4.0 4 0.5',
+                         'beamtimeId': '99001234',
+                         'comments': {
+                             'line_1': 'ascan exp_mot04 0.0 4.0 4 0.5',
+                             'line_2':
+                             'user jkotan Acquisition started at '
+                             'Thu Dec  8 17:00:43 2022'},
+                         'end_time': 'Thu Dec  8 17:00:50 2022',
+                         'parameters': {
+                             'abs': 1423,
+                             'anav': 5.14532,
+                             'atten': 99777400.0,
+                             'bpm1': 7,
+                             'hkl': [
+                                 0.0031110747648095565,
+                                 0.0024437328201669176,
+                                 0.1910783136442638],
+                             'rois_p100k': [
+                                 228, 115, 238, 123, 227, 97, 252, 130,
+                                 238, 115, 248, 123],
+                             'sdd': None,
+                             'signalcounter': 'p100k_roi1',
+                             'ubmatrix':
+                             '[[ 0.82633922 -0.80961862 -0.01117831]; '
+                             '[ 0.02460193  0.0091408   1.15661358]; '
+                             '[-0.80932194 -0.82636427  0.02374563]]'
+                         }, 'start_time': 'Thu Dec  8 17:00:43 2022'},
+                     'sourceFolder':
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+                     'techniques': [],
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'})
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[1]),
+                    {'accessGroups': [
+                        '99001234-dmgt',
+                        '99001234-clbt',
+                        '99001234-part',
+                        'p00dmgt',
+                        'p00staff'],
+                     'contactEmail': 'appuser@fake.com',
+                     'createdAt': '2022-05-14 11:54:29',
+                     'instrumentId': '/petra3/p00',
+                     'creationLocation': '/DESY/PETRA III/P00',
+                     'datasetName': 'myscan_00002',
+                     'description': 'H20 distribution',
+                     'endTime': '2022-05-19 09:00:00',
+                     'isPublished': False,
+                     'owner': 'Smithson',
+                     'ownerEmail': 'peter.smithson@fake.de',
+                     'ownerGroup': '99001234-dmgt',
+                     'pid': '99001234/myscan_00002',
+                     'principalInvestigator': 'appuser@fake.com',
+                     'proposalId': '99001234',
+                     'scientificMetadata': {
+                         'DOOR_proposalId': '99991173',
+                         'ScanCommand': 'ascan exp_mot04 0.0 4.0 4 0.5',
+                         'beamtimeId': '99001234',
+                         'comments': {
+                             'line_1': 'ascan exp_mot04 0.0 4.0 4 0.5',
+                             'line_2':
+                             'user jkotan Acquisition started at '
+                             'Thu Dec  8 17:00:43 2022'},
+                         'end_time': 'Thu Dec  8 17:00:50 2022',
+                         'parameters': {
+                             'abs': 1423,
+                             'anav': 5.14532,
+                             'atten': 99777400.0,
+                             'bpm1': 7,
+                             'hkl': [
+                                 0.0031110747648095565,
+                                 0.0024437328201669176,
+                                 0.1910783136442638],
+                             'rois_p100k': [
+                                 228, 115, 238, 123, 227, 97, 252, 130,
+                                 238, 115, 248, 123],
+                             'sdd': None,
+                             'signalcounter': 'p100k_roi1',
+                             'ubmatrix':
+                             '[[ 0.82633922 -0.80961862 -0.01117831]; '
+                             '[ 0.02460193  0.0091408   1.15661358]; '
+                             '[-0.80932194 -0.82636427  0.02374563]]'
+                         }, 'start_time': 'Thu Dec  8 17:00:43 2022'},
+                     'sourceFolder':
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+                     'techniques': [],
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'})
+                self.assertEqual(len(self.__server.origdatablocks), 2)
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[0]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'ownerGroup': '99001234-dmgt',
+                     'datasetId': '/99001234/myscan_00001',
+                     'accessGroups': [
+                         '99001234-dmgt', '99001234-clbt', '99001234-part',
+                         'p00dmgt', 'p00staff'],
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[1]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'ownerGroup': '99001234-dmgt',
+                     'datasetId': '/99001234/myscan_00002',
+                     'accessGroups': [
+                         '99001234-dmgt', '99001234-clbt', '99001234-part',
+                         'p00dmgt', 'p00staff'],
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.attachments), 2)
+                self.assertEqual(len(self.__server.attachments[0]), 2)
+                self.assertEqual(self.__server.attachments[0][0],
+                                 '/99001234/myscan_00001')
+                self.myAssertDict(
+                    json.loads(self.__server.attachments[0][1]),
+                    {
+                        'ownerGroup': '99001234-dmgt',
+                        'thumbnail':
+                        "data:image/png;base64,i",
+                        'accessGroups': [
+                            '99001234-dmgt', '99001234-clbt', '99001234-part',
+                            'p00dmgt', 'p00staff'],
+                    }, skip=["thumbnail"])
+                self.assertTrue(
+                    json.loads(
+                        self.__server.attachments[0][1])["thumbnail"].
+                    startswith("data:image/png;base64,i"))
+                self.assertEqual(len(self.__server.attachments[1]), 2)
+                self.assertEqual(self.__server.attachments[1][0],
+                                 '/99001234/myscan_00002')
+                self.myAssertDict(
+                    json.loads(self.__server.attachments[1][1]),
+                    {
+                        'ownerGroup': '99001234-dmgt',
+                        'thumbnail':
+                        "data:image/png;base64,i",
+                        'accessGroups': [
+                            '99001234-dmgt', '99001234-clbt', '99001234-part',
+                            'p00dmgt', 'p00staff'],
+                    }, skip=["thumbnail"])
+                self.assertTrue(
+                    json.loads(
+                        self.__server.attachments[1][1])["thumbnail"].
+                    startswith("data:image/png;base64,i"))
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.exists(cpmapname):
+                os.remove(cpmapname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
     def test_datasetfile_add_fio(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
@@ -638,7 +1048,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
             "myscan_%05i.fio",
         ]
 
-        def test_thread():
+        def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
             time.sleep(3)
             shutil.copy(lsource, fsubdirname2)
@@ -667,7 +1077,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                 shutil.copy(lsource, fsubdirname2)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
-                th = threading.Thread(target=test_thread)
+                th = threading.Thread(target=tst_thread)
                 th.start()
                 vl, er = self.runtest(cmd)
                 th.join()
@@ -888,6 +1298,374 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'size': 629}, skip=["dataFileList", "size"])
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
+    def test_datasetfile_add_fio_attachment(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
+        os.mkdir(fdirname)
+        btmeta = "beamtime-metadata-99001234.json"
+        dslist = "scicat-datasets-99001234.lst"
+        idslist = "scicat-ingested-datasets-99001234.lst"
+        # wrongdslist = "scicat-datasets-99001235.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        fiofile = "mymeta2_00011.fio"
+        fiosource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                 "config",
+                                 fiofile)
+        shutil.copy(source, fdirname)
+        # shutil.copy(lsource, fsubdirname2)
+        # shutil.copy(wlsource, fsubdirname)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        username = "myingestor"
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'oned_in_metadata: true\n' \
+            'oned_dataset_generator_switch: " --oned "\n' \
+            'master_file_extension_list:\n' \
+            '  - "fio"\n' \
+            'add_empty_units: False\n' \
+            'attachment_signal_names: "exp_c04,exp_c02"\n' \
+            'attachment_axes_names: "timestamp"\n' \
+            'ingest_dataset_attachment: true\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingestor_username: "{username}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, vardir=vardir,
+                username=username, credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+
+        wrmodule = WRITERS[self.writer]
+        filewriter.writer = wrmodule
+
+        commands = [('scicat_dataset_ingestor -c %s -r40 --log debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r40 -l debug'
+                     % cfgfname).split()]
+
+        arg = [
+            "myscan_%05i.fio",
+        ]
+
+        def tst_thread():
+            """ test thread which adds and removes beamtime metadata file """
+            time.sleep(3)
+            shutil.copy(lsource, fsubdirname2)
+            time.sleep(5)
+            os.mkdir(fsubdirname3)
+            time.sleep(12)
+            with open(fdslist, "a+") as fds:
+                fds.write("myscan_00003\n")
+                fds.write("myscan_00004\n")
+
+        # commands.pop()
+        try:
+            for cmd in commands:
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+
+                for k in range(4):
+                    fiofilename = os.path.join(
+                        fsubdirname2, arg[0] % (k + 1))
+                    shutil.copy(fiosource, fiofilename)
+
+                # print(cmd)
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                self.__server.reset()
+                shutil.copy(lsource, fsubdirname2)
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                th = threading.Thread(target=tst_thread)
+                th.start()
+                vl, er = self.runtest(cmd)
+                th.join()
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                dseri = [ln for ln in seri if "DEBUG :" not in ln]
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                # print(er)
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                        '{basedir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir2} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Creating DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : DatasetWatcher: Adding watch {cnt5}: '
+                        '{dslist} {idslist}\n'
+                        'INFO : DatasetWatcher: Waiting datasets: '
+                        '[\'{sc1}\', \'{sc2}\']\n'
+                        'INFO : DatasetWatcher: Ingested datasets: []\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
+                        'INFO : DatasetIngestor: Generating fio metadata: '
+                        '{sc1} {subdir2}/{sc1}.scan.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment metadata:'
+                        ' {sc1} {subdir2}/{sc1}.attachment.json\n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc1}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '/99001234/{sc1}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
+                        'INFO : DatasetIngestor: Generating fio metadata: '
+                        '{sc2} {subdir2}/{sc2}.scan.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment metadata:'
+                        ' {sc2} {subdir2}/{sc2}.attachment.json\n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc2}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '/99001234/{sc2}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc3}\n'
+                        'INFO : DatasetIngestor: Generating fio metadata: '
+                        '{sc3} {subdir2}/{sc3}.scan.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc3} {subdir2}/{sc3}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment metadata:'
+                        ' {sc3} {subdir2}/{sc3}.attachment.json\n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc3}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '/99001234/{sc3}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc4}\n'
+                        'INFO : DatasetIngestor: Generating fio metadata: '
+                        '{sc4} {subdir2}/{sc4}.scan.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc4} {subdir2}/{sc4}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment metadata:'
+                        ' {sc4} {subdir2}/{sc4}.attachment.json\n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc4}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '/99001234/{sc4}\n'
+                        'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: '
+                        'Stopping ScanDirWatcher {btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Stopping DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt5}: '
+                        '{dslist}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                subdir=fsubdirname, subdir2=fsubdirname2,
+                                dslist=fdslist, idslist=fidslist,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                                cnt4=(cnt + 3), cnt5=(cnt + 4),
+                                sc1='myscan_00001', sc2='myscan_00002',
+                                sc3='myscan_00003', sc4='myscan_00004'),
+                        "\n".join(dseri))
+                except Exception:
+                    print(er)
+                    raise
+                self.assertEqual(
+                    'Login: myingestor\n'
+                    "RawDatasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: /99001234/myscan_00001\n"
+                    "Datasets Attachments: /99001234/myscan_00001\n"
+                    "RawDatasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: /99001234/myscan_00002\n"
+                    "Datasets Attachments: /99001234/myscan_00002\n"
+                    'Login: myingestor\n'
+                    "RawDatasets: 99001234/myscan_00003\n"
+                    "OrigDatablocks: /99001234/myscan_00003\n"
+                    "Datasets Attachments: /99001234/myscan_00003\n"
+                    "RawDatasets: 99001234/myscan_00004\n"
+                    "OrigDatablocks: /99001234/myscan_00004\n"
+                    "Datasets Attachments: /99001234/myscan_00004\n",
+                    vl)
+                self.assertEqual(len(self.__server.userslogin), 2)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "myingestor", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[1],
+                    b'{"username": "myingestor", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 4)
+                for i in range(4):
+                    self.myAssertDict(
+                        json.loads(self.__server.datasets[i]),
+                        {'accessGroups': [
+                            '99001234-dmgt',
+                            '99001234-clbt',
+                            '99001234-part',
+                            'p00dmgt',
+                            'p00staff'],
+                         'contactEmail': 'appuser@fake.com',
+                         'createdAt': '2022-05-14 11:54:29',
+                         'instrumentId': '/petra3/p00',
+                         'creationLocation': '/DESY/PETRA III/P00',
+                         'pid': '99001234/myscan_%05i' % (i + 1),
+                         'datasetName': 'myscan_%05i' % (i + 1),
+                         'description': 'H20 distribution',
+                         'endTime': '2022-05-19 09:00:00',
+                         'isPublished': False,
+                         'owner': 'Smithson',
+                         'ownerEmail': 'peter.smithson@fake.de',
+                         'ownerGroup': '99001234-dmgt',
+                         'principalInvestigator': 'appuser@fake.com',
+                         'proposalId': '99001234',
+                         'scientificMetadata': {
+                             'DOOR_proposalId': '99991173',
+                             'ScanCommand': 'ascan exp_mot04 0.0 4.0 4 0.5',
+                             'beamtimeId': '99001234',
+                             'comments': {
+                                 'line_1': 'ascan exp_mot04 0.0 4.0 4 0.5',
+                                 'line_2':
+                                 'user jkotan Acquisition started at '
+                                 'Thu Dec  8 17:00:43 2022'},
+                             'end_time': 'Thu Dec  8 17:00:50 2022',
+                             'data': {
+                                 'bpm1c': [-1.0, -1.0, -1.0, -1.0, -1.0],
+                                 'exp_c02': [140.4539012230071,
+                                             43.03782737462626,
+                                             2.8750752655385,
+                                             32.14813145322391,
+                                             133.6535350066115],
+                                 'exp_c03': [3.6754749142642638,
+                                             51.76074517540757,
+                                             177.15589117792712,
+                                             52.376975207311894,
+                                             2.9541814712878325],
+                                 'exp_mot04': [0.0, 1.0, 2.0, 3.0, 4.0],
+                                 'exp_t01': [0.5, 0.5, 0.5, 0.5, 0.5],
+                                 'p09/motor/exp.08/Position':
+                                 [1.0, 1.0, 1.0, 1.0, 1.0],
+                                 'timestamp': [2.284174680709839,
+                                               3.3944602012634277,
+                                               4.407033920288086,
+                                               5.524206161499023,
+                                               6.656368255615234]
+                             },
+                             'parameters': {
+                                 'abs': 1423,
+                                 'anav': 5.14532,
+                                 'atten': 99777400.0,
+                                 'bpm1': 7,
+                                 'hkl': [
+                                     0.0031110747648095565,
+                                     0.0024437328201669176,
+                                     0.1910783136442638],
+                                 'rois_p100k': [
+                                     228, 115, 238, 123, 227, 97, 252, 130,
+                                     238, 115, 248, 123],
+                                 'sdd': None,
+                                 'signalcounter': 'p100k_roi1',
+                                 'ubmatrix':
+                                 '[[ 0.82633922 -0.80961862 -0.01117831]; '
+                                 '[ 0.02460193  0.0091408   1.15661358]; '
+                                 '[-0.80932194 -0.82636427  0.02374563]]'
+                             },
+                             'start_time': 'Thu Dec  8 17:00:43 2022'
+                         },
+                         'sourceFolder':
+                         '/asap3/petra3/'
+                         'gpfs/p00/2022/data/9901234/raw/special',
+                         'techniques': [],
+                         'type': 'raw',
+                         'updatedAt': '2022-05-14 11:54:29'})
+
+                self.assertEqual(len(self.__server.origdatablocks), 4)
+                for i in range(4):
+                    self.myAssertDict(
+                        json.loads(self.__server.origdatablocks[i]),
+                        {'dataFileList': [
+                            {'gid': 'jkotan',
+                             'path': 'myscan_00001.scan.json',
+                             'perm': '-rw-r--r--',
+                             'size': 629,
+                             'time': '2022-07-05T19:07:16.683673+0200',
+                             'uid': 'jkotan'}],
+                         'ownerGroup': '99001234-dmgt',
+                         'datasetId':
+                         '/99001234/myscan_%05i' % (i + 1),
+                         'accessGroups': [
+                             '99001234-dmgt', '99001234-clbt', '99001234-part',
+                             'p00dmgt', 'p00staff'],
+                         'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.attachments), 4)
+                for i in range(4):
+                    self.assertEqual(len(self.__server.attachments[i]), 2)
+                    self.assertEqual(self.__server.attachments[i][0],
+                                     '/99001234/myscan_%05i' % (i + 1))
+                    self.myAssertDict(
+                        json.loads(self.__server.attachments[i][1]),
+                        {
+                            'thumbnail': "data:sdfsAAA%s" % i,
+                            'ownerGroup': '99001234-dmgt',
+                            'accessGroups': [
+                                '99001234-dmgt', '99001234-clbt',
+                                '99001234-part', 'p00dmgt', 'p00staff']
+                        },
+                        skip=["thumbnail"])
+                    self.assertTrue(
+                        json.loads(
+                            self.__server.attachments[i][1])["thumbnail"].
+                        startswith("data:image/png;base64,i"))
+                    # with open("myte_%05i.json" % (i + 1), "w") as cf:
+                    #     cf.write(self.__server.attachments[i][1].decode("utf-8"))
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
         finally:

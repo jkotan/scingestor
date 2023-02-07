@@ -109,6 +109,18 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             message = "{}"
 
         elif self.path.lower().startswith(
+                '/datasets/') and \
+                contenttype == 'application/json':
+            spath = self.path.lower().split("?access_token=")
+            if len(spath) == 2:
+                lpath = spath[0].split("/")
+                if len(lpath) == 4 and lpath[3] == "attachments":
+                    pid = lpath[2]
+                    pid = pid.replace("%2f", "/")
+                    print("Datasets Attachments: %s" % pid)
+                    self.server.attachments.append((pid, in_data))
+                    message = "{}"
+        elif self.path.lower().startswith(
                 '/origdatablocks?access_token=') and \
                 contenttype == 'application/json':
             self.server.origdatablocks.append(in_data)
@@ -244,9 +256,11 @@ class SciCatTestServer(HTTPServer):
         self.userslogin = []
         #: (:obj:`list`<:obj:`str`>) other ingestions
         self.others = []
+        #: (:obj:`list`<:obj:`str`>) ingested attachments
+        self.attachments = []
         #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with datasets
         self.pid_dataset = {}
-        #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with proposals
+        #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with proposal
         self.pid_proposal = {}
         #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with datablocks
         self.id_origdatablock = {}
@@ -258,6 +272,7 @@ class SciCatTestServer(HTTPServer):
         self.datasets = []
         self.origdatablocks = []
         self.userslogin = []
+        self.attachments = []
         self.others = []
         self.pid_dataset = {}
         self.pid_proposal = {}
