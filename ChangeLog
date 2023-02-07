@@ -2,7 +2,7 @@
 	* add ingest_attachment, scicat_attachments_path, attachment_metadata_postfix, attachment_metadata_generator, plot_file_extension_list, attachment_* configuration variables (#179)
 	* add scicat_ingest script (#177)
 	* add support for nxstools 3.39.0 (#175)
-	* add override_attachment_signals* configuration variables (#179)
+	* add override_attachment_signals* configuration variables (#181)
 	* tagged as 0.5.0
 
 2022-12-09 Jan Kotanski <jan.kotanski@desy.de>
