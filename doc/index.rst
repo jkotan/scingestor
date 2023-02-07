@@ -81,6 +81,7 @@ The configuration written in YAML can contain the following variables
 * **chmod_generator_switch** *(str)* , default: ``" -x {chmod} "``
 * **relative_path_generator_switch** *(str)* , default: ``" -r {relpath} "``
 * **oned_dataset_generator_switch** *(str)* , default: ``" --oned "``
+* **override_attachment_signals_generator_switch** *(bool)* , default: ``" --override "``
 * **hidden_attributes_generator_switch** *(str)* , default: ``" -n {hiddenattributes} "``
 * **hidden_attributes** *(str)* , default: ``"nexdatas_source,nexdatas_strategy,units"``
 * **attachment_signals_generator_switch** *(str)* , default: ``" -s {signals} "``
@@ -90,6 +91,7 @@ The configuration written in YAML can contain the following variables
 * **attachment_axes_names** *(str)* , default: ``""``
 * **attachment_image_frame_number** *(str)* , default: ``""``
 * **ingest_dataset_attachment** *(bool)* , default: ``False``
+* **override_attachment_signals** *(bool)* , default: ``False``
 * **add_empty_units_generator_switch** *(str)* , default: ``" --add-empty-units "``
 * **add_empty_units** *(bool)* , default: ``True``
 * **metadata_copy_map_file** *(str)* , default: ``None``

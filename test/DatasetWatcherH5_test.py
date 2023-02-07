@@ -2809,6 +2809,433 @@ class DatasetWatcherH5Test(unittest.TestCase):
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_datasetfile_add_h5_attachment_counter_override(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
+        os.mkdir(fdirname)
+        btmeta = "beamtime-metadata-99001234.json"
+        dslist = "scicat-datasets-99001234.lst"
+        idslist = "scicat-ingested-datasets-99001234.lst"
+        # wrongdslist = "scicat-datasets-99001235.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        shutil.copy(source, fdirname)
+        # shutil.copy(lsource, fsubdirname2)
+        # shutil.copy(wlsource, fsubdirname)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        username = "myingestor"
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'oned_in_metadata: true\n' \
+            'override_attachment_signals: true\n' \
+            'oned_dataset_generator_switch: " --oned "\n' \
+            'override_attachment_signals_generator_switch: " --override "\n' \
+            'add_empty_units: False\n' \
+            'attachment_signal_names: "nonexist,lk_spectrum"\n' \
+            'attachment_axes_names: "nonexist,mot03"\n' \
+            'ingest_dataset_attachment: true\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingestor_username: "{username}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, vardir=vardir,
+                username=username, credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+
+        wrmodule = WRITERS[self.writer]
+        filewriter.writer = wrmodule
+
+        commands = [('scicat_dataset_ingestor -c %s -r40 --log debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r40 -l debug'
+                     % cfgfname).split()]
+
+        arg = [
+            "myscan_%05i.nxs",
+            "Test experiment",
+            "BL1234554",
+            "PETRA III",
+            "P3",
+            "2014-02-12T15:19:21+00:00",
+            "2014-02-15T15:17:21+00:00",
+            "water",
+            "H20",
+            'technique: "saxs"',
+        ]
+        ltech = [
+            {
+                'name': 'small angle x-ray scattering',
+                'pid':
+                'http://purl.org/pan-science/PaNET/PaNET01188'
+            }
+        ]
+
+        def tst_thread():
+            """ test thread which adds and removes beamtime metadata file """
+            time.sleep(3)
+            shutil.copy(lsource, fsubdirname2)
+            time.sleep(5)
+            os.mkdir(fsubdirname3)
+            time.sleep(12)
+            with open(fdslist, "a+") as fds:
+                fds.write("myscan_00003\n")
+                fds.write("myscan_00004\n")
+
+        # commands.pop()
+        try:
+            for cmd in commands:
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+
+                for k in range(4):
+                    nxsfilename = os.path.join(
+                        fsubdirname2, arg[0] % (k + 1))
+                    title = arg[1]
+                    beamtime = arg[2]
+                    insname = arg[3]
+                    inssname = arg[4]
+                    stime = arg[5]
+                    etime = arg[6]
+                    smpl = arg[7]
+                    formula = arg[8]
+                    spectrum = [243, 34, 34, 23, 334, 34, 34, 33, 32, 11]
+                    mot03 = list(range(3, 13))
+
+                    nxsfile = filewriter.create_file(
+                        nxsfilename, overwrite=True)
+                    rt = nxsfile.root()
+                    rt.attributes.create(
+                        "default", "string").write("entry12345")
+                    entry = rt.create_group("entry12345", "NXentry")
+                    entry.attributes.create(
+                        "default", "string").write("data")
+                    ins = entry.create_group("instrument", "NXinstrument")
+                    det = ins.create_group("detector", "NXdetector")
+                    entry.create_field(
+                        "experiment_description", "string").write(arg[9])
+                    dt = entry.create_group("data", "NXdata")
+                    dt.attributes.create(
+                        "signal", "string").write("lkintimage")
+                    dt.attributes.create("axes", "string").write("lk_spectrum")
+                    mt = dt.create_field("mot03", "uint32", [10], [10])
+                    mt.write(mot03)
+
+                    sample = entry.create_group("sample", "NXsample")
+                    fl = det.create_field(
+                        "intimage", "uint32", [1, 30], [1, 30])
+                    sp = det.create_field("spectrum", "uint32", [10], [10])
+                    sp.write(spectrum)
+                    fl[0, :] = list(range(30))
+                    filewriter.link(
+                        "/entry12345/instrument/detector/intimage", dt,
+                        "lkintimage")
+                    filewriter.link(
+                        "/entry12345/instrument/detector/spectrum", dt,
+                        "lk_spectrum")
+
+                    entry.create_field("title", "string").write(title)
+                    entry.create_field(
+                        "experiment_identifier", "string").write(beamtime)
+                    entry.create_field("start_time", "string").write(stime)
+                    entry.create_field("end_time", "string").write(etime)
+                    sname = ins.create_field("name", "string")
+                    sname.write(insname)
+                    sattr = sname.attributes.create("short_name", "string")
+                    sattr.write(inssname)
+                    sname = sample.create_field("name", "string")
+                    sname.write(smpl)
+                    sfml = sample.create_field("chemical_formula", "string")
+                    sfml.write(formula)
+                    nxsfile.close()
+
+                # print(cmd)
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                self.__server.reset()
+                shutil.copy(lsource, fsubdirname2)
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                th = threading.Thread(target=tst_thread)
+                th.start()
+                vl, er = self.runtest(cmd)
+                th.join()
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                dseri = [ln for ln in seri if "DEBUG :" not in ln]
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                # print(er)
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                        '{basedir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir2} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Creating DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : DatasetWatcher: Adding watch {cnt5}: '
+                        '{dslist} {idslist}\n'
+                        'INFO : DatasetWatcher: Waiting datasets: '
+                        '[\'{sc1}\', \'{sc2}\']\n'
+                        'INFO : DatasetWatcher: Ingested datasets: []\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
+                        'INFO : DatasetIngestor: Generating nxs metadata: '
+                        '{sc1} {subdir2}/{sc1}.scan.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment metadata:'
+                        ' {sc1} {subdir2}/{sc1}.attachment.json\n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc1}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '/99001234/{sc1}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
+                        'INFO : DatasetIngestor: Generating nxs metadata: '
+                        '{sc2} {subdir2}/{sc2}.scan.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment metadata:'
+                        ' {sc2} {subdir2}/{sc2}.attachment.json\n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc2}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '/99001234/{sc2}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc3}\n'
+                        'INFO : DatasetIngestor: Generating nxs metadata: '
+                        '{sc3} {subdir2}/{sc3}.scan.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc3} {subdir2}/{sc3}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment metadata:'
+                        ' {sc3} {subdir2}/{sc3}.attachment.json\n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc3}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '/99001234/{sc3}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc4}\n'
+                        'INFO : DatasetIngestor: Generating nxs metadata: '
+                        '{sc4} {subdir2}/{sc4}.scan.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc4} {subdir2}/{sc4}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment metadata:'
+                        ' {sc4} {subdir2}/{sc4}.attachment.json\n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc4}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '/99001234/{sc4}\n'
+                        'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: '
+                        'Stopping ScanDirWatcher {btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Stopping DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt5}: '
+                        '{dslist}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                subdir=fsubdirname, subdir2=fsubdirname2,
+                                dslist=fdslist, idslist=fidslist,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                                cnt4=(cnt + 3), cnt5=(cnt + 4),
+                                sc1='myscan_00001', sc2='myscan_00002',
+                                sc3='myscan_00003', sc4='myscan_00004'),
+                        "\n".join(dseri))
+                except Exception:
+                    print(er)
+                    raise
+                self.assertEqual(
+                    'Login: myingestor\n'
+                    "RawDatasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: /99001234/myscan_00001\n"
+                    "Datasets Attachments: /99001234/myscan_00001\n"
+                    "RawDatasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: /99001234/myscan_00002\n"
+                    "Datasets Attachments: /99001234/myscan_00002\n"
+                    'Login: myingestor\n'
+                    "RawDatasets: 99001234/myscan_00003\n"
+                    "OrigDatablocks: /99001234/myscan_00003\n"
+                    "Datasets Attachments: /99001234/myscan_00003\n"
+                    "RawDatasets: 99001234/myscan_00004\n"
+                    "OrigDatablocks: /99001234/myscan_00004\n"
+                    "Datasets Attachments: /99001234/myscan_00004\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 2)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "myingestor", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[1],
+                    b'{"username": "myingestor", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 4)
+                for i in range(4):
+                    self.myAssertDict(
+                        json.loads(self.__server.datasets[i]),
+                        {'contactEmail': 'appuser@fake.com',
+                         'creationTime': arg[6],
+                         'createdAt': '2022-05-14 11:54:29',
+                         'instrumentId': '/petra3/p00',
+                         'creationLocation': '/DESY/PETRA III/P00',
+                         'description': arg[1],
+                         'endTime': arg[6],
+                         'isPublished': False,
+                         'techniques': ltech,
+                         'owner': 'Smithson',
+                         'ownerEmail': 'peter.smithson@fake.de',
+                         'pid': '99001234/myscan_%05i' % (i + 1),
+                         'datasetName': 'myscan_%05i' % (i + 1),
+                         'accessGroups': [
+                             '99001234-dmgt', '99001234-clbt', '99001234-part',
+                             'p00dmgt', 'p00staff'],
+                         'principalInvestigator': 'appuser@fake.com',
+                         'ownerGroup': '99001234-dmgt',
+                         'proposalId': '99001234',
+                         'scientificMetadata':
+                         {'name': 'entry12345',
+                          'experiment_description': {
+                              'value': arg[9]
+                          },
+                          'data': {
+                              'signal': 'lkintimage',
+                              'axes': 'lk_spectrum',
+                              'NX_class': 'NXdata',
+                              'lkintimage': {
+                                  'shape': [1, 30]
+                              },
+                              'lk_spectrum': {
+                                  'value': spectrum,
+                                  'shape': [10]
+                              },
+                              'mot03': {
+                                  'value': mot03,
+                                  'shape': [10]
+                              }
+                          },
+                          'end_time': {'value': '%s' % arg[6]},
+                          'experiment_identifier': {'value': '%s' % arg[2]},
+                          'default': 'data',
+                          'instrument': {
+                              'NX_class': 'NXinstrument',
+                              'detector': {
+                                  'NX_class': 'NXdetector',
+                                  'intimage': {
+                                      'shape': [1, 30]
+                                  },
+                                  'spectrum': {
+                                      'value': spectrum,
+                                      'shape': [10]
+                                  }
+                              },
+
+                              'name': {
+                                  'short_name': '%s' % arg[4],
+                                  'value': '%s' % arg[3]}},
+                          'sample': {
+                              'NX_class': 'NXsample',
+                              'chemical_formula': {'value': '%s' % arg[8]},
+                              'name': {'value': '%s' % arg[7]}},
+                          'start_time': {
+                              'value': '%s' % arg[5]},
+                          'title': {'value': '%s' % arg[1]},
+                          'DOOR_proposalId': '99991173',
+                          'beamtimeId': '99001234'},
+                         'sourceFolder':
+                         '/asap3/petra3/gpfs/p00/2022/data/9901234/'
+                         'raw/special',
+                         'type': 'raw',
+                         'updatedAt': '2022-05-14 11:54:29'})
+
+                self.assertEqual(len(self.__server.origdatablocks), 4)
+                for i in range(4):
+                    self.myAssertDict(
+                        json.loads(self.__server.origdatablocks[i]),
+                        {'dataFileList': [
+                            {'gid': 'jkotan',
+                             'path': 'myscan_00001.scan.json',
+                             'perm': '-rw-r--r--',
+                             'size': 629,
+                             'time': '2022-07-05T19:07:16.683673+0200',
+                             'uid': 'jkotan'}],
+                         'ownerGroup': '99001234-dmgt',
+                         'datasetId':
+                         '/99001234/myscan_%05i' % (i + 1),
+                         'accessGroups': [
+                             '99001234-dmgt', '99001234-clbt', '99001234-part',
+                             'p00dmgt', 'p00staff'],
+                         'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.attachments), 4)
+                for i in range(4):
+                    self.assertEqual(len(self.__server.attachments[i]), 2)
+                    self.assertEqual(self.__server.attachments[i][0],
+                                     '/99001234/myscan_%05i' % (i + 1))
+                    self.myAssertDict(
+                        json.loads(self.__server.attachments[i][1]),
+                        {
+                            'thumbnail': "data:sdfsAAA%s" % i,
+                            'ownerGroup': '99001234-dmgt',
+                            'accessGroups': [
+                                '99001234-dmgt', '99001234-clbt',
+                                '99001234-part', 'p00dmgt', 'p00staff']
+                        },
+                        skip=["thumbnail"])
+                    self.assertTrue(
+                        json.loads(
+                            self.__server.attachments[i][1])["thumbnail"].
+                        startswith("data:image/png;base64,i"))
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
     def test_datasetfile_add_h5_attachment_image(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
