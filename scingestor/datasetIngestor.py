@@ -146,6 +146,8 @@ class DatasetIngestor:
         self.__copymapfile = None
         #: (:obj:`bool`) oned metadata flag
         self.__oned = False
+        #: (:obj:`bool`) override attachment signals flag
+        self.__override = False
         #: (:obj:`bool`) empty units flag
         self.__emptyunits = True
 
@@ -207,12 +209,14 @@ class DatasetIngestor:
         self.__hiddenattributes_switch = " -n {hiddenattributes} "
         #: (:obj:`str`) relpath generator switch
         self.__relpath_switch = " -r {relpath} "
-        #: (:obj:`str`) attachament signals generator switch
+        #: (:obj:`str`) attachment signals generator switch
         self.__attachmentsignals_switch = " -s {signals} "
-        #: (:obj:`str`) attachament axes generator switch
+        #: (:obj:`str`) attachment axes generator switch
         self.__attachmentaxes_switch = " -e {axes} "
-        #: (:obj:`str`) attachament frame generator switch
+        #: (:obj:`str`) attachment frame generator switch
         self.__attachmentframe_switch = " -m {frame} "
+        #: (:obj:`str`) attachment override signals switch
+        self.__attachmentoverride_switch = " --override "
 
         #: (:obj:`dict` <:obj:`str`, :obj:`str`>) request headers
         self.__headers = {'Content-Type': 'application/json',
@@ -353,6 +357,8 @@ class DatasetIngestor:
                     homepath=self.__homepath)
         if "oned_in_metadata" in self.__config.keys():
             self.__oned = self.__config["oned_in_metadata"]
+        if "override_attachment_signals" in self.__config.keys():
+            self.__override = self.__config["override_attachment_signals"]
         if "ingest_dataset_attachment" in self.__config.keys():
             self.__ingest_attachment = \
                 self.__config["ingest_dataset_attachment"]
@@ -419,6 +425,11 @@ class DatasetIngestor:
         if "oned_dataset_generator_switch" in self.__config.keys():
             self.__oned_switch = \
                 self.__config["oned_dataset_generator_switch"]
+
+        if "override_attachment_signals_generator_switch" \
+                in self.__config.keys():
+            self.__attachmentoverride_switch = \
+                self.__config["override_attachment_signals_generator_switch"]
 
         if "add_empty_units_generator_switch" in self.__config.keys():
             self.__emptyunits_switch = \
@@ -502,6 +513,11 @@ class DatasetIngestor:
             if "attachment_metadata_generator" not in self.__config.keys():
                 self.__attachmentcommand = \
                     self.__attachmentcommand + self.__attachmentframe_switch
+
+        if self.__override:
+            if "attachment_metadata_generator" not in self.__config.keys():
+                self.__attachmentcommand = \
+                    self.__attachmentcommand + self.__attachmentoverride_switch
 
         if "max_request_tries_number" in self.__config.keys():
             try:
