@@ -2020,9 +2020,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
         wrmodule = WRITERS[self.writer]
         filewriter.writer = wrmodule
 
-        commands = [('scicat_dataset_ingestor -c %s -r36 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r40 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r36 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r40 -l debug'
                      % cfgfname).split()]
 
         arg = [
@@ -2444,9 +2444,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
         wrmodule = WRITERS[self.writer]
         filewriter.writer = wrmodule
 
-        commands = [('scicat_dataset_ingestor -c %s -r36 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r40 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r36 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r40 -l debug'
                      % cfgfname).split()]
 
         arg = [
@@ -2866,9 +2866,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
         wrmodule = WRITERS[self.writer]
         filewriter.writer = wrmodule
 
-        commands = [('scicat_dataset_ingestor -c %s -r36 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r40 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r36 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r40 -l debug'
                      % cfgfname).split()]
         c2d = [
             np.random.normal(0, 0.1, 1024).reshape(16, 64),
