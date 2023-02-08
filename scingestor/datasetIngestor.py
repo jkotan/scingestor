@@ -149,7 +149,7 @@ class DatasetIngestor:
         #: (:obj:`bool`) override attachment signals flag
         self.__override = False
         #: (:obj:`bool`) log generator command flag
-        self.__logcommand = False
+        self.__logcommands = False
         #: (:obj:`bool`) empty units flag
         self.__emptyunits = True
 
@@ -200,11 +200,11 @@ class DatasetIngestor:
             " {scanpath}/{scanname}.{plotext}"
 
         #: (:obj:`str`) oned generator switch
-        self.__oned_switch = " --oned  "
+        self.__oned_switch = " --oned "
         #: (:obj:`str`) oned generator switch
-        self.__copymapfile_switch = " --copy-map-file {copymapfile}  "
+        self.__copymapfile_switch = " --copy-map-file {copymapfile} "
         #: (:obj:`str`) empty units generator switch
-        self.__emptyunits_switch = " --add-empty-units  "
+        self.__emptyunits_switch = " --add-empty-units "
         #: (:obj:`str`) chmod generator switch
         self.__chmod_switch = " -x {chmod} "
         #: (:obj:`str`) hidden attributes generator switch
@@ -361,8 +361,8 @@ class DatasetIngestor:
             self.__oned = self.__config["oned_in_metadata"]
         if "override_attachment_signals" in self.__config.keys():
             self.__override = self.__config["override_attachment_signals"]
-        if "log_generator_command" in self.__config.keys():
-            self.__logcommand = self.__config["log_generator_command"]
+        if "log_generator_commands" in self.__config.keys():
+            self.__logcommands = self.__config["log_generator_commands"]
         if "ingest_dataset_attachment" in self.__config.keys():
             self.__ingest_attachment = \
                 self.__config["ingest_dataset_attachment"]
@@ -630,7 +630,7 @@ class DatasetIngestor:
                     "{metapath}/{scanname}{scanpostfix}".format(
                         **self.__dctfmt)))
             command = self.__datasetcommandfile.format(**self.__dctfmt)
-            if self.__logcommand:
+            if self.__logcommands:
                 get_logger().info(
                     'DatasetIngestor: Generating dataset command: %s ' % (
                         command))
@@ -646,7 +646,7 @@ class DatasetIngestor:
                     "{metapath}/{scanname}{scanpostfix}".format(
                         **self.__dctfmt)))
             command = self.__datasetcommand.format(**self.__dctfmt)
-            if self.__logcommand:
+            if self.__logcommands:
                 get_logger().info(
                     'DatasetIngestor: Generating dataset command: %s'
                     % (command))
@@ -681,7 +681,7 @@ class DatasetIngestor:
         for sc in sscan:
             cmd += self.__datablockscanpath.format(
                 scanpath=self.__dctfmt["scanpath"], scanname=sc)
-        if self.__logcommand:
+        if self.__logcommands:
             get_logger().info(
                 'DatasetIngestor: Generating origdatablock command: %s' % cmd)
         else:
@@ -721,7 +721,7 @@ class DatasetIngestor:
                     "{metapath}/{scanname}{attachmentpostfix}".format(
                         **self.__dctfmt)))
             cmd = self.__attachmentcommand.format(**self.__dctfmt)
-            if self.__logcommand:
+            if self.__logcommands:
                 get_logger().info(
                     'DatasetIngestor: Generating attachment command: %s' % cmd)
             else:
@@ -768,7 +768,7 @@ class DatasetIngestor:
         except Exception as e:
             get_logger().warning('%s: %s' % (scan, str(e)))
         if dmeta is None:
-            if self.__logcommand:
+            if self.__logcommands:
                 get_logger().info(
                     'DatasetIngestor: Generating origdatablock command: %s'
                     % cmd)
@@ -786,7 +786,7 @@ class DatasetIngestor:
                     dctfmt["scanname"] = sc
                     cmd += self.__datablockscanpath.format(**dctfmt)
 
-            if self.__logcommand:
+            if self.__logcommands:
                 get_logger().info(
                     'DatasetIngestor: Generating origdatablock command: %s'
                     % cmd)
