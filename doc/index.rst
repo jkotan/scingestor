@@ -92,6 +92,7 @@ The configuration written in YAML can contain the following variables
 * **attachment_image_frame_number** *(str)* , default: ``""``
 * **ingest_dataset_attachment** *(bool)* , default: ``False``
 * **override_attachment_signals** *(bool)* , default: ``False``
+* **log_gemerator_command** *(bool)* , default: ``False``
 * **add_empty_units_generator_switch** *(str)* , default: ``" --add-empty-units "``
 * **add_empty_units** *(bool)* , default: ``True``
 * **metadata_copy_map_file** *(str)* , default: ``None``
