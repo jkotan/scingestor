@@ -3,6 +3,7 @@
 	* add scicat_ingest script (#177)
 	* add support for nxstools 3.39.0 (#175)
 	* add override_attachment_signals* configuration variables (#181)
+	*  add log_generator_commands configuration variable  (#183)
 	* tagged as 0.5.0
 
 2022-12-09 Jan Kotanski <jan.kotanski@desy.de>
