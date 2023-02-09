@@ -134,7 +134,7 @@ scicat_dataset_ingest
 ---------------------
 
 Re-ingestion script for SciCat RawDatasets and OrigDatablocks is usually
-performed at the end of the beamtime.
+launched at the end of the beamtime.
 
 ::
 
@@ -142,6 +142,17 @@ performed at the end of the beamtime.
 
 Its configuration written YAML like for ``scicat_dataset_ingestor`` ##
 Installation
+
+scicat_dataset_ingest
+---------------------
+
+General ingestion script for SciCat Models could be used for manual scicat model ingestion, e.g. Sample, Instrument or DerivedDataset.
+
+::
+
+   scicat_ingest  -m Samples  -c ~/.scingestor.yaml  ./metadata.json
+
+Its configuration written YAML like for ``scicat_dataset_ingestor``
 
 Required packages
 ~~~~~~~~~~~~~~~~~
@@ -250,6 +261,7 @@ Contents
 
    scicat_dataset_ingestor
    scicat_dataset_ingest
+   scicat_ingest
    scingestor
 
 
