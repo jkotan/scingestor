@@ -306,7 +306,7 @@ def main():
     epilog = "" \
         " examples:\n" \
         "      scicat_dataset_ingest -c ~/.scingestor.yaml\n " \
-        "      scicat_dataset_ingest -c ~/.scingestor.yaml -l debug\n" \
+        "     scicat_dataset_ingest -c ~/.scingestor.yaml -l debug\n" \
         "\n"
     parser = argparse.ArgumentParser(
         description=description, epilog=epilog,

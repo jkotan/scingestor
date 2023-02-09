@@ -1,8 +1,8 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "SCICAT_DATASET_INGEST" "1" "Feb 09, 2023" "0.5" "SciCat Dataset Ingestor"
+.TH "SCICAT_INGEST" "1" "Feb 09, 2023" "0.5" "SciCat Dataset Ingestor"
 .SH NAME
-scicat_dataset_ingest \- Reingestion script to upload SciCat RawDatasets
+scicat_ingest \- General ingest script to upload SciCat Samples or Instruments
 .
 .nr rst2man-indent-level 0
 .
@@ -39,12 +39,15 @@ Re\-ingestion script for SciCat RawDatasets.
 .sp
 .nf
 .ft C
-scicat_dataset_ingest [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG] [\-f LOGFILE] [\-t]
+scicat_ingest [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG] [\-f LOGFILE] [\-t] [\-p TOKENFILE]   metadata_json_file [metadata_json_file ...]
 .ft P
 .fi
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
+.TP
+.B Arguments:
+metadata_json_file    metadata json file(s)
 .TP
 .B Options:
 .INDENT 7.0
@@ -63,6 +66,9 @@ log file name
 .TP
 .B \-t\fP,\fB  \-\-timestamps
 timestamps in logs
+.TP
+.BI \-p \ TOKENFILE\fP,\fB \ \-\-token\-file \ TOKENFILE
+file with a user token
 .UNINDENT
 .UNINDENT
 .SH EXAMPLE
@@ -71,9 +77,9 @@ timestamps in logs
 .sp
 .nf
 .ft C
-scicat_dataset_ingest \-c ~/.scingestor.yaml
+scicat_ingest \-m Samples \-c ~/.scingestor.yaml ./metadata.json
 
-scicat_dataset_ingest \-c ~/.scingestor.yaml \-l debug
+scicat_ingest \-m Attachments \-c ~/.scingestor.yaml \-p ~/.mytoken.cfg ./metadata.json
 .ft P
 .fi
 .UNINDENT

@@ -13,7 +13,7 @@ Synopsis
 
 .. code:: bash
 
-	  scicat_dataset_ingestor [-h] [-c CONFIG] [-r RUNTIME] [-l LOG]
+	  scicat_dataset_ingestor [-h] [-c CONFIG] [-r RUNTIME] [-l LOG] [-f LOGFILE] [-t]
 
 
 
@@ -24,6 +24,9 @@ Options:
   -r RUNTIME, --runtime RUNTIME
                         stop program after runtime in seconds
   -l LOG, --log LOG     logging level, i.e. debug, info, warning, error, critical
+  -f LOGFILE, --log-file LOGFILE
+                        log file name
+  -t, --timestamps      timestamps in logs
 
 
 Example

@@ -90,6 +90,9 @@ man_pages = [
     ('scicat_dataset_ingest', 'scicat_dataset_ingest',
      'Reingestion script to upload SciCat RawDatasets',
      [u'Jan Kotanski'], 1),
+    ('scicat_ingest', 'scicat_ingest',
+     'General ingest script to upload SciCat Samples or Instruments',
+     [u'Jan Kotanski'], 1),
 ]
 
 autoclass_content = 'both'

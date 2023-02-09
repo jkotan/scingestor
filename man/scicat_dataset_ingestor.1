@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "SCICAT_DATASET_INGESTOR" "1" "Dec 15, 2022" "0.4" "SciCat Dataset Ingestor"
+.TH "SCICAT_DATASET_INGESTOR" "1" "Feb 09, 2023" "0.5" "SciCat Dataset Ingestor"
 .SH NAME
 scicat_dataset_ingestor \- Server daemon to ingest SciCat RawDatasets
 .
@@ -39,7 +39,7 @@ BeamtimeWatcher service SciCat Dataset ingestor.
 .sp
 .nf
 .ft C
-scicat_dataset_ingestor [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG]
+scicat_dataset_ingestor [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG] [\-f LOGFILE] [\-t]
 .ft P
 .fi
 .UNINDENT
@@ -60,6 +60,12 @@ stop program after runtime in seconds
 .TP
 .BI \-l \ LOG\fP,\fB \ \-\-log \ LOG
 logging level, i.e. debug, info, warning, error, critical
+.TP
+.BI \-f \ LOGFILE\fP,\fB \ \-\-log\-file \ LOGFILE
+log file name
+.TP
+.B \-t\fP,\fB  \-\-timestamps
+timestamps in logs
 .UNINDENT
 .UNINDENT
 .SH EXAMPLE
