@@ -362,7 +362,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
