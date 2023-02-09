@@ -13,9 +13,11 @@ Synopsis
 
 .. code:: bash
 
-	  scicat_dataset_ingest [-h] [-c CONFIG] [-r RUNTIME] [-l LOG] [-f LOGFILE] [-t]
+	  scicat_ingest [-h] [-c CONFIG] [-r RUNTIME] [-l LOG] [-f LOGFILE] [-t] [-p TOKENFILE]   metadata_json_file [metadata_json_file ...]
 
 
+Arguments:
+  metadata_json_file    metadata json file(s)
 
 Options:
   -h, --help            show this help message and exit
@@ -25,6 +27,8 @@ Options:
   -f LOGFILE, --log-file LOGFILE
                         log file name
   -t, --timestamps      timestamps in logs
+  -p TOKENFILE, --token-file TOKENFILE
+                        file with a user token
 
 
 Example
@@ -32,7 +36,7 @@ Example
 
 .. code:: bash
 
-	  scicat_dataset_ingest -c ~/.scingestor.yaml
+	  scicat_ingest -m Samples -c ~/.scingestor.yaml ./metadata.json
 
-	  scicat_dataset_ingest -c ~/.scingestor.yaml -l debug
+	  scicat_ingest -m Attachments -c ~/.scingestor.yaml -p ~/.mytoken.cfg ./metadata.json
 	  
