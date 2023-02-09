@@ -210,7 +210,7 @@ class DatasetIngestTest(unittest.TestCase):
         wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                 "config",
                                 wrongdslist)
-        # fullbtmeta = os.path.join(fdirname, btmeta)
+        fullbtmeta = os.path.join(fdirname, btmeta)
         fdslist = os.path.join(fsubdirname2, dslist)
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
@@ -228,6 +228,7 @@ class DatasetIngestTest(unittest.TestCase):
             'datasets_filename_pattern: "sc-ds-{{beamtimeid}}.lst"\n' \
             'ingested_datasets_filename_pattern: ' \
             '"sc-ids-{{beamtimeid}}.lst"\n' \
+            'log_generator_commands: true\n' \
             'inotify_timeout: 0.2\n' \
             'get_event_timeout: 0.02\n' \
             'ingestion_delay_time: 2\n' \
@@ -271,9 +272,26 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
+                    'INFO : DatasetIngestor: Generating dataset command: '
+                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff -w 99001234-dmgt '
+                    '-b {btmeta} '
+                    '-p 99001234/myscan_00001'
+                    ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-o {subdir2}/{sc1}.origdatablock.json  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
@@ -285,9 +303,26 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
+                    'INFO : DatasetIngestor: Generating dataset command: '
+                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff -w 99001234-dmgt '
+                    '-b {btmeta} '
+                    '-p 99001234/myscan_00002'
+                    ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-o {subdir2}/{sc2}.origdatablock.json  '
+                    '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '/99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
@@ -299,6 +334,7 @@ class DatasetIngestTest(unittest.TestCase):
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
                             dslist=fdslist,
+                            btmeta=fullbtmeta,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
                 self.assertEqual(
@@ -441,6 +477,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
@@ -477,9 +514,29 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
                             dslist=fdslist,
@@ -623,6 +680,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'metadata_keywords_without_checks:\n' \
             '  - "techniques"\n' \
             '  - "classification"\n' \
@@ -697,6 +755,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
@@ -706,6 +774,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
@@ -876,6 +954,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
@@ -943,6 +1022,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
@@ -955,6 +1044,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
@@ -1181,6 +1280,7 @@ class DatasetIngestTest(unittest.TestCase):
                 cfg = 'beamtime_dirs:\n' \
                     '  - "{basedir}"\n' \
                     'scicat_url: "{url}"\n' \
+                    'log_generator_commands: true\n' \
                     'scandir_blacklist:\n' \
                     '  - "{scratchdir}"\n' \
                     'use_corepath_as_scandir: true\n' \
@@ -1257,6 +1357,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001284-dmgt '
+                    '-c 99001284-dmgt,99001284-clbt,99001284-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001284/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '/99001284/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
@@ -1269,6 +1379,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001284-dmgt '
+                    '-c 99001284-dmgt,99001284-clbt,99001284-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001284/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
@@ -1478,6 +1598,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'dataset_update_strategy: "no"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -1546,9 +1667,29 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
@@ -1719,6 +1860,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'dataset_update_strategy: "mixed"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -1787,6 +1929,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
@@ -1798,11 +1950,31 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-o {subdir2}/{sc1}.origdatablock.json  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Ingest origdatablock:'
                     ' {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
@@ -2021,6 +2193,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
@@ -2098,10 +2271,30 @@ class DatasetIngestTest(unittest.TestCase):
                         ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                         # 'INFO : DatasetIngestor: Ingest dataset: '
                         # '{subdir2}/{sc1}.scan.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-p /99001234/myscan_00001  '
+                        '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Checking origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-p /99001234/myscan_00002  '
+                        '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
@@ -2319,6 +2512,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'dataset_update_strategy: "no"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -2395,12 +2589,32 @@ class DatasetIngestTest(unittest.TestCase):
                         'INFO : DatasetIngestor: '
                         'Checking origdatablock metadata:'
                         ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-p /99001234/myscan_00001  '
+                        '{subdir2}/{sc1} \n'
                         # 'INFO : DatasetIngestor: Ingest dataset: '
                         # '{subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Checking origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-p /99001234/myscan_00002  '
+                        '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
@@ -2580,6 +2794,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'dataset_update_strategy: "mixed"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -2656,12 +2871,32 @@ class DatasetIngestTest(unittest.TestCase):
                         'INFO : DatasetIngestor: '
                         'Checking origdatablock metadata:'
                         ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-p /99001234/myscan_00001  '
+                        '{subdir2}/{sc1} \n'
                         # 'INFO : DatasetIngestor: Ingest dataset: '
                         # '{subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Checking origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-p /99001234/myscan_00002  '
+                        '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
@@ -2677,6 +2912,16 @@ class DatasetIngestTest(unittest.TestCase):
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-o {subdir2}/{sc2}.origdatablock.json  '
+                        '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Ingest origdatablock:'
                         ' {subdir2}/{sc2}.origdatablock.json\n'
                         .format(basedir=fdirname,
@@ -2881,6 +3126,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'dataset_update_strategy: "create"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -2957,12 +3203,32 @@ class DatasetIngestTest(unittest.TestCase):
                         'INFO : DatasetIngestor: '
                         'Checking origdatablock metadata:'
                         ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-p /99001234/myscan_00001  '
+                        '{subdir2}/{sc1} \n'
                         # 'INFO : DatasetIngestor: Ingest dataset: '
                         # '{subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Checking origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-p /99001234/myscan_00002  '
+                        '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
@@ -2978,6 +3244,16 @@ class DatasetIngestTest(unittest.TestCase):
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-o {subdir2}/{sc2}.origdatablock.json  '
+                        '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Ingest origdatablock:'
                         ' {subdir2}/{sc2}.origdatablock.json\n'
                         .format(basedir=fdirname,
@@ -3181,6 +3457,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
@@ -3230,6 +3507,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
@@ -3242,6 +3529,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
                             dslist=fdslist,
@@ -3419,6 +3716,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'dataset_update_strategy: "no"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -3469,9 +3767,29 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
                             dslist=fdslist,
@@ -3620,6 +3938,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'dataset_update_strategy: "mixed"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -3670,6 +3989,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
@@ -3682,6 +4011,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
                             dslist=fdslist,
@@ -3859,6 +4198,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'dataset_update_strategy: "create"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -3909,6 +4249,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
@@ -3921,11 +4271,31 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-o {subdir2}/{sc1}.origdatablock.json  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
                     '{subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
                             dslist=fdslist,
@@ -4105,7 +4475,7 @@ class DatasetIngestTest(unittest.TestCase):
         wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                 "config",
                                 wrongdslist)
-        # fullbtmeta = os.path.join(fdirname, btmeta)
+        fullbtmeta = os.path.join(fdirname, btmeta)
         fdslist = os.path.join(fsubdirname2, dslist)
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
@@ -4121,6 +4491,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
@@ -4157,9 +4528,26 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
+                    'INFO : DatasetIngestor: Generating dataset command: '
+                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff -w 99001234-dmgt '
+                    '-b {btmeta} '
+                    '-p 99001234/myscan_00001'
+                    ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-o {subdir2}/{sc1}.origdatablock.json  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
@@ -4171,9 +4559,26 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
+                    'INFO : DatasetIngestor: Generating dataset command: '
+                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff -w 99001234-dmgt '
+                    '-b {btmeta} '
+                    '-p 99001234/myscan_00002'
+                    ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-o {subdir2}/{sc2}.origdatablock.json  '
+                    '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '/99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
@@ -4183,6 +4588,7 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Ingest origdatablock: '
                     '{subdir2}/{sc2}.origdatablock.json\n'
                     .format(basedir=fdirname,
+                            btmeta=fullbtmeta,
                             subdir2=fsubdirname2,
                             dslist=fdslist,
                             sc1='myscan_00001', sc2='myscan_00002'),
@@ -4330,6 +4736,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
@@ -4366,9 +4773,29 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
                             dslist=fdslist,
@@ -4517,6 +4944,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
@@ -4577,6 +5005,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
@@ -4586,6 +5024,16 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w 99001234-dmgt '
+                    '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                    'p00dmgt,p00staff '
+                    '-p /99001234/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
@@ -4744,7 +5192,7 @@ class DatasetIngestTest(unittest.TestCase):
         wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                 "config",
                                 wrongdslist)
-        # fullbtmeta = os.path.join(fdirname, btmeta)
+        fullbtmeta = os.path.join(fdirname, btmeta)
         fdslist = os.path.join(fsubdirname2, dslist)
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
@@ -4765,6 +5213,7 @@ class DatasetIngestTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'dataset_pid_prefix: "10.3204"\n' \
+            'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
@@ -4806,9 +5255,25 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
+                    'INFO : DatasetIngestor: Generating dataset command: '
+                    'nxsfileinfo metadata  '
+                    '-o {vardir}{subdir2}/{sc1}.scan.json  '
+                    '-c group1,group2 -w mygroup '
+                    '-b {btmeta} '
+                    '-p 99001234/myscan_00001'
+                    ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc1} {vardir}{subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-p 10.3204/99001234/myscan_00001  '
+                    '-w mygroup -c group1,group2 '
+                    '-o {vardir}{subdir2}/{sc1}.origdatablock.json  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '10.3204/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
@@ -4820,9 +5285,25 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
+                    'INFO : DatasetIngestor: Generating dataset command: '
+                    'nxsfileinfo metadata  '
+                    '-o {vardir}{subdir2}/{sc2}.scan.json  '
+                    '-c group1,group2 -w mygroup '
+                    '-b {btmeta} '
+                    '-p 99001234/myscan_00002'
+                    ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc2} {vardir}{subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-p 10.3204/99001234/myscan_00002  '
+                    '-w mygroup -c group1,group2 '
+                    '-o {vardir}{subdir2}/{sc2}.origdatablock.json  '
+                    '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '10.3204/99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
@@ -4834,6 +5315,7 @@ class DatasetIngestTest(unittest.TestCase):
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
                             dslist=fdslist,
+                            btmeta=fullbtmeta,
                             vardir=lvardir,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
@@ -4983,6 +5465,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
@@ -5025,9 +5508,25 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {vardir}{subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w mygroup -c group1,group2 '
+                    '-p 10.3204/99001234/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {vardir}{subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w mygroup -c group1,group2 '
+                    '-p 10.3204/99001234/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
                             vardir=vardir,
@@ -5178,6 +5677,7 @@ class DatasetIngestTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'dataset_pid_prefix: "10.3204"\n' \
             'owner_access_groups_from_proposal: true\n' \
@@ -5249,6 +5749,14 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc1} {vardir}{subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w mygroup -c group1,group2 '
+                    '-p 10.3204/99001234/myscan_00001  '
+                    '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '10.3204/99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
@@ -5258,6 +5766,14 @@ class DatasetIngestTest(unittest.TestCase):
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
                     ' {sc2} {vardir}{subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock command: '
+                    'nxsfileinfo origdatablock  '
+                    '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                    '*.attachment.json,*~  '
+                    '-w mygroup -c group1,group2 '
+                    '-p 10.3204/99001234/myscan_00002  '
+                    '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
                     ' {sc2} {vardir}{subdir2}/{sc2}.origdatablock.json\n'
