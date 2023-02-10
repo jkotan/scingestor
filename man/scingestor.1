@@ -913,6 +913,98 @@ init logger
 .UNINDENT
 .UNINDENT
 .UNINDENT
+.SS scingestor.modelIngest module
+.INDENT 0.0
+.TP
+.B class scingestor.modelIngest.ModelIngest(options)
+Bases: \fI\%object\fP
+.sp
+Dataset Ingest command
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBoptions\fP (\fI\%argparse.Namespace\fP) – parser options
+.UNINDENT
+.INDENT 7.0
+.TP
+.B get_token()
+provides ingestor token
+.INDENT 7.0
+.TP
+.B Returns
+ingestor token
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B start()
+start ingestion
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B scingestor.modelIngest.main()
+the main program function
+.UNINDENT
+.SS scingestor.pathConverter module
+.INDENT 0.0
+.TP
+.B class scingestor.pathConverter.PathConverter(corepath, blpath, usecorepath=False)
+Bases: \fI\%object\fP
+.sp
+Path Converter
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBcorepath\fP (\fI\%str\fP) – core path
+.IP \(bu 2
+\fBblpath\fP (\fI\%str\fP) – beamline path
+.IP \(bu 2
+\fBusecorepath\fP (\fI\%bool\fP) – enabled flag
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B from_core(path)
+converts core path to notify path
+.INDENT 7.0
+.TP
+.B Parameters
+\fBpath\fP (\fI\%str\fP) – core path
+.TP
+.B Returns
+notify path
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B to_core(path)
+converts notify path to core path
+.INDENT 7.0
+.TP
+.B Parameters
+\fBpath\fP (\fI\%str\fP) – notify path
+.TP
+.B Returns
+core path
+.TP
+.B Return type
+\fI\%str\fP
+.UNINDENT
+.UNINDENT
+.UNINDENT
 .SS scingestor.safeINotifier module
 .INDENT 0.0
 .TP
