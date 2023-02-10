@@ -52,6 +52,22 @@ scingestor.logger module
    :undoc-members:
    :show-inheritance:
 
+scingestor.modelIngest module
+-----------------------------
+
+.. automodule:: scingestor.modelIngest
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scingestor.pathConverter module
+-------------------------------
+
+.. automodule:: scingestor.pathConverter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scingestor.safeINotifier module
 -------------------------------
 

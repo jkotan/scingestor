@@ -448,6 +448,113 @@ set the ‘converter’ attribute in the Formatter class.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-scingestor.modelIngest">
+<span id="scingestor-modelingest-module"></span><h2>scingestor.modelIngest module<a class="headerlink" href="#module-scingestor.modelIngest" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="scingestor.modelIngest.ModelIngest">
+<em class="property">class </em><code class="descclassname">scingestor.modelIngest.</code><code class="descname">ModelIngest</code><span class="sig-paren">(</span><em>options</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/modelIngest.html#ModelIngest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.modelIngest.ModelIngest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Dataset Ingest command</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>options</strong> (<a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">argparse.Namespace</span></code></a>) – parser options</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scingestor.modelIngest.ModelIngest.get_token">
+<code class="descname">get_token</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/modelIngest.html#ModelIngest.get_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.modelIngest.ModelIngest.get_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>provides ingestor token</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">ingestor token</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="scingestor.modelIngest.ModelIngest.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/modelIngest.html#ModelIngest.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.modelIngest.ModelIngest.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>start ingestion</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="scingestor.modelIngest.main">
+<code class="descclassname">scingestor.modelIngest.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/modelIngest.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.modelIngest.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>the main program function</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scingestor.pathConverter">
+<span id="scingestor-pathconverter-module"></span><h2>scingestor.pathConverter module<a class="headerlink" href="#module-scingestor.pathConverter" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="scingestor.pathConverter.PathConverter">
+<em class="property">class </em><code class="descclassname">scingestor.pathConverter.</code><code class="descname">PathConverter</code><span class="sig-paren">(</span><em>corepath</em>, <em>blpath</em>, <em>usecorepath=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/pathConverter.html#PathConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.pathConverter.PathConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Path Converter</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>corepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – core path</li>
+<li><strong>blpath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – beamline path</li>
+<li><strong>usecorepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – enabled flag</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scingestor.pathConverter.PathConverter.from_core">
+<code class="descname">from_core</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/pathConverter.html#PathConverter.from_core"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.pathConverter.PathConverter.from_core" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts core path to notify path</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – core path</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">notify path</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="scingestor.pathConverter.PathConverter.to_core">
+<code class="descname">to_core</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scingestor/pathConverter.html#PathConverter.to_core"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scingestor.pathConverter.PathConverter.to_core" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts notify path to core path</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – notify path</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">core path</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-scingestor.safeINotifier">
 <span id="scingestor-safeinotifier-module"></span><h2>scingestor.safeINotifier module<a class="headerlink" href="#module-scingestor.safeINotifier" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -643,6 +750,8 @@ else to the thread.</p>
 <li class="toctree-l2"><a class="reference internal" href="#module-scingestor.datasetIngestor">scingestor.datasetIngestor module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scingestor.datasetWatcher">scingestor.datasetWatcher module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scingestor.logger">scingestor.logger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scingestor.modelIngest">scingestor.modelIngest module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scingestor.pathConverter">scingestor.pathConverter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scingestor.safeINotifier">scingestor.safeINotifier module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scingestor.scanDirWatcher">scingestor.scanDirWatcher module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scingestor">Module contents</a></li>
