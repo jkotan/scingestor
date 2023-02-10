@@ -13,7 +13,7 @@ Synopsis
 
 .. code:: bash
 
-	  scicat_dataset_ingest [-h] [-c CONFIG] [-r RUNTIME] [-l LOG]
+	  scicat_dataset_ingest [-h] [-c CONFIG] [-r RUNTIME] [-l LOG] [-f LOGFILE] [-t]
 
 
 
@@ -22,6 +22,9 @@ Options:
   -c CONFIG, --configuration CONFIG
                         configuration file name
   -l LOG, --log LOG     logging level, i.e. debug, info, warning, error, critical
+  -f LOGFILE, --log-file LOGFILE
+                        log file name
+  -t, --timestamps      timestamps in logs
 
 
 Example
