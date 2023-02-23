@@ -355,6 +355,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -374,7 +375,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -382,6 +384,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -401,7 +404,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -558,6 +562,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -577,7 +582,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -585,6 +591,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -604,7 +611,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -818,6 +826,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'ownerGroup': '99001234-dmgt',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -836,7 +845,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -844,6 +854,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -863,7 +874,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -1088,6 +1100,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -1107,7 +1120,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -1115,6 +1129,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'owner': 'Smithson',
@@ -1134,7 +1149,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'new.owner@ggg.gg',
@@ -1142,6 +1158,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [{
@@ -1164,7 +1181,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -1423,6 +1441,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -1442,7 +1461,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '%s/raw/special' % coredir,
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -1450,6 +1470,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'owner': 'Smithson',
@@ -1469,7 +1490,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '%s/raw/special' % coredir,
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'new.owner@ggg.gg',
@@ -1477,6 +1499,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [{
@@ -1499,7 +1522,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '%s/raw/special' % coredir,
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -1723,6 +1747,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -1742,7 +1767,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -1750,6 +1776,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'owner': 'Smithson',
@@ -1769,7 +1796,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -2010,6 +2038,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -2029,7 +2058,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -2037,6 +2067,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -2056,7 +2087,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'new.owner@ggg.gg',
@@ -2064,6 +2096,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [{
@@ -2086,7 +2119,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -2338,6 +2372,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
+                         'creationTime': '2022-05-19 09:00:00',
                          'endTime': '2022-05-19 09:00:00',
                          'isPublished': False,
                          'techniques': [],
@@ -2358,7 +2393,8 @@ class DatasetIngestTest(unittest.TestCase):
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
@@ -2366,6 +2402,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
+                         'creationTime': '2022-05-19 09:00:00',
                          'endTime': '2022-05-19 09:00:00',
                          'ownerGroup': '99001234-dmgt',
                          'isPublished': False,
@@ -2386,7 +2423,8 @@ class DatasetIngestTest(unittest.TestCase):
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
@@ -2395,6 +2433,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
                          'endTime': '2022-05-19 09:00:00',
+                         'creationTime': '2022-05-19 09:00:00',
                          'ownerGroup': '99001234-dmgt',
                          'isPublished': False,
                          'techniques': [],
@@ -2414,7 +2453,8 @@ class DatasetIngestTest(unittest.TestCase):
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
                         json.loads(self.__server.origdatablocks[0]),
@@ -2648,6 +2688,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
+                         'creationTime': '2022-05-19 09:00:00',
                          'endTime': '2022-05-19 09:00:00',
                          'isPublished': False,
                          'techniques': [],
@@ -2668,7 +2709,8 @@ class DatasetIngestTest(unittest.TestCase):
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
@@ -2676,6 +2718,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
+                         'creationTime': '2022-05-19 09:00:00',
                          'endTime': '2022-05-19 09:00:00',
                          'ownerGroup': '99001234-dmgt',
                          'isPublished': False,
@@ -2696,7 +2739,8 @@ class DatasetIngestTest(unittest.TestCase):
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
                         json.loads(self.__server.origdatablocks[0]),
@@ -2952,6 +2996,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
+                         'creationTime': '2022-05-19 09:00:00',
                          'endTime': '2022-05-19 09:00:00',
                          'isPublished': False,
                          'techniques': [],
@@ -2972,7 +3017,8 @@ class DatasetIngestTest(unittest.TestCase):
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
@@ -2980,6 +3026,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
+                         'creationTime': '2022-05-19 09:00:00',
                          'endTime': '2022-05-19 09:00:00',
                          'ownerGroup': '99001234-dmgt',
                          'isPublished': False,
@@ -3000,7 +3047,8 @@ class DatasetIngestTest(unittest.TestCase):
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
@@ -3008,6 +3056,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
+                         'creationTime': '2022-05-19 09:00:00',
                          'endTime': '2022-05-19 09:00:00',
                          'ownerGroup': '99001234-dmgt',
                          'isPublished': False,
@@ -3028,7 +3077,8 @@ class DatasetIngestTest(unittest.TestCase):
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
                         json.loads(self.__server.origdatablocks[0]),
@@ -3284,6 +3334,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
+                         'creationTime': '2022-05-19 09:00:00',
                          'endTime': '2022-05-19 09:00:00',
                          'isPublished': False,
                          'techniques': [],
@@ -3304,7 +3355,8 @@ class DatasetIngestTest(unittest.TestCase):
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
@@ -3312,6 +3364,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
+                         'creationTime': '2022-05-19 09:00:00',
                          'endTime': '2022-05-19 09:00:00',
                          'ownerGroup': '99001234-dmgt',
                          'techniques': [],
@@ -3332,7 +3385,8 @@ class DatasetIngestTest(unittest.TestCase):
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
@@ -3340,6 +3394,7 @@ class DatasetIngestTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
+                         'creationTime': '2022-05-19 09:00:00',
                          'endTime': '2022-05-19 09:00:00',
                          'ownerGroup': '99001234-dmgt',
                          'isPublished': False,
@@ -3360,7 +3415,8 @@ class DatasetIngestTest(unittest.TestCase):
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
                         json.loads(self.__server.origdatablocks[0]),
@@ -3566,6 +3622,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -3585,7 +3642,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -3593,6 +3651,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -3612,7 +3671,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'appuser@fake.com',
@@ -3620,6 +3680,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -3640,7 +3701,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime"])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -3816,6 +3878,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -3835,7 +3898,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -3843,6 +3907,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -3862,7 +3927,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -4048,6 +4114,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -4067,7 +4134,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -4075,6 +4143,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -4094,7 +4163,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'appuser@fake.com',
@@ -4102,6 +4172,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -4122,7 +4193,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime"])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -4324,6 +4396,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -4343,7 +4416,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -4351,6 +4425,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -4370,7 +4445,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'appuser@fake.com',
@@ -4378,6 +4454,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -4398,7 +4475,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime"])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -4611,6 +4689,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -4630,7 +4709,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -4638,6 +4718,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -4657,7 +4738,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -4817,6 +4899,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -4836,7 +4919,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -4844,6 +4928,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -4863,7 +4948,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -5068,6 +5154,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'ownerGroup': '99001234-dmgt',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -5086,7 +5173,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -5094,6 +5182,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -5113,7 +5202,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -5341,6 +5431,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -5358,7 +5449,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -5366,6 +5458,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -5383,7 +5476,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -5555,6 +5649,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -5572,7 +5667,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -5580,6 +5676,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -5597,7 +5694,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -5816,6 +5914,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'ownerGroup': 'mygroup',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -5832,7 +5931,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -5840,6 +5940,7 @@ class DatasetIngestTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
                      'endTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
@@ -5858,7 +5959,8 @@ class DatasetIngestTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
