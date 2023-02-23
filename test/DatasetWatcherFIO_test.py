@@ -99,6 +99,9 @@ class DatasetWatcherFIOTest(unittest.TestCase):
     def myAssertDict(self, dct, dct2, skip=None, parent=None):
         parent = parent or ""
         self.assertTrue(isinstance(dct, dict))
+        if not isinstance(dct2, dict):
+            print(dct)
+            print(dct2)
         self.assertTrue(isinstance(dct2, dict))
         if len(list(dct.keys())) != len(list(dct2.keys())):
             print(list(dct.keys()))
@@ -472,7 +475,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'datasetName': 'myscan_00001',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
+                     'creationTime': 'Thu Dec  8 17:00:50 2022',
+                     'endTime': 'Thu Dec  8 17:00:50 2022',
                      'isPublished': False,
                      'owner': 'Smithson',
                      'ownerEmail': 'peter.smithson@fake.de',
@@ -489,7 +493,10 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                              'line_2':
                              'user jkotan Acquisition started at '
                              'Thu Dec  8 17:00:43 2022'},
-                         'end_time': 'Thu Dec  8 17:00:50 2022',
+                         'end_time': {
+                             'value': 'Thu Dec  8 17:00:50 2022',
+                             'unit': ''
+                         },
                          'parameters': {
                              'abs': 1423,
                              'anav': 5.14532,
@@ -508,7 +515,12 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                              '[[ 0.82633922 -0.80961862 -0.01117831]; '
                              '[ 0.02460193  0.0091408   1.15661358]; '
                              '[-0.80932194 -0.82636427  0.02374563]]'
-                         }, 'start_time': 'Thu Dec  8 17:00:43 2022'},
+                         },
+                         'start_time': {
+                             'value': 'Thu Dec  8 17:00:43 2022',
+                             'unit': ''
+                         }
+                     },
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'techniques': [],
@@ -528,7 +540,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'datasetName': 'myscan_00002',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
+                     'creationTime': 'Thu Dec  8 17:00:50 2022',
+                     'endTime': 'Thu Dec  8 17:00:50 2022',
                      'isPublished': False,
                      'owner': 'Smithson',
                      'ownerEmail': 'peter.smithson@fake.de',
@@ -545,7 +558,10 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                              'line_2':
                              'user jkotan Acquisition started at '
                              'Thu Dec  8 17:00:43 2022'},
-                         'end_time': 'Thu Dec  8 17:00:50 2022',
+                         'end_time': {
+                             'value': 'Thu Dec  8 17:00:50 2022',
+                             'unit': ''
+                         },
                          'parameters': {
                              'abs': 1423,
                              'anav': 5.14532,
@@ -564,7 +580,12 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                              '[[ 0.82633922 -0.80961862 -0.01117831]; '
                              '[ 0.02460193  0.0091408   1.15661358]; '
                              '[-0.80932194 -0.82636427  0.02374563]]'
-                         }, 'start_time': 'Thu Dec  8 17:00:43 2022'},
+                         },
+                         'start_time': {
+                             'value': 'Thu Dec  8 17:00:43 2022',
+                             'unit': ''
+                         }
+                     },
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'techniques': [],
@@ -903,7 +924,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'datasetName': 'myscan_00001',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
+                     'creationTime': 'Thu Dec  8 17:00:50 2022',
+                     'endTime': 'Thu Dec  8 17:00:50 2022',
                      'isPublished': False,
                      'owner': 'Smithson',
                      'ownerEmail': 'peter.smithson@fake.de',
@@ -920,7 +942,10 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                              'line_2':
                              'user jkotan Acquisition started at '
                              'Thu Dec  8 17:00:43 2022'},
-                         'end_time': 'Thu Dec  8 17:00:50 2022',
+                         'end_time': {
+                             'value': 'Thu Dec  8 17:00:50 2022',
+                             'unit': ''
+                         },
                          'parameters': {
                              'abs': 1423,
                              'anav': 5.14532,
@@ -939,7 +964,12 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                              '[[ 0.82633922 -0.80961862 -0.01117831]; '
                              '[ 0.02460193  0.0091408   1.15661358]; '
                              '[-0.80932194 -0.82636427  0.02374563]]'
-                         }, 'start_time': 'Thu Dec  8 17:00:43 2022'},
+                         },
+                         'start_time': {
+                             'value': 'Thu Dec  8 17:00:43 2022',
+                             'unit': ''
+                         }
+                     },
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'techniques': [],
@@ -959,7 +989,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'datasetName': 'myscan_00002',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
+                     'creationTime': 'Thu Dec  8 17:00:50 2022',
+                     'endTime': 'Thu Dec  8 17:00:50 2022',
                      'isPublished': False,
                      'owner': 'Smithson',
                      'ownerEmail': 'peter.smithson@fake.de',
@@ -976,7 +1007,10 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                              'line_2':
                              'user jkotan Acquisition started at '
                              'Thu Dec  8 17:00:43 2022'},
-                         'end_time': 'Thu Dec  8 17:00:50 2022',
+                         'end_time': {
+                             'value': 'Thu Dec  8 17:00:50 2022',
+                             'unit': ''
+                         },
                          'parameters': {
                              'abs': 1423,
                              'anav': 5.14532,
@@ -995,7 +1029,12 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                              '[[ 0.82633922 -0.80961862 -0.01117831]; '
                              '[ 0.02460193  0.0091408   1.15661358]; '
                              '[-0.80932194 -0.82636427  0.02374563]]'
-                         }, 'start_time': 'Thu Dec  8 17:00:43 2022'},
+                         },
+                         'start_time': {
+                             'value': 'Thu Dec  8 17:00:43 2022',
+                             'unit': ''
+                         }
+                     },
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'techniques': [],
@@ -1380,7 +1419,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
                          'description': 'H20 distribution',
-                         'endTime': '2022-05-19 09:00:00',
+                         'creationTime': 'Thu Dec  8 17:00:50 2022',
+                         'endTime': 'Thu Dec  8 17:00:50 2022',
                          'isPublished': False,
                          'owner': 'Smithson',
                          'ownerEmail': 'peter.smithson@fake.de',
@@ -1396,7 +1436,10 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                                  'line_2':
                                  'user jkotan Acquisition started at '
                                  'Thu Dec  8 17:00:43 2022'},
-                             'end_time': 'Thu Dec  8 17:00:50 2022',
+                             'end_time': {
+                                 'value': 'Thu Dec  8 17:00:50 2022',
+                                 'unit': ''
+                             },
                              'data': {
                                  'bpm1c': [-1.0, -1.0, -1.0, -1.0, -1.0],
                                  'exp_c02': [140.4539012230071,
@@ -1438,7 +1481,10 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                                  '[ 0.02460193  0.0091408   1.15661358]; '
                                  '[-0.80932194 -0.82636427  0.02374563]]'
                              },
-                             'start_time': 'Thu Dec  8 17:00:43 2022'
+                             'start_time': {
+                                 'value': 'Thu Dec  8 17:00:43 2022',
+                                 'unit': ''
+                             }
                          },
                          'sourceFolder':
                          '/asap3/petra3/'
@@ -1828,7 +1874,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
                          'description': 'H20 distribution',
-                         'endTime': '2022-05-19 09:00:00',
+                         'creationTime': 'Thu Dec  8 17:00:50 2022',
+                         'endTime': 'Thu Dec  8 17:00:50 2022',
                          'isPublished': False,
                          'owner': 'Smithson',
                          'ownerEmail': 'peter.smithson@fake.de',
@@ -1844,7 +1891,10 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                                  'line_2':
                                  'user jkotan Acquisition started at '
                                  'Thu Dec  8 17:00:43 2022'},
-                             'end_time': 'Thu Dec  8 17:00:50 2022',
+                             'end_time': {
+                                 'value': 'Thu Dec  8 17:00:50 2022',
+                                 'unit': ''
+                             },
                              'data': {
                                  'bpm1c': [-1.0, -1.0, -1.0, -1.0, -1.0],
                                  'exp_c02': [140.4539012230071,
@@ -1886,7 +1936,10 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                                  '[ 0.02460193  0.0091408   1.15661358]; '
                                  '[-0.80932194 -0.82636427  0.02374563]]'
                              },
-                             'start_time': 'Thu Dec  8 17:00:43 2022'
+                             'start_time': {
+                                 'value': 'Thu Dec  8 17:00:43 2022',
+                                 'unit': ''
+                             }
                          },
                          'sourceFolder':
                          '/asap3/petra3/'

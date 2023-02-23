@@ -418,6 +418,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
+                     'creationTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -445,6 +446,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
+                     'creationTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -793,6 +795,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
                          'endTime': '2022-05-19 09:00:00',
+                         'creationTime': '2022-05-19 09:00:00',
                          'isPublished': False,
                          'owner': 'Smithson',
                          'techniques': [],
@@ -812,7 +815,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=["creationTime"])
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):
@@ -1056,6 +1060,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
+                     'creationTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -1083,6 +1088,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
+                     'creationTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -1448,6 +1454,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
                          'endTime': '2022-05-19 09:00:00',
+                         'creationTime': '2022-05-19 09:00:00',
                          'isPublished': False,
                          'owner': 'Smithson',
                          'techniques': [],
@@ -1467,7 +1474,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=["creationTime"])
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):
@@ -3310,6 +3318,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
+                     'creationTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -3337,6 +3346,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
+                     'creationTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -3674,6 +3684,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
                          'endTime': '2022-05-19 09:00:00',
+                         'creationTime': '2022-05-19 09:00:00',
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
@@ -3692,7 +3703,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=["creationTime"])
 
                 # print(self.__server.origdatablocks)
                 self.assertEqual(len(self.__server.origdatablocks), 4)
@@ -4000,6 +4012,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
                          'endTime': '2022-05-19 09:00:00',
+                         'creationTime': '2022-05-19 09:00:00',
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
@@ -4018,7 +4031,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=["creationTime"])
 
                 # print(self.__server.origdatablocks)
                 self.assertEqual(len(self.__server.origdatablocks), 4)
@@ -4280,6 +4294,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'instrumentId': '/fs-sc/sdd01',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
+                     'creationTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -4298,7 +4313,8 @@ class DatasetWatcherTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
@@ -4307,6 +4323,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'creationLocation': '/DESY/FS-SC/SDD01',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
+                     'creationTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -4325,7 +4342,8 @@ class DatasetWatcherTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime"])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -4721,6 +4739,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'instrumentId': '/fs-sc/sdd01',
                          'description': 'H20 distribution',
                          'endTime': '2022-05-19 09:00:00',
+                         'creationTime': '2022-05-19 09:00:00',
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
@@ -4739,7 +4758,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=["creationTime"])
 
                 # print(self.__server.origdatablocks)
                 self.assertEqual(len(self.__server.origdatablocks), 4)
@@ -5024,6 +5044,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'instrumentId': '/fs-sc/sdd01',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
+                     'creationTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -5049,6 +5070,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'creationLocation': '/DESY/FS-SC/SDD01',
                      'description': 'H20 distribution',
                      'endTime': '2022-05-19 09:00:00',
+                     'creationTime': '2022-05-19 09:00:00',
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -5473,6 +5495,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationLocation': '/DESY/FS-SC/SDD01',
                          'description': 'H20 distribution',
                          'endTime': '2022-05-19 09:00:00',
+                         'creationTime': '2022-05-19 09:00:00',
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
@@ -5489,7 +5512,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=["creationTime"])
 
                 # print(self.__server.origdatablocks)
                 self.assertEqual(len(self.__server.origdatablocks), 4)
