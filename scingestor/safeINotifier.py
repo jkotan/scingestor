@@ -21,9 +21,9 @@ import time
 import threading
 import inotifyx
 import queue
+import os
 # import glob
 # import json
-# import os
 from .logger import get_logger
 
 
@@ -222,6 +222,12 @@ class SafeINotifier(threading.Thread):
                 except Exception as e:
                     get_logger().debug(
                         'SafeINotifier: finally %s' % str(e))
+            if self.__notifier:
+                try:
+                    os.close(self.__notifier)
+                    self.__notifier = None
+                except OSError:
+                    pass
 
     def stop(self):
         """ stop the watcher

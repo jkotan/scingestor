@@ -1,3 +1,8 @@
+2023-02-24 Jan Kotanski <jan.kotanski@desy.de>
+	* change tests for nxstools 3.42.0 (#188)
+	* close inotify file descriptor (#190)
+	* tagged as 0.5.1
+
 2023-02-07 Jan Kotanski <jan.kotanski@desy.de>
 	* add ingest_attachment, scicat_attachments_path, attachment_metadata_postfix, attachment_metadata_generator, plot_file_extension_list, attachment_* configuration variables (#179)
 	* add scicat_ingest script (#177)
