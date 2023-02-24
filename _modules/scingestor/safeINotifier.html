@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>scingestor.safeINotifier &#8212; SciCat Dataset Ingestor 0.5.0 documentation</title>
+    <title>scingestor.safeINotifier &#8212; SciCat Dataset Ingestor 0.5.1 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -53,9 +53,9 @@
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">inotifyx</span>
 <span class="kn">import</span> <span class="nn">queue</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="c1"># import glob</span>
 <span class="c1"># import json</span>
-<span class="c1"># import os</span>
 <span class="kn">from</span> <span class="nn">.logger</span> <span class="k">import</span> <span class="n">get_logger</span>
 
 
@@ -253,7 +253,13 @@
                     <span class="n">inotifyx</span><span class="o">.</span><span class="n">rm_watch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span><span class="p">,</span> <span class="n">wd</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                        <span class="s1">&#39;SafeINotifier: finally </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+                        <span class="s1">&#39;SafeINotifier: finally </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__notifier</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                    <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="SafeINotifier.stop"><a class="viewcode-back" href="../../scingestor.html#scingestor.safeINotifier.SafeINotifier.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; stop the watcher</span>
