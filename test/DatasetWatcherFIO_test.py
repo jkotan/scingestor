@@ -461,8 +461,9 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
                 self.assertEqual(len(self.__server.datasets), 2)
+                ds = json.loads(self.__server.datasets[0])
                 self.myAssertDict(
-                    json.loads(self.__server.datasets[0]),
+                    ds,
                     {'accessGroups': [
                         '99001234-dmgt',
                         '99001234-clbt',
@@ -525,9 +526,23 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'techniques': [],
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime", "endTime",
+                          "scientificMetadata.end_time",
+                          "scientificMetadata.start_time"])
+                self.assertTrue(ds["creationTime"].startswith(
+                    "2022-12-08T17:00:50.000000"))
+                self.assertTrue(ds["endTime"].startswith(
+                    "2022-12-08T17:00:50.000000"))
+                self.assertTrue(
+                    ds["scientificMetadata"]["end_time"]["value"].
+                    startswith("2022-12-08T17:00:50.000000"))
+                self.assertTrue(
+                    ds["scientificMetadata"]["start_time"]["value"].
+                    startswith("2022-12-08T17:00:43.000000"))
+                ds = json.loads(self.__server.datasets[1])
                 self.myAssertDict(
-                    json.loads(self.__server.datasets[1]),
+                    ds,
                     {'accessGroups': [
                         '99001234-dmgt',
                         '99001234-clbt',
@@ -590,7 +605,20 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'techniques': [],
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime", "endTime",
+                          "scientificMetadata.end_time",
+                          "scientificMetadata.start_time"])
+                self.assertTrue(ds["creationTime"].startswith(
+                    "2022-12-08T17:00:50.000000"))
+                self.assertTrue(ds["endTime"].startswith(
+                    "2022-12-08T17:00:50.000000"))
+                self.assertTrue(
+                    ds["scientificMetadata"]["end_time"]["value"].
+                    startswith("2022-12-08T17:00:50.000000"))
+                self.assertTrue(
+                    ds["scientificMetadata"]["start_time"]["value"].
+                    startswith("2022-12-08T17:00:43.000000"))
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -910,8 +938,9 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
                 self.assertEqual(len(self.__server.datasets), 2)
+                ds = json.loads(self.__server.datasets[0])
                 self.myAssertDict(
-                    json.loads(self.__server.datasets[0]),
+                    ds,
                     {'accessGroups': [
                         '99001234-dmgt',
                         '99001234-clbt',
@@ -974,9 +1003,23 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'techniques': [],
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime", "endTime",
+                          "scientificMetadata.end_time",
+                          "scientificMetadata.start_time"])
+                self.assertTrue(ds["creationTime"].startswith(
+                    "2022-12-08T17:00:50.000000"))
+                self.assertTrue(ds["endTime"].startswith(
+                    "2022-12-08T17:00:50.000000"))
+                self.assertTrue(
+                    ds["scientificMetadata"]["end_time"]["value"].
+                    startswith("2022-12-08T17:00:50.000000"))
+                self.assertTrue(
+                    ds["scientificMetadata"]["start_time"]["value"].
+                    startswith("2022-12-08T17:00:43.000000"))
+                ds = json.loads(self.__server.datasets[1])
                 self.myAssertDict(
-                    json.loads(self.__server.datasets[1]),
+                    ds,
                     {'accessGroups': [
                         '99001234-dmgt',
                         '99001234-clbt',
@@ -1039,7 +1082,20 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'techniques': [],
                      'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=["creationTime", "endTime",
+                          "scientificMetadata.end_time",
+                          "scientificMetadata.start_time"])
+                self.assertTrue(ds["creationTime"].startswith(
+                    "2022-12-08T17:00:50.000000"))
+                self.assertTrue(ds["endTime"].startswith(
+                    "2022-12-08T17:00:50.000000"))
+                self.assertTrue(
+                    ds["scientificMetadata"]["end_time"]["value"].
+                    startswith("2022-12-08T17:00:50.000000"))
+                self.assertTrue(
+                    ds["scientificMetadata"]["start_time"]["value"].
+                    startswith("2022-12-08T17:00:43.000000"))
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -1404,8 +1460,9 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                     b'{"username": "myingestor", "password": "12342345"}')
                 self.assertEqual(len(self.__server.datasets), 4)
                 for i in range(4):
+                    ds = json.loads(self.__server.datasets[i])
                     self.myAssertDict(
-                        json.loads(self.__server.datasets[i]),
+                        ds,
                         {'accessGroups': [
                             '99001234-dmgt',
                             '99001234-clbt',
@@ -1491,7 +1548,20 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                          'gpfs/p00/2022/data/9901234/raw/special',
                          'techniques': [],
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=["creationTime", "endTime",
+                              "scientificMetadata.end_time",
+                              "scientificMetadata.start_time"])
+                    self.assertTrue(ds["creationTime"].startswith(
+                        "2022-12-08T17:00:50.000000"))
+                    self.assertTrue(ds["endTime"].startswith(
+                        "2022-12-08T17:00:50.000000"))
+                    self.assertTrue(
+                        ds["scientificMetadata"]["end_time"]["value"].
+                        startswith("2022-12-08T17:00:50.000000"))
+                    self.assertTrue(
+                        ds["scientificMetadata"]["start_time"]["value"].
+                        startswith("2022-12-08T17:00:43.000000"))
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):
@@ -1859,8 +1929,9 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                     b'{"username": "myingestor", "password": "12342345"}')
                 self.assertEqual(len(self.__server.datasets), 4)
                 for i in range(4):
+                    ds = json.loads(self.__server.datasets[i])
                     self.myAssertDict(
-                        json.loads(self.__server.datasets[i]),
+                        ds,
                         {'accessGroups': [
                             '99001234-dmgt',
                             '99001234-clbt',
@@ -1946,7 +2017,20 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                          'gpfs/p00/2022/data/9901234/raw/special',
                          'techniques': [],
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=["creationTime", "endTime",
+                              "scientificMetadata.end_time",
+                              "scientificMetadata.start_time"])
+                    self.assertTrue(ds["creationTime"].startswith(
+                        "2022-12-08T17:00:50.000000"))
+                    self.assertTrue(ds["endTime"].startswith(
+                        "2022-12-08T17:00:50.000000"))
+                    self.assertTrue(
+                        ds["scientificMetadata"]["end_time"]["value"].
+                        startswith("2022-12-08T17:00:50.000000"))
+                    self.assertTrue(
+                        ds["scientificMetadata"]["start_time"]["value"].
+                        startswith("2022-12-08T17:00:43.000000"))
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):
