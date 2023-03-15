@@ -1,0 +1,333 @@
+TODO
+
+Tests for  scingestor/beamtimeWatcher.py:
+-----------------------------------------
+
+
+- `owner_access_groups_from_proposal` option
+
+- WRONG `max_scandir_depth` option  -- (not int)
+
+- WRONG `recheck_beamtime_file_interval` option -- (not int)
+
+- WRONG `get_event_timeout` option -- (not float)
+
+- WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")
+
+- WRONG `inotify_timeout` option -- (not float)
+
+- start() test KeyboardInterrupt
+- _signal_handle tests
+
+- blacklist tests in  _launch_scandir_watcher(self, path, files)  (if path in self.__scandir_blacklist)
+
+- bt-meta not loadable tests ,  _launch_scandir_watcher(self, path, files)
+
+- ArgumentParser error tests
+
+
+
+
+- WRONG _add_path of add_watch() exception ???? REMOVE ????
+    - _add_base_path(self, path, split=True) when split base_path needed   ????
+
+- WHEN no path in _add_base_path(self, path, split=True) when split ??
+
+- EXCEPTION in _add_base_path ???? if needed ????
+
+- WRONG in start() when len(self.__wd_to_queue) == 0 ????
+
+- WRONG in start() when len(self.__wd_to_bqueue) == 0 ????
+
+- WRONG in start() "not self.__beamtime_base_dir"  ??????
+
+- WRONG in start() "not event.name"  ??????
+
+- WRONG in start() " if not os.path.isfile(fl)" ????
+- WRONG in start()  " while len(dss):" ????
+
+
+- WRONG in   _launch_scandir_watcher(self, path, files) exception ????
+
+
+
+
+Tests for  scingestor/configuration.py
+--------------------------------------
+
+- configuration not loadable
+
+
+
+Tests for  scingestor/datasetIngest.py
+--------------------------------------
+
+- `beamtime_type_blacklist` option tests
+-   in _check_beamtime_not_in_blacklist, if self.__beamtime_type_blacklist and proposalType
+
+- `beamtimeid_blacklist_file` option tests
+-   in _check_beamtime_not_in_blacklist, if self.__beamtimeid_blacklist
+
+-  in _ingest_scandir, continue  self.__scandir_blacklist tests
+
+
+- WRONG `use_corepath_as_scandir` option  -- (not bool)
+
+- WRONG in __init__()  not self.__beamtime_dirs
+
+- bt-meta not loadable tests , in start()
+
+- WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")
+
+- ArgumentParser error tests
+
+
+
+- WRONG in start() Exception  ????
+
+- WRONG in _ingest_scandir, Exception ?????
+
+
+
+Tests for  scingestor/datasetIngestor.py
+----------------------------------------
+
+- `scicat_proposals_path` option tests
+
+- `attachment_frame_number` option tests
+-   also when no `attachment_metadata_generator`
+
+- WRONG `dataset_update_strategy` option  -- (not from the list)
+
+- WRONG `max_request_tries_number` option  -- (not int)
+
+- WRONG `request_headers` option  -- (not dict)
+
+- WRONG `metadata_keywords_without_checks` option  -- (not list)
+
+- in _generate_rawdataset_metadata()  if not self.__ext and not self.__logcommands tests ??
+
+- in _generate_rawdataset_metadata()  no rdss generated  tests ??
+
+- in _generate_origdatablock_metadata(self, scan) no obds generated  tests ??
+
+- in _regenerate_origdatablock_metadata(...) if  open(mfilename, "r") not loadable tests?
+-   in _regenerate_origdatablock_metadata(...) if dmeta is None ???
+
+- in _regenerate_origdatablock_metadata(...) if dmeta  and  not self.__logcommands tests ??
+
+- in _regenerate_origdatablock_metadata(...) if  new metad not loadable tests?
+
+- in _regenerate_origdatablock_metadata()  no obds generated  tests ??
+
+- in _metadataEqual(...) if parent tests ?
+
+- in _metadataEqual(...) if k not in dct2.keys()  tests ?
+
+- in _metadataEqual(...) if isinstance(v, dict)  tests ?
+
+- in get_token(self) request exception test e.g. content without id ??
+
+- in get_token(self) exception test if not response.ok ??
+
+- in append_proposal_groups(self) request exception test e.g. content without exists ??
+
+- in append_proposal_groups(self) exception test if not resget.ok ??
+
+- in post_dataset(...) exception test if spid[-1] not int ??
+
+- in post_dataset(...) exception test if not resexists.ok ??
+
+- in post_dataset(...) exception test if not response.ok ??
+
+- in patch_dataset(...) exception test if not response.ok ??
+
+- in _ingest_dataset(...) exception test if not resexists.ok ??
+
+- in _ingest_dataset(...) if  resexists exception test e.g. content without exists ?
+
+- in _ingest_dataset(...) exception test if not response.ok ??
+
+- in _ingest_dataset(...) exception test if not resds.ok ??
+
+- in _ingest_dataset(...) exception test if not resexists.ok  (second) ??
+
+- in _ingest_dataset(...) exception test if request EXCEPTIONS ?????
+
+- in _ingest_origdatablock(...) exception test if not response.ok ??
+
+- in _ingest_origdatablock(...) exception test if request EXCEPTIONS ?????
+
+- in _ingest_attachment(...) exception test if not response.ok ??
+
+- in _ingest_attachment(...) exception test if request EXCEPTIONS ?????
+
+- in _get_id_first_origdatablock(...) exception test if request EXCEPTIONS ?????
+
+- in _get_delete_origdatablock(...) exception test if not response.ok ??
+
+- in _get_delete_origdatablock(...) exception test if request EXCEPTIONS ?????
+
+- in _get_pid(...) exception test if metedata is not loadable ??
+
+- in _ingest_rawdataset_metadata() if mt["proposalId"] != self.__bid error (wrong beamtime)
+
+- in _ingest_rawdataset_metadata() if not mt["pid"].startswith("%s/" % (self.__bid)) (wrong beamtime)
+-  in _ingest_rawdataset_metadata() exception test if metedata is not loadable ??
+
+- _delete_origdatablocks() duplicated origdatablocks to delete test ?
+
+- _delete_origdatablocks() exception test if request EXCEPTIONS ?????
+
+- _ingest_origdatablock_metadata()  if not mt["datasetId"].startswith(
+                    "%s/%s/" % (self.__pidprefix, self.__bid)) EXCEPTIONS tests ?
+
+- in _ingest_origdatablock_metadata() exception test if request EXCEPTIONS ?????
+
+- in _ingest_attachment_metadata() if "datasetId" in mt and ..
+                                       : EXCEPTIONS tests ?
+
+- in ingest() if  odbs[0] (first) tests 
+
+- in ingest() if  pid is None and rdss and rdss[0]: tests?
+
+- in ingest()  if self.__ingest_attachment and ads and ads[0] and pid:
+                if pid is None and adss and adss[0]: tests ?
+
+- in ingest() if  pid is None: tests?
+- in ingest() if  dbstatus is None : tests?
+
+- in reingest() if self.__ingest_attachment:  tests
+- in reingest() if self.__ingest_attachment (second):  tests
+
+- in reingest()   else:  mtmds = 0    tests
+
+- in reingest()   else:  mtmdb = 0    tests
+
+- in reingest()   if (dastatus and reingest_attachment):   tests
+
+- in check_list()  if reingest and Exception test ???
+
+
+
+
+Tests for  scingestor/datasetWatcher.py
+---------------------------------------
+
+- WRONG `use_corepath_as_scandir` option  -- (not bool)
+
+- `recheck_dataset_list_interval` option tests
+
+- WRONG `recheck_dataset_list_interval` option  -- (not int)
+
+- WRONG `get_event_timeout` option  -- (not float)
+
+- WRONG `ingestion_delay_time` option  -- (not float)
+
+- WRONG _add_path of add_watch() exception ???? REMOVE ????
+
+- in run() EXCEPTION from self.__ingestor.check_list()  tests ??
+
+- in run() EXCEPTION from self.__ingestor.ingest(scan, token)  tests ??
+
+- WRONG in start() when (not self.__wd_to_queue) ????
+
+- in run() if event.name: and "IN_CLOSE_WRITE test ??
+
+- in run() EXCEPTION from self.__ingestor.check_list() in the loop  tests ??
+
+- in run() loop if event.name: and  "IN_MODIFY" in masks or "IN_OPEN" in masks test ??
+
+- in run() loop if EXCEPTION from self.__ingestor.check_list() in the loop if self.__recheck_dslist_interval > 0 tests  ??
+
+- in run() loop get_token EXCEPTION test ??
+
+- in run() loop self.__ingestor.ingest(scan, token) EXCEPTION test ??
+
+
+
+Tests for  scingestor/modelIngest.py
+-------------------------------------
+
+- `ingestor_username` option tests
+
+- model metadata not loadable tests ,  _ingest_model_metadata(self, metafile, token)
+
+- in _ingest_model(self, metadata, token) if not response.ok tests
+
+- in get_token  if not request.ok tests
+
+- in get_token  request exception test e.g. content without id ??
+
+- ArgumentParser error tests
+
+- if not option.model tests
+
+
+Tests for  scingestor/pathConverter.py
+--------------------------------------
+
+- in from_core , pass all if tests
+
+- in to_core if path in self.__notify_core_path.keys() tests
+
+Tests for  scingestor/safeINotifier.py 
+--------------------------------------
+
+- in _append inotifyx.add_watch exception ???
+
+- in run  os.close(self.__notifier) exception ????
+
+
+Tests for  scingestor/scanDirWatcher.py
+---------------------------------------
+
+- WRONG `use_corepath_as_scandir` option  -- (not bool)
+
+- WRONG `get_event_timeout` option -- (not float)
+
+
+- EXCEPTION in _add_path ???? if needed ????
+
+- WRONG in   _launch_scandir_watcher(self, paths) exception ????
+
+- WRONG in run() when (not self.__wd_to_queue) ????
+
+- in run() if self.__dslist_fullname == npath and \
+                                   not os.path.isfile(self.__dslist_fullname) \
+                                   and os.path.isdir(self.__path)
+    , watcher for subdirectories launched tests ??
+
+
+- in run() if fn not in self.__dataset_watchers.keys() \
+                                   and fn == self.__dslist_fullname:
+
+   ,tests ??
+
+-     in run() if dw is not None: tests? 
+
+- in run() if list(self.__scandir_watchers.keys()) and "IN_ISDIR" not in masks tests
+    ...
+
+
+
+DONE
+
+
+
+----------- coverage: platform linux, python 3.9.2-final-0 -----------
+Name                            Stmts   Miss  Cover   Missing
+-------------------------------------------------------------
+scingestor/__init__.py              1      0   100%
+scingestor/beamtimeWatcher.py     358     58    84%   101-104, 135-136, 163-164, 178-179, 218-219, 235-236, 260-262, 277, 280, 296-299, 357-358, 450-451, 467-473, 480, 509-511, 513-517, 544-546, 557, 566-569, 582-583, 655-656, 694-698
+scingestor/configuration.py        10      2    80%   34-35
+scingestor/datasetIngest.py       166     34    80%   58-59, 104-107, 116-120, 155, 174-177, 180-181, 187-191, 205, 207-209, 259, 274-275, 295-296, 331-336
+scingestor/datasetIngestor.py     833    134    84%   324-325, 333, 355, 517-518, 530-531, 537-538, 544-545, 654, 664, 696, 768-769, 771-779, 794, 803-805, 823, 856, 863-867, 869-871, 895-899, 923, 947-952, 976-980, 996, 1013, 1044, 1075-1078, 1080, 1085-1086, 1098, 1136-1142, 1164-1168, 1195-1199, 1222-1223, 1245-1249, 1265-1266, 1286, 1290, 1296-1297, 1319, 1321-1322, 1342, 1353-1356, 1373-1382, 1387-1390, 1425, 1454, 1459, 1463, 1465, 1562-1591, 1616-1622, 1630, 1636, 1639, 1679-1680, 1699
+scingestor/datasetWatcher.py      177     61    66%   77-78, 105-109, 114-115, 120-121, 137-146, 156-165, 196-197, 216-217, 233-234, 243, 262-264, 273-275, 278-290, 305-307, 321-323, 327-329
+scingestor/logger.py               36      0   100%
+scingestor/modelIngest.py         105     28    73%   76, 84-88, 91-95, 143-146, 165-166, 181-185, 229-234, 237-241
+scingestor/pathConverter.py        30      2    93%   61, 86
+scingestor/safeINotifier.py       102      4    96%   143-144, 229-230
+scingestor/scanDirWatcher.py      187     28    85%   75-76, 141-142, 200-201, 243-244, 286, 314-321, 332-340, 346-347, 354-360, 362-363
+-------------------------------------------------------------
+TOTAL                            2005    351    82%
