@@ -126,44 +126,6 @@ class DatasetWatcher(threading.Thread):
             configuration, path, dsfile, idsfile, meta,
             self.__conv.to_core(beamtimefile))
 
-    def __to_core(self, path):
-        """ converts notify path to core path
-
-        :param path: notify path
-        :type path: :obj:`str`
-        :returns: core path
-        :rtype: :obj:`str`
-        """
-        if not self.__usecorepath or not self.__corepath:
-            return path
-        if path in self.__notify_core_path.keys():
-            return self.__notify_core_path[path]
-        if path.startswith(self.__bpath):
-            cpath = os.self.__corepath + path[len(self.__bpath):]
-            self.__notify_core_path[path] = cpath
-            self.__core_notify_path[cpath] = path
-            return cpath
-        return path
-
-    def __from_core(self, path):
-        """ converts core path to notify path
-
-        :param path: core path
-        :type path: :obj:`str`
-        :returns: notify path
-        :rtype: :obj:`str`
-        """
-        if not self.__usecorepath or not self.__corepath:
-            return path
-        if path in self.__core_notify_path.keys():
-            return self.__core_notify_path[path]
-        if path.startswith(self.__corepath):
-            bpath = os.self.__bpath + path[len(self.__corepath):]
-            self.__core_notify_path[path] = bpath
-            self.__notify_core_path[bpath] = path
-            return bpath
-        return path
-
     def _start_notifier(self, path):
         """ start notifier
 
