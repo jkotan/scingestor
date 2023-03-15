@@ -26,6 +26,8 @@ import sys
 import threading
 import shutil
 import time
+from dateutil import parser as duparser
+
 
 from scingestor import beamtimeWatcher
 from scingestor import safeINotifier
@@ -242,6 +244,63 @@ optional arguments:
                     'INFO : BeamtimeWatcher: Adding watch {cnt}: {basedir}\n'
                     'INFO : BeamtimeWatcher: Removing watch {cnt}: '
                     '{basedir}\n'.format(basedir=fdirname, cnt=cnt), er)
+                self.assertEqual('', vl)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
+    def test_config_basedir_timestamps(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        os.mkdir(fdirname)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"'.format(basedir=fdirname)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor --timestamps -c %s -r3'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor -t --config %s -r3'
+                     % cfgfname).split()]
+        try:
+            for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                vl, er = self.runtest(cmd)
+                erl = er.split("\n")
+                self.assertEqual(len(erl), 3)
+                self.assertEqual(len(erl[2]), 0)
+
+                self.assertEqual(
+                    'INFO : BeamtimeWatcher: Adding watch {cnt}: {basedir}'
+                    .format(basedir=fdirname, cnt=cnt),
+                    erl[0].split(" ", 3)[-1])
+                self.assertEqual(erl[0].split(" ", 3)[2], ":")
+                tst = duparser.parse(
+                    " ".join(erl[0].split(" ", 3)[:2])).timestamp()
+                ct = time.time()
+                self.assertTrue(tst <= ct)
+                self.assertTrue(ct - tst < 10)
+
+                self.assertEqual(
+                    'INFO : BeamtimeWatcher: Removing watch {cnt}: '
+                    '{basedir}'.format(basedir=fdirname, cnt=cnt),
+                    erl[1].split(" ", 3)[-1])
+                self.assertEqual(erl[1].split(" ", 3)[2], ":")
+                tst = duparser.parse(
+                    " ".join(erl[1].split(" ", 3)[:2])).timestamp()
+                ct = time.time()
+                self.assertTrue(tst <= ct)
+                self.assertTrue(ct - tst < 10)
+
                 self.assertEqual('', vl)
         finally:
             if os.path.exists(cfgfname):
