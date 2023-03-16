@@ -61,9 +61,8 @@ class PathConverter:
             return self.__notify_core_path[path]
         if path.startswith(self.__bpath):
             cpath = self.__corepath + path[len(self.__bpath):]
-            self.__notify_core_path[path] = cpath
             self.__core_notify_path[cpath] = path
-            return cpath
+            path = self.__notify_core_path[path] = cpath
         return path
 
     def from_core(self, path):
@@ -80,7 +79,6 @@ class PathConverter:
             return self.__core_notify_path[path]
         if path.startswith(self.__corepath):
             bpath = self.__bpath + path[len(self.__corepath):]
-            self.__core_notify_path[path] = bpath
             self.__notify_core_path[bpath] = path
-            return bpath
+            path = self.__core_notify_path[path] = bpath
         return path

@@ -545,7 +545,11 @@ class BeamtimeWatcher:
                    time.time() - self.__starttime > self.__runtime:
                     self.stop()
                 if self._test_interrupt:
-                    raise KeyboardInterrupt()
+                    if self._test_interrupt == 1:
+                        raise KeyboardInterrupt()
+                    elif self._test_interrupt == 2:
+                        signal.pthread_kill(
+                            threading.currentThread().ident, signal.SIGTERM)
         except KeyboardInterrupt:
             get_logger().warning('Keyboard interrupt (SIGINT) received...')
             self.stop()
@@ -661,11 +665,11 @@ class BeamtimeWatcher:
         self.stop()
 
 
-def main(interrupt=False):
+def main(interrupt=0):
     """ the main program function
 
-    :param interrupt: test interrupt flag
-    :type interrupt: :obj:`bool`
+    :param interrupt: test interrupt flag: 1:keyboard, 2:signal
+    :type interrupt: :obj:`int`
     """
 
     description = "BeamtimeWatcher service SciCat Dataset ingestior"

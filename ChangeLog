@@ -1,5 +1,6 @@
 2023-03-16 Jan Kotanski <jan.kotanski@desy.de>
 	* fix misspel in attachment_image_frame_number (#202)
+	* add more tests
 	* tagged as 0.5.2
 
 2023-02-24 Jan Kotanski <jan.kotanski@desy.de>
