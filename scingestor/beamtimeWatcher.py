@@ -129,6 +129,9 @@ class BeamtimeWatcher:
         #: (:obj:`int`) maximal scandir depth
         self.__scandir_depth = -1
 
+        #: (:obj:`bool`) test interrupt flag
+        self._test_interrupt = False
+
         if "max_scandir_depth" in self.__config.keys():
             try:
                 self.__scandir_depth = int(self.__config["max_scandir_depth"])
@@ -541,6 +544,8 @@ class BeamtimeWatcher:
                 if self.__runtime and \
                    time.time() - self.__starttime > self.__runtime:
                     self.stop()
+                if self._test_interrupt:
+                    raise KeyboardInterrupt()
         except KeyboardInterrupt:
             get_logger().warning('Keyboard interrupt (SIGINT) received...')
             self.stop()
@@ -656,8 +661,11 @@ class BeamtimeWatcher:
         self.stop()
 
 
-def main():
+def main(interrupt=False):
     """ the main program function
+
+    :param interrupt: test interrupt flag
+    :type interrupt: :obj:`bool`
     """
 
     description = "BeamtimeWatcher service SciCat Dataset ingestior"
@@ -694,6 +702,7 @@ def main():
                 options.timestamps, options.logfile)
 
     bw = BeamtimeWatcher(options)
+    bw._test_interrupt = interrupt
     bw.start()
     SafeINotifier().stop()
     sys.exit(0)
