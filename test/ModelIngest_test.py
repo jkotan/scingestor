@@ -292,13 +292,15 @@ optional arguments:
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
         cred = "12342345"
+        uname = "lingestor"
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
             cf.write(cred)
 
         cfg = 'scicat_url: "{url}"\n' \
+            'ingestor_username: "{username}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                url=url, credfile=credfile)
+                url=url, credfile=credfile, username=uname)
 
         jsns = [
             {'contactEmail': 'appuser@fake.com',
@@ -388,13 +390,13 @@ optional arguments:
                     "ModelIngestTest_test_modelfile_00002.dataset.json\n",
                     "\n".join(seri))
                 self.assertEqual(
-                    "Login: ingestor\n"
+                    "Login: lingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
-                    b'{"username": "ingestor", "password": "12342345"}')
+                    b'{"username": "lingestor", "password": "12342345"}')
                 self.assertEqual(len(self.__server.datasets), 2)
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),

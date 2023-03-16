@@ -244,7 +244,7 @@ Tests for  scingestor/datasetWatcher.py
 Tests for  scingestor/modelIngest.py
 -------------------------------------
 
-- `ingestor_username` option tests
++ `ingestor_username` option tests
 
 - model metadata not loadable tests ,  _ingest_model_metadata(self, metafile, token)
 
