@@ -688,14 +688,7 @@ def main():
         default=False, dest="timestamps",
         help="timestamps in logs")
 
-    try:
-        options = parser.parse_args()
-    except Exception as e:
-        sys.stderr.write("Error: %s\n" % str(e))
-        sys.stderr.flush()
-        parser.print_help()
-        print("")
-        sys.exit(255)
+    options = parser.parse_args()
 
     init_logger("SciCatDatasetIngestor", options.log,
                 options.timestamps, options.logfile)

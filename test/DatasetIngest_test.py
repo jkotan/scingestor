@@ -75,6 +75,31 @@ class DatasetIngestTest(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
 
         self.maxDiff = None
+        self.helperror = "Error: too few arguments\n"
+
+        self.helpshort = """usage: scicat_dataset_ingest [-h]""" \
+            """[-c CONFIG] [-l LOG] [-f LOGFILE] [-t]
+scicat_dataset_ingest: error: unrecognized arguments: """
+
+        self.helpinfo = """usage: scicat_dataset_ingest [-h]""" \
+            """[-c CONFIG] [-l LOG] [-f LOGFILE] [-t]
+
+Re-ingestion script for SciCat RawDatasets.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --configuration CONFIG
+                        configuration file name
+  -l LOG, --log LOG     logging level, i.e. debug, info, warning, error,
+                        critical
+  -f LOGFILE, --log-file LOGFILE
+                        log file name
+  -t, --timestamps      timestamps in logs
+
+ examples:
+      scicat_dataset_ingest -c ~/.scingestor.yaml
+      scicat_dataset_ingest -c ~/.scingestor.yaml -l debug
+"""
 
     def myAssertDict(self, dct, dct2, skip=None, parent=None):
         parent = parent or ""
@@ -188,6 +213,33 @@ class DatasetIngestTest(unittest.TestCase):
         er = mystderr.getvalue()
         return vl, er, etxt
 
+    def test_help(self):
+        # fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        helps = ['-h', '--help']
+        for hl in helps:
+            vl, er, et = self.runtestexcept(
+                ['scicat_dataset_ingest', hl], SystemExit)
+            self.assertEqual(
+                "".join(self.helpinfo.split()).replace(
+                    "optionalarguments:", "options:"),
+                "".join(vl.split()).replace("optionalarguments:", "options:"))
+            self.assertEqual('', er)
+
+    def test_wrong_args(self):
+        # fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        helps = ['--wrong', '+asd']
+        for hl in helps:
+            vl, er, et = self.runtestexcept(
+                ['scicat_dataset_ingest', hl], SystemExit)
+            self.assertEqual('', vl)
+            self.assertEqual(
+                "".join(self.helpshort.split() + [hl]),
+                "".join(er.split()))
+
     def test_datasetfile_exist(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
@@ -234,7 +286,7 @@ class DatasetIngestTest(unittest.TestCase):
             'ingestion_delay_time: 2\n' \
             'max_request_tries_number: 10\n' \
             'recheck_beamtime_file_interval: 1000\n' \
-            'rrecheck_dataset_list_interval: 1000\n' \
+            'recheck_dataset_list_interval: 1000\n' \
             'scicat_url: "{url}"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(

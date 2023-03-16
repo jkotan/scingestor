@@ -74,6 +74,50 @@ class ModelIngestTest(unittest.TestCase):
 
         self.maxDiff = None
 
+        self.helpshort = """usage: scicat_ingest [-h]""" \
+            """[-m MODEL] [-c CONFIG] [-l LOG] [-f LOGFILE] [-t]
+                     [-p TOKENFILE]
+                     metadata_json_file [metadata_json_file ...]
+scicat_ingest: error: unrecognized arguments: """
+
+        self.helpshort2 = """usage: scicat_ingest [-h]""" \
+            """[-m MODEL] [-c CONFIG] [-l LOG] [-f LOGFILE] [-t]
+                     [-p TOKENFILE]
+                     metadata_json_file [metadata_json_file ...]
+scicat_ingest: error: the following arguments are required: metadata_json_file
+"""
+        self.helpshort3 = """Error: SciCat model not define. """ \
+            """Use the -m or --model option
+"""
+        self.helpinfo = """usage: scicat_ingest [-h]""" \
+            """[-m MODEL] [-c CONFIG] [-l LOG] [-f LOGFILE] [-t]
+                     [-p TOKENFILE]
+                     metadata_json_file [metadata_json_file ...]
+
+Ingest script for SciCat Models.
+
+positional arguments:
+  metadata_json_file    metadata json file(s)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -m MODEL, --model MODEL
+                        SciCat model name in plural
+  -c CONFIG, --configuration CONFIG
+                        configuration file name
+  -l LOG, --log LOG     logging level, i.e. debug, info, warning, error,
+                        critical
+  -f LOGFILE, --log-file LOGFILE
+                        log file name
+  -t, --timestamps      timestamps in logs
+  -p TOKENFILE, --token-file TOKENFILE
+                        file with a user token
+
+ examples:
+      scicat_ingest -m Samples -c ~/.scingestor.yaml
+      scicat_ingest -m Attachments -c ~/.scingestor.yaml -p ~/.mytoken.cfg
+"""
+
     def myAssertDict(self, dct, dct2, skip=None, parent=None):
         parent = parent or ""
         self.assertTrue(isinstance(dct, dict))
@@ -185,6 +229,57 @@ class ModelIngestTest(unittest.TestCase):
         vl = mystdout.getvalue()
         er = mystderr.getvalue()
         return vl, er, etxt
+
+    def test_help(self):
+        # fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        helps = ['-h', '--help']
+        for hl in helps:
+            vl, er, et = self.runtestexcept(
+                ['scicat_ingest', hl], SystemExit)
+            self.assertEqual(
+                "".join(self.helpinfo.split()).replace(
+                    "optionalarguments:", "options:"),
+                "".join(vl.split()).replace("optionalarguments:", "options:"))
+            self.assertEqual('', er)
+
+    def test_wrong_args(self):
+        # fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        helps = ['--wrong', '-asd']
+        for hl in helps:
+            vl, er, et = self.runtestexcept(
+                ['scicat_ingest', 'meta.json', hl], SystemExit)
+            self.assertEqual('', vl.strip())
+            self.assertEqual(
+                "".join(self.helpshort.split() + [hl]),
+                "".join(er.split()))
+
+    def test_wrong_args2(self):
+        # fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        helps = ['--wrong', '-asd']
+        for hl in helps:
+            vl, er, et = self.runtestexcept(
+                ['scicat_ingest', hl], SystemExit)
+            self.assertEqual('', vl.strip())
+            self.assertEqual(
+                "".join(self.helpshort2.split()),
+                "".join(er.split()))
+
+    def test_wrong_args3(self):
+        # fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        vl, er, et = self.runtestexcept(
+            ['scicat_ingest', 'meta.json'], SystemExit)
+        self.assertEqual('', vl.strip())
+        self.assertEqual(
+            "".join(self.helpshort3.split()),
+            "".join(er.split()))
 
     def test_modelfile(self):
         fun = sys._getframe().f_code.co_name

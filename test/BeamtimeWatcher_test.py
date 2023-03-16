@@ -70,6 +70,11 @@ class BeamtimeWatcherTest(unittest.TestCase):
 
         self.helperror = "Error: too few arguments\n"
 
+        self.helpshort = """usage: scicat_dataset_ingestor [-h]""" \
+            """[-c CONFIG] [-r RUNTIME] [-l LOG]
+                               [-f LOGFILE] [-t]
+scicat_dataset_ingestor: error: unrecognized arguments: """
+
         self.helpinfo = """usage: scicat_dataset_ingestor [-h]""" \
             """[-c CONFIG] [-r RUNTIME] [-l LOG]
                                [-f LOGFILE] [-t]
@@ -178,6 +183,19 @@ optional arguments:
                     "optionalarguments:", "options:"),
                 "".join(vl.split()).replace("optionalarguments:", "options:"))
             self.assertEqual('', er)
+
+    def test_wrong_args(self):
+        # fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        helps = ['--wrong', '+asd']
+        for hl in helps:
+            vl, er, et = self.runtestexcept(
+                ['scicat_dataset_ingestor', hl], SystemExit)
+            self.assertEqual('', vl)
+            self.assertEqual(
+                "".join(self.helpshort.split() + [hl]),
+                "".join(er.split()))
 
     def test_noconfig(self):
         # fun = sys._getframe().f_code.co_name
