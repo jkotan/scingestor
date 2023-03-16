@@ -351,8 +351,9 @@ class DatasetIngestor:
             self.__attachmentsignals = self.__config["attachment_signal_names"]
         if "attachment_axes_names" in self.__config.keys():
             self.__attachmentaxes = self.__config["attachment_axes_names"]
-        if "attachment_frame_number" in self.__config.keys():
-            self.__attachmentframe = self.__config["attachment_frame_number"]
+        if "attachment_image_frame_number" in self.__config.keys():
+            self.__attachmentframe = \
+                self.__config["attachment_image_frame_number"]
         if "metadata_copy_map_file" in self.__config.keys():
             self.__copymapfile = \
                 self.__config["metadata_copy_map_file"].format(
