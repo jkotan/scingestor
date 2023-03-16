@@ -86,6 +86,9 @@ scicat_ingest: error: unrecognized arguments: """
                      metadata_json_file [metadata_json_file ...]
 scicat_ingest: error: the following arguments are required: metadata_json_file
 """
+        self.helpshort3 = """Error: SciCat model not define. """ \
+            """Use the -m or --model option
+"""
         self.helpinfo = """usage: scicat_ingest [-h]""" \
             """[-m MODEL] [-c CONFIG] [-l LOG] [-f LOGFILE] [-t]
                      [-p TOKENFILE]
@@ -266,6 +269,17 @@ optional arguments:
             self.assertEqual(
                 "".join(self.helpshort2.split()),
                 "".join(er.split()))
+
+    def test_wrong_args3(self):
+        # fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        vl, er, et = self.runtestexcept(
+            ['scicat_ingest', 'meta.json'], SystemExit)
+        self.assertEqual('', vl.strip())
+        self.assertEqual(
+            "".join(self.helpshort3.split()),
+            "".join(er.split()))
 
     def test_modelfile(self):
         fun = sys._getframe().f_code.co_name
