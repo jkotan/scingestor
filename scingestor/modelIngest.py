@@ -224,14 +224,7 @@ def main():
         'args', metavar='metadata_json_file', type=str,
         nargs='+', help="metadata json file(s)")
 
-    try:
-        options = parser.parse_args()
-    except Exception as e:
-        sys.stderr.write("Error: %s\n" % str(e))
-        sys.stderr.flush()
-        parser.print_help()
-        print("")
-        sys.exit(255)
+    options = parser.parse_args()
 
     if not options.model:
         sys.stderr.write("Error: SciCat model not define. "
