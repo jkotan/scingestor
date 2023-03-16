@@ -582,11 +582,7 @@ optional arguments:
                     'INFO : DatasetIngest: beamtime path: {basedir}\n'
                     'INFO : DatasetIngest: beamtime file: '
                     'bt-mt-99001234.jsn\n'
-                    .format(basedir=fdirname,
-                            subdir2=fsubdirname2,
-                            dslist=fdslist,
-                            btmeta=fullbtmeta,
-                            sc1='myscan_00001', sc2='myscan_00002'),
+                    .format(basedir=fdirname),
                     "\n".join(seri))
                 self.assertEqual("", vl)
                 self.assertEqual(len(self.__server.userslogin), 0)
@@ -682,11 +678,7 @@ optional arguments:
                     'INFO : DatasetIngest: beamtime path: {basedir}\n'
                     'INFO : DatasetIngest: beamtime file: '
                     'bt-mt-99001234.jsn\n'
-                    .format(basedir=fdirname,
-                            subdir2=fsubdirname2,
-                            dslist=fdslist,
-                            btmeta=fullbtmeta,
-                            sc1='myscan_00001', sc2='myscan_00002'),
+                    .format(basedir=fdirname),
                     "\n".join(seri))
                 self.assertEqual("", vl)
                 self.assertEqual(len(self.__server.userslogin), 0)
