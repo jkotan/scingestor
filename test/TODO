@@ -23,8 +23,6 @@ Tests for  scingestor/beamtimeWatcher.py:
 
 - bt-meta not loadable tests ,  _launch_scandir_watcher(self, path, files)
 
-- ArgumentParser error tests
-
 
 
 
@@ -78,9 +76,6 @@ Tests for  scingestor/datasetIngest.py
 - bt-meta not loadable tests , in start()
 
 - WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")
-
-- ArgumentParser error tests
-
 
 
 - WRONG in start() Exception  ????
@@ -216,7 +211,7 @@ Tests for  scingestor/datasetWatcher.py
 
 - WRONG `use_corepath_as_scandir` option  -- (not bool)
 
-- `recheck_dataset_list_interval` option tests (spelling mistake)
++ `recheck_dataset_list_interval` option tests (spelling mistake)
 
 - WRONG `recheck_dataset_list_interval` option  -- (not int)
 
@@ -258,10 +253,6 @@ Tests for  scingestor/modelIngest.py
 - in get_token  if not request.ok tests
 
 - in get_token  request exception test e.g. content without id ??
-
-- ArgumentParser error tests
-
-- if not option.model tests
 
 
 Tests for  scingestor/pathConverter.py
