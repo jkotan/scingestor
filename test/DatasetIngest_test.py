@@ -213,6 +213,18 @@ optional arguments:
         er = mystderr.getvalue()
         return vl, er, etxt
 
+    def test_noconfig(self):
+        # fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        vl, er, et = self.runtestexcept(
+            ['scicat_dataset_ingest'], SystemExit)
+        self.assertTrue(
+            er.endswith(
+                'WARNING : DatasetIngest: '
+                'Beamtime directories not defined\n'))
+        self.assertEqual('', vl)
+
     def test_help(self):
         # fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
