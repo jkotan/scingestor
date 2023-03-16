@@ -242,7 +242,7 @@ class DatasetWatcherTest(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'scicat_users_login_path: "Users/login"\n' \
             'scicat_datasets_path: "RawDatasets"\n' \
-            'scicat_proposal_path: "Proposals"\n' \
+            'scicat_proposals_path: "Proposals"\n' \
             'scicat_datablocks_path: "OrigDatablocks"\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
