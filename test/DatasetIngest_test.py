@@ -522,8 +522,6 @@ optional arguments:
         wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                 "config",
                                 wrongdslist)
-        fullbtmeta = os.path.join(fdirname, btmeta)
-        fdslist = os.path.join(fsubdirname2, dslist)
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
@@ -618,8 +616,6 @@ optional arguments:
         wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                 "config",
                                 wrongdslist)
-        fullbtmeta = os.path.join(fdirname, btmeta)
-        fdslist = os.path.join(fsubdirname2, dslist)
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
