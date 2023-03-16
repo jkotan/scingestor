@@ -89,7 +89,7 @@ Tests for  scingestor/datasetIngestor.py
 
 - `scicat_proposals_path` option tests
 
-- `attachment_frame_number` option tests
++ `attachment_frame_number` option tests
 -   also when no `attachment_metadata_generator`
 
 - WRONG `dataset_update_strategy` option  -- (not from the list)
