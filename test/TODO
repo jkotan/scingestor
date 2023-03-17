@@ -10,11 +10,11 @@ Tests for  scingestor/beamtimeWatcher.py:
 
 - WRONG `get_event_timeout` option -- (not float)
 
-- WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")
-
 - WRONG `inotify_timeout` option -- (not float)
 
 - blacklist tests in  _launch_scandir_watcher(self, path, files)  (if path in self.__scandir_blacklist) (SEP)
+
++ WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")
 
 + bt-meta not loadable tests ,  _launch_scandir_watcher(self, path, files) 
 
