@@ -1918,6 +1918,153 @@ optional arguments:
             if os.path.isdir(coredir):
                 shutil.rmtree(coredir)
 
+    def test_datasetfile_jsonchange_corepath_change_blacklist(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirnames = os.path.abspath(os.path.join(dirname, "scratch"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        coredir = "/tmp/scingestor_core_%s" % uuid.uuid4().hex
+        cfsubdirname = os.path.abspath(os.path.join(coredir, "raw"))
+        cfsubdirnames = os.path.abspath(os.path.join(coredir, "scratch"))
+        cfsubdirname2 = os.path.abspath(os.path.join(cfsubdirname, "special"))
+        btmeta = "beamtime-metadata-99001284.json"
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        dslist = "scicat-datasets-99001284.lst"
+        idslist = "scicat-ingested-datasets-99001284.lst"
+        wrongdslist = "scicat-datasets-99001235.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        with open(source) as blf:
+            jblm = blf.read()
+            blm = json.loads(jblm)
+            blm["corePath"] = coredir
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                "config",
+                                wrongdslist)
+        # fullbtmeta = os.path.join(fdirname, btmeta)
+        fidslist = os.path.join(fsubdirname2, idslist)
+        cfullbtmeta = os.path.join(coredir, btmeta)
+        cfdslist = os.path.join(cfsubdirname2, dslist)
+        cfidslist = os.path.join(cfsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        os.mkdir(fdirname)
+        os.makedirs(coredir, exist_ok=True)
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        commands = [('scicat_dataset_ingest -c %s'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingest --config %s'
+                     % cfgfname).split()]
+        # commands.pop()
+        try:
+            for kk, cmd in enumerate(commands):
+                with open(credfile, "w") as cf:
+                    cf.write(cred)
+                if kk % 2:
+                    scratchdir = cfsubdirnames
+                else:
+                    scratchdir = fsubdirnames
+
+                cfg = 'beamtime_dirs:\n' \
+                    '  - "{basedir}"\n' \
+                    'scicat_url: "{url}"\n' \
+                    'log_generator_commands: true\n' \
+                    'scandir_blacklist:\n' \
+                    '  - "{scratchdir}"\n' \
+                    'use_corepath_as_scandir: true\n' \
+                    'ingestor_var_dir: "{vardir}"\n' \
+                    'ingestor_credential_file: "{credfile}"\n'.format(
+                        scratchdir=scratchdir,
+                        basedir=fdirname, url=url,
+                        vardir=vardir, credfile=credfile)
+                with open(cfgfname, "w+") as cf:
+                    cf.write(cfg)
+
+                os.mkdir(fsubdirnames)
+                os.mkdir(cfsubdirnames)
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                os.mkdir(cfsubdirname)
+                os.mkdir(cfsubdirname2)
+                with open(cfullbtmeta, "w") as blf:
+                    blf.write(json.dumps(blm))
+                with open(fullbtmeta, "w") as blf:
+                    blf.write(json.dumps(blm))
+                # shutil.copy(source, fdirname)
+                shutil.copy(lsource, fsubdirname2)
+                shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource, cfsubdirname2)
+                shutil.copy(wlsource, cfsubdirname)
+                self.__server.reset()
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                if os.path.exists(cfidslist):
+                    os.remove(cfidslist)
+
+                if kk % 2:
+                    scratchdir = cfsubdirname2
+                else:
+                    scratchdir = fsubdirname2
+
+                cfg = 'beamtime_dirs:\n' \
+                    '  - "{basedir}"\n' \
+                    'scicat_url: "{url}"\n' \
+                    'log_generator_commands: true\n' \
+                    'scandir_blacklist:\n' \
+                    '  - "{scratchdir}"\n' \
+                    'use_corepath_as_scandir: true\n' \
+                    'ingestor_var_dir: "{vardir}"\n' \
+                    'ingestor_credential_file: "{credfile}"\n'.format(
+                        scratchdir=scratchdir,
+                        basedir=fdirname, url=url,
+                        vardir=vardir, credfile=credfile)
+                with open(cfgfname, "w+") as cf:
+                    cf.write(cfg)
+
+                vl, er = self.runtest(cmd)
+
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                # print(er)
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                self.assertEqual(
+                    'INFO : DatasetIngest: beamtime path: {basedir}\n'
+                    'INFO : DatasetIngest: beamtime file: '
+                    'beamtime-metadata-99001284.json\n'
+                    'INFO : DatasetIngest: dataset list: {dslist}\n'
+                    .format(basedir=fdirname, dslist=cfdslist),
+                    "\n".join(seri))
+                self.assertEqual("", vl)
+                self.assertEqual(len(self.__server.userslogin), 0)
+                self.assertEqual(len(self.__server.datasets), 0)
+                self.assertEqual(len(self.__server.origdatablocks), 0)
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+                if os.path.isdir(cfsubdirname):
+                    shutil.rmtree(cfsubdirname)
+                if os.path.isdir(fsubdirnames):
+                    shutil.rmtree(fsubdirnames)
+                if os.path.isdir(cfsubdirnames):
+                    shutil.rmtree(cfsubdirnames)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+            if os.path.isdir(coredir):
+                shutil.rmtree(coredir)
+
     def test_datasetfile_jsonchange_nods(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
