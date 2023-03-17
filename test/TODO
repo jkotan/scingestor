@@ -33,7 +33,7 @@ Tests for  scingestor/datasetIngest.py
 --------------------------------------
 
 
-- WRONG in _ingest_scandir, in blacklist continnue ??
++ WRONG in _ingest_scandir, in blacklist continnue ??
 
 - WRONG in _ingest_scandir, Exception ?? token or reingest error ??
 
