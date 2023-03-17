@@ -3,26 +3,17 @@ TODO
 Tests for  scingestor/beamtimeWatcher.py:
 -----------------------------------------
 
-
-+ WRONG `max_scandir_depth` option  -- (not int)
-
-+ WRONG `recheck_beamtime_file_interval` option -- (not int)
-
-- WRONG `get_event_timeout` option -- (not float)
-
-- WRONG `inotify_timeout` option -- (not float)
-
-- blacklist tests in  _launch_scandir_watcher(self, path, files)  (if path in self.__scandir_blacklist) (SEP)
-
-- WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")
+- WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")  (NO EXEC ????)
 
 
 - WRONG _add_path of add_watch() exception ???? REMOVE ????
-    - _add_base_path(self, path, split=True) when split base_path needed   ????
 
+- _add_base_path(self, path, split=True) when split base_path needed   ????
 - WHEN no path in _add_base_path(self, path, split=True) when split ??
 
 - EXCEPTION in _add_base_path ???? if needed ????
+
+
 
 - WRONG in start() when len(self.__wd_to_queue) == 0 ????
 
@@ -36,39 +27,20 @@ Tests for  scingestor/beamtimeWatcher.py:
 - WRONG in start()  " while len(dss):" ????
 
 
-- WRONG in   _launch_scandir_watcher(self, path, files) exception ????
-
-
 
 
 Tests for  scingestor/datasetIngest.py
 --------------------------------------
 
--  in _ingest_scandir, continue  self.__scandir_blacklist tests
-
-
-- WRONG `use_corepath_as_scandir` option  -- (not bool)  (NOERROR ??)
-
-- WRONG in __init__()  not self.__beamtime_dirs
-
-- WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")
-
 - WRONG in start() Exception  ????
 
 - WRONG in _ingest_scandir, Exception ?????
 
+- WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")  (NO EXEC ????)
 
 
 Tests for  scingestor/datasetIngestor.py
 ----------------------------------------
-
-+ WRONG `dataset_update_strategy` option  -- (not from the list)
-
-+ WRONG `max_request_tries_number` option  -- (not int)
-
-+ WRONG `request_headers` option  -- (not dict)
-
-+ WRONG `metadata_keywords_without_checks` option  -- (not list)
 
 - in _generate_rawdataset_metadata()  if not self.__ext and not self.__logcommands tests ??
 
@@ -179,21 +151,12 @@ Tests for  scingestor/datasetIngestor.py
 Tests for  scingestor/datasetWatcher.py
 ---------------------------------------
 
-- WRONG `use_corepath_as_scandir` option  -- (not bool)  (NOERROR ??)
+- in _add_path() EXCEPTION of add_watch() exception ???? REMOVE ????
 
-+ WRONG `recheck_dataset_list_interval` option  -- (not int)
-
-+ WRONG `get_event_timeout` option  -- (not float)
-
-+ WRONG `ingestion_delay_time` option  -- (not float)
-
-- WRONG _add_path of add_watch() exception ???? REMOVE ????
 
 - in run() EXCEPTION from self.__ingestor.check_list()  tests ??
 
 - in run() EXCEPTION from self.__ingestor.ingest(scan, token)  tests ??
-
-- WRONG in start() when (not self.__wd_to_queue) ????
 
 - in run() if event.name: and "IN_CLOSE_WRITE test ??
 
@@ -211,10 +174,6 @@ Tests for  scingestor/datasetWatcher.py
 
 Tests for  scingestor/modelIngest.py
 -------------------------------------
-
-+ WRONG `max_request_tries_number` option type tests (not int)
-
-+ WRONG `request_headers` options type tests (not dict)
 
 - model metadata not loadable tests ,  _ingest_model_metadata(self, metafile, token)
 
@@ -235,18 +194,9 @@ Tests for  scingestor/safeINotifier.py
 
 - in run  os.close(self.__notifier) exception ????
 
-( in _remove  inotifyx.rm_watch exception test (random) ??)
-( in _append inotifyx.add_watch exception ??? )
-
-
 
 Tests for  scingestor/scanDirWatcher.py
 ---------------------------------------
-
-- WRONG `use_corepath_as_scandir` option  -- (not bool) (NO ERROR)
-
-+ WRONG `get_event_timeout` option -- (not float)
-
 
 - EXCEPTION in _add_path ???? if needed ????
 
@@ -277,15 +227,15 @@ DONE
 Name                            Stmts   Miss  Cover   Missing
 -------------------------------------------------------------
 scingestor/__init__.py              1      0   100%
-scingestor/beamtimeWatcher.py     358     37    90%   138-139, 166-167, 181-182, 221-222, 238-239, 263-265, 280, 283, 299-302, 360-361, 453-454, 470-476, 483, 512-514, 516-520
+scingestor/beamtimeWatcher.py     358     29    92%   221-222, 263-265, 280, 283, 299-302, 360-361, 453-454, 470-476, 483, 512-514, 516-520
 scingestor/configuration.py        10      0   100%
-scingestor/datasetIngest.py       159      7    96%   58-59, 259, 274-275, 295-296
-scingestor/datasetIngestor.py     833    130    84%   324-325, 531-532, 538-539, 545-546, 655, 665, 697, 769-770, 772-780, 795, 804-806, 824, 857, 864-868, 870-872, 896-900, 924, 948-953, 977-981, 997, 1014, 1045, 1076-1079, 1081, 1086-1087, 1099, 1137-1143, 1165-1169, 1196-1200, 1223-1224, 1246-1250, 1266-1267, 1287, 1291, 1297-1298, 1320, 1322-1323, 1343, 1354-1357, 1374-1383, 1388-1391, 1426, 1455, 1460, 1464, 1466, 1563-1592, 1617-1623, 1631, 1637, 1640, 1680-1681, 1700
-scingestor/datasetWatcher.py      155     39    75%   77-78, 108-109, 114-115, 120-121, 158-159, 178-179, 195-196, 205, 224-226, 235-237, 240-252, 267-269, 283-285, 289-291
+scingestor/datasetIngest.py       156      5    97%   256, 271-272, 292-293
+scingestor/datasetIngestor.py     833    122    85%   655, 665, 697, 769-770, 772-780, 795, 804-806, 824, 857, 864-868, 870-872, 896-900, 924, 948-953, 977-981, 997, 1014, 1045, 1076-1079, 1081, 1086-1087, 1099, 1137-1143, 1165-1169, 1196-1200, 1223-1224, 1246-1250, 1266-1267, 1287, 1291, 1297-1298, 1320, 1322-1323, 1343, 1354-1357, 1374-1383, 1388-1391, 1426, 1455, 1460, 1464, 1466, 1563-1592, 1617-1623, 1631, 1637, 1640, 1680-1681, 1700
+scingestor/datasetWatcher.py      152     31    80%   155-156, 175-176, 192-193, 202, 221-223, 232-234, 237-249, 264-266, 280-282, 286-288
 scingestor/logger.py               36      0   100%
-scingestor/modelIngest.py          98     13    87%   87-88, 94-95, 143-146, 165-166, 181-185
+scingestor/modelIngest.py          98      9    91%   143-146, 165-166, 181-185
 scingestor/pathConverter.py        30      1    97%   61
 scingestor/safeINotifier.py       102      2    98%   229-230
-scingestor/scanDirWatcher.py      187     28    85%   75-76, 141-142, 200-201, 243-244, 286, 314-321, 332-340, 346-347, 354-360, 362-363
+scingestor/scanDirWatcher.py      184     24    87%   197-198, 240-241, 283, 311-318, 329-337, 343-344, 351-357, 359-360
 -------------------------------------------------------------
-TOTAL                            1969    257    87%
+TOTAL                            1960    223    89%

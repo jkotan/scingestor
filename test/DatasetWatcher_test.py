@@ -32,6 +32,7 @@ import re
 
 from scingestor import beamtimeWatcher
 from scingestor import safeINotifier
+from scingestor import pathConverter
 
 
 try:
@@ -202,6 +203,50 @@ class DatasetWatcherTest(unittest.TestCase):
                     ltext[il] = re.sub(it, ot, ltext[il])
             ltext[bg:ed] = sorted(ltext[bg:ed])
         return "\n".join(ltext)
+
+    def test_path_converter(self):
+        # fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        bpath = os.path.abspath(dirname)
+        cpath = "/tmp/scingestor_core_%s" % uuid.uuid4().hex
+        tpath = "/tmp2/test/test2"
+
+        usecorepath = False
+        conv = pathConverter.PathConverter(cpath, bpath, usecorepath)
+        bp = os.path.join(bpath, "mytest")
+        cp = conv.to_core(bp)
+        self.assertEqual(bp, cp)
+
+        cp = os.path.join(cpath, "mytest2")
+        bp = conv.from_core(cp)
+        self.assertEqual(bp, cp)
+
+        usecorepath = True
+        conv = pathConverter.PathConverter(cpath, bpath, usecorepath)
+        bp = os.path.join(bpath, "mytest")
+        rp = os.path.join(cpath, "mytest")
+        cp = conv.to_core(bp)
+        cp = conv.to_core(bp)
+        self.assertEqual(rp, cp)
+
+        cp = os.path.join(cpath, "mytest2")
+        rp = os.path.join(bpath, "mytest2")
+        bp = conv.from_core(cp)
+        bp = conv.from_core(cp)
+        self.assertEqual(bp, rp)
+
+        usecorepath = True
+        conv = pathConverter.PathConverter(cpath, bpath, usecorepath)
+        bp = os.path.join(tpath, "mytest")
+        cp = conv.to_core(bp)
+        self.assertEqual(bp, cp)
+
+        cp = os.path.join(tpath, "mytest2")
+        bp = conv.from_core(cp)
+        self.assertEqual(bp, cp)
 
     def test_datasetfile_exist(self):
         fun = sys._getframe().f_code.co_name
