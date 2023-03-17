@@ -14,12 +14,9 @@ Tests for  scingestor/beamtimeWatcher.py:
 
 - WRONG `inotify_timeout` option -- (not float)
 
-- start() test KeyboardInterrupt
-- _signal_handle tests
+- blacklist tests in  _launch_scandir_watcher(self, path, files)  (if path in self.__scandir_blacklist) (SEP)
 
-- blacklist tests in  _launch_scandir_watcher(self, path, files)  (if path in self.__scandir_blacklist)
-
-- bt-meta not loadable tests ,  _launch_scandir_watcher(self, path, files)
++ bt-meta not loadable tests ,  _launch_scandir_watcher(self, path, files)
 
 
 
@@ -51,7 +48,7 @@ Tests for  scingestor/beamtimeWatcher.py:
 Tests for  scingestor/configuration.py
 --------------------------------------
 
-- configuration not loadable
++ configuration not loadable
 
 
 
@@ -231,6 +228,10 @@ Tests for  scingestor/datasetWatcher.py
 Tests for  scingestor/modelIngest.py
 -------------------------------------
 
+- `max_request_tries_number` option tests
+
+- `request_headers` options tests
+
 - model metadata not loadable tests ,  _ingest_model_metadata(self, metafile, token)
 
 - in _ingest_model(self, metadata, token) if not response.ok tests
@@ -243,7 +244,7 @@ Tests for  scingestor/modelIngest.py
 Tests for  scingestor/pathConverter.py
 --------------------------------------
 
-- in to_core if path in self.__notify_core_path.keys() tests
+- in to_core if path in self.__notify_core_path.keys() tests   (SEP)
 
 Tests for  scingestor/safeINotifier.py
 --------------------------------------
