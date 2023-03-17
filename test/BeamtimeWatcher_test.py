@@ -351,7 +351,6 @@ optional arguments:
         source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                               "config",
                               btmeta)
-        fullbtmeta = os.path.join(fdirname, btmeta)
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
         vardir = "/"
@@ -420,8 +419,7 @@ optional arguments:
                         'WARNING : SafeINotifier: append  '
                         '\0:\x00embedded null character\n'
                         'INFO : BeamtimeWatcher: Removing watch 1: \0\n'
-                        .format(btmeta=fullbtmeta,
-                                cnt1=cnt).replace("\0", " "),
+                        .format(cnt1=cnt).replace("\0", " "),
                         '\n'.join(dseri).replace("\0", " "))
                 except Exception:
                     print(er)
