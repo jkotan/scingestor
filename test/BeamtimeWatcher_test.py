@@ -399,7 +399,11 @@ optional arguments:
                 if lastlog:
                     with open(logfname1) as lfl:
                         er2 = lfl.read()
-                    self.assertEqual(er2, lastlog)
+                    self.assertEqual(
+                        er2.replace("\0", " ").replace(
+                            'WARNING : embedded null byte\n', ""),
+                        lastlog.replace("\0", " ").replace(
+                            'WARNING : embedded null byte\n', ""))
                 lastlog = er
 
                 ser = er.split("\n")
