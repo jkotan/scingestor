@@ -485,20 +485,18 @@ optional arguments:
         while os.path.exists(dirname):
             dirname = dirname + '_1'
         fdirname = os.path.abspath(dirname)
-        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
         os.mkdir(fdirname)
         btmeta = "beamtime-metadata-99001234.json"
         source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                               "config",
                               btmeta)
         shutil.copy(source, fdirname)
-        fullbtmeta = os.path.join(fdirname, btmeta)
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scandir_blacklist:\n' \
             '  - "{basedir}"' \
-            .format(basedir=fdirname, subdir=fsubdirname)
+            .format(basedir=fdirname)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
@@ -516,8 +514,8 @@ optional arguments:
                     'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
                     'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                     '{basedir}\n'
-                    .format(basedir=fdirname, btmeta=fullbtmeta,
-                            cnt1=cnt, cnt2=(cnt + 1)), er)
+                    .format(basedir=fdirname,
+                            cnt1=cnt), er)
                 self.assertEqual('', vl)
         finally:
             if os.path.exists(cfgfname):
@@ -532,7 +530,6 @@ optional arguments:
         while os.path.exists(dirname):
             dirname = dirname + '_1'
         fdirname = os.path.abspath(dirname)
-        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
         os.mkdir(fdirname)
         btmeta = "beamtime-metadata-99001234.json"
         source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
@@ -544,7 +541,7 @@ optional arguments:
             '  - "{basedir}"' \
             'scandir_blacklist:\n' \
             '  - "{basedir}"' \
-            .format(basedir=fdirname, subdir=fsubdirname)
+            .format(basedir=fdirname)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:

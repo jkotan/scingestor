@@ -572,9 +572,7 @@ optional arguments:
                     'WARNING : {btmeta} cannot be ingested: '
                     'Expecting value: line 1 column 1 (char 0)\n'
                     .format(basedir=fdirname,
-                            subdir2=fsubdirname2,
-                            btmeta=fullbtmeta,
-                            sc1='myscan_00001', sc2='myscan_00002'),
+                            btmeta=fullbtmeta),
                     "\n".join(seri))
                 self.assertEqual("", vl)
                 self.assertEqual(len(self.__server.userslogin), 0)
