@@ -69,11 +69,8 @@ class ScanDirWatcher(threading.Thread):
         #: (:obj:`bool`) use core path
         self.__usecorepath = False
         if "use_corepath_as_scandir" in self.__config.keys():
-            try:
-                self.__usecorepath = bool(
-                    self.__config["use_corepath_as_scandir"])
-            except Exception as e:
-                get_logger().warning('%s' % (str(e)))
+            self.__usecorepath = bool(
+                self.__config["use_corepath_as_scandir"])
 
         #: (:class:`scingestor.datasetWatcher.DatasetWatcher`) use core path
         self.__conv = PathConverter(

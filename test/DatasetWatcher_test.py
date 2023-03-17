@@ -1819,6 +1819,331 @@ class DatasetWatcherTest(unittest.TestCase):
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_datasetfile_exist_json_wrong_types(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
+        btmeta = "beamtime-metadata-99001234.json"
+        dslist = "scicat-datasets-99001234.lst"
+        idslist = "scicat-ingested-datasets-99001234.lst"
+        wrongdslist = "scicat-datasets-99001235.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                "config",
+                                wrongdslist)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fds1 = os.path.join(fsubdirname2, "myscan_00001.scan.json")
+        fds2 = os.path.join(fsubdirname2, "myscan_00002.scan.json")
+        fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        ds1 = {'contactEmail': 'appuser@fake.com',
+               'createdAt': '2022-05-14 11:54:29',
+               'creationLocation': '/DESY/PETRA III/P00',
+               'instrumentId': '/petra3/p00',
+               'description': 'H20 distribution',
+               'endTime': '2022-05-19 09:00:00',
+               'isPublished': False,
+               'techniques': [
+                   {
+                       'name': 'small angle x-ray scattering',
+                       'pid':
+                       'http://purl.org/pan-science/PaNET/PaNET01188'
+                   }
+               ],
+               'owner': 'Smithson',
+               'ownerGroup': '99001234-dmgt',
+               'ownerEmail': 'peter.smithson@fake.de',
+               'pid': '99001234/myscan_00001',
+               'accessGroups': [
+                   '99001234-dmgt', '99001234-clbt', '99001234-part',
+                   'p00dmgt', 'p00staff'],
+               'datasetName': 'myscan_00001',
+               'principalInvestigator': 'appuser@fake.com',
+               'proposalId': '99001234',
+               'scientificMetadata': {
+                   'DOOR_proposalId': '99991173',
+                   'beamtimeId': '99001234'},
+               'sourceFolder':
+               '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+               'type': 'raw',
+               'updatedAt': '2022-05-14 11:54:29'}
+        ds2 = {'contactEmail': 'appuser@fake.com',
+               'createdAt': '2022-05-14 11:54:29',
+               'creationLocation': '/DESY/PETRA III/P00',
+               'instrumentId': '/petra3/p00',
+               'description': 'H20 distribution',
+               'endTime': '2022-05-19 09:00:00',
+               'isPublished': False,
+               'techniques': [
+                {
+                    'name': 'wide angle x-ray scattering',
+                    'pid':
+                    'http://purl.org/pan-science/PaNET/PaNET01191'
+                },
+                {
+                    'name': 'grazing incidence diffraction',
+                    'pid':
+                    'http://purl.org/pan-science/PaNET/PaNET01098'
+                }
+               ],
+               'owner': 'Smithson',
+               'ownerGroup': '99001234-dmgt',
+               'ownerEmail': 'peter.smithson@fake.de',
+               'pid': '99001234/myscan_00002',
+               'accessGroups': [
+                   '99001234-dmgt', '99001234-clbt', '99001234-part',
+                   'p00dmgt', 'p00staff'],
+               'datasetName': 'myscan_00002',
+               'principalInvestigator': 'appuser@fake.com',
+               'proposalId': '99001234',
+               'scientificMetadata': {
+                   'DOOR_proposalId': '99991173',
+                   'beamtimeId': '99001234'},
+               'sourceFolder':
+               '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+               'type': 'raw',
+               'updatedAt': '2022-05-14 11:54:29'}
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'log_generator_commands: true\n' \
+            'max_scandir_depth: a2\n' \
+            'dataset_update_strategy: haha\n' \
+            'max_request_tries_number: ha\n' \
+            'request_headers: true\n' \
+            'metadata_keywords_without_checks: true\n' \
+            'recheck_beamtime_file_interval: rbfi\n' \
+            'recheck_dataset_list_interval: dsli\n' \
+            'ingestion_delay_time: idt\n' \
+            'get_event_timeout: timeout\n' \
+            'inotify_timeout: itimeout\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r10 --log debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r10 -l debug'
+                     % cfgfname).split()]
+        # commands.pop()
+        try:
+            for cmd in commands:
+                time.sleep(1)
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                os.mkdir(fsubdirname3)
+                with open(fds1, "w") as cf:
+                    cf.write(json.dumps(ds1))
+                with open(fds2, "w") as cf:
+                    cf.write(json.dumps(ds2))
+                shutil.copy(source, fdirname)
+                shutil.copy(lsource, fsubdirname2)
+                shutil.copy(wlsource, fsubdirname)
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                self.__server.reset()
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                vl, er = self.runtest(cmd)
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                dseri = [ln for ln in seri if "DEBUG :" not in ln]
+                # print(vl)
+                # print(er)
+
+                # nodebug = "\n".join([ee for ee in er.split("\n")
+                #                      if (("DEBUG :" not in ee) and
+                #                          (not ee.startswith("127.0.0.1")))])
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                try:
+                    self.assertEqual(
+                        'WARNING : invalid literal for int() '
+                        'with base 10: \'a2\'\n'
+                        'WARNING : invalid literal for int() '
+                        'with base 10: \'rbfi\'\n'
+                        'WARNING : could not convert string to float: '
+                        '\'timeout\'\n'
+                        'WARNING : could not convert string to float: '
+                        '\'itimeout\'\n'
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                        '{basedir} {btmeta}\n'
+                        'WARNING : could not convert string to float: '
+                        '\'timeout\'\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        'WARNING : could not convert string to float: '
+                        '\'timeout\'\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt3}: '
+                        '{subdir}\n'
+                        'WARNING : could not convert string to float: '
+                        '\'timeout\'\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir2} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt4}: '
+                        '{subdir2}\n'
+                        'WARNING : invalid literal for int() with base 10:'
+                        ' \'dsli\'\n'
+                        'WARNING : could not convert string to float: '
+                        '\'timeout\'\n'
+                        'WARNING : could not convert string to float: '
+                        '\'idt\'\n'
+                        'WARNING : Wrong UpdateStrategy value: \'HAHA\'\n'
+                        'WARNING : invalid literal for int() with base 10:'
+                        ' \'ha\'\n'
+                        'WARNING : \'bool\' object is not iterable\n'
+                        'WARNING : \'bool\' object is not iterable\n'
+                        'INFO : ScanDirWatcher: Creating DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : DatasetWatcher: Adding watch {cnt5}: '
+                        '{dslist} {idslist}\n'
+                        'INFO : DatasetWatcher: Waiting datasets: '
+                        '[\'{sc1}\', \'{sc2}\']\n'
+                        'INFO : DatasetWatcher: Ingested datasets: []\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-o {subdir2}/{sc1}.origdatablock.json  '
+                        '{subdir2}/{sc1} \n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc1}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '/99001234/{sc1}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-o {subdir2}/{sc2}.origdatablock.json  '
+                        '{subdir2}/{sc2} \n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc2}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '/99001234/{sc2}\n'
+                        'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: '
+                        'Stopping ScanDirWatcher {btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Stopping DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt5}: '
+                        '{dslist}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                subdir=fsubdirname, subdir2=fsubdirname2,
+                                dslist=fdslist, idslist=fidslist,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                                cnt4=(cnt + 3), cnt5=(cnt + 4),
+                                sc1='myscan_00001', sc2='myscan_00002'),
+                        '\n'.join(dseri))
+                except Exception:
+                    print(er)
+                    raise
+                self.assertEqual(
+                    "Login: ingestor\n"
+                    "RawDatasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: /99001234/myscan_00001\n"
+                    "RawDatasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 1)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 2)
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[0]), ds1)
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[1]), ds2)
+                self.assertEqual(len(self.__server.origdatablocks), 2)
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[0]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'ownerGroup': '99001234-dmgt',
+                     'datasetId': '/99001234/myscan_00001',
+                     'accessGroups': [
+                         '99001234-dmgt', '99001234-clbt', '99001234-part',
+                         'p00dmgt', 'p00staff'],
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[1]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'ownerGroup': '99001234-dmgt',
+                     'datasetId': '/99001234/myscan_00002',
+                     'accessGroups': [
+                         '99001234-dmgt', '99001234-clbt', '99001234-part',
+                         'p00dmgt', 'p00staff'],
+                     'size': 629}, skip=["dataFileList", "size"])
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
     def test_datasetfile_exist_json_attachment(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
