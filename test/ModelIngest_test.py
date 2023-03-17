@@ -299,6 +299,10 @@ optional arguments:
 
         cfg = 'scicat_url: "{url}"\n' \
             'ingestor_username: "{username}"\n' \
+            'max_request_tries_number: 10\n' \
+            'request_headers:\n' \
+            '  "Content-Type": "application/json"\n' \
+            '  "Accept": "application/json"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 url=url, credfile=credfile, username=uname)
 

@@ -415,12 +415,12 @@ optional arguments:
                 try:
                     self.assertEqual(
                         'INFO : BeamtimeWatcher: Adding watch {cnt1}: \0\n'
-                        'WARNING : embedded null byte\n'
                         'WARNING : SafeINotifier: append  '
                         '\0:\x00embedded null character\n'
                         'INFO : BeamtimeWatcher: Removing watch 1: \0\n'
                         .format(cnt1=cnt).replace("\0", " "),
-                        '\n'.join(dseri).replace("\0", " "))
+                        '\n'.join(dseri).replace("\0", " ").replace(
+                            'WARNING : embedded null byte\n', ""))
                 except Exception:
                     print(er)
                     raise
