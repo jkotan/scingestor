@@ -16,7 +16,7 @@ Tests for  scingestor/beamtimeWatcher.py:
 
 - blacklist tests in  _launch_scandir_watcher(self, path, files)  (if path in self.__scandir_blacklist) (SEP)
 
-+ bt-meta not loadable tests ,  _launch_scandir_watcher(self, path, files)
++ bt-meta not loadable tests ,  _launch_scandir_watcher(self, path, files) 
 
 
 
@@ -62,7 +62,7 @@ Tests for  scingestor/datasetIngest.py
 
 - WRONG in __init__()  not self.__beamtime_dirs
 
-- bt-meta not loadable tests , in start()
++ bt-meta not loadable tests , in start()
 
 - WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")
 
