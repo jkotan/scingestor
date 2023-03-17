@@ -370,7 +370,7 @@ optional arguments:
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
-                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
+                url=url, vardir=vardir, credfile=credfile)
 
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         logfname = "%s_%s.log" % (self.__class__.__name__, fun)
@@ -420,7 +420,7 @@ optional arguments:
                         'WARNING : SafeINotifier: append  '
                         '\0:\x00embedded null character\n'
                         'INFO : BeamtimeWatcher: Removing watch 1: \0\n'
-                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                        .format(btmeta=fullbtmeta,
                                 cnt1=cnt).replace("\0", " "),
                         '\n'.join(dseri).replace("\0", " "))
                 except Exception:
