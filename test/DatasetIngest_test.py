@@ -509,6 +509,83 @@ optional arguments:
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_datasetfile_exist_wrong_btmeta(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        btmeta = "beamtime-metadata-99999999.json"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'log_generator_commands: true\n' \
+            'inotify_timeout: 0.2\n' \
+            'get_event_timeout: 0.02\n' \
+            'ingestion_delay_time: 2\n' \
+            'max_request_tries_number: 10\n' \
+            'recheck_beamtime_file_interval: 1000\n' \
+            'recheck_dataset_list_interval: 1000\n' \
+            'scicat_url: "{url}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [("scicat_dataset_ingest  -c %s"
+                     % cfgfname).split(),
+                    ("scicat_dataset_ingest --config %s"
+                     % cfgfname).split()]
+        # commands.pop()
+        try:
+            for cmd in commands:
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                shutil.copy(source, fdirname)
+                self.__server.reset()
+                vl, er = self.runtest(cmd)
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                # print(vl)
+                # print(er)
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                self.assertEqual(
+                    'INFO : DatasetIngest: beamtime path: {basedir}\n'
+                    'INFO : DatasetIngest: beamtime file: '
+                    'beamtime-metadata-99999999.json\n'
+                    'WARNING : {btmeta} cannot be ingested: '
+                    'Expecting value: line 1 column 1 (char 0)\n'
+                    .format(basedir=fdirname,
+                            btmeta=fullbtmeta),
+                    "\n".join(seri))
+                self.assertEqual("", vl)
+                self.assertEqual(len(self.__server.userslogin), 0)
+                self.assertEqual(len(self.__server.datasets), 0)
+                self.assertEqual(len(self.__server.origdatablocks), 0)
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
     def test_datasetfile_exist_black(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))

@@ -234,6 +234,209 @@ optional arguments:
             if os.path.isfile(cfgfname):
                 os.remove(cfgfname)
 
+    def test_datasetfile_exist_wrong_btmeta(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
+        btmeta = "beamtime-metadata-99999999.json"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'scicat_users_login_path: "Users/login"\n' \
+            'scicat_datasets_path: "RawDatasets"\n' \
+            'scicat_proposals_path: "Proposals"\n' \
+            'scicat_datablocks_path: "OrigDatablocks"\n' \
+            'log_generator_commands: true\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        logfname = "%s_%s.log" % (self.__class__.__name__, fun)
+        logfname1 = "%s_%s.log.1" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -f %s -r3 '
+                     % (cfgfname, logfname)).split(),
+                    ('scicat_dataset_ingestor --config %s --log-file %s '
+                     ' -r3  '
+                     % (cfgfname, logfname)).split()]
+        # commands.pop()
+        lastlog = None
+        try:
+            for cmd in commands:
+                time.sleep(1)
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                os.mkdir(fsubdirname3)
+                shutil.copy(source, fdirname)
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                vl, er = self.runtest(cmd)
+                with open(logfname) as lfl:
+                    er = lfl.read()
+
+                if lastlog:
+                    with open(logfname1) as lfl:
+                        er2 = lfl.read()
+                    self.assertEqual(er2, lastlog)
+                lastlog = er
+
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                dseri = [ln for ln in seri if "DEBUG :" not in ln]
+                # print(vl)
+                # print(er)
+
+                # nodebug = "\n".join([ee for ee in er.split("\n")
+                #                      if (("DEBUG :" not in ee) and
+                #                          (not ee.startswith("127.0.0.1")))])
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'WARNING : {btmeta} cannot be watched: '
+                        'Expecting value: '
+                        'line 1 column 1 (char 0)\n'
+                        'INFO : BeamtimeWatcher: Removing watch 1: {basedir}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                cnt1=cnt),
+                        '\n'.join(dseri))
+                except Exception:
+                    print(er)
+                    raise
+                self.assertEqual("", vl)
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.exists(logfname):
+                os.remove(logfname)
+            if os.path.exists(logfname1):
+                os.remove(logfname1)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
+    def test_datasetfile_exist_wrong_bdir(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
+        btmeta = "beamtime-metadata-99999999.json"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "\\0"\n' \
+            'scicat_url: "{url}"\n' \
+            'scicat_users_login_path: "Users/login"\n' \
+            'scicat_datasets_path: "RawDatasets"\n' \
+            'scicat_proposals_path: "Proposals"\n' \
+            'scicat_datablocks_path: "OrigDatablocks"\n' \
+            'log_generator_commands: true\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                url=url, vardir=vardir, credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        logfname = "%s_%s.log" % (self.__class__.__name__, fun)
+        logfname1 = "%s_%s.log.1" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -f %s -r3 '
+                     % (cfgfname, logfname)).split(),
+                    ('scicat_dataset_ingestor --config %s --log-file %s '
+                     ' -r3  '
+                     % (cfgfname, logfname)).split()]
+        # commands.pop()
+        lastlog = None
+        try:
+            for cmd in commands:
+                time.sleep(1)
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                os.mkdir(fsubdirname3)
+                shutil.copy(source, fdirname)
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                vl, er = self.runtest(cmd)
+                with open(logfname) as lfl:
+                    er = lfl.read()
+
+                if lastlog:
+                    with open(logfname1) as lfl:
+                        er2 = lfl.read()
+                    self.assertEqual(er2, lastlog)
+                lastlog = er
+
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                dseri = [ln for ln in seri if "DEBUG :" not in ln]
+                # print(vl)
+                # print(er)
+
+                # nodebug = "\n".join([ee for ee in er.split("\n")
+                #                      if (("DEBUG :" not in ee) and
+                #                          (not ee.startswith("127.0.0.1")))])
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: \0\n'
+                        'WARNING : SafeINotifier: append  '
+                        '\0:\x00embedded null character\n'
+                        'INFO : BeamtimeWatcher: Removing watch 1: \0\n'
+                        .format(cnt1=cnt).replace("\0", " "),
+                        '\n'.join(dseri).replace("\0", " ").replace(
+                            'WARNING : embedded null byte\n', ""))
+                except Exception:
+                    print(er)
+                    raise
+                self.assertEqual("", vl)
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.exists(logfname):
+                os.remove(logfname)
+            if os.path.exists(logfname1):
+                os.remove(logfname1)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
     def test_config_basedir(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
@@ -368,6 +571,95 @@ optional arguments:
                     'INFO : ScanDirWatcher: Removing watch {cnt2}: {basedir}\n'
                     .format(basedir=fdirname, btmeta=fullbtmeta,
                             cnt1=cnt, cnt2=(cnt + 1)), er)
+                self.assertEqual('', vl)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
+    def test_config_beamtime_metadata_exist_black_scandir(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        os.mkdir(fdirname)
+        btmeta = "beamtime-metadata-99001234.json"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        shutil.copy(source, fdirname)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scandir_blacklist:\n' \
+            '  - "{basedir}"' \
+            .format(basedir=fdirname)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r3'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r3'
+                     % cfgfname).split()]
+        try:
+            for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                vl, er = self.runtest(cmd)
+                self.assertEqual(
+                    'INFO : BeamtimeWatcher: Adding watch {cnt1}: {basedir}\n'
+                    'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                    '{basedir}\n'
+                    .format(basedir=fdirname,
+                            cnt1=cnt), er)
+                self.assertEqual('', vl)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
+    def test_config_beamtime_metadata_exist_wrong_config(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        os.mkdir(fdirname)
+        btmeta = "beamtime-metadata-99001234.json"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        shutil.copy(source, fdirname)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"' \
+            'scandir_blacklist:\n' \
+            '  - "{basedir}"' \
+            .format(basedir=fdirname)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r3'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r3'
+                     % cfgfname).split()]
+        try:
+            for cmd in commands:
+                self.notifier = safeINotifier.SafeINotifier()
+                vl, er = self.runtest(cmd)
+                self.assertTrue(er.startswith(
+                    "WARNING : while parsing a block mapping"))
+                self.assertEqual(
+                    "WARNING : BeamtimeWatcher: "
+                    "Beamtime directories not defined",
+                    er.strip().split("\n")[-1])
                 self.assertEqual('', vl)
         finally:
             if os.path.exists(cfgfname):

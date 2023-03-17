@@ -562,6 +562,7 @@ class BeamtimeWatcher:
         :param path: beamtime files
         :type path: :obj:`list`<:obj:`str`>
         """
+
         if path in self.__scandir_blacklist:
             return
         for bt in files:
