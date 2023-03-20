@@ -1414,6 +1414,7 @@ class DatasetIngestor:
         else:
             rds = self._generate_rawdataset_metadata(self.__dctfmt["scanname"])
         mtmds = 0
+        ads = None
         if rds:
             mtmds = os.path.getmtime(rds)
 
@@ -1560,13 +1561,13 @@ class DatasetIngestor:
 
         dastatus = None
         dbstatus = None
+        ads = None
         if self.__ingest_attachment:
             adss = glob.glob(
                 "{metapath}/{scan}{postfix}".format(
                     scan=self.__dctfmt["scanname"],
                     postfix=self.__attachmentpostfix,
                     metapath=self.__dctfmt["metapath"]))
-            ads = None
             if adss and adss[0]:
                 ads = adss[0]
                 mtm0 = os.path.getmtime(ads)
