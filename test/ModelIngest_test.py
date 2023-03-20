@@ -467,6 +467,81 @@ optional arguments:
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_modelfile_wrong_format(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        # fullbtmeta = os.path.join(fdirname, btmeta)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        cred = "12342345"
+        uname = "lingestor"
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        cfg = 'scicat_url: "{url}"\n' \
+            'ingestor_username: "{username}"\n' \
+            'max_request_tries_number: 10\n' \
+            'request_headers:\n' \
+            '  "Content-Type": "application/json"\n' \
+            '  "Accept": "application/json"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                url=url, credfile=credfile, username=uname)
+
+        jsnfiles = [
+            "%s_%s_00001.dataset.json" % (self.__class__.__name__, fun),
+            "%s_%s_00002.dataset.json" % (self.__class__.__name__, fun)
+        ]
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [("scicat_ingest -m RawDatasets -c %s  "
+                     % (cfgfname)).split(),
+                    ("scicat_ingest --model RawDatasets --config %s "
+                     % (cfgfname)).split()]
+        # commands.pop()
+        try:
+            for cmd in commands:
+                self.__server.reset()
+                cmd.extend(jsnfiles)
+                # print(cmd)
+                vl, er = self.runtest(cmd)
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                # print(vl)
+                # print(er)
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                self.assertEqual(
+                    "ERROR : ModelIngestor: [Errno 2] "
+                    "No such file or directory: "
+                    "'ModelIngestTest_test_modelfile_wrong_format_"
+                    "00001.dataset.json'\n"
+                    "ERROR : ModelIngestor: [Errno 2] "
+                    "No such file or directory: "
+                    "'ModelIngestTest_test_modelfile_wrong_format_"
+                    "00002.dataset.json'\n",
+                    "\n".join(seri))
+                self.assertEqual("Login: lingestor\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 1)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "lingestor", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 0)
+                self.assertEqual(len(self.__server.origdatablocks), 0)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.exists(jsnfiles[0]):
+                os.remove(jsnfiles[0])
+            if os.path.exists(jsnfiles[1]):
+                os.remove(jsnfiles[1])
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
     def test_modelfile_wrong_type(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))

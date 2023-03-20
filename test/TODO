@@ -3,19 +3,19 @@ TODO
 Tests for  scingestor/beamtimeWatcher.py:
 -----------------------------------------
 
-- WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")  (NO EXEC ????)
+- WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")    (SEP EXEC)
 
 
-- WRONG _add_path of add_watch() exception ???? REMOVE ????
-
+- WRONG _add_path of add_watch() exception ???? REMOVE ???? (ASEC)
 - _add_base_path(self, path, split=True) when split base_path needed   ????
+
 - WHEN no path in _add_base_path(self, path, split=True) when split ??
 
 - EXCEPTION in _add_base_path ???? if needed ????
 
 
 
-- WRONG in start() when len(self.__wd_to_queue) == 0 ????
+- WRONG in start() when len(self.__wd_to_queue) == 0 ???? 
 
 - WRONG in start() when len(self.__wd_to_bqueue) == 0 ????
 
@@ -32,11 +32,12 @@ Tests for  scingestor/beamtimeWatcher.py:
 Tests for  scingestor/datasetIngest.py
 --------------------------------------
 
-- WRONG in start() Exception  ????
 
-- WRONG in _ingest_scandir, Exception ?????
++ WRONG in _ingest_scandir, in blacklist continnue ??
 
-- WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")  (NO EXEC ????)
+- WRONG in _ingest_scandir, Exception ?? token or reingest error ??
+
+- WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")  (SEP EXEC)
 
 
 Tests for  scingestor/datasetIngestor.py
@@ -192,9 +193,9 @@ Tests for  scingestor/safeINotifier.py
 Tests for  scingestor/scanDirWatcher.py
 ---------------------------------------
 
-- EXCEPTION in _add_path ???? if needed ????
+- EXCEPTION in _add_path ???? if needed ?? (NOT EXEC) ??
 
-- WRONG in   _launch_scandir_watcher(self, paths) exception ????
+- WRONG in   _launch_scandir_watcher(self, paths) exception ?? start() crashes ??
 
 - WRONG in run() when (not self.__wd_to_queue) ????
 
