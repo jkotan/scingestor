@@ -2994,6 +2994,371 @@ optional arguments:
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_datasetfile_changefiles_attachment(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        btmeta = "beamtime-metadata-99001234.json"
+        dslist = "scicat-datasets-99001234.lst"
+        idslist = "scicat-ingested-datasets-99001234.lst"
+        wrongdslist = "scicat-datasets-99001235.lst"
+        cpng = "myscan_00002.png"
+        jatt = "myscan_00002.attachment.json"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                "config",
+                                wrongdslist)
+        psource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               cpng)
+        asource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               jatt)
+        # fullbtmeta = os.path.join(fdirname, btmeta)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        dfname = "%s/%s.dat" % (fsubdirname2, 'myscan_00002')
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'ingest_dataset_attachment: true\n' \
+            'log_generator_commands: true\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingest -c %s  --log debug'
+                     #  % cfgfname).split(),
+                     # ('scicat_dataset_ingest --config %s -l debug'
+                     % cfgfname).split()]
+        # commands.pop()
+        try:
+            for cmd in commands:
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                shutil.copy(source, fdirname)
+                shutil.copy(lsource, fsubdirname2)
+                shutil.copy(psource, fsubdirname2)
+                shutil.copy(wlsource, fsubdirname)
+
+                with open(dfname, "w") as fl:
+                    fl.write("sdfsdfs\n")
+
+                self.__server.reset()
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                vl, er = self.runtest(cmd)
+                # print(vl)
+                # print(er)
+                # import time
+                # time.sleep(0.1)
+                scfname2 = "%s/%s.scan.json" % (fsubdirname2, 'myscan_00002')
+                odbfname2 = "%s/%s.origdatablock.json" \
+                    % (fsubdirname2, 'myscan_00002')
+
+                scdict = {}
+                with open(scfname2, "r") as fl:
+                    scn = fl.read()
+                    scdict = json.loads(scn)
+                scdict["owner"] = "NewOwner"
+                scdict["contactEmail"] = "new.owner@ggg.gg"
+
+                with open(scfname2, "w") as fl:
+                    fl.write(json.dumps(scdict))
+                with open(dfname, "w") as fl:
+                    fl.write("sdfsfsdfsdfs\n")
+
+                scdict = {}
+                with open(odbfname2, "r") as fl:
+                    scn = fl.read()
+                    scdict = json.loads(scn)
+                shutil.copy(asource, fsubdirname2)
+
+                #    print(scn)
+                # scdict["size"] = 123123
+                # with open(odbfname2, "w") as fl:
+                #     fl.write(json.dumps(scdict))
+
+                vl, er = self.runtest(cmd)
+
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                nodebug = "\n".join([ee for ee in seri
+                                     if "DEBUG :" not in ee])
+                # print(vl)
+                # print(er)
+                try:
+                    # print(er)
+                    # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                    self.assertEqual(
+                        'INFO : DatasetIngest: beamtime path: {basedir}\n'
+                        'INFO : DatasetIngest: beamtime file: '
+                        'beamtime-metadata-99001234.json\n'
+                        'INFO : DatasetIngest: dataset list: {dslist}\n'
+                        'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
+                        'INFO : DatasetIngestor: '
+                        'Checking origdatablock metadata:'
+                        ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        # 'INFO : DatasetIngestor: Ingest dataset: '
+                        # '{subdir2}/{sc1}.scan.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-p /99001234/myscan_00001  '
+                        '{subdir2}/{sc1} \n'
+                        'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
+                        'INFO : DatasetIngestor: '
+                        'Checking origdatablock metadata:'
+                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-p /99001234/myscan_00002  '
+                        '{subdir2}/{sc2} \n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc2}\n'
+                        'INFO : DatasetIngestor: Find the dataset by id: '
+                        '/99001234/{sc2}\n'
+                        'INFO : DatasetIngestor: '
+                        'Patch scientificMetadata of dataset: '
+                        '/99001234/{sc2}\n'
+                        'INFO : DatasetIngestor: Ingest dataset: '
+                        '{subdir2}/{sc2}.scan.json\n'
+                        'INFO : DatasetIngestor: Ingest origdatablock:'
+                        ' {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: Ingest attachment:'
+                        ' {subdir2}/{sc2}.attachment.json\n'
+                        .format(basedir=fdirname,
+                                subdir2=fsubdirname2,
+                                dslist=fdslist,
+                                sc1='myscan_00001', sc2='myscan_00002'),
+                        nodebug)
+                    self.assertEqual(
+                        "Login: ingestor\n"
+                        "RawDatasets: /99001234/myscan_00002\n"
+                        "OrigDatablocks: delete /99001234/myscan_00002\n"
+                        "OrigDatablocks: /99001234/myscan_00002\n"
+                        "Datasets Attachments: /99001234/myscan_00002\n",
+                        vl)
+                    self.assertEqual(len(self.__server.userslogin), 2)
+                    self.assertEqual(
+                        self.__server.userslogin[0],
+                        b'{"username": "ingestor", "password": "12342345"}')
+                    self.assertEqual(
+                        self.__server.userslogin[1],
+                        b'{"username": "ingestor", "password": "12342345"}')
+                    # self.assertEqual(
+                    #     self.__server.userslogin[2],
+                    #     b'{"username": "ingestor", "password": "12342345"}')
+                    self.assertEqual(len(self.__server.datasets), 3)
+                    self.myAssertDict(
+                        json.loads(self.__server.datasets[0]),
+                        {'contactEmail': 'appuser@fake.com',
+                         'createdAt': '2022-05-14 11:54:29',
+                         'instrumentId': '/petra3/p00',
+                         'creationLocation': '/DESY/PETRA III/P00',
+                         'description': 'H20 distribution',
+                         'creationTime': '2022-05-19 09:00:00',
+                         'endTime': '2022-05-19 09:00:00',
+                         'isPublished': False,
+                         'techniques': [],
+                         'owner': 'Smithson',
+                         'ownerGroup': '99001234-dmgt',
+                         'ownerEmail': 'peter.smithson@fake.de',
+                         'pid': '99001234/myscan_00001',
+                         'datasetName': 'myscan_00001',
+                         'accessGroups': [
+                             '99001234-dmgt', '99001234-clbt', '99001234-part',
+                             'p00dmgt', 'p00staff'],
+                         'principalInvestigator': 'appuser@fake.com',
+                         'proposalId': '99001234',
+                         'scientificMetadata': {
+                             'DOOR_proposalId': '99991173',
+                             'beamtimeId': '99001234'},
+                         'sourceFolder':
+                         '/asap3/petra3/gpfs/p00/2022/data/9901234/'
+                         'raw/special',
+                         'type': 'raw',
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
+                    self.myAssertDict(
+                        json.loads(self.__server.datasets[1]),
+                        {'contactEmail': 'appuser@fake.com',
+                         'createdAt': '2022-05-14 11:54:29',
+                         'instrumentId': '/petra3/p00',
+                         'creationLocation': '/DESY/PETRA III/P00',
+                         'description': 'H20 distribution',
+                         'creationTime': '2022-05-19 09:00:00',
+                         'endTime': '2022-05-19 09:00:00',
+                         'ownerGroup': '99001234-dmgt',
+                         'isPublished': False,
+                         'techniques': [],
+                         'owner': 'Smithson',
+                         'ownerEmail': 'peter.smithson@fake.de',
+                         'pid': '99001234/myscan_00002',
+                         'datasetName': 'myscan_00002',
+                         'accessGroups': [
+                             '99001234-dmgt', '99001234-clbt', '99001234-part',
+                             'p00dmgt', 'p00staff'],
+                         'principalInvestigator': 'appuser@fake.com',
+                         'proposalId': '99001234',
+                         'scientificMetadata': {
+                             'DOOR_proposalId': '99991173',
+                             'beamtimeId': '99001234'},
+                         'sourceFolder':
+                         '/asap3/petra3/gpfs/p00/2022/data/9901234/'
+                         'raw/special',
+                         'type': 'raw',
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
+                    self.myAssertDict(
+                        json.loads(self.__server.datasets[2]),
+                        {'contactEmail': 'new.owner@ggg.gg',
+                         'createdAt': '2022-05-14 11:54:29',
+                         'instrumentId': '/petra3/p00',
+                         'creationLocation': '/DESY/PETRA III/P00',
+                         'description': 'H20 distribution',
+                         'endTime': '2022-05-19 09:00:00',
+                         'creationTime': '2022-05-19 09:00:00',
+                         'ownerGroup': '99001234-dmgt',
+                         'isPublished': False,
+                         'techniques': [],
+                         'owner': 'NewOwner',
+                         'ownerEmail': 'peter.smithson@fake.de',
+                         'pid': '/99001234/myscan_00002',
+                         'datasetName': 'myscan_00002',
+                         'accessGroups': [
+                             '99001234-dmgt', '99001234-clbt', '99001234-part',
+                             'p00dmgt', 'p00staff'],
+                         'principalInvestigator': 'appuser@fake.com',
+                         'proposalId': '99001234',
+                         'scientificMetadata': {
+                             'DOOR_proposalId': '99991173',
+                             'beamtimeId': '99001234'},
+                         'sourceFolder':
+                         '/asap3/petra3/gpfs/p00/2022/data/9901234/'
+                         'raw/special',
+                         'type': 'raw',
+                         'updatedAt': '2022-05-14 11:54:29'},
+                        skip=['creationTime'])
+                    self.assertEqual(len(self.__server.origdatablocks), 3)
+                    self.myAssertDict(
+                        json.loads(self.__server.origdatablocks[0]),
+                        {'dataFileList': [
+                            {'gid': 'jkotan',
+                             'path': 'myscan_00001.scan.json',
+                             'perm': '-rw-r--r--',
+                             'size': 629,
+                             'time': '2022-07-05T19:07:16.683673+0200',
+                             'uid': 'jkotan'}],
+                         'datasetId': '/99001234/myscan_00001',
+                         'accessGroups': [
+                             '99001234-dmgt', '99001234-clbt', '99001234-part',
+                             'p00dmgt', 'p00staff'],
+                         'ownerGroup': '99001234-dmgt',
+                         'size': 629}, skip=["dataFileList", "size"])
+                    self.myAssertDict(
+                        json.loads(self.__server.origdatablocks[1]),
+                        {'dataFileList': [
+                            {'gid': 'jkotan',
+                             'path': 'myscan_00001.scan.json',
+                             'perm': '-rw-r--r--',
+                             'size': 629,
+                             'time': '2022-07-05T19:07:16.683673+0200',
+                             'uid': 'jkotan'}],
+                         'datasetId': '/99001234/myscan_00002',
+                         'accessGroups': [
+                             '99001234-dmgt', '99001234-clbt', '99001234-part',
+                             'p00dmgt', 'p00staff'],
+                         'ownerGroup': '99001234-dmgt',
+                         'size': 629}, skip=["dataFileList", "size"])
+                    self.myAssertDict(
+                        json.loads(self.__server.origdatablocks[2]),
+                        {'dataFileList': [
+                            {'gid': 'jkotan',
+                             'path': 'myscan_00001.scan.json',
+                             'perm': '-rw-r--r--',
+                             'size': 629,
+                             'time': '2022-07-05T19:07:16.683673+0200',
+                             'uid': 'jkotan'}],
+                         'datasetId': '/99001234/myscan_00002',
+                         'accessGroups': [
+                             '99001234-dmgt', '99001234-clbt', '99001234-part',
+                             'p00dmgt', 'p00staff'],
+                         'ownerGroup': '99001234-dmgt',
+                         'size': 629}, skip=["dataFileList", "size"])
+                    # self.assertEqual(len(self.__server.attachments), 1)
+                    self.assertEqual(
+                        self.__server.attachments[0][0],
+                        "/99001234/myscan_00002")
+                    self.myAssertDict(
+                        json.loads(self.__server.attachments[0][1]),
+                        {'accessGroups': ['99001234-dmgt',
+                                          '99001234-clbt',
+                                          '99001234-part',
+                                          'p00dmgt',
+                                          'p00staff'],
+                         'ownerGroup': '99001234-dmgt',
+                         'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
+                         'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
+                         'T92AAAAB3RJTUUH5wEbCAAYYJKxWgAAABl0RVh0Q29tbWVudABDc'
+                         'mVhdGVkIHdpdGggR0lNUFeBDhcAAAEQSURBVBjTBcFNTgIxFADg9'
+                         'vVNO1MGCPiDxugK4wIXmpi40GN4Pg/gQbyAKxcaIxojKCoFZtq+v'
+                         'vp98uZ4cjDQ1+ejnX5n+uzvH+cXl/XV2fj27iHIBLvdemjt/tbAl'
+                         'qA0Y1qP93qHA4PtT78gjKuV1KYSWYpY1WitBiEpppiETAAhZ86Cv'
+                         'NdKaY2F7bsATS4Je9NFA2SqNeWmjUZXwYfYbLRk9u3aLREQCJJL8'
+                         'LdJbrm0XVtv17oDqCnB5vTkCBAYjUlZSQDPHImYBQvgonx5n4EWX'
+                         'IA0pTFlhyKj0qiMc7EJ+DSdw6iuikyc+eNzPpv9fi/c69uXW+U2Q'
+                         'm84BKtAZW6D90SqqDyDz+CTQFSllv+/oo3kf3+TDAAAAABJRU5Er'
+                         'kJggg=='})
+                except Exception:
+                    print(er)
+                    raise
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+                if os.path.exists(dfname):
+                    os.remove(dfname)
+        finally:
+            pass
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
     def test_datasetfile_changefiles_nods(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
@@ -3063,6 +3428,7 @@ optional arguments:
 
                 # import time
                 # time.sleep(0.1)
+                # print(vl)
                 scfname2 = "%s/%s.scan.json" % (fsubdirname2, 'myscan_00002')
                 odbfname2 = "%s/%s.origdatablock.json" \
                     % (fsubdirname2, 'myscan_00002')
