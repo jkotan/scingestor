@@ -582,7 +582,7 @@ optional arguments:
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
                 shutil.copy(asource, fsubdirname2)
-                    
+
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -877,10 +877,10 @@ optional arguments:
                 with open(patt, "r") as fl:
                     scn = fl.read()
                 scdict = json.loads(scn)
-                scdict["datasetId"] = "Something/wrong"    
+                scdict["datasetId"] = "Something/wrong"
                 with open(patt, "w") as fl:
                     fl.write(json.dumps(scdict))
-                    
+
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -3988,7 +3988,6 @@ optional arguments:
         idslist = "scicat-ingested-datasets-99001234.lst"
         wrongdslist = "scicat-datasets-99001235.lst"
         cpng = "myscan_00002.png"
-        jatt = "myscan_00002.attachment.json"
         source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                               "config",
                               btmeta)
@@ -4001,9 +4000,6 @@ optional arguments:
         psource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                "config",
                                cpng)
-        asource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                               "config",
-                               jatt)
         # fullbtmeta = os.path.join(fdirname, btmeta)
         fdslist = os.path.join(fsubdirname2, dslist)
         fidslist = os.path.join(fsubdirname2, idslist)
@@ -4352,7 +4348,6 @@ optional arguments:
         idslist = "scicat-ingested-datasets-99001234.lst"
         wrongdslist = "scicat-datasets-99001235.lst"
         cpng = "myscan_00002.png"
-        jatt = "myscan_00002.attachment.json"
         source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                               "config",
                               btmeta)
@@ -4365,9 +4360,6 @@ optional arguments:
         psource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                "config",
                                cpng)
-        asource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                               "config",
-                               jatt)
         # fullbtmeta = os.path.join(fdirname, btmeta)
         fdslist = os.path.join(fsubdirname2, dslist)
         fidslist = os.path.join(fsubdirname2, idslist)

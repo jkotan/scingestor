@@ -1373,7 +1373,8 @@ class DatasetIngestor:
             if "datasetId" in mt:
                 if not pid.startswith(self.__bid):
                     raise Exception(
-                        "Wrong attachment datasetId %s for DESY beamtimeId %s in  %s"
+                        "Wrong attachment datasetId %s for DESY beamtimeId "
+                        "%s in  %s"
                         % (pid, self.__bid, metafile))
                 if mt["datasetId"] != "%s/%s" % (self.__pidprefix, pid):
                     mt["datasetId"] = "%s/%s" % (self.__pidprefix, pid)
