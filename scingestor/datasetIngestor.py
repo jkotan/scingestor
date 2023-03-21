@@ -1414,6 +1414,7 @@ class DatasetIngestor:
         else:
             rds = self._generate_rawdataset_metadata(self.__dctfmt["scanname"])
         mtmds = 0
+        ads = None
         if rds:
             mtmds = os.path.getmtime(rds)
 
@@ -1429,7 +1430,6 @@ class DatasetIngestor:
         mtmdb = 0
         if odb:
             mtmdb = os.path.getmtime(odb)
-
         if self.__ingest_attachment:
             adss = glob.glob(
                 "{metapath}/{scan}{postfix}".format(
@@ -1442,7 +1442,7 @@ class DatasetIngestor:
                 ads = self._generate_attachment_metadata(
                     self.__dctfmt["scanname"])
             if ads:
-                mtmda = os.path.getmtime(rds)
+                mtmda = os.path.getmtime(ads)
 
         dbstatus = None
         dastatus = None
@@ -1559,6 +1559,9 @@ class DatasetIngestor:
         if odb:
             mtmdb = os.path.getmtime(odb)
 
+        dastatus = None
+        dbstatus = None
+        ads = None
         if self.__ingest_attachment:
             adss = glob.glob(
                 "{metapath}/{scan}{postfix}".format(
@@ -1568,34 +1571,19 @@ class DatasetIngestor:
             if adss and adss[0]:
                 ads = adss[0]
                 mtm0 = os.path.getmtime(ads)
-
                 if scan not in self.__sc_ingested_map.keys() \
                    or mtm0 > self.__sc_ingested_map[scan][-1]:
                     reingest_attachment = True
-                mtm = os.path.getmtime(ads)
-                if scan in self.__sc_ingested_map.keys():
-                    get_logger().debug("DB Timestamps: %s %s %s %s" % (
-                        scan,
-                        mtm, self.__sc_ingested_map[scan][-1],
-                        mtm > self.__sc_ingested_map[scan][-1]))
-
-                if scan not in self.__sc_ingested_map.keys() \
-                   or mtm > self.__sc_ingested_map[scan][-1]:
-                    if self.__strategy != UpdateStrategy.NO:
-                        reingest_attachment = True
             else:
-                ads = self._generate_attachment_metadata(scan)
-                get_logger().debug("DB No File: %s True" % (scan))
+                ads = self._generate_attachment_metadata(
+                    self.__dctfmt["scanname"])
                 reingest_attachment = True
-            mtmda = 0
             if ads:
-                mtmda = os.path.getmtime(ads)
+                mtm0 = os.path.getmtime(ads)
 
-        dbstatus = None
-        dastatus = None
         pid = None
-        if rds and odb:
-            if rds and rds[0] and reingest_dataset:
+        if (rds and odb) or ads:
+            if rds and reingest_dataset:
                 pid = self._ingest_rawdataset_metadata(rds, token)
                 get_logger().info(
                     "DatasetIngestor: Ingest dataset: %s" % (rds))
@@ -1604,7 +1592,7 @@ class DatasetIngestor:
                     # get_logger().info("PID %s %s %s" % (scan,pid,oldpid))
                     odb = self._generate_origdatablock_metadata(scan)
                     reingest_origdatablock = True
-            if odb and odb[0] and reingest_origdatablock:
+            if odb and reingest_origdatablock:
                 if pid is None and rdss and rdss[0]:
                     pid = self._get_pid(rdss[0])
                 self._delete_origdatablocks(pid, token)
@@ -1614,14 +1602,16 @@ class DatasetIngestor:
                     "DatasetIngestor: Ingest origdatablock: %s" % (odb))
 
             if self.__ingest_attachment:
-                if ads and ads[0] and reingest_attachment:
+                if ads and reingest_attachment:
                     if pid is None and adss and adss[0]:
                         pid = self._get_pid(adss[0])
-                    self._delete_origdatablocks(pid, token)
-                    dbstatus = self._ingest_origdatablock_metadata(
-                        odb, pid, token)
+                    dastatus = self._ingest_attachment_metadata(
+                        ads, pid, token)
                     get_logger().info(
-                        "DatasetIngestor: Ingest origdatablock: %s" % (odb))
+                        "DatasetIngestor: Ingest attachment: %s" % (ads))
+        mtmda = 0
+        if ads:
+            mtmda = os.path.getmtime(ads)
 
         if (pid and reingest_dataset):
             pass
