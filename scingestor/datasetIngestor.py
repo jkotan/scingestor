@@ -1442,7 +1442,7 @@ class DatasetIngestor:
                 ads = self._generate_attachment_metadata(
                     self.__dctfmt["scanname"])
             if ads:
-                mtmda = os.path.getmtime(rds)
+                mtmda = os.path.getmtime(ads)
 
         dbstatus = None
         dastatus = None
@@ -1571,12 +1571,18 @@ class DatasetIngestor:
             if adss and adss[0]:
                 ads = adss[0]
                 mtm0 = os.path.getmtime(ads)
-
                 if scan not in self.__sc_ingested_map.keys() \
                    or mtm0 > self.__sc_ingested_map[scan][-1]:
                     reingest_attachment = True
+            else:
+                ads = self._generate_attachment_metadata(
+                    self.__dctfmt["scanname"])
+                reingest_attachment = True
+            if ads:
+                mtm0 = os.path.getmtime(ads)
+
         pid = None
-        if rds and odb:
+        if (rds and odb) or ads:
             if rds and reingest_dataset:
                 pid = self._ingest_rawdataset_metadata(rds, token)
                 get_logger().info(

@@ -3094,6 +3094,7 @@ optional arguments:
                     scn = fl.read()
                     scdict = json.loads(scn)
                 shutil.copy(asource, fsubdirname2)
+                # os.utime(os.path.join(fsubdirname2, jatt))
 
                 #    print(scn)
                 # scdict["size"] = 123123
@@ -3101,6 +3102,8 @@ optional arguments:
                 #     fl.write(json.dumps(scdict))
 
                 vl, er = self.runtest(cmd)
+                # print(vl)
+                # print(er)
 
                 ser = er.split("\n")
                 seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
@@ -3321,12 +3324,34 @@ optional arguments:
                              'p00dmgt', 'p00staff'],
                          'ownerGroup': '99001234-dmgt',
                          'size': 629}, skip=["dataFileList", "size"])
-                    # self.assertEqual(len(self.__server.attachments), 1)
+                    self.assertEqual(len(self.__server.attachments), 2)
                     self.assertEqual(
                         self.__server.attachments[0][0],
                         "/99001234/myscan_00002")
                     self.myAssertDict(
                         json.loads(self.__server.attachments[0][1]),
+                        {'accessGroups': ['99001234-dmgt',
+                                          '99001234-clbt',
+                                          '99001234-part',
+                                          'p00dmgt',
+                                          'p00staff'],
+                         'ownerGroup': '99001234-dmgt',
+                         'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
+                         'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
+                         'T92AAAAB3RJTUUH5wMVByY7kGggYgAAARJJREFUGNMFwU1Kw0AUA'
+                         'OA3b15mkmna0PpTRXCj4sJuBMGNt9ATiOAVPEHXnso7uFDEKmKLF'
+                         'Zs2yfy98fvEzcnZwVBdnY93qt7s1T49Ly4uy+uHx+ntvRMRd/vly'
+                         'Jj9raHJUSqmuDneG1RHE+p+qyyQX6+F0gUkAb4oyRiFIADARxAR0'
+                         'aXECYK1SkqlKDNV7RAAAg1myxaDLjYhtZ3XqnDW+bZRggFgU68IC'
+                         'QPGOuJfE+vVyvRNuV2qHgJAxGZyeoiETFrHJAWiZfYhMAMAcJa/f'
+                         'c5RAWcodK513gueSSqSGgBaRy+zBY3LgkPgxF/fi/k8/Cyb9w800'
+                         '7vO42A0QiNRJu6ctSHIrLCMNqGNQCRzJf4BBAx/cKU5uL8AAAAAS'
+                         'UVORK5CYII='})
+                    self.assertEqual(
+                        self.__server.attachments[1][0],
+                        "/99001234/myscan_00002")
+                    self.myAssertDict(
+                        json.loads(self.__server.attachments[1][1]),
                         {'accessGroups': ['99001234-dmgt',
                                           '99001234-clbt',
                                           '99001234-part',
