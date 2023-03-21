@@ -1338,11 +1338,11 @@ class DatasetIngestor:
             with open(metafile) as fl:
                 smt = fl.read()
                 mt = json.loads(smt)
-            if not mt["datasetId"].startswith(
-                    "%s/%s/" % (self.__pidprefix, self.__bid)):
+            if not pid.startswith(self.__bid):
                 raise Exception(
-                    "Wrong datasetId %s for DESY beamtimeId %s in  %s"
-                    % (mt["pid"], self.__bid, metafile))
+                    "Wrong origdatablock datasetId %s for DESY beamtimeId "
+                    "%s in  %s"
+                    % (pid, self.__bid, metafile))
             if mt["datasetId"] != "%s/%s" % (self.__pidprefix, pid):
                 mt["datasetId"] = "%s/%s" % (self.__pidprefix, pid)
                 smt = json.dumps(mt)
@@ -1371,11 +1371,10 @@ class DatasetIngestor:
                 smt = fl.read()
                 mt = json.loads(smt)
             if "datasetId" in mt:
-                if not mt["datasetId"].startswith(
-                        "%s/%s/" % (self.__pidprefix, self.__bid)):
+                if not pid.startswith(self.__bid):
                     raise Exception(
-                        "Wrong datasetId %s for DESY beamtimeId %s in  %s"
-                        % (mt["pid"], self.__bid, metafile))
+                        "Wrong attachment datasetId %s for DESY beamtimeId %s in  %s"
+                        % (pid, self.__bid, metafile))
                 if mt["datasetId"] != "%s/%s" % (self.__pidprefix, pid):
                     mt["datasetId"] = "%s/%s" % (self.__pidprefix, pid)
                     smt = json.dumps(mt)
