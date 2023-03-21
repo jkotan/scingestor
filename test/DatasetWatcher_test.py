@@ -4875,7 +4875,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
                 # print(er)
                 try:
-                    self.assertEqual(
+                    pattern = self.sortmarkedlines(
                         'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: Create ScanDirWatcher '
@@ -5078,7 +5078,10 @@ class DatasetWatcherTest(unittest.TestCase):
                                 det3="../lambda3", det4="../lambda4",
                                 sc1='myscan_00001', sc2='myscan_00002',
                                 sc3='myscan_00003', sc4='myscan_00004'),
-                        "\n".join(dseri))
+                        [(5, 43)], {'watch [0-9]:': 'watch:'})
+                    self.assertEqual(
+                        pattern, self.sortmarkedlines(
+                            dseri, [(5, 43)], {'watch [0-9]:': 'watch:'}))
                 except Exception:
                     print(er)
                     raise

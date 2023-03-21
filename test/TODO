@@ -132,17 +132,15 @@ Tests for  scingestor/datasetIngestor.py
 - in ingest() if  pid is None: tests?
 - in ingest() if  dbstatus is None : tests?
 
-- in reingest() if self.__ingest_attachment:  tests
-- in reingest() if self.__ingest_attachment (second):  tests
+- in reingest() if self.__ingest_attachment  and pid is None and adss and adss[0]:  tests
 
 - in reingest()   else:  mtmds = 0    tests
 
 - in reingest()   else:  mtmdb = 0    tests
 
-- in reingest()   if (dastatus and reingest_attachment):   tests
-
 - in check_list()  if reingest and Exception test ??? (timestamp not float)
 
+- clear_tmpfile() if os.path.exists() : tests
 
 
 
@@ -221,7 +219,7 @@ scingestor/__init__.py              1      0   100%
 scingestor/beamtimeWatcher.py     358     29    92%   221-222, 263-265, 280, 283, 299-302, 360-361, 453-454, 470-476, 483, 512-514, 516-520
 scingestor/configuration.py        10      0   100%
 scingestor/datasetIngest.py       156      4    97%   271-272, 292-293
-scingestor/datasetIngestor.py     833    122    85%   655, 665, 697, 769-770, 772-780, 795, 804-806, 824, 857, 864-868, 870-872, 896-900, 924, 948-953, 977-981, 997, 1014, 1045, 1076-1079, 1081, 1086-1087, 1099, 1137-1143, 1165-1169, 1196-1200, 1223-1224, 1246-1250, 1266-1267, 1287, 1291, 1297-1298, 1320, 1322-1323, 1343, 1354-1357, 1374-1383, 1388-1391, 1426, 1455, 1460, 1464, 1466, 1563-1592, 1617-1623, 1631, 1637, 1640, 1680-1681, 1700
+scingestor/datasetIngestor.py     829     98    88%   655, 665, 697, 769-770, 772-780, 795, 804-806, 824, 857, 864-868, 870-872, 896-900, 924, 948-953, 977-981, 997, 1014, 1045, 1076-1079, 1081, 1086-1087, 1099, 1137-1143, 1165-1169, 1196-1200, 1223-1224, 1246-1250, 1266-1267, 1287, 1291, 1297-1298, 1320, 1322-1323, 1343, 1354-1357, 1374-1383, 1388-1391, 1427, 1455, 1460, 1464, 1466, 1607, 1621, 1627, 1670-1671, 1690
 scingestor/datasetWatcher.py      152     31    80%   155-156, 175-176, 192-193, 202, 221-223, 232-234, 237-249, 264-266, 280-282, 286-288
 scingestor/logger.py               36      0   100%
 scingestor/modelIngest.py          98      6    94%   165-166, 181-185
@@ -229,4 +227,4 @@ scingestor/pathConverter.py        30      0   100%
 scingestor/safeINotifier.py       102      2    98%   229-230
 scingestor/scanDirWatcher.py      184     24    87%   197-198, 240-241, 283, 311-318, 329-337, 343-344, 351-357, 359-360
 -------------------------------------------------------------
-TOTAL                            1960    218    89%
+TOTAL                            1956    194    90%
