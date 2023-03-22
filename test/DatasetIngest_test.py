@@ -509,6 +509,226 @@ optional arguments:
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_datasetfile_exist_nolog(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        btmeta = "bt-mt-99001234.jsn"
+        dslist = "sc-ds-99001234.lst"
+        idslist = "sc-ids-99001234.lst"
+        wrongdslist = "sc-ds-99001235.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                "config",
+                                wrongdslist)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'beamtime_filename_prefix: "bt-mt-"\n' \
+            'beamtime_filename_postfix: ".jsn"\n' \
+            'datasets_filename_pattern: "sc-ds-{{beamtimeid}}.lst"\n' \
+            'ingested_datasets_filename_pattern: ' \
+            '"sc-ids-{{beamtimeid}}.lst"\n' \
+            'inotify_timeout: 0.2\n' \
+            'get_event_timeout: 0.02\n' \
+            'ingestion_delay_time: 2\n' \
+            'max_request_tries_number: 10\n' \
+            'recheck_beamtime_file_interval: 1000\n' \
+            'recheck_dataset_list_interval: 1000\n' \
+            'scicat_url: "{url}"\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [("scicat_dataset_ingest  -c %s"
+                     % cfgfname).split(),
+                    ("scicat_dataset_ingest --config %s"
+                     % cfgfname).split()]
+        # commands.pop()
+        try:
+            for cmd in commands:
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                shutil.copy(source, fdirname)
+                shutil.copy(lsource, fsubdirname2)
+                shutil.copy(wlsource, fsubdirname)
+                self.__server.reset()
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                vl, er = self.runtest(cmd)
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                # print(vl)
+                # print(er)
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                self.assertEqual(
+                    'INFO : DatasetIngest: beamtime path: {basedir}\n'
+                    'INFO : DatasetIngest: beamtime file: '
+                    'bt-mt-99001234.jsn\n'
+                    'INFO : DatasetIngest: dataset list: {dslist}\n'
+                    'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
+                    'INFO : DatasetIngestor: Generating metadata: '
+                    '{sc1} {subdir2}/{sc1}.scan.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock metadata:'
+                    ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: Check if dataset exists: '
+                    '/99001234/{sc1}\n'
+                    'INFO : DatasetIngestor: Post the dataset: '
+                    '/99001234/{sc1}\n'
+                    'INFO : DatasetIngestor: Ingest dataset: '
+                    '{subdir2}/{sc1}.scan.json\n'
+                    'INFO : DatasetIngestor: Ingest origdatablock: '
+                    '{subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
+                    'INFO : DatasetIngestor: Generating metadata: '
+                    '{sc2} {subdir2}/{sc2}.scan.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock metadata:'
+                    ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: Check if dataset exists: '
+                    '/99001234/{sc2}\n'
+                    'INFO : DatasetIngestor: Post the dataset: '
+                    '/99001234/{sc2}\n'
+                    'INFO : DatasetIngestor: Ingest dataset: '
+                    '{subdir2}/{sc2}.scan.json\n'
+                    'INFO : DatasetIngestor: Ingest origdatablock: '
+                    '{subdir2}/{sc2}.origdatablock.json\n'
+                    .format(basedir=fdirname,
+                            subdir2=fsubdirname2,
+                            dslist=fdslist,
+                            sc1='myscan_00001', sc2='myscan_00002'),
+                    "\n".join(seri))
+                self.assertEqual(
+                    "Login: ingestor\n"
+                    "RawDatasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: /99001234/myscan_00001\n"
+                    "RawDatasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 1)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 2)
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[0]),
+                    {'contactEmail': 'appuser@fake.com',
+                     'createdAt': '2022-05-14 11:54:29',
+                     'creationLocation': '/DESY/PETRA III/P00',
+                     'instrumentId': '/petra3/p00',
+                     'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
+                     'endTime': '2022-05-19 09:00:00',
+                     'isPublished': False,
+                     'techniques': [],
+                     'owner': 'Smithson',
+                     'ownerGroup': '99001234-dmgt',
+                     'accessGroups': [
+                         '99001234-dmgt', '99001234-clbt', '99001234-part',
+                         'p00dmgt', 'p00staff'],
+                     'ownerEmail': 'peter.smithson@fake.de',
+                     'pid': '99001234/myscan_00001',
+                     'datasetName': 'myscan_00001',
+                     'principalInvestigator': 'appuser@fake.com',
+                     'proposalId': '99001234',
+                     'scientificMetadata': {
+                         'DOOR_proposalId': '99991173',
+                         'beamtimeId': '99001234'},
+                     'sourceFolder':
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[1]),
+                    {'contactEmail': 'appuser@fake.com',
+                     'createdAt': '2022-05-14 11:54:29',
+                     'instrumentId': '/petra3/p00',
+                     'creationLocation': '/DESY/PETRA III/P00',
+                     'description': 'H20 distribution',
+                     'creationTime': '2022-05-19 09:00:00',
+                     'endTime': '2022-05-19 09:00:00',
+                     'isPublished': False,
+                     'techniques': [],
+                     'owner': 'Smithson',
+                     'ownerGroup': '99001234-dmgt',
+                     'ownerEmail': 'peter.smithson@fake.de',
+                     'pid': '99001234/myscan_00002',
+                     'datasetName': 'myscan_00002',
+                     'accessGroups': [
+                         '99001234-dmgt', '99001234-clbt', '99001234-part',
+                         'p00dmgt', 'p00staff'],
+                     'principalInvestigator': 'appuser@fake.com',
+                     'proposalId': '99001234',
+                     'scientificMetadata': {
+                         'DOOR_proposalId': '99991173',
+                         'beamtimeId': '99001234'},
+                     'sourceFolder':
+                     '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'},
+                    skip=['creationTime'])
+                self.assertEqual(len(self.__server.origdatablocks), 2)
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[0]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'ownerGroup': '99001234-dmgt',
+                     'accessGroups': [
+                         '99001234-dmgt', '99001234-clbt', '99001234-part',
+                         'p00dmgt', 'p00staff'],
+                     'datasetId': '/99001234/myscan_00001',
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[1]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'datasetId': '/99001234/myscan_00002',
+                     'accessGroups': [
+                         '99001234-dmgt', '99001234-clbt', '99001234-part',
+                         'p00dmgt', 'p00staff'],
+                     'ownerGroup': '99001234-dmgt',
+                     'size': 629}, skip=["dataFileList", "size"])
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
     def test_datasetfile_exist_attachment(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
@@ -3639,8 +3859,8 @@ optional arguments:
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
         commands = [('scicat_dataset_ingest -c %s  --log debug'
-                     #  % cfgfname).split(),
-                     # ('scicat_dataset_ingest --config %s -l debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingest --config %s -l debug'
                      % cfgfname).split()]
         # commands.pop()
         try:
@@ -4025,8 +4245,8 @@ optional arguments:
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
         commands = [('scicat_dataset_ingest -c %s  --log debug'
-                     #  % cfgfname).split(),
-                     # ('scicat_dataset_ingest --config %s -l debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingest --config %s -l debug'
                      % cfgfname).split()]
         # commands.pop()
         try:
@@ -4385,8 +4605,8 @@ optional arguments:
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
         commands = [('scicat_dataset_ingest -c %s  --log debug'
-                     #  % cfgfname).split(),
-                     # ('scicat_dataset_ingest --config %s -l debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingest --config %s -l debug'
                      % cfgfname).split()]
         # commands.pop()
         try:
