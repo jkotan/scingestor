@@ -7,6 +7,7 @@ include config/scingestor.service
 include man/scingestor.1
 include man/scicat_dataset_ingestor.1
 include man/scicat_dataset_ingest.1
+include man/scicat_ingest.1
 include doc/*
 include doc/*/*
 include doc/*/*/*
