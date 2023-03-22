@@ -531,7 +531,6 @@ optional arguments:
         wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                 "config",
                                 wrongdslist)
-        fullbtmeta = os.path.join(fdirname, btmeta)
         fdslist = os.path.join(fsubdirname2, dslist)
         fidslist = os.path.join(fsubdirname2, idslist)
         credfile = os.path.join(fdirname, 'pwd')
@@ -620,7 +619,6 @@ optional arguments:
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
                             dslist=fdslist,
-                            btmeta=fullbtmeta,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
                 self.assertEqual(
