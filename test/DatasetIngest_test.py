@@ -3639,8 +3639,8 @@ optional arguments:
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
         commands = [('scicat_dataset_ingest -c %s  --log debug'
-                     #  % cfgfname).split(),
-                     # ('scicat_dataset_ingest --config %s -l debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingest --config %s -l debug'
                      % cfgfname).split()]
         # commands.pop()
         try:
@@ -4025,8 +4025,8 @@ optional arguments:
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
         commands = [('scicat_dataset_ingest -c %s  --log debug'
-                     #  % cfgfname).split(),
-                     # ('scicat_dataset_ingest --config %s -l debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingest --config %s -l debug'
                      % cfgfname).split()]
         # commands.pop()
         try:
@@ -4385,8 +4385,8 @@ optional arguments:
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
         commands = [('scicat_dataset_ingest -c %s  --log debug'
-                     #  % cfgfname).split(),
-                     # ('scicat_dataset_ingest --config %s -l debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingest --config %s -l debug'
                      % cfgfname).split()]
         # commands.pop()
         try:
