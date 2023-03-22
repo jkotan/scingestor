@@ -639,7 +639,7 @@ class DatasetIngestor:
                 get_logger().debug(
                     'DatasetIngestor: Generating dataset command: %s ' % (
                         command))
-            subprocess.run(command.split(), check=True)
+            subprocess.run(command, shell=True, check=True)
         else:
             get_logger().info(
                 'DatasetIngestor: Generating metadata: %s %s' % (
@@ -655,7 +655,7 @@ class DatasetIngestor:
                 get_logger().debug(
                     'DatasetIngestor: Generating dataset command: %s'
                     % (command))
-            subprocess.run(command.split(), check=True)
+            subprocess.run(command, shell=True, check=True)
 
         rdss = glob.glob(
             "{metapath}/{scanname}{scanpostfix}".format(**self.__dctfmt))
@@ -688,7 +688,7 @@ class DatasetIngestor:
         else:
             get_logger().debug(
                 'DatasetIngestor: Generating origdatablock command: %s' % cmd)
-        subprocess.run(cmd.split(), check=True)
+        subprocess.run(cmd, shell=True, check=True)
         odbs = glob.glob(
             "{metapath}/{scanname}{datablockpostfix}".format(
                     **self.__dctfmt))
@@ -728,7 +728,7 @@ class DatasetIngestor:
             else:
                 get_logger().debug(
                     'DatasetIngestor: Generating attachment command: %s' % cmd)
-            subprocess.run(cmd.split(), check=True)
+            subprocess.run(cmd, shell=True, check=True)
             adss = glob.glob(
                 "{metapath}/{scanname}{attachmentpostfix}".format(
                     **self.__dctfmt))
@@ -777,7 +777,7 @@ class DatasetIngestor:
                 get_logger().debug(
                     'DatasetIngestor: Generating origdatablock command: %s'
                     % cmd)
-            subprocess.run(cmd.split(), check=True)
+            subprocess.run(cmd, shell=True, check=True)
         else:
             cmd = self.__datablockmemcommand.format(**self.__dctfmt)
             sscan = (scan or "").split(" ")
@@ -796,7 +796,7 @@ class DatasetIngestor:
                     'DatasetIngestor: Generating origdatablock command: %s'
                     % cmd)
             result = subprocess.run(
-                cmd.split(),
+                cmd, shell=True,
                 text=True, capture_output=True, check=True)
             nwmeta = str(result.stdout)
             try:

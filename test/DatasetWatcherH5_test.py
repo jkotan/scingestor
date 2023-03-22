@@ -5925,6 +5925,282 @@ class DatasetWatcherH5Test(unittest.TestCase):
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_datasetfile_exist_h5_bad_meta_script(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
+        btmeta = "beamtime-metadata-99001234.json"
+        dslist = "scicat-datasets-99001234.lst"
+        idslist = "scicat-ingested-datasets-99001234.lst"
+        wrongdslist = "scicat-datasets-99001235.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                "config",
+                                wrongdslist)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        wrmodule = WRITERS[self.writer]
+        filewriter.writer = wrmodule
+
+        oldpidprefix = self.__server.pidprefix
+        self.__server.pidprefix = "10.3204/"
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'dataset_pid_prefix: "10.3204"\n' \
+            'log_generator_commands: true\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingest_dataset_attachment: true\n' \
+            'attachment_metadata_generator: ' \
+            'echo "sdfs:[" > {{scanpath}}/{{scanname}}.attachment.json \n'\
+            'file_dataset_metadata_generator: ' \
+            'echo "blaha:[" > {{scanpath}}/{{scanname}}.scan.json \n'\
+            'datablock_metadata_generator_scanpath_postfix: '\
+            '"  "\n' \
+            'datablock_metadata_generator: ' \
+            'echo "haha:[" > {{scanpath}}/{{scanname}}.origdatablock.json \n'\
+            'datablock_metadata_stream_generator: ' \
+            'echo "hihi:[" \n'\
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, vardir=vardir,
+                credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r10 --log debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r10 -l debug'
+                     % cfgfname).split()]
+        # commands.pop()
+
+        args = [
+            [
+                "myscan_00001.nxs",
+                "Test experiment",
+                "BL1234554",
+                "PETRA III",
+                "P3",
+                "2014-02-12T15:19:21+00:00",
+                "2014-02-15T15:17:21+00:00",
+                "water",
+                "H20",
+                'technique: "saxs"',
+            ],
+            [
+                "myscan_00002.nxs",
+                "My experiment",
+                "BT123_ADSAD",
+                "Petra III",
+                "PIII",
+                "2019-02-14T15:19:21+00:00",
+                "2019-02-15T15:27:21+00:00",
+                "test sample",
+                "LaB6",
+                'techniques_pids:\n'
+                '  - "PaNET01191"\n'
+                '  - "PaNET01188"\n'
+                '  - "PaNET01098"\n'
+            ],
+        ]
+        try:
+            for cmd in commands:
+                time.sleep(1)
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                os.mkdir(fsubdirname3)
+
+                for k, arg in enumerate(args):
+                    nxsfilename = os.path.join(fsubdirname2, arg[0])
+                    title = arg[1]
+                    beamtime = arg[2]
+                    insname = arg[3]
+                    inssname = arg[4]
+                    stime = arg[5]
+                    etime = arg[6]
+                    smpl = arg[7]
+                    formula = arg[8]
+
+                    nxsfile = filewriter.create_file(
+                        nxsfilename, overwrite=True)
+                    rt = nxsfile.root()
+                    entry = rt.create_group("entry12345", "NXentry")
+                    ins = entry.create_group("instrument", "NXinstrument")
+                    det = ins.create_group("detector", "NXdetector")
+                    entry.create_field(
+                        "experiment_description", "string").write(arg[9])
+                    entry.create_group("data", "NXdata")
+                    sample = entry.create_group("sample", "NXsample")
+                    det.create_field("intimage", "uint32", [0, 30], [1, 30])
+
+                    entry.create_field("title", "string").write(title)
+                    entry.create_field(
+                        "experiment_identifier", "string").write(beamtime)
+                    entry.create_field("start_time", "string").write(stime)
+                    entry.create_field("end_time", "string").write(etime)
+                    sname = ins.create_field("name", "string")
+                    sname.write(insname)
+                    sattr = sname.attributes.create("short_name", "string")
+                    sattr.write(inssname)
+                    sname = sample.create_field("name", "string")
+                    sname.write(smpl)
+                    sfml = sample.create_field("chemical_formula", "string")
+                    sfml.write(formula)
+                    nxsfile.close()
+
+                shutil.copy(source, fdirname)
+                shutil.copy(lsource, fsubdirname2)
+                shutil.copy(wlsource, fsubdirname)
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                self.__server.reset()
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                vl, er = self.runtest(cmd)
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                dseri = [ln for ln in seri if "DEBUG :" not in ln]
+
+                # status = os.stat(dsfilename)
+                # self.assertEqual(chmod, str(oct(status.st_mode & 0o777)))
+                # status = os.stat(dbfilename)
+                # self.assertEqual(chmod, str(oct(status.st_mode & 0o777)))
+
+                # print(vl)
+                # print(er)
+
+                # nodebug = "\n".join([ee for ee in er.split("\n")
+                #                      if (("DEBUG :" not in ee) and
+                #                          (not ee.startswith("127.0.0.1")))])
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                        '{basedir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir2} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Creating DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : DatasetWatcher: Adding watch {cnt5}: '
+                        '{dslist} {idslist}\n'
+                        'INFO : DatasetWatcher: Waiting datasets: '
+                        '[\'{sc1}\', \'{sc2}\']\n'
+                        'INFO : DatasetWatcher: Ingested datasets: []\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
+                        'INFO : DatasetIngestor: Generating nxs metadata: '
+                        '{sc1} {subdir2}/{sc1}.scan.json\n'
+                        'INFO : DatasetIngestor: Generating dataset command: '
+                        'echo "blaha:[" > {subdir2}/{sc1}.scan.json \n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'echo "haha:[" > {subdir2}/{sc1}.origdatablock.json  \n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment metadata:'
+                        ' {sc1} {subdir2}/{sc1}.attachment.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment command: '
+                        'echo "sdfs:[" > {subdir2}/{sc1}.attachment.json\n'
+                        'ERROR : DatasetIngestor: Expecting value: '
+                        'line 1 column 1 (char 0)\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
+                        'INFO : DatasetIngestor: Generating nxs metadata: '
+                        '{sc2} {subdir2}/{sc2}.scan.json\n'
+                        'INFO : DatasetIngestor: Generating dataset command: '
+                        'echo "blaha:[" > {subdir2}/{sc2}.scan.json \n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'echo "haha:[" > {subdir2}/{sc2}.origdatablock.json  \n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment metadata:'
+                        ' {sc2} {subdir2}/{sc2}.attachment.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating attachment command: '
+                        'echo "sdfs:[" > {subdir2}/{sc2}.attachment.json\n'
+                        'ERROR : DatasetIngestor: Expecting value: '
+                        'line 1 column 1 (char 0)\n'
+                        'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: '
+                        'Stopping ScanDirWatcher {btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Stopping DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt5}: '
+                        '{dslist}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                subdir=fsubdirname, subdir2=fsubdirname2,
+                                dslist=fdslist, idslist=fidslist,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                                cnt4=(cnt + 3), cnt5=(cnt + 4),
+                                sc1='myscan_00001', sc2='myscan_00002'),
+                        '\n'.join(dseri))
+                except Exception:
+                    print(er)
+                    raise
+                self.assertEqual(
+                    "Login: ingestor\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 1)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 0)
+                self.assertEqual(len(self.__server.origdatablocks), 0)
+                self.assertEqual(len(self.__server.attachments), 0)
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            self.__server.pidprefix = oldpidprefix
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
     def test_datasetfile_add_h5_script(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
