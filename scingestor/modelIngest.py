@@ -159,11 +159,9 @@ class ModelIngest:
             "%s?access_token=%s" % (self.__modelurl, token),
             headers=self.__headers,
             data=metadata)
-        if response.ok:
-            return True
-        else:
+        if not response.ok:
             raise Exception("%s" % response.text)
-        return False
+        return True
 
     def get_token(self):
         """ provides ingestor token
