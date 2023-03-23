@@ -92,7 +92,6 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         """ implementation of action for http POST requests
         """
-        self.set_json_header()
 
         # print(self.headers)
         # print(self.path)
