@@ -575,11 +575,11 @@ optional arguments:
                 self.assertEqual(
                     'ERROR : ModelIngestor: {"Error": "Empty username"}\n'
                     "INFO : ModelIngestor: Post the RawDatasets from "
-                    "ModelIngestTest_test_modelfile_wrong_user_00001."
+                    "ModelIngestTest_test_modelfile_wrong_username_00001."
                     "dataset.json\n"
                     'ERROR : ModelIngestor: {"Error": "Empty access_token"}\n'
                     "INFO : ModelIngestor: Post the RawDatasets from "
-                    "ModelIngestTest_test_modelfile_wrong_user_00002."
+                    "ModelIngestTest_test_modelfile_wrong_username_00002."
                     "dataset.json\n"
                     'ERROR : ModelIngestor: {"Error": "Empty access_token"}\n',
                     "\n".join(seri))
