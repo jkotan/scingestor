@@ -129,13 +129,13 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         elif self.path.lower().startswith(
                 '/rawdatasets?access_token=') and \
                 contenttype == 'application/json':
-            self.server.datasets.append(in_data)
             # print(in_data)
             # print(type(in_data))
             spath = self.path.lower().split("?access_token=")
             try:
                 if not spath[-1]:
                     raise Exception("Empty access_token")
+                self.server.datasets.append(in_data)
                 dt = json.loads(in_data)
                 # print("Datasets: %s" % dt)
                 print("RawDatasets: %s" % dt["pid"])

@@ -181,7 +181,7 @@ class ModelIngest:
                 raise Exception("%s" % response.text)
         except Exception as e:
             get_logger().error(
-                'DatasetIngestor: %s' % (str(e)))
+                'ModelIngestor: %s' % (str(e)))
         return ""
 
 
