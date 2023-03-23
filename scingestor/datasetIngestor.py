@@ -1338,7 +1338,7 @@ class DatasetIngestor:
             with open(metafile) as fl:
                 smt = fl.read()
                 mt = json.loads(smt)
-            if not pid.startswith(self.__bid):
+            if not pid.startswith(self.__bid) :
                 raise Exception(
                     "Wrong origdatablock datasetId %s for DESY beamtimeId "
                     "%s in  %s"
