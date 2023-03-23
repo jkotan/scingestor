@@ -91,7 +91,7 @@ Tests for  scingestor/datasetIngestor.py
 
 - in _get_delete_origdatablock(...) exception test if request EXCEPTIONS ?????
 
-- in _get_pid(...) exception test if metedata is not loadable ??
+- in _get_pid(...) exception test if metedata is not loadable or no "pid" in metadata ??
 
 - in _ingest_rawdataset_metadata() if mt["proposalId"] != self.__bid error (wrong beamtime)
 
@@ -148,19 +148,13 @@ Tests for  scingestor/datasetWatcher.py
 - in run() loop self.__ingestor.ingest(scan, token) EXCEPTION test ??
 
 
-
-Tests for  scingestor/modelIngest.py
--------------------------------------
-
-- in _ingest_model(self, metadata, token) last return  ??
-
-
 Tests for  scingestor/safeINotifier.py
 --------------------------------------
 
 - in run  os.close(self.__notifier) exception ????
 
 - in _remove()   inotifyx.rm_watch() raise Exception ?? random
+
 
 Tests for  scingestor/scanDirWatcher.py
 ---------------------------------------
@@ -200,9 +194,9 @@ scingestor/datasetIngest.py       156      4    97%   271-272, 292-293
 scingestor/datasetIngestor.py     829     72    91%   769-770, 772-780, 795, 804-806, 824, 857, 864-868, 870-872, 924, 948-953, 977-981, 997, 1014, 1045, 1076-1079, 1081, 1086-1087, 1099, 1137-1139, 1165-1169, 1196-1200, 1223-1224, 1246-1250, 1266-1267, 1287, 1291, 1320, 1322-1323, 1342, 1375, 1427, 1455, 1460, 1607, 1621, 1627, 1670-1671, 1690
 scingestor/datasetWatcher.py      152     31    80%   155-156, 175-176, 192-193, 202, 221-223, 232-234, 237-249, 264-266, 280-282, 286-288
 scingestor/logger.py               36      0   100%
-scingestor/modelIngest.py          98      1    99%   166
+scingestor/modelIngest.py          97      0   100%
 scingestor/pathConverter.py        30      0   100%
-scingestor/safeINotifier.py       102      4    96%   157-158, 229-230
+scingestor/safeINotifier.py       102      2    98%   229-230
 scingestor/scanDirWatcher.py      184     24    87%   197-198, 240-241, 283, 311-318, 329-337, 343-344, 351-357, 359-360
 -------------------------------------------------------------
-TOTAL                            1956    165    92%
+TOTAL                            1955    162    92%

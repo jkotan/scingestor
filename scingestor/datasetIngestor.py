@@ -1287,7 +1287,8 @@ class DatasetIngestor:
                 raise Exception(
                     "Wrong SC proposalId %s for DESY beamtimeId %s in %s"
                     % (mt["proposalId"], self.__bid, metafile))
-            if not mt["pid"].startswith("%s/" % (self.__bid)):
+            if not mt['pid'] or \
+               not mt["pid"].startswith("%s/" % (self.__bid)):
                 raise Exception(
                     "Wrong pid %s for DESY beamtimeId %s in  %s"
                     % (mt["pid"], self.__bid, metafile))
@@ -1338,7 +1339,7 @@ class DatasetIngestor:
             with open(metafile) as fl:
                 smt = fl.read()
                 mt = json.loads(smt)
-            if not pid.startswith(self.__bid):
+            if not pid or not pid.startswith(self.__bid):
                 raise Exception(
                     "Wrong origdatablock datasetId %s for DESY beamtimeId "
                     "%s in  %s"
@@ -1371,7 +1372,7 @@ class DatasetIngestor:
                 smt = fl.read()
                 mt = json.loads(smt)
             if "datasetId" in mt:
-                if not pid.startswith(self.__bid):
+                if not pid or not pid.startswith(self.__bid):
                     raise Exception(
                         "Wrong attachment datasetId %s for DESY beamtimeId "
                         "%s in  %s"

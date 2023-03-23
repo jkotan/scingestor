@@ -7931,6 +7931,160 @@ optional arguments:
             if os.path.isdir(lvardir):
                 shutil.rmtree(lvardir)
 
+    def test_datasetfile_exist_meta_wrong_user(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        btmeta = "beamtime-metadata-99001234.json"
+        dslist = "scicat-datasets-99001234.lst"
+        idslist = "scicat-ingested-datasets-99001234.lst"
+        wrongdslist = "scicat-datasets-99001235.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                "config",
+                                wrongdslist)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/tmp/scingestor_log_%s/{beamtimeid}" % uuid.uuid4().hex
+        lvardir = vardir.format(beamtimeid="99001234")
+        fidslist = "%s%s" % (lvardir, fidslist)
+        cred = "12342345"
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+        prop = {
+            "ownerGroup": "mygroup",
+            "accessGroups": ["group1", "group2"],
+        }
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'ingestor_username: ""\n' \
+            'ingest_dataset_attachment: true\n' \
+            'dataset_pid_prefix: "10.3204"\n' \
+            'metadata_in_var_dir: true\n' \
+            'owner_access_groups_from_proposal: true\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [("scicat_dataset_ingest  -c %s"
+                     % cfgfname).split(),
+                    ("scicat_dataset_ingest --config %s"
+                     % cfgfname).split()]
+        # commands.pop()
+        try:
+            oldpidprefix = self.__server.pidprefix
+            self.__server.pidprefix = "10.3204/"
+            for cmd in commands:
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                shutil.copy(source, fdirname)
+                shutil.copy(lsource, fsubdirname2)
+                shutil.copy(wlsource, fsubdirname)
+                self.__server.reset()
+                self.__server.pid_proposal["99001234"] = json.dumps(prop)
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                vl, er = self.runtest(cmd)
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                # print(vl)
+                # print(er)
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                self.assertEqual(
+                    'INFO : DatasetIngest: beamtime path: {basedir}\n'
+                    'INFO : DatasetIngest: beamtime file: '
+                    'beamtime-metadata-99001234.json\n'
+                    'INFO : DatasetIngest: dataset list: {dslist}\n'
+                    'ERROR : DatasetIngestor: {{"Error": "Empty username"}}\n'
+                    'WARNING : Proposal 99001234: '
+                    '{{"Error": "Empty access_token"}}\n'
+                    'ERROR : DatasetIngestor: {{"Error": "Empty username"}}\n'
+                    'INFO : DatasetIngestor: Checking: {dslist} {sc1}\n'
+                    'INFO : DatasetIngestor: Generating metadata: '
+                    '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock metadata:'
+                    ' {sc1} {vardir}{subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: Check if dataset exists: '
+                    '10.3204/99001234/{sc1}\n'
+                    'ERROR : DatasetIngestor: '
+                    '{{"Error": "Empty access_token"}}\n'
+                    'INFO : DatasetIngestor: Ingest dataset: '
+                    '{vardir}{subdir2}/{sc1}.scan.json\n'
+                    'ERROR : DatasetIngestor: '
+                    'Wrong origdatablock datasetId None for DESY '
+                    'beamtimeId 99001234 in  '
+                    '{vardir}{subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: Ingest origdatablock: '
+                    '{vardir}{subdir2}/{sc1}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
+                    'INFO : DatasetIngestor: Generating metadata: '
+                    '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
+                    'INFO : DatasetIngestor: '
+                    'Generating origdatablock metadata:'
+                    ' {sc2} {vardir}{subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: Check if dataset exists: '
+                    '10.3204/99001234/{sc2}\n'
+                    'ERROR : DatasetIngestor: '
+                    '{{"Error": "Empty access_token"}}\n'
+                    'INFO : DatasetIngestor: Ingest dataset: '
+                    '{vardir}{subdir2}/{sc2}.scan.json\n'
+                    'ERROR : DatasetIngestor: '
+                    'Wrong origdatablock datasetId None for DESY '
+                    'beamtimeId 99001234 in  '
+                    '{vardir}{subdir2}/{sc2}.origdatablock.json\n'
+                    'INFO : DatasetIngestor: Ingest origdatablock: '
+                    '{vardir}{subdir2}/{sc2}.origdatablock.json\n'
+                    .format(basedir=fdirname,
+                            subdir2=fsubdirname2,
+                            dslist=fdslist,
+                            vardir=lvardir,
+                            sc1='myscan_00001', sc2='myscan_00002'),
+                    "\n".join(seri))
+                self.assertEqual(
+                    "Login: \n"
+                    "Login: \n", vl)
+                self.assertEqual(len(self.__server.userslogin), 2)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[1],
+                    b'{"username": "", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 0)
+                self.assertEqual(len(self.__server.origdatablocks), 0)
+                self.assertEqual(len(self.__server.attachments), 0)
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+                if os.path.isdir("%s%s" % (lvardir, fsubdirname)):
+                    shutil.rmtree("%s%s" % (lvardir, fsubdirname))
+        finally:
+            self.__server.pidprefix = oldpidprefix
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+            if os.path.isdir(lvardir):
+                shutil.rmtree(lvardir)
+
     def test_datasetfile_repeat_log_meta(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
