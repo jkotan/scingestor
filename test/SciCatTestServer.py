@@ -32,16 +32,30 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
 
     """ scicat mock server handler """
 
-    def do_PATCH(self):
-        """ implementation of action for http PATCH requests
+    def set_json_header(self, resp=200):
+        """ set json header
+
+        :param resp: response value
+        :type resp: :obj:`int`
         """
-        self.send_response(200)
+        self.send_response(resp)
         self.send_header('Content-Type', 'application/json')
         self.send_header('Accept', 'application/json')
         self.end_headers()
 
-        # print(self.headers)
-        # print(self.path)
+    def set_html_header(self, resp=200):
+        """ set html header
+
+        :param resp: response value
+        :type resp: :obj:`int`
+        """
+        self.send_response(resp)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+
+    def do_PATCH(self):
+        """ implementation of action for http PATCH requests
+        """
         length = int(self.headers.get('Content-Length'))
         contenttype = self.headers.get('Content-Type')
         in_data = self.rfile.read(length)
@@ -54,15 +68,22 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             self.server.datasets.append(in_data)
             # print(in_data)
             # print(type(in_data))
-            dt = json.loads(in_data)
-            # print("Datasets: %s" % dt)
-            print("RawDatasets: %s" % dt["pid"])
-            npid = dt["pid"]
-            dt["pid"] = npid
-            self.server.pid_dataset[npid] = json.dumps(dt)
-            message = "{}"
+            try:
+                dt = json.loads(in_data)
+                # print("Datasets: %s" % dt)
+                print("RawDatasets: %s" % dt["pid"])
+                npid = dt["pid"]
+                dt["pid"] = npid
+                self.server.pid_dataset[npid] = json.dumps(dt)
+                message = "{}"
+                resp = 200
+            except Exception as e:
+                message = json.dumps({"Error": str(e)})
+                resp = 400
+            self.set_json_header(resp)
 
         else:
+            self.set_json_header()
             self.server.others.append(in_data)
             print("Others: %s" % str(in_data))
 
@@ -71,10 +92,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         """ implementation of action for http POST requests
         """
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
-        self.send_header('Accept', 'application/json')
-        self.end_headers()
+        self.set_json_header()
 
         # print(self.headers)
         # print(self.path)
@@ -87,12 +105,18 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         if self.path.lower() == '/users/login' and \
            contenttype == 'application/json':
             self.server.userslogin.append(in_data)
-            dt = json.loads(in_data)
-            # print("Login: %s" % dt)
-            print("Login: %s" % dt["username"])
-            message = json.dumps(
-                {"id": "H3BxDGwgvnGbp5ZlhdksDKdIpljtEm8"
-                 "yilq1B7s7CygIaxbQRAMmZBgJ6JW2GjnX"})
+            try:
+                dt = json.loads(in_data)
+                # print("Login: %s" % dt)
+                print("Login: %s" % dt["username"])
+                message = json.dumps(
+                    {"id": "H3BxDGwgvnGbp5ZlhdksDKdIpljtEm8"
+                     "yilq1B7s7CygIaxbQRAMmZBgJ6JW2GjnX"})
+                resp = 200
+            except Exception as e:
+                message = json.dumps({"Error": str(e)})
+                resp = 400
+            self.set_json_header(resp)
 
         elif self.path.lower().startswith(
                 '/rawdatasets?access_token=') and \
@@ -100,18 +124,25 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             self.server.datasets.append(in_data)
             # print(in_data)
             # print(type(in_data))
-            dt = json.loads(in_data)
-            # print("Datasets: %s" % dt)
-            print("RawDatasets: %s" % dt["pid"])
-            npid = self.server.pidprefix + dt["pid"]
-            dt["pid"] = npid
-            self.server.pid_dataset[npid] = json.dumps(dt)
-            message = "{}"
+            try:
+                dt = json.loads(in_data)
+                # print("Datasets: %s" % dt)
+                print("RawDatasets: %s" % dt["pid"])
+                npid = self.server.pidprefix + dt["pid"]
+                dt["pid"] = npid
+                self.server.pid_dataset[npid] = json.dumps(dt)
+                message = "{}"
+                resp = 200
+            except Exception as e:
+                message = json.dumps({"Error": str(e)})
+                resp = 400
+            self.set_json_header(resp)
 
         elif self.path.lower().startswith(
                 '/datasets/') and \
                 contenttype == 'application/json':
             spath = self.path.lower().split("?access_token=")
+            resp = 200
             if len(spath) == 2:
                 lpath = spath[0].split("/")
                 if len(lpath) == 4 and lpath[3] == "attachments":
@@ -119,20 +150,32 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     pid = pid.replace("%2f", "/")
                     print("Datasets Attachments: %s" % pid)
                     self.server.attachments.append((pid, in_data))
-                    message = "{}"
+                    try:
+                        dt = json.loads(in_data)
+                        message = "{}"
+                    except Exception as e:
+                        message = json.dumps({"Error": str(e)})
+                        resp = 400
+            self.set_json_header(resp)
         elif self.path.lower().startswith(
                 '/origdatablocks?access_token=') and \
                 contenttype == 'application/json':
             self.server.origdatablocks.append(in_data)
-            dt = json.loads(in_data)
-            print("OrigDatablocks: %s" % dt['datasetId'])
-            npid = str(uuid.uuid4())
-            dt["id"] = npid
-            self.server.id_origdatablock[npid] = json.dumps(dt)
-            message = "{}"
-            message = "{}"
+            try:
+                dt = json.loads(in_data)
+                print("OrigDatablocks: %s" % dt['datasetId'])
+                npid = str(uuid.uuid4())
+                dt["id"] = npid
+                self.server.id_origdatablock[npid] = json.dumps(dt)
+                message = "{}"
+                resp = 200
+            except Exception as e:
+                message = json.dumps({"Error": str(e)})
+                resp = 400
+            self.set_json_header(resp)
 
         else:
+            self.set_json_header()
             self.server.others.append(in_data)
             print("Others: %s" % str(in_data))
 
@@ -194,17 +237,13 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             elif len(dspath) == 3:
                 pid = dspath[2].replace("%2F", "/")
                 message = self.server.id_origdatablock[pid]
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
+        self.set_html_header()
         self.wfile.write(bytes(message, "utf8"))
 
     def do_DELETE(self):
         """ implementation of action for http DELETE requests
         """
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
+        self.set_html_header()
 
         message = "SciCat mock server for tests!"
         path = self.path
