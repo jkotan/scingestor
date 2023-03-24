@@ -56,6 +56,14 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
     def do_PATCH(self):
         """ implementation of action for http PATCH requests
         """
+        self.server.counter += 1
+        if self.server.counter in self.server.error_requests:
+            message = json.dumps({"Error": "Internal Error"})
+            resp = 500
+            self.set_json_header(resp)
+            self.wfile.write(bytes(message, "utf8"))
+            return
+
         length = int(self.headers.get('Content-Length'))
         contenttype = self.headers.get('Content-Type')
         in_data = self.rfile.read(length)
@@ -97,6 +105,14 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         """ implementation of action for http POST requests
         """
+
+        self.server.counter += 1
+        if self.server.counter in self.server.error_requests:
+            message = json.dumps({"Error": "Internal Error"})
+            resp = 500
+            self.set_json_header(resp)
+            self.wfile.write(bytes(message, "utf8"))
+            return
 
         # print(self.headers)
         # print(self.path)
@@ -201,6 +217,14 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         """ implementation of action for http GET requests
         """
 
+        self.server.counter += 1
+        if self.server.counter in self.server.error_requests:
+            message = json.dumps({"Error": "Internal Error"})
+            resp = 500
+            self.set_html_header(resp)
+            self.wfile.write(bytes(message, "utf8"))
+            return
+
         message = "SciCat mock server for tests!"
         path = self.path
         if "?access_token=" in path:
@@ -267,6 +291,14 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
     def do_DELETE(self):
         """ implementation of action for http DELETE requests
         """
+        self.server.counter += 1
+        if self.server.counter in self.server.error_requests:
+            message = json.dumps({"Error": "Internal Error"})
+            resp = 500
+            self.set_html_header(resp)
+            self.wfile.write(bytes(message, "utf8"))
+            return
+
         message = "SciCat mock server for tests!"
         path = self.path
         if "?access_token=" in path:
@@ -333,6 +365,10 @@ class SciCatTestServer(HTTPServer):
         self.pid_proposal = {}
         #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with datablocks
         self.id_origdatablock = {}
+        #: (:obj:`int`) id counter
+        self.counter = 0
+        #: (:obj:`int`) request ids with error
+        self.error_requests = []
         #: (:obj:`str`) pid prefix
         self.pidprefix = "/"
         # self.pidprefix = "10.3204/"
@@ -346,6 +382,8 @@ class SciCatTestServer(HTTPServer):
         self.pid_dataset = {}
         self.pid_proposal = {}
         self.id_origdatablock = {}
+        self.counter = 0
+        self.error_requests = []
 
     def run(self):
         try:

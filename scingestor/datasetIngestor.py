@@ -918,6 +918,7 @@ class DatasetIngestor:
                     url=self.__proposalurl,
                     pid=bid.replace("/", "%2F"),
                     token=token))
+
             if resexists.ok:
                 pexists = json.loads(resexists.content)["exists"]
             else:
@@ -990,6 +991,7 @@ class DatasetIngestor:
                     url=self.__dataseturl,
                     pid=npid.replace("/", "%2F"),
                     token=token))
+            # get_logger().info('POST1')
             if resexists.ok:
                 pexist = json.loads(
                     resexists.content)["exists"]
@@ -1008,6 +1010,7 @@ class DatasetIngestor:
             % (self.__dataseturl, token),
             headers=self.__headers,
             data=nmeta)
+        # get_logger().info('POST2')
         if response.ok:
             return mdic["pid"]
         else:
@@ -1039,6 +1042,7 @@ class DatasetIngestor:
                 token=token),
             headers=self.__headers,
             data=nmeta)
+        # get_logger().info('PATCH1')
         if response.ok:
             return mdct["pid"]
         else:
@@ -1106,6 +1110,7 @@ class DatasetIngestor:
                             url=self.__dataseturl,
                             pid=pid.replace("/", "%2F"),
                             token=token))
+                    # get_logger().info('INGEST 3')
                     if resds.ok:
                         dsmeta = json.loads(resds.content)
                         mdic = dict(mdct)
@@ -1190,6 +1195,7 @@ class DatasetIngestor:
                 url.format(pid=dsid, token=token),
                 headers=self.__headers,
                 data=metadata)
+            # get_logger().info('INGEST ATTACH 1')
             if response.ok:
                 return True
             else:
@@ -1240,6 +1246,7 @@ class DatasetIngestor:
                     url=self.__datablockurl,
                     pid=did.replace("/", "%2F"),
                     token=token))
+            # get_logger().info('GET DEL 1')
             if response.ok:
                 return True
             else:
