@@ -170,30 +170,34 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                 contenttype == 'application/json':
             spath = self.path.lower().split("?access_token=")
             resp = 200
-            if not spath[-1]:
-                raise Exception("Empty access_token")
-            if len(spath) == 2:
-                lpath = spath[0].split("/")
-                if len(lpath) == 4 and lpath[3] == "attachments":
-                    pid = lpath[2]
-                    pid = pid.replace("%2f", "/")
-                    print("Datasets Attachments: %s" % pid)
-                    self.server.attachments.append((pid, in_data))
-                    try:
-                        dt = json.loads(in_data)
-                        message = "{}"
-                    except Exception as e:
-                        message = json.dumps({"Error": str(e)})
-                        resp = 400
+            try:
+                if not spath[-1]:
+                    raise Exception("Empty access_token")
+                if len(spath) == 2:
+                    lpath = spath[0].split("/")
+                    if len(lpath) == 4 and lpath[3] == "attachments":
+                        pid = lpath[2]
+                        pid = pid.replace("%2f", "/")
+                        print("Datasets Attachments: %s" % pid)
+                        self.server.attachments.append((pid, in_data))
+                        try:
+                            dt = json.loads(in_data)
+                            message = "{}"
+                        except Exception as e:
+                            message = json.dumps({"Error": str(e)})
+                            resp = 400
+            except Exception as e:
+                message = json.dumps({"Error": str(e)})
+                resp = 400
             self.set_json_header(resp)
         elif self.path.lower().startswith(
                 '/origdatablocks?access_token=') and \
                 contenttype == 'application/json':
             self.server.origdatablocks.append(in_data)
             spath = self.path.lower().split("?access_token=")
-            if not spath[-1]:
-                raise Exception("Empty access_token")
             try:
+                if not spath[-1]:
+                    raise Exception("Empty access_token")
                 dt = json.loads(in_data)
                 print("OrigDatablocks: %s" % dt['datasetId'])
                 npid = str(uuid.uuid4())
