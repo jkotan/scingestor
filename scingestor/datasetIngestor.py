@@ -1607,10 +1607,15 @@ class DatasetIngestor:
                 if ads and reingest_attachment:
                     if pid is None and adss and adss[0]:
                         pid = self._get_pid(adss[0])
-                    dastatus = self._ingest_attachment_metadata(
-                        ads, pid, token)
-                    get_logger().info(
-                        "DatasetIngestor: Ingest attachment: %s" % (ads))
+                    if not pid:
+                        get_logger().error(
+                            "DatasetIngestor: No dataset pid "
+                            "for the attachment found: %s" % (ads))
+                    else:
+                        dastatus = self._ingest_attachment_metadata(
+                            ads, pid, token)
+                        get_logger().info(
+                            "DatasetIngestor: Ingest attachment: %s" % (ads))
         mtmda = 0
         if ads:
             mtmda = os.path.getmtime(ads)
