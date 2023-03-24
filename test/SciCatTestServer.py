@@ -32,16 +32,38 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
 
     """ scicat mock server handler """
 
-    def do_PATCH(self):
-        """ implementation of action for http PATCH requests
+    def set_json_header(self, resp=200):
+        """ set json header
+
+        :param resp: response value
+        :type resp: :obj:`int`
         """
-        self.send_response(200)
+        self.send_response(resp)
         self.send_header('Content-Type', 'application/json')
         self.send_header('Accept', 'application/json')
         self.end_headers()
 
-        # print(self.headers)
-        # print(self.path)
+    def set_html_header(self, resp=200):
+        """ set html header
+
+        :param resp: response value
+        :type resp: :obj:`int`
+        """
+        self.send_response(resp)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+
+    def do_PATCH(self):
+        """ implementation of action for http PATCH requests
+        """
+        self.server.counter += 1
+        if self.server.counter in self.server.error_requests:
+            message = json.dumps({"Error": "Internal Error"})
+            resp = 500
+            self.set_json_header(resp)
+            self.wfile.write(bytes(message, "utf8"))
+            return
+
         length = int(self.headers.get('Content-Length'))
         contenttype = self.headers.get('Content-Type')
         in_data = self.rfile.read(length)
@@ -54,15 +76,27 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             self.server.datasets.append(in_data)
             # print(in_data)
             # print(type(in_data))
-            dt = json.loads(in_data)
-            # print("Datasets: %s" % dt)
-            print("RawDatasets: %s" % dt["pid"])
-            npid = dt["pid"]
-            dt["pid"] = npid
-            self.server.pid_dataset[npid] = json.dumps(dt)
-            message = "{}"
+            try:
+                if "?access_token=" not in self.path.lower():
+                    raise Exception("Missing access_token")
+                spath = self.path.lower().split("?access_token=")
+                if not spath[-1]:
+                    raise Exception("Empty access_token")
+                dt = json.loads(in_data)
+                # print("Datasets: %s" % dt)
+                print("RawDatasets: %s" % dt["pid"])
+                npid = dt["pid"]
+                dt["pid"] = npid
+                self.server.pid_dataset[npid] = json.dumps(dt)
+                message = "{}"
+                resp = 200
+            except Exception as e:
+                message = json.dumps({"Error": str(e)})
+                resp = 400
+            self.set_json_header(resp)
 
         else:
+            self.set_json_header()
             self.server.others.append(in_data)
             print("Others: %s" % str(in_data))
 
@@ -71,10 +105,14 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         """ implementation of action for http POST requests
         """
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
-        self.send_header('Accept', 'application/json')
-        self.end_headers()
+
+        self.server.counter += 1
+        if self.server.counter in self.server.error_requests:
+            message = json.dumps({"Error": "Internal Error"})
+            resp = 500
+            self.set_json_header(resp)
+            self.wfile.write(bytes(message, "utf8"))
+            return
 
         # print(self.headers)
         # print(self.path)
@@ -87,52 +125,93 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         if self.path.lower() == '/users/login' and \
            contenttype == 'application/json':
             self.server.userslogin.append(in_data)
-            dt = json.loads(in_data)
-            # print("Login: %s" % dt)
-            print("Login: %s" % dt["username"])
-            message = json.dumps(
-                {"id": "H3BxDGwgvnGbp5ZlhdksDKdIpljtEm8"
-                 "yilq1B7s7CygIaxbQRAMmZBgJ6JW2GjnX"})
+            try:
+                dt = json.loads(in_data)
+                # print("Login: %s" % dt)
+                print("Login: %s" % dt["username"])
+                if not dt["username"]:
+                    raise Exception("Empty username")
+                if not dt["password"]:
+                    raise Exception("Empty password")
+                message = json.dumps(
+                    {"id": "H3BxDGwgvnGbp5ZlhdksDKdIpljtEm8"
+                     "yilq1B7s7CygIaxbQRAMmZBgJ6JW2GjnX"})
+                resp = 200
+            except Exception as e:
+                message = json.dumps({"Error": str(e)})
+                resp = 400
+            self.set_json_header(resp)
 
         elif self.path.lower().startswith(
                 '/rawdatasets?access_token=') and \
                 contenttype == 'application/json':
-            self.server.datasets.append(in_data)
             # print(in_data)
             # print(type(in_data))
-            dt = json.loads(in_data)
-            # print("Datasets: %s" % dt)
-            print("RawDatasets: %s" % dt["pid"])
-            npid = self.server.pidprefix + dt["pid"]
-            dt["pid"] = npid
-            self.server.pid_dataset[npid] = json.dumps(dt)
-            message = "{}"
+            spath = self.path.lower().split("?access_token=")
+            try:
+                if not spath[-1]:
+                    raise Exception("Empty access_token")
+                self.server.datasets.append(in_data)
+                dt = json.loads(in_data)
+                # print("Datasets: %s" % dt)
+                print("RawDatasets: %s" % dt["pid"])
+                npid = self.server.pidprefix + dt["pid"]
+                dt["pid"] = npid
+                self.server.pid_dataset[npid] = json.dumps(dt)
+                message = "{}"
+                resp = 200
+            except Exception as e:
+                message = json.dumps({"Error": str(e)})
+                resp = 400
+            self.set_json_header(resp)
 
         elif self.path.lower().startswith(
                 '/datasets/') and \
                 contenttype == 'application/json':
             spath = self.path.lower().split("?access_token=")
-            if len(spath) == 2:
-                lpath = spath[0].split("/")
-                if len(lpath) == 4 and lpath[3] == "attachments":
-                    pid = lpath[2]
-                    pid = pid.replace("%2f", "/")
-                    print("Datasets Attachments: %s" % pid)
-                    self.server.attachments.append((pid, in_data))
-                    message = "{}"
+            resp = 200
+            try:
+                if not spath[-1]:
+                    raise Exception("Empty access_token")
+                if len(spath) == 2:
+                    lpath = spath[0].split("/")
+                    if len(lpath) == 4 and lpath[3] == "attachments":
+                        pid = lpath[2]
+                        pid = pid.replace("%2f", "/")
+                        print("Datasets Attachments: %s" % pid)
+                        self.server.attachments.append((pid, in_data))
+                        try:
+                            dt = json.loads(in_data)
+                            message = "{}"
+                        except Exception as e:
+                            message = json.dumps({"Error": str(e)})
+                            resp = 400
+            except Exception as e:
+                message = json.dumps({"Error": str(e)})
+                resp = 400
+            self.set_json_header(resp)
         elif self.path.lower().startswith(
                 '/origdatablocks?access_token=') and \
                 contenttype == 'application/json':
             self.server.origdatablocks.append(in_data)
-            dt = json.loads(in_data)
-            print("OrigDatablocks: %s" % dt['datasetId'])
-            npid = str(uuid.uuid4())
-            dt["id"] = npid
-            self.server.id_origdatablock[npid] = json.dumps(dt)
-            message = "{}"
-            message = "{}"
+            spath = self.path.lower().split("?access_token=")
+            try:
+                if not spath[-1]:
+                    raise Exception("Empty access_token")
+                dt = json.loads(in_data)
+                print("OrigDatablocks: %s" % dt['datasetId'])
+                npid = str(uuid.uuid4())
+                dt["id"] = npid
+                self.server.id_origdatablock[npid] = json.dumps(dt)
+                message = "{}"
+                resp = 200
+            except Exception as e:
+                message = json.dumps({"Error": str(e)})
+                resp = 400
+            self.set_json_header(resp)
 
         else:
+            self.set_json_header()
             self.server.others.append(in_data)
             print("Others: %s" % str(in_data))
 
@@ -142,6 +221,14 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         """ implementation of action for http GET requests
         """
 
+        self.server.counter += 1
+        if self.server.counter in self.server.error_requests:
+            message = json.dumps({"Error": "Internal Error"})
+            resp = 500
+            self.set_html_header(resp)
+            self.wfile.write(bytes(message, "utf8"))
+            return
+
         message = "SciCat mock server for tests!"
         path = self.path
         if "?access_token=" in path:
@@ -151,60 +238,70 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         else:
             spath = [path]
         dspath = spath[0].split("/")
+        try:
+            if not spath[-1]:
+                raise Exception("Empty access_token")
 
-        if len(dspath) > 2 and dspath[1].lower() == "rawdatasets":
-            pid = dspath[2].replace("%2F", "/")
-            if len(dspath) == 4 and dspath[3].lower() == "exists":
-                message = json.dumps(
-                    {'exists': (pid in self.server.pid_dataset.keys())})
-            elif len(dspath) == 3:
-                message = self.server.pid_dataset[pid]
-        elif len(dspath) > 2 and dspath[1].lower() == "proposals":
-            pid = dspath[2].replace("%2F", "/")
-            if len(dspath) == 4 and dspath[3].lower() == "exists":
-                message = json.dumps(
-                    {'exists': (pid in self.server.pid_proposal.keys())})
-            elif len(dspath) == 3:
-                message = self.server.pid_proposal[pid]
-        elif len(dspath) > 2 and dspath[1].lower() == "origdatablocks":
-            pid = requests.utils.unquote(dspath[2])
-            if len(dspath) == 4 and dspath[3].lower() == "exists":
+            if len(dspath) > 2 and dspath[1].lower() == "rawdatasets":
                 pid = dspath[2].replace("%2F", "/")
-                message = json.dumps(
-                    {'exists': (pid in self.server.id_origdatablock.keys())})
-            elif len(dspath) == 3 and \
-                    pid.startswith('findOne?filter={"where"'):
-                where = json.loads(pid[15:])["where"]
-                if "datasetId" in where.keys():
-                    pid = where["datasetId"]
-                    pid = pid.replace("%2F", "/")
-                    found = False
-                    for odb in self.server.id_origdatablock.values():
-                        jodb = json.loads(odb)
-                        if "datasetId" in jodb.keys() and \
-                           jodb["datasetId"] == pid:
-                            message = odb
-                            found = True
-                            # print("found", pid )
-                            break
-                if not found:
-                    self.send_error(
-                        404, 'Unknown "OrigDatablock" id "undefined"')
-                    return
-            elif len(dspath) == 3:
+                if len(dspath) == 4 and dspath[3].lower() == "exists":
+                    message = json.dumps(
+                        {'exists': (pid in self.server.pid_dataset.keys())})
+                elif len(dspath) == 3:
+                    message = self.server.pid_dataset[pid]
+            elif len(dspath) > 2 and dspath[1].lower() == "proposals":
                 pid = dspath[2].replace("%2F", "/")
-                message = self.server.id_origdatablock[pid]
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
+                if len(dspath) == 4 and dspath[3].lower() == "exists":
+                    message = json.dumps(
+                        {'exists': (pid in self.server.pid_proposal.keys())})
+                elif len(dspath) == 3:
+                    message = self.server.pid_proposal[pid]
+            elif len(dspath) > 2 and dspath[1].lower() == "origdatablocks":
+                pid = requests.utils.unquote(dspath[2])
+                if len(dspath) == 4 and dspath[3].lower() == "exists":
+                    pid = dspath[2].replace("%2F", "/")
+                    message = json.dumps(
+                        {'exists':
+                         (pid in self.server.id_origdatablock.keys())})
+                elif len(dspath) == 3 and \
+                        pid.startswith('findOne?filter={"where"'):
+                    where = json.loads(pid[15:])["where"]
+                    if "datasetId" in where.keys():
+                        pid = where["datasetId"]
+                        pid = pid.replace("%2F", "/")
+                        found = False
+                        for odb in self.server.id_origdatablock.values():
+                            jodb = json.loads(odb)
+                            if "datasetId" in jodb.keys() and \
+                               jodb["datasetId"] == pid:
+                                message = odb
+                                found = True
+                                # print("found", pid )
+                                break
+                    if not found:
+                        self.send_error(
+                            404, 'Unknown "OrigDatablock" id "undefined"')
+                        return
+                elif len(dspath) == 3:
+                    pid = dspath[2].replace("%2F", "/")
+                    message = self.server.id_origdatablock[pid]
+            resp = 200
+        except Exception as e:
+            message = json.dumps({"Error": str(e)})
+            resp = 400
+        self.set_html_header(resp)
         self.wfile.write(bytes(message, "utf8"))
 
     def do_DELETE(self):
         """ implementation of action for http DELETE requests
         """
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
+        self.server.counter += 1
+        if self.server.counter in self.server.error_requests:
+            message = json.dumps({"Error": "Internal Error"})
+            resp = 500
+            self.set_html_header(resp)
+            self.wfile.write(bytes(message, "utf8"))
+            return
 
         message = "SciCat mock server for tests!"
         path = self.path
@@ -215,26 +312,34 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         else:
             spath = [path]
         dspath = spath[0].split("/")
+        try:
+            if not spath[-1]:
+                raise Exception("Empty access_token")
 
-        if len(dspath) > 2 and dspath[1].lower() == "rawdatasets":
-            pid = dspath[2].replace("%2F", "/")
-            if len(dspath) == 3:
-                if pid in self.server.pid_dataset.keys():
-                    self.server.pid_dataset.pop(pid)
-                    print("RawDatasets: delete %s" % pid)
-        elif len(dspath) > 2 and dspath[1].lower() == "proposals":
-            pid = dspath[2].replace("%2F", "/")
-            if len(dspath) == 3:
-                if pid in self.server.pid_proposal.keys():
-                    self.server.pid_proposal.pop(pid)
-                    print("Proposals: delete %s" % pid)
-        elif len(dspath) > 2 and dspath[1].lower() == "origdatablocks":
-            pid = dspath[2].replace("%2F", "/")
-            if len(dspath) == 3:
-                if pid in self.server.id_origdatablock.keys():
-                    dt = self.server.id_origdatablock.pop(pid)
-                    print("OrigDatablocks: delete %s"
-                          % json.loads(dt)['datasetId'])
+            if len(dspath) > 2 and dspath[1].lower() == "rawdatasets":
+                pid = dspath[2].replace("%2F", "/")
+                if len(dspath) == 3:
+                    if pid in self.server.pid_dataset.keys():
+                        self.server.pid_dataset.pop(pid)
+                        print("RawDatasets: delete %s" % pid)
+            elif len(dspath) > 2 and dspath[1].lower() == "proposals":
+                pid = dspath[2].replace("%2F", "/")
+                if len(dspath) == 3:
+                    if pid in self.server.pid_proposal.keys():
+                        self.server.pid_proposal.pop(pid)
+                        print("Proposals: delete %s" % pid)
+            elif len(dspath) > 2 and dspath[1].lower() == "origdatablocks":
+                pid = dspath[2].replace("%2F", "/")
+                if len(dspath) == 3:
+                    if pid in self.server.id_origdatablock.keys():
+                        dt = self.server.id_origdatablock.pop(pid)
+                        print("OrigDatablocks: delete %s"
+                              % json.loads(dt)['datasetId'])
+            resp = 200
+        except Exception as e:
+            message = json.dumps({"Error": str(e)})
+            resp = 400
+        self.set_html_header(resp)
         self.wfile.write(bytes(message, "utf8"))
 
 
@@ -264,6 +369,10 @@ class SciCatTestServer(HTTPServer):
         self.pid_proposal = {}
         #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with datablocks
         self.id_origdatablock = {}
+        #: (:obj:`int`) id counter
+        self.counter = 0
+        #: (:obj:`int`) request ids with error
+        self.error_requests = []
         #: (:obj:`str`) pid prefix
         self.pidprefix = "/"
         # self.pidprefix = "10.3204/"
@@ -277,6 +386,8 @@ class SciCatTestServer(HTTPServer):
         self.pid_dataset = {}
         self.pid_proposal = {}
         self.id_origdatablock = {}
+        self.counter = 0
+        self.error_requests = []
 
     def run(self):
         try:

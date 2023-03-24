@@ -918,6 +918,7 @@ class DatasetIngestor:
                     url=self.__proposalurl,
                     pid=bid.replace("/", "%2F"),
                     token=token))
+
             if resexists.ok:
                 pexists = json.loads(resexists.content)["exists"]
             else:
@@ -1287,7 +1288,8 @@ class DatasetIngestor:
                 raise Exception(
                     "Wrong SC proposalId %s for DESY beamtimeId %s in %s"
                     % (mt["proposalId"], self.__bid, metafile))
-            if not mt["pid"].startswith("%s/" % (self.__bid)):
+            if not mt['pid'] or \
+               not mt["pid"].startswith("%s/" % (self.__bid)):
                 raise Exception(
                     "Wrong pid %s for DESY beamtimeId %s in  %s"
                     % (mt["pid"], self.__bid, metafile))
@@ -1338,7 +1340,7 @@ class DatasetIngestor:
             with open(metafile) as fl:
                 smt = fl.read()
                 mt = json.loads(smt)
-            if not pid.startswith(self.__bid):
+            if not pid or not pid.startswith(self.__bid):
                 raise Exception(
                     "Wrong origdatablock datasetId %s for DESY beamtimeId "
                     "%s in  %s"
@@ -1371,7 +1373,7 @@ class DatasetIngestor:
                 smt = fl.read()
                 mt = json.loads(smt)
             if "datasetId" in mt:
-                if not pid.startswith(self.__bid):
+                if not pid or not pid.startswith(self.__bid):
                     raise Exception(
                         "Wrong attachment datasetId %s for DESY beamtimeId "
                         "%s in  %s"
@@ -1605,10 +1607,15 @@ class DatasetIngestor:
                 if ads and reingest_attachment:
                     if pid is None and adss and adss[0]:
                         pid = self._get_pid(adss[0])
-                    dastatus = self._ingest_attachment_metadata(
-                        ads, pid, token)
-                    get_logger().info(
-                        "DatasetIngestor: Ingest attachment: %s" % (ads))
+                    if not pid:
+                        get_logger().error(
+                            "DatasetIngestor: No dataset pid "
+                            "for the attachment found: %s" % (ads))
+                    else:
+                        dastatus = self._ingest_attachment_metadata(
+                            ads, pid, token)
+                        get_logger().info(
+                            "DatasetIngestor: Ingest attachment: %s" % (ads))
         mtmda = 0
         if ads:
             mtmda = os.path.getmtime(ads)

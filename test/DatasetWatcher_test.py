@@ -555,6 +555,226 @@ class DatasetWatcherTest(unittest.TestCase):
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_datasetfile_exist_wrong_username(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
+        btmeta = "beamtime-metadata-99001234.json"
+        dslist = "scicat-datasets-99001234.lst"
+        idslist = "scicat-ingested-datasets-99001234.lst"
+        wrongdslist = "scicat-datasets-99001235.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        wlsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                "config",
+                                wrongdslist)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'ingestor_username: ""\n' \
+            'scicat_url: "{url}"\n' \
+            'scicat_users_login_path: "Users/login"\n' \
+            'scicat_datasets_path: "RawDatasets"\n' \
+            'scicat_proposals_path: "Proposals"\n' \
+            'scicat_datablocks_path: "OrigDatablocks"\n' \
+            'log_generator_commands: true\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
+
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        logfname = "%s_%s.log" % (self.__class__.__name__, fun)
+        logfname1 = "%s_%s.log.1" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -f %s -r10 '
+                     % (cfgfname, logfname)).split(),
+                    ('scicat_dataset_ingestor --config %s --log-file %s '
+                     ' -r10 '
+                     % (cfgfname, logfname)).split()]
+        # commands.pop()
+        lastlog = None
+        try:
+            for cmd in commands:
+                time.sleep(1)
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                os.mkdir(fsubdirname3)
+                shutil.copy(source, fdirname)
+                shutil.copy(lsource, fsubdirname2)
+                shutil.copy(wlsource, fsubdirname)
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                self.__server.reset()
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                vl, er = self.runtest(cmd)
+                with open(logfname) as lfl:
+                    er = lfl.read()
+
+                if lastlog:
+                    with open(logfname1) as lfl:
+                        er2 = lfl.read()
+                    self.assertEqual(er2, lastlog)
+                lastlog = er
+
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                dseri = [ln for ln in seri if "DEBUG :" not in ln]
+                # print(vl)
+                # print(er)
+
+                # nodebug = "\n".join([ee for ee in er.split("\n")
+                #                      if (("DEBUG :" not in ee) and
+                #                          (not ee.startswith("127.0.0.1")))])
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                        '{basedir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir2} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Creating DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : DatasetWatcher: Adding watch {cnt5}: '
+                        '{dslist} {idslist}\n'
+                        'INFO : DatasetWatcher: Waiting datasets: '
+                        '[\'{sc1}\', \'{sc2}\']\n'
+                        'INFO : DatasetWatcher: Ingested datasets: []\n'
+                        'ERROR : DatasetIngestor: '
+                        '{{"Error": "Empty username"}}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
+                        'INFO : DatasetIngestor: Generating metadata: '
+                        '{sc1} {subdir2}/{sc1}.scan.json\n'
+                        'INFO : DatasetIngestor: Generating dataset command: '
+                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff -w 99001234-dmgt '
+                        '-b {btmeta} '
+                        '-p 99001234/myscan_00001'
+                        ' -r raw/special  --add-empty-units \n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-o {subdir2}/{sc1}.origdatablock.json  '
+                        '{subdir2}/{sc1} \n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc1}\n'
+                        'ERROR : DatasetIngestor: '
+                        '{{"Error": "Empty access_token"}}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
+                        'INFO : DatasetIngestor: Generating metadata: '
+                        '{sc2} {subdir2}/{sc2}.scan.json\n'
+                        'INFO : DatasetIngestor: Generating dataset command: '
+                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff -w 99001234-dmgt '
+                        '-b {btmeta} '
+                        '-p 99001234/myscan_00002'
+                        ' -r raw/special  --add-empty-units \n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        'p00dmgt,p00staff '
+                        '-o {subdir2}/{sc2}.origdatablock.json  '
+                        '{subdir2}/{sc2} \n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '/99001234/{sc2}\n'
+                        'ERROR : DatasetIngestor: '
+                        '{{"Error": "Empty access_token"}}\n'
+                        'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: '
+                        'Stopping ScanDirWatcher {btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Stopping DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt5}: '
+                        '{dslist}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                subdir=fsubdirname, subdir2=fsubdirname2,
+                                dslist=fdslist, idslist=fidslist,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                                cnt4=(cnt + 3), cnt5=(cnt + 4),
+                                sc1='myscan_00001', sc2='myscan_00002'),
+                        '\n'.join(dseri))
+                except Exception:
+                    print(er)
+                    raise
+                self.assertEqual(
+                    "Login: \n", vl)
+                self.assertEqual(len(self.__server.userslogin), 1)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 0)
+                self.assertEqual(len(self.__server.origdatablocks), 0)
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.exists(logfname):
+                os.remove(logfname)
+            if os.path.exists(logfname1):
+                os.remove(logfname1)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
     def test_datasetfile_add(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))
