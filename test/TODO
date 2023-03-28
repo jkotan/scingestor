@@ -3,16 +3,15 @@ TODO
 Tests for  scingestor/beamtimeWatcher.py:
 -----------------------------------------
 
-- WRONG path if check for errors in _find_bt_files() needed ?? disk error e.g. os.path.isdir("\0")    (SEP EXEC)
+- in _find_bt_files() WRONG path if check for errors  needed ?? disk error e.g. os.path.isdir("\0")    (SEP EXEC)
 
+- in _add_path() WRONG   add_watch() exception ???? REMOVE ???? (ASEC)
 
-- WRONG _add_path of add_watch() exception ???? REMOVE ???? (ASEC)
-- _add_base_path(self, path, split=True) when split base_path needed   ????
+- in _add_base_path(self, path, split=True) when split base_path needed   ????
 
-- WHEN no path in _add_base_path(self, path, split=True) when split ??
+- in _add_base_path(self, path, split=True) WHEN no path  when split ??
 
-- EXCEPTION in _add_base_path ???? if needed ????
-
+- in _add_base_path() EXCEPTION  ???? if needed ????
 
 
 - WRONG in start() when len(self.__wd_to_queue) == 0 ????
