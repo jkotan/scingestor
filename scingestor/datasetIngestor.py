@@ -147,7 +147,7 @@ class DatasetIngestor:
         #: (:obj:`bool`) oned metadata flag
         self.__oned = False
         #: (:obj:`int`) max oned size of metadata record
-        self.__max_oned_size = 1024
+        self.__max_oned_size = None
         #: (:obj:`bool`) override attachment signals flag
         self.__override = False
         #: (:obj:`bool`) log generator command flag
@@ -506,7 +506,7 @@ class DatasetIngestor:
                 self.__datasetcommandfile = \
                     self.__datasetcommandfile + self.__oned_switch
 
-        if self.__max_oned_size:
+        if self.__oned and self.__max_oned_size:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__max_oned_switch
