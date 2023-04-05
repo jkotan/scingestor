@@ -1633,6 +1633,9 @@ class DatasetWatcherFIOTest(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'oned_in_metadata: true\n' \
             'oned_dataset_generator_switch: " --oned "\n' \
+            'max_oned_size: 3\n' \
+            'max_oned_dataset_generator_switch: ' \
+            '" --max-oned-size {{maxonedsize}} "\n' \
             'master_file_extension_list:\n' \
             '  - "fio"\n' \
             'add_empty_units: False\n' \
@@ -1732,7 +1735,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '{subdir2}/{sc1}.fio -r raw/special  --oned  \n'
+                        '{subdir2}/{sc1}.fio -r raw/special  --oned  '
+                        '--max-oned-size 3  \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
@@ -1770,7 +1774,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '{subdir2}/{sc2}.fio -r raw/special  --oned  \n'
+                        '{subdir2}/{sc2}.fio -r raw/special  --oned  '
+                        '--max-oned-size 3  \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
@@ -1808,7 +1813,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '{subdir2}/{sc3}.fio -r raw/special  --oned  \n'
+                        '{subdir2}/{sc3}.fio -r raw/special  --oned  '
+                        '--max-oned-size 3  \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc3} {subdir2}/{sc3}.origdatablock.json\n'
@@ -1846,7 +1852,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '{subdir2}/{sc4}.fio -r raw/special  --oned  \n'
+                        '{subdir2}/{sc4}.fio -r raw/special  --oned  '
+                        '--max-oned-size 3  \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc4} {subdir2}/{sc4}.origdatablock.json\n'
@@ -1967,25 +1974,16 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                                  'unit': ''
                              },
                              'data': {
-                                 'bpm1c': [-1.0, -1.0, -1.0, -1.0, -1.0],
+                                 'bpm1c': [-1.0, -1.0],
                                  'exp_c02': [140.4539012230071,
-                                             43.03782737462626,
-                                             2.8750752655385,
-                                             32.14813145322391,
                                              133.6535350066115],
                                  'exp_c03': [3.6754749142642638,
-                                             51.76074517540757,
-                                             177.15589117792712,
-                                             52.376975207311894,
                                              2.9541814712878325],
-                                 'exp_mot04': [0.0, 1.0, 2.0, 3.0, 4.0],
-                                 'exp_t01': [0.5, 0.5, 0.5, 0.5, 0.5],
+                                 'exp_mot04': [0.0, 4.0],
+                                 'exp_t01': [0.5, 0.5],
                                  'p09/motor/exp.08/Position':
-                                 [1.0, 1.0, 1.0, 1.0, 1.0],
+                                 [1.0, 1.0],
                                  'timestamp': [2.284174680709839,
-                                               3.3944602012634277,
-                                               4.407033920288086,
-                                               5.524206161499023,
                                                6.656368255615234]
                              },
                              'parameters': {
@@ -1998,8 +1996,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                                      0.0024437328201669176,
                                      0.1910783136442638],
                                  'rois_p100k': [
-                                     228, 115, 238, 123, 227, 97, 252, 130,
-                                     238, 115, 248, 123],
+                                     228, 115, 238, 123, 227, 97, 252,
+                                     130, 238, 115, 248, 123],
                                  'sdd': None,
                                  'signalcounter': 'p100k_roi1',
                                  'ubmatrix':

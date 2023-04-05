@@ -27,6 +27,7 @@ The configuration written in YAML can contain the following variables
 * **chmod_json_files** *(str)* , default: `None`
 * **max_scandir_depth** *(int)*, default: `-1`
 * **oned_in_metadata** *(bool)* , default: `False`
+* **max_oned_size** *(int)* , default: `1024`
 * **scan_metadata_postfix** *(str)* , default: `".scan.json"`
 * **datablock_metadata_postfix** *(str)* , default: `".origdatablock.json"`
 * **attachment_metadata_postfix** *(str)* , default: `".attachment.json"`
@@ -47,6 +48,7 @@ The configuration written in YAML can contain the following variables
 * **chmod_generator_switch** *(str)* , default: `" -x {chmod} "`
 * **relative_path_generator_switch** *(str)* , default: `" -r {relpath} "`
 * **oned_dataset_generator_switch** *(str)* , default: `" --oned "`
+* **max_oned_dataset_generator_switch** *(str)* , default: `" --max-oned-size {maxonedsize} "`
 * **override_attachment_signals_generator_switch** *(bool)* , default: `" --override "`
 * **hidden_attributes_generator_switch** *(str)* , default: `" -n {hiddenattributes} "`
 * **hidden_attributes** *(str)* , default: `"nexdatas_source,nexdatas_strategy,units"`

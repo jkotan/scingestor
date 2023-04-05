@@ -2741,6 +2741,9 @@ class DatasetWatcherH5Test(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'max_oned_size: 3\n' \
+            'max_oned_dataset_generator_switch: ' \
+            '" --max-oned-size {{maxonedsize}} "\n' \
             'oned_in_metadata: true\n' \
             'oned_dataset_generator_switch: " --oned "\n' \
             'add_empty_units: false\n' \
@@ -2912,7 +2915,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '{subdir2}/{sc1}.nxs -r raw/special  --oned  \n'
+                        '{subdir2}/{sc1}.nxs -r raw/special  --oned  '
+                        '--max-oned-size 3  \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
@@ -2950,7 +2954,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '{subdir2}/{sc2}.nxs -r raw/special  --oned  \n'
+                        '{subdir2}/{sc2}.nxs -r raw/special  --oned  '
+                        '--max-oned-size 3  \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
@@ -2988,7 +2993,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '{subdir2}/{sc3}.nxs -r raw/special  --oned  \n'
+                        '{subdir2}/{sc3}.nxs -r raw/special  --oned  '
+                        '--max-oned-size 3  \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc3} {subdir2}/{sc3}.origdatablock.json\n'
@@ -3026,7 +3032,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '{subdir2}/{sc4}.nxs -r raw/special  --oned  \n'
+                        '{subdir2}/{sc4}.nxs -r raw/special  --oned  '
+                        '--max-oned-size 3  \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc4} {subdir2}/{sc4}.origdatablock.json\n'
@@ -3140,11 +3147,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                                   'shape': [1, 30]
                               },
                               'lk_spectrum': {
-                                  'value': spectrum,
+                                  'value': [spectrum[0], spectrum[-1]],
                                   'shape': [10]
                               },
                               'mot03': {
-                                  'value': mot03,
+                                  'value': [mot03[0], mot03[-1]],
                                   'shape': [10]
                               }
                           },
@@ -3158,7 +3165,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                                       'shape': [1, 30]
                                   },
                                   'spectrum': {
-                                      'value': spectrum,
+                                      'value': [spectrum[0], spectrum[-1]],
                                       'shape': [10]
                                   }
                               },
