@@ -1,8 +1,5 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "SCICAT_DATASET_INGESTOR" "1" "Feb 24, 2023" "0.5" "SciCat Dataset Ingestor"
-.SH NAME
-scicat_dataset_ingestor \- Server daemon to ingest SciCat RawDatasets
 .
 .nr rst2man-indent-level 0
 .
@@ -30,6 +27,9 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
+.TH "SCICAT_DATASET_INGESTOR" "1" "Apr 05, 2023" "0.6" "SciCat Dataset Ingestor"
+.SH NAME
+scicat_dataset_ingestor \- Server daemon to ingest SciCat RawDatasets
 .SH DESCRIPTION
 .sp
 BeamtimeWatcher service SciCat Dataset ingestor.
@@ -49,22 +49,22 @@ scicat_dataset_ingestor [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG] [\-f LOGFILE]
 .B Options:
 .INDENT 7.0
 .TP
-.B \-h\fP,\fB  \-\-help
+.B  \-h\fP,\fB  \-\-help
 show this help message and exit
 .TP
-.BI \-c \ CONFIG\fP,\fB \ \-\-configuration \ CONFIG
+.BI \-c \ CONFIG\fR,\fB \ \-\-configuration \ CONFIG
 configuration file name
 .TP
-.BI \-r \ RUNTIME\fP,\fB \ \-\-runtime \ RUNTIME
+.BI \-r \ RUNTIME\fR,\fB \ \-\-runtime \ RUNTIME
 stop program after runtime in seconds
 .TP
-.BI \-l \ LOG\fP,\fB \ \-\-log \ LOG
+.BI \-l \ LOG\fR,\fB \ \-\-log \ LOG
 logging level, i.e. debug, info, warning, error, critical
 .TP
-.BI \-f \ LOGFILE\fP,\fB \ \-\-log\-file \ LOGFILE
+.BI \-f \ LOGFILE\fR,\fB \ \-\-log\-file \ LOGFILE
 log file name
 .TP
-.B \-t\fP,\fB  \-\-timestamps
+.B  \-t\fP,\fB  \-\-timestamps
 timestamps in logs
 .UNINDENT
 .UNINDENT

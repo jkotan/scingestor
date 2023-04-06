@@ -146,6 +146,8 @@ class DatasetIngestor:
         self.__copymapfile = None
         #: (:obj:`bool`) oned metadata flag
         self.__oned = False
+        #: (:obj:`int`) max oned size of metadata record
+        self.__max_oned_size = None
         #: (:obj:`bool`) override attachment signals flag
         self.__override = False
         #: (:obj:`bool`) log generator command flag
@@ -201,7 +203,9 @@ class DatasetIngestor:
 
         #: (:obj:`str`) oned generator switch
         self.__oned_switch = " --oned "
-        #: (:obj:`str`) oned generator switch
+        #: (:obj:`str`) max oned size generator switch
+        self.__max_oned_switch = " --max-oned-size {maxonedsize} "
+        #: (:obj:`str`) copy map file generator switch
         self.__copymapfile_switch = " --copy-map-file {copymapfile} "
         #: (:obj:`str`) empty units generator switch
         self.__emptyunits_switch = " --add-empty-units "
@@ -360,6 +364,8 @@ class DatasetIngestor:
                     homepath=self.__homepath)
         if "oned_in_metadata" in self.__config.keys():
             self.__oned = self.__config["oned_in_metadata"]
+        if "max_oned_size" in self.__config.keys():
+            self.__max_oned_size = self.__config["max_oned_size"]
         if "override_attachment_signals" in self.__config.keys():
             self.__override = self.__config["override_attachment_signals"]
         if "log_generator_commands" in self.__config.keys():
@@ -431,6 +437,10 @@ class DatasetIngestor:
             self.__oned_switch = \
                 self.__config["oned_dataset_generator_switch"]
 
+        if "max_oned_dataset_generator_switch" in self.__config.keys():
+            self.__max_oned_switch = \
+                self.__config["max_oned_dataset_generator_switch"]
+
         if "override_attachment_signals_generator_switch" \
                 in self.__config.keys():
             self.__attachmentoverride_switch = \
@@ -495,6 +505,14 @@ class DatasetIngestor:
             if "file_dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommandfile = \
                     self.__datasetcommandfile + self.__oned_switch
+
+        if self.__oned and self.__max_oned_size:
+            if "dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommand = \
+                    self.__datasetcommand + self.__max_oned_switch
+            if "file_dataset_metadata_generator" not in self.__config.keys():
+                self.__datasetcommandfile = \
+                    self.__datasetcommandfile + self.__max_oned_switch
 
         if self.__emptyunits:
             if "dataset_metadata_generator" not in self.__config.keys():
@@ -570,6 +588,7 @@ class DatasetIngestor:
             "signals": self.__attachmentsignals,
             "axes": self.__attachmentaxes,
             "frame": self.__attachmentframe,
+            "maxonedsize": self.__max_oned_size,
         }
 
         get_logger().debug(
