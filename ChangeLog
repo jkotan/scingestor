@@ -1,3 +1,7 @@
+2023-04-06 Jan Kotanski <jan.kotanski@desy.de>
+	* add max_oned_size and max_oned_dataset_generator_switch configuration variables(#227)
+	* tagged as 0.6.0
+
 2023-03-23 Jan Kotanski <jan.kotanski@desy.de>
 	* execute generator commands as a shell process (#221)
 	* tagged as 0.5.4
