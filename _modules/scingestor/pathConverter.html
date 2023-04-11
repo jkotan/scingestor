@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>scingestor.pathConverter &#8212; SciCat Dataset Ingestor 0.5.1 documentation</title>
+    <title>scingestor.pathConverter &#8212; SciCat Dataset Ingestor 0.6.0 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -93,9 +93,9 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__notify_core_path</span><span class="p">[</span><span class="n">path</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__bpath</span><span class="p">):</span>
             <span class="n">cpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__corepath</span> <span class="o">+</span> <span class="n">path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__bpath</span><span class="p">):]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__notify_core_path</span><span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpath</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__core_notify_path</span><span class="p">[</span><span class="n">cpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span>
-            <span class="k">return</span> <span class="n">cpath</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__notify_core_path</span><span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpath</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">cpath</span>
         <span class="k">return</span> <span class="n">path</span></div>
 
 <div class="viewcode-block" id="PathConverter.from_core"><a class="viewcode-back" href="../../scingestor.html#scingestor.pathConverter.PathConverter.from_core">[docs]</a>    <span class="k">def</span> <span class="nf">from_core</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
@@ -112,9 +112,9 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__core_notify_path</span><span class="p">[</span><span class="n">path</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__corepath</span><span class="p">):</span>
             <span class="n">bpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bpath</span> <span class="o">+</span> <span class="n">path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__corepath</span><span class="p">):]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__core_notify_path</span><span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">=</span> <span class="n">bpath</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__notify_core_path</span><span class="p">[</span><span class="n">bpath</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span>
-            <span class="k">return</span> <span class="n">bpath</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__core_notify_path</span><span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">=</span> <span class="n">bpath</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">bpath</span>
         <span class="k">return</span> <span class="n">path</span></div></div>
 </pre></div>
 
