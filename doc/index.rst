@@ -218,7 +218,7 @@ or in your pip environment by
 Debian and Ubuntu packages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Debian ``bullseye``, ``buster`` or Ubuntu ``jammy``, ``focal`` packages
+Debian ``bookworm``, ``bullseye``, ``buster`` or Ubuntu ``lunar``, ``jammy``, ``focal`` packages
 can be found in the HDRI repository.
 
 To install the debian packages, add the PGP repository key
@@ -229,12 +229,12 @@ To install the debian packages, add the PGP repository key
    curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
    chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
 
-and then download the corresponding source list, e.g. for ``bullseye``
+and then download the corresponding source list, e.g. for ``bookworm``
 
 ::
 
    cd /etc/apt/sources.list.d
-   wget http://repos.pni-hdri.de/bullseye-pni-hdri.list
+   wget http://repos.pni-hdri.de/bookworm-pni-hdri.list
 
 or ``jammy``
 
