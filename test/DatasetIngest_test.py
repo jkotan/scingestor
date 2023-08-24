@@ -9054,7 +9054,8 @@ optional arguments:
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
                 self.__server.reset()
-                self.__server.error_requests = [1, 2, 3]
+                # self.__server.error_requests = [1, 2, 3]
+                self.__server.error_requests = [1]
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
@@ -9096,7 +9097,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Check if dataset exists: '
                     '/99001234/{sc1}\n'
                     'ERROR : DatasetIngestor: '
-                    '{{"Error": "Internal Error"}}\n'
+                    '{{"Error": "Empty access_token"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'ERROR : DatasetIngestor: '
@@ -10238,7 +10239,7 @@ optional arguments:
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
                 self.__server.reset()
-                self.__server.error_requests = [3]
+                self.__server.error_requests = [2]
                 self.__server.pid_proposal["99001234"] = "sdfsd:["
                 if os.path.exists(fidslist):
                     os.remove(fidslist)

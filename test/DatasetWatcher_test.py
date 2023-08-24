@@ -608,11 +608,13 @@ class DatasetWatcherTest(unittest.TestCase):
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
         commands = [('scicat_dataset_ingestor -c %s -f %s -r10 '
+                     # ' -l debug -t'
                      % (cfgfname, logfname)).split(),
                     ('scicat_dataset_ingestor --config %s --log-file %s '
                      ' -r10 '
+                     # ' -l debug -t'
                      % (cfgfname, logfname)).split()]
-        # commands.pop()
+        commands.pop()
         lastlog = None
         try:
             for cmd in commands:

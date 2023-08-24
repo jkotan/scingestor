@@ -244,10 +244,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
 
             if len(dspath) > 2 and dspath[1].lower() == "rawdatasets":
                 pid = dspath[2].replace("%2F", "/")
-                if len(dspath) == 4 and dspath[3].lower() == "exists":
-                    message = json.dumps(
-                        {'exists': (pid in self.server.pid_dataset.keys())})
-                elif len(dspath) == 3:
+                if len(dspath) == 3:
                     if pid in self.server.pid_dataset:
                         message = self.server.pid_dataset[pid]
                     else:
@@ -263,41 +260,14 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     message = json.dumps(odbs)
             elif len(dspath) > 2 and dspath[1].lower() == "proposals":
                 pid = dspath[2].replace("%2F", "/")
-                if len(dspath) == 4 and dspath[3].lower() == "exists":
-                    message = json.dumps(
-                        {'exists': (pid in self.server.pid_proposal.keys())})
-                elif len(dspath) == 3:
+                if len(dspath) == 3:
                     if pid in self.server.pid_proposal:
                         message = self.server.pid_proposal[pid]
                     else:
                         message = ''
             elif len(dspath) > 2 and dspath[1].lower() == "origdatablocks":
                 pid = requests.utils.unquote(dspath[2])
-                if len(dspath) == 4 and dspath[3].lower() == "exists":
-                    pid = dspath[2].replace("%2F", "/")
-                    message = json.dumps(
-                        {'exists':
-                         (pid in self.server.id_origdatablock.keys())})
-                elif len(dspath) == 3 and \
-                        pid.startswith('findOne?filter={"where"'):
-                    where = json.loads(pid[15:])["where"]
-                    if "datasetId" in where.keys():
-                        pid = where["datasetId"]
-                        pid = pid.replace("%2F", "/")
-                        found = False
-                        for odb in self.server.id_origdatablock.values():
-                            jodb = json.loads(odb)
-                            if "datasetId" in jodb.keys() and \
-                               jodb["datasetId"] == pid:
-                                message = odb
-                                found = True
-                                # print("found", pid )
-                                break
-                    if not found:
-                        self.send_error(
-                            404, 'Unknown "OrigDatablock" id "undefined"')
-                        return
-                elif len(dspath) == 3:
+                if len(dspath) == 3:
                     pid = dspath[2].replace("%2F", "/")
                     if pid in self.server.id_origdatablock:
                         message = self.server.id_origdatablock[pid]

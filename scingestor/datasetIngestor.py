@@ -765,7 +765,6 @@ class DatasetIngestor:
         :returns: a file name of generate file
         :rtype: :obj:`str`
         """
-        # get_logger().info("REGET %s" % force)
         mfilename = "{metapath}/{scanname}{datablockpostfix}".format(
             **self.__dctfmt)
         get_logger().info(
@@ -824,11 +823,8 @@ class DatasetIngestor:
             except Exception as e:
                 get_logger().warning('%s: %s' % (scan, str(e)))
                 dnwmeta = None
-            # print("M2", dnwmeta)
             if dnwmeta is not None:
                 if not self._metadataEqual(dmeta, dnwmeta) or force:
-                    # get_logger().info("M1 %s %s" % (str(dmeta), force))
-                    # get_logger().info("M2 %s" % str(dnwmeta))
                     get_logger().info(
                         'DatasetIngestor: '
                         'Generating origdatablock metadata: %s %s' % (
@@ -945,7 +941,9 @@ class DatasetIngestor:
             if resexists.ok:
                 pexists = bool(resexists.content)
             else:
-                raise Exception("Proposal %s: %s" % (bid, resexists.text))
+                raise Exception(
+                    "Proposal %s: %s"
+                    % (bid, resexists.text or '{\"exists\": false}'))
             if pexists:
                 resget = resexists
                 if resget.ok:
@@ -967,7 +965,8 @@ class DatasetIngestor:
                     raise Exception(
                         "Proposal %s: %s" % (bid, resget.text))
             else:
-                raise Exception("Proposal %s: %s" % (bid, resexists.text))
+                raise Exception("Proposal %s: %s" %
+                                (bid, resexists.text or '{\"exists\": false}'))
         except Exception as e:
             get_logger().warning('%s' % (str(e)))
         return self.__meta
@@ -1090,10 +1089,17 @@ class DatasetIngestor:
                         pid=pid.replace("/", "%2F")),
                     params={"access_token": token}
                 )
-                if resexists.ok and hasattr(resexists, "content"):
-                    checking = False
-                else:
-                    time.sleep(0.1)
+                if hasattr(resexists, "content"):
+                    try:
+                        json.loads(resexists.content)
+                        checking = False
+                    except Exception:
+                        time.sleep(0.1)
+                        if resexists.ok and hasattr(resexists, "content") and \
+                           not bool(resexists.content):
+                            checking = False
+                        else:
+                            time.sleep(0.1)
                 if counter == self.__maxcounter:
                     checking = False
                 counter += 1
@@ -1222,34 +1228,6 @@ class DatasetIngestor:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
         return False
-
-    def _get_id_first_origdatablock(self, datasetid, token):
-        """ get id of first origdatablock with datasetid
-
-        :param datasetid: dataset id
-        :type datasetid: :obj:`str`
-        :param token: ingestor token
-        :type token: :obj:`str`
-        :returns: origdatablock id
-        :rtype: :obj:`str`
-        """
-        try:
-            where = requests.utils.quote(
-                '{"where": {"datasetId":"%s"}}'
-                % datasetid.replace("/", "%2F"))
-            self.__headers["Authorization"] = "Bearer {}".format(token)
-            response = requests.get(
-                self.__datablockurl + "/findOne",
-                params={"access_token": token,
-                        "filter": where},
-                headers=self.__headers)
-            if response.ok:
-                js = response.json()
-                return js['id']
-        except Exception as e:
-            get_logger().error(
-                'DatasetIngestor: %s' % (str(e)))
-        return None
 
     def _get_origdatablocks(self, datasetid, token):
         """ get origdatablocks with datasetid
