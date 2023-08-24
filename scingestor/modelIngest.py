@@ -155,9 +155,12 @@ class ModelIngest:
         :returns: rewquest startus
         :rtype: :obj:`bool`
         """
+        self.__headers["Authorization"] = "Bearer {}".format(token)
+        # print("ingest", self.__modelurl)
         response = requests.post(
-            "%s?access_token=%s" % (self.__modelurl, token),
+            self.__modelurl,
             headers=self.__headers,
+            params={"access_token": token},
             data=metadata)
         if not response.ok:
             raise Exception("%s" % response.text)

@@ -248,14 +248,29 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     message = json.dumps(
                         {'exists': (pid in self.server.pid_dataset.keys())})
                 elif len(dspath) == 3:
-                    message = self.server.pid_dataset[pid]
+                    if pid in self.server.pid_dataset:
+                        message = self.server.pid_dataset[pid]
+                    else:
+                        message = ''
+                elif (len(dspath) == 4 and
+                      dspath[3].lower() == "origdatablocks"):
+                    odbs = []
+                    for odb in self.server.id_origdatablock.values():
+                        jodb = json.loads(odb)
+                        if "datasetId" in jodb.keys() and \
+                           jodb["datasetId"] == pid:
+                            odbs.append(jodb)
+                    message = json.dumps(odbs)
             elif len(dspath) > 2 and dspath[1].lower() == "proposals":
                 pid = dspath[2].replace("%2F", "/")
                 if len(dspath) == 4 and dspath[3].lower() == "exists":
                     message = json.dumps(
                         {'exists': (pid in self.server.pid_proposal.keys())})
                 elif len(dspath) == 3:
-                    message = self.server.pid_proposal[pid]
+                    if pid in self.server.pid_proposal:
+                        message = self.server.pid_proposal[pid]
+                    else:
+                        message = ''
             elif len(dspath) > 2 and dspath[1].lower() == "origdatablocks":
                 pid = requests.utils.unquote(dspath[2])
                 if len(dspath) == 4 and dspath[3].lower() == "exists":
@@ -284,7 +299,10 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                         return
                 elif len(dspath) == 3:
                     pid = dspath[2].replace("%2F", "/")
-                    message = self.server.id_origdatablock[pid]
+                    if pid in self.server.id_origdatablock:
+                        message = self.server.id_origdatablock[pid]
+                    else:
+                        message = ""
             resp = 200
         except Exception as e:
             message = json.dumps({"Error": str(e)})
