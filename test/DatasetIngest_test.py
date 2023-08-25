@@ -991,7 +991,7 @@ optional arguments:
                 self.assertEqual(len(self.__server.attachments), 1)
                 self.assertEqual(
                     self.__server.attachments[0][0],
-                    "/99001234/myscan_00002")
+                    "99001234/myscan_00002")
                 self.myAssertDict(
                     json.loads(self.__server.attachments[0][1]),
                     {'accessGroups': ['99001234-dmgt',
@@ -1789,7 +1789,7 @@ optional arguments:
                 self.assertEqual(len(self.__server.attachments), 1)
                 self.assertEqual(
                     self.__server.attachments[0][0],
-                    "/99001234/myscan_00002")
+                    "99001234/myscan_00002")
                 self.myAssertDict(
                     json.loads(self.__server.attachments[0][1]),
                     {'accessGroups': ['99001234-dmgt',
@@ -2446,7 +2446,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -2721,7 +2721,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -3030,7 +3030,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -3614,7 +3614,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001284/myscan_00001\n"
-                    "OrigDatablocks: delete /99001284/myscan_00002\n"
+                    "OrigDatablocks: delete 99001284/myscan_00002\n"
                     "OrigDatablocks: 99001284/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -4067,7 +4067,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -4358,7 +4358,7 @@ optional arguments:
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001/2\n"
                     "OrigDatablocks: 99001234/myscan_00001/2\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -4680,7 +4680,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -4957,7 +4957,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -5244,7 +5244,7 @@ optional arguments:
                     self.assertEqual(
                         "Login: ingestor\n"
                         "RawDatasets: 99001234/myscan_00002\n"
-                        "OrigDatablocks: delete /99001234/myscan_00002\n"
+                        "OrigDatablocks: delete 99001234/myscan_00002\n"
                         "OrigDatablocks: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
@@ -5587,7 +5587,7 @@ optional arguments:
                     self.assertEqual(
                         "Login: ingestor\n"
                         "RawDatasets: 99001234/myscan_00002\n"
-                        "OrigDatablocks: delete /99001234/myscan_00002\n"
+                        "OrigDatablocks: delete 99001234/myscan_00002\n"
                         "OrigDatablocks: 99001234/myscan_00002\n"
                         "Datasets Attachments: 99001234/myscan_00002\n",
                         vl)
@@ -5741,7 +5741,7 @@ optional arguments:
                     self.assertEqual(len(self.__server.attachments), 2)
                     self.assertEqual(
                         self.__server.attachments[0][0],
-                        "/99001234/myscan_00002")
+                        "99001234/myscan_00002")
                     self.myAssertDict(
                         json.loads(self.__server.attachments[0][1]),
                         {'accessGroups': ['99001234-dmgt',
@@ -5763,7 +5763,7 @@ optional arguments:
                          'UVORK5CYII='})
                     self.assertEqual(
                         self.__server.attachments[1][0],
-                        "/99001234/myscan_00002")
+                        "99001234/myscan_00002")
                     self.myAssertDict(
                         json.loads(self.__server.attachments[1][1]),
                         {'accessGroups': ['99001234-dmgt',
@@ -5971,7 +5971,7 @@ optional arguments:
                     self.assertEqual(
                         "Login: ingestor\n"
                         "RawDatasets: 99001234/myscan_00002\n"
-                        "OrigDatablocks: delete /99001234/myscan_00002\n"
+                        "OrigDatablocks: delete 99001234/myscan_00002\n"
                         "OrigDatablocks: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
@@ -6124,7 +6124,7 @@ optional arguments:
                     self.assertEqual(len(self.__server.attachments), 1)
                     self.assertEqual(
                         self.__server.attachments[0][0],
-                        "/99001234/myscan_00002")
+                        "99001234/myscan_00002")
                     self.myAssertDict(
                         json.loads(self.__server.attachments[0][1]),
                         {'accessGroups': ['99001234-dmgt',
@@ -6343,7 +6343,7 @@ optional arguments:
                     self.assertEqual(
                         "Login: ingestor\n"
                         "RawDatasets: 99001234/myscan_00002\n"
-                        "OrigDatablocks: delete /99001234/myscan_00002\n"
+                        "OrigDatablocks: delete 99001234/myscan_00002\n"
                         "OrigDatablocks: 99001234/myscan_00002\n"
                         "Datasets Attachments: 99001234/myscan_00002\n",
                         vl)
@@ -6497,7 +6497,7 @@ optional arguments:
                     self.assertEqual(len(self.__server.attachments), 1)
                     self.assertEqual(
                         self.__server.attachments[0][0],
-                        "/99001234/myscan_00002")
+                        "99001234/myscan_00002")
                     self.myAssertDict(
                         json.loads(self.__server.attachments[0][1]),
                         {'accessGroups': ['99001234-dmgt',
@@ -6684,7 +6684,7 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "OrigDatablocks: delete /99001234/myscan_00002\n"
+                        "OrigDatablocks: delete 99001234/myscan_00002\n"
                         "OrigDatablocks: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
@@ -9512,7 +9512,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)

@@ -248,7 +248,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     if pid in self.server.pid_dataset:
                         message = self.server.pid_dataset[pid]
                     else:
-                        message = ''
+                        message = ""
                 elif (len(dspath) == 4 and
                       dspath[3].lower() == "origdatablocks"):
                     odbs = []
@@ -362,7 +362,7 @@ class SciCatTestServer(HTTPServer):
         #: (:obj:`int`) request ids with error
         self.error_requests = []
         #: (:obj:`str`) pid prefix
-        self.pidprefix = "/"
+        self.pidprefix = ""
         # self.pidprefix = "10.3204/"
 
     def reset(self):

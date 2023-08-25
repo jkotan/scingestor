@@ -990,8 +990,12 @@ class DatasetIngestor:
         npid = mdic["pid"]
         ipid = mdct["pid"]
         while pexist:
+            npre = ""
+            if npid.startswith(self.__pidprefix):
+                npre = self.__pidprefix
+                npid = npid[len(npre):]
             spid = npid.split("/")
-            if len(spid) > 3:
+            if len(spid) > 2:
                 try:
                     ver = int(spid[-1])
                     spid[-1] = str(ver + 1)
@@ -999,14 +1003,14 @@ class DatasetIngestor:
                     spid.append("2")
             else:
                 spid.append("2")
-            npid = "/".join(spid)
+            npid = npre + "/".join(spid)
             if len(spid) > 0:
-                ipid = "/".join(spid[1:])
+                ipid = npre + "/".join(spid)
             resexists = requests.get(
                 "{url}/{pid}"
                 .format(
                     url=self.__dataseturl,
-                    pid=npid.replace("/", "%2F")),
+                    pid=(npre + npid.replace("/", "%2F"))),
                 params={"access_token": token})
             if resexists.ok:
                 pexist = bool(resexists.content)
