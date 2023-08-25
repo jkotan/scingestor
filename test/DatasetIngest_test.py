@@ -9682,7 +9682,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
@@ -9940,7 +9940,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
@@ -10213,7 +10213,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
@@ -10482,7 +10482,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
@@ -10755,7 +10755,7 @@ optional arguments:
             'scicat_url: "{url}"\n' \
             'ingestor_username: ""\n' \
             'ingest_dataset_attachment: true\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
@@ -10911,7 +10911,7 @@ optional arguments:
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
@@ -11125,7 +11125,7 @@ optional arguments:
             'scicat_url: "{url}"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(

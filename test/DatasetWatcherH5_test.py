@@ -5249,7 +5249,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'file_dataset_metadata_generator: "nxsfileinfo metadata ' \
@@ -5261,7 +5261,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'datablock_metadata_generator: "nxsfileinfo origdatablock ' \
             ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
             ' -x 0o662 ' \
-            ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} ' \
+            ' -p {{pidprefix}}{{beamtimeid}}/{{scanname}} ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt ' \
             ' -o {{scanpath}}/{{scanname}}{{datablockpostfix}} "\n' \
             'datablock_metadata_stream_generator: ' \
@@ -5269,7 +5269,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
             ' -x 0o662 ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt' \
-            ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} "\n' \
+            ' -p {{pidprefix}}{{beamtimeid}}/{{scanname}} "\n' \
             'datablock_metadata_generator_scanpath_postfix: '\
             '" {{scanpath}}/{{scanname}} "\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -5707,7 +5707,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingest_dataset_attachment: true\n' \
@@ -5975,7 +5975,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingest_dataset_attachment: true\n' \
@@ -6253,7 +6253,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingest_dataset_attachment: true\n' \
@@ -6684,7 +6684,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'oned_in_metadata: true\n' \
             'file_dataset_metadata_generator: "nxsfileinfo metadata ' \
@@ -6696,7 +6696,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             '{{scanpath}}/{{scanname}}.nxs"\n' \
             'datablock_metadata_generator: "nxsfileinfo origdatablock ' \
             ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
-            ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} ' \
+            ' -p {{pidprefix}}{{beamtimeid}}/{{scanname}} ' \
             ' -x 0o662 ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt ' \
             ' -o {{scanpath}}/{{scanname}}{{datablockpostfix}} "\n' \
@@ -6705,7 +6705,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt' \
             ' -x 0o662 ' \
-            ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} "\n' \
+            ' -p {{pidprefix}}{{beamtimeid}}/{{scanname}} "\n' \
             'datablock_metadata_generator_scanpath_postfix: '\
             ' " {{scanpath}}/{{scanname}}"\n' \
             'ingestor_var_dir: "{vardir}"\n' \

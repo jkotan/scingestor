@@ -109,7 +109,7 @@ class DatasetIngestor:
 
         #: (:obj:`str`) doi prefix
         self.__pidprefix = ""
-        # self.__pidprefix = "10.3204"
+        # self.__pidprefix = "10.3204/"
         #: (:obj:`str`) username
         self.__username = 'ingestor'
         #: (:obj:`str`) update strategy
@@ -123,7 +123,7 @@ class DatasetIngestor:
         #: (:obj:`str`) scicat users login
         self.__scicat_users_login = "Users/login"
         #: (:obj:`str`) scicat datasets class
-        self.__scicat_datasets = "RawDatasets"
+        self.__scicat_datasets = "Datasets"
         #: (:obj:`str`) scicat proposal class
         self.__scicat_proposals = "Proposals"
         #: (:obj:`str`) scicat datablock class
@@ -182,7 +182,7 @@ class DatasetIngestor:
         self.__datablockcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*{datablockpostfix},*{scanpostfix}," \
             "*{attachmentpostfix},*~ " \
-            " -p {pidprefix}/{beamtimeid}/{scanname} " \
+            " -p {pidprefix}{beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
             " -o {metapath}/{scanname}{datablockpostfix} "
@@ -192,7 +192,7 @@ class DatasetIngestor:
             "*{attachmentpostfix},*~ " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
-            " -p {pidprefix}/{beamtimeid}/{scanname} "
+            " -p {pidprefix}{beamtimeid}/{scanname} "
         #: (:obj:`str`) datablock path postfix
         self.__datablockscanpath = " {scanpath}/{scanname} "
         #: (:obj:`str`) attachment shell command
@@ -1076,7 +1076,7 @@ class DatasetIngestor:
         :rtype: :obj:`str`
         """
         try:
-            pid = "%s/%s" % (self.__pidprefix, mdct["pid"])
+            pid = "%s%s" % (self.__pidprefix, mdct["pid"])
             # check if dataset with the pid exists
             get_logger().info(
                 'DatasetIngestor: Check if dataset exists: %s' % (pid))
@@ -1341,7 +1341,7 @@ class DatasetIngestor:
         :rtype: :obj:`str`
         """
         try:
-            datasetid = "%s/%s" % (self.__pidprefix, pid)
+            datasetid = "%s%s" % (self.__pidprefix, pid)
             odbs = self._get_origdatablocks(datasetid, token) or []
             for odb in odbs:
                 if "id" in odb:
@@ -1370,8 +1370,8 @@ class DatasetIngestor:
                     "Wrong origdatablock datasetId %s for DESY beamtimeId "
                     "%s in  %s"
                     % (pid, self.__bid, metafile))
-            if mt["datasetId"] != "%s/%s" % (self.__pidprefix, pid):
-                mt["datasetId"] = "%s/%s" % (self.__pidprefix, pid)
+            if mt["datasetId"] != "%s%s" % (self.__pidprefix, pid):
+                mt["datasetId"] = "%s%s" % (self.__pidprefix, pid)
                 smt = json.dumps(mt)
                 with open(metafile, "w") as mf:
                     mf.write(smt)
@@ -1403,12 +1403,12 @@ class DatasetIngestor:
                         "Wrong attachment datasetId %s for DESY beamtimeId "
                         "%s in  %s"
                         % (pid, self.__bid, metafile))
-                if mt["datasetId"] != "%s/%s" % (self.__pidprefix, pid):
-                    mt["datasetId"] = "%s/%s" % (self.__pidprefix, pid)
+                if mt["datasetId"] != "%s%s" % (self.__pidprefix, pid):
+                    mt["datasetId"] = "%s%s" % (self.__pidprefix, pid)
                     smt = json.dumps(mt)
                     with open(metafile, "w") as mf:
                         mf.write(smt)
-            dsid = "%s/%s" % (self.__pidprefix, pid)
+            dsid = "%s%s" % (self.__pidprefix, pid)
             status = self._ingest_attachment(smt, dsid, token)
             if status:
                 return dsid

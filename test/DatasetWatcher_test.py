@@ -4371,7 +4371,7 @@ class DatasetWatcherTest(unittest.TestCase):
             ' -b {{beamtimefile}} -p {{beamtimeid}}/{{scanname}} "\n' \
             'datablock_metadata_generator: "nxsfileinfo origdatablock ' \
             ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
-            ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} ' \
+            ' -p {{pidprefix}}{{beamtimeid}}/{{scanname}} ' \
             ' -x 0o662 ' \
             ' -r {{relpath}} ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt ' \
@@ -4382,7 +4382,7 @@ class DatasetWatcherTest(unittest.TestCase):
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt' \
             ' -r {{relpath}} ' \
             ' -x 0o662 ' \
-            ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} "\n' \
+            ' -p {{pidprefix}}{{beamtimeid}}/{{scanname}} "\n' \
             'datablock_metadata_generator_scanpath_postfix: '\
             ' " {{scanpath}}/{{scanname}}"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
