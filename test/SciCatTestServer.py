@@ -71,7 +71,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         message = ""
 
         if self.path.lower().startswith(
-                '/rawdatasets/') and \
+                '/datasets/') and \
                 contenttype == 'application/json':
             self.server.datasets.append(in_data)
             # print(in_data)
@@ -143,7 +143,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             self.set_json_header(resp)
 
         elif self.path.lower().startswith(
-                '/rawdatasets?access_token=') and \
+                '/datasets?access_token=') and \
                 contenttype == 'application/json':
             # print(in_data)
             # print(type(in_data))
@@ -242,7 +242,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             if not spath[-1]:
                 raise Exception("Empty access_token")
 
-            if len(dspath) > 2 and dspath[1].lower() == "rawdatasets":
+            if len(dspath) > 2 and dspath[1].lower() == "datasets":
                 pid = dspath[2].replace("%2F", "/")
                 if len(dspath) == 3:
                     if pid in self.server.pid_dataset:
@@ -304,7 +304,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             if not spath[-1]:
                 raise Exception("Empty access_token")
 
-            if len(dspath) > 2 and dspath[1].lower() == "rawdatasets":
+            if len(dspath) > 2 and dspath[1].lower() == "datasets":
                 pid = dspath[2].replace("%2F", "/")
                 if len(dspath) == 3:
                     if pid in self.server.pid_dataset.keys():

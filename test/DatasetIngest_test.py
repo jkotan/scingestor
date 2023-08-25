@@ -351,15 +351,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -382,15 +382,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -404,9 +404,9 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -484,7 +484,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -495,7 +495,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -595,9 +595,9 @@ optional arguments:
                     'Generating origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -609,9 +609,9 @@ optional arguments:
                     'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -624,9 +624,9 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -704,7 +704,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -715,7 +715,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -835,15 +835,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -866,15 +866,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -890,10 +890,10 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n"
-                    "Datasets Attachments: /99001234/myscan_00002\n", vl)
+                    "OrigDatablocks: 99001234/myscan_00002\n"
+                    "Datasets Attachments: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -971,7 +971,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -982,7 +982,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1127,15 +1127,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -1158,15 +1158,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Internal Error"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -1190,7 +1190,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n", vl)
+                    "OrigDatablocks: 99001234/myscan_00001\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1239,7 +1239,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.assertEqual(len(self.__server.attachments), 0)
                 if os.path.isdir(fsubdirname):
@@ -1357,15 +1357,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -1388,15 +1388,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -1414,9 +1414,9 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1494,7 +1494,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -1505,7 +1505,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1633,15 +1633,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -1664,15 +1664,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -1688,10 +1688,10 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n"
-                    "Datasets Attachments: /99001234/myscan_00002\n", vl)
+                    "OrigDatablocks: 99001234/myscan_00002\n"
+                    "Datasets Attachments: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1769,7 +1769,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -1780,7 +1780,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1797,7 +1797,7 @@ optional arguments:
                                       '99001234-part',
                                       'p00dmgt',
                                       'p00staff'],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'ownerGroup': '99001234-dmgt',
                      'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                      'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
@@ -2168,7 +2168,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
@@ -2181,7 +2181,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
@@ -2265,7 +2265,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2280,7 +2280,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2413,12 +2413,12 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -2432,7 +2432,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -2447,7 +2447,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -2528,7 +2528,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2543,7 +2543,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2558,7 +2558,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2684,15 +2684,15 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -2706,7 +2706,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -2720,9 +2720,9 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: /99001234/myscan_00001\n"
+                    "RawDatasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -2810,7 +2810,7 @@ optional arguments:
                      'owner': 'NewOwner',
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '/99001234/myscan_00001',
+                     'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -2835,7 +2835,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2850,7 +2850,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2865,7 +2865,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2992,15 +2992,15 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Internal Error"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -3016,7 +3016,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -3031,7 +3031,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -3112,7 +3112,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3127,7 +3127,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3142,7 +3142,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3269,12 +3269,12 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Internal Error"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -3290,7 +3290,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -3306,7 +3306,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -3387,7 +3387,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3402,7 +3402,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3417,7 +3417,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3577,15 +3577,15 @@ optional arguments:
                     '-w 99001284-dmgt '
                     '-c 99001284-dmgt,99001284-clbt,99001284-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001284/myscan_00001  '
+                    '-p 99001284/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001284/{sc1}\n'
+                    '99001284/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001284/{sc1}\n'
+                    '99001284/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '/99001284/{sc1}\n'
+                    '99001284/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -3599,7 +3599,7 @@ optional arguments:
                     '-w 99001284-dmgt '
                     '-c 99001284-dmgt,99001284-clbt,99001284-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001284/myscan_00002  '
+                    '-p 99001284/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -3613,9 +3613,9 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: /99001284/myscan_00001\n"
+                    "RawDatasets: 99001284/myscan_00001\n"
                     "OrigDatablocks: delete /99001284/myscan_00002\n"
-                    "OrigDatablocks: /99001284/myscan_00002\n",
+                    "OrigDatablocks: 99001284/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -3703,7 +3703,7 @@ optional arguments:
                      'owner': 'NewOwner',
                      'ownerGroup': '99001284-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '/99001284/myscan_00001',
+                     'pid': '99001284/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
@@ -3728,7 +3728,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001284/myscan_00001',
+                     'datasetId': '99001284/myscan_00001',
                      'accessGroups': [
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
                          'p00dmgt', 'p00staff'],
@@ -3743,7 +3743,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001284/myscan_00002',
+                     'datasetId': '99001284/myscan_00002',
                      'accessGroups': [
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
                          'p00dmgt', 'p00staff'],
@@ -3758,7 +3758,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001284/myscan_00002',
+                     'datasetId': '99001284/myscan_00002',
                      'accessGroups': [
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
                          'p00dmgt', 'p00staff'],
@@ -4040,7 +4040,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
@@ -4053,7 +4053,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -4068,7 +4068,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -4149,7 +4149,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4164,7 +4164,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4179,7 +4179,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4306,14 +4306,14 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset with a new pid: '
-                    '/99001234/{sc1}/2\n'
+                    '99001234/{sc1}/2\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: '
@@ -4324,7 +4324,7 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
@@ -4342,7 +4342,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -4357,9 +4357,9 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001/2\n"
-                    "OrigDatablocks: /99001234/myscan_00001/2\n"
+                    "OrigDatablocks: 99001234/myscan_00001/2\n"
                     "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -4472,7 +4472,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4487,7 +4487,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4502,7 +4502,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001/2',
+                     'datasetId': '99001234/myscan_00001/2',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4517,7 +4517,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4645,12 +4645,12 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Internal Error"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -4666,7 +4666,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -4681,7 +4681,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -4762,7 +4762,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4777,7 +4777,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4792,7 +4792,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4920,14 +4920,14 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
-                    'Post the dataset with a new pid: /99001234/{sc1}/2\n'
+                    'Post the dataset with a new pid: 99001234/{sc1}/2\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Internal Error"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -4943,7 +4943,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -4958,7 +4958,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -5039,7 +5039,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -5054,7 +5054,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -5069,7 +5069,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -5206,7 +5206,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
@@ -5220,18 +5220,18 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Patch scientificMetadata of dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Ingest origdatablock:'
@@ -5243,9 +5243,9 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: /99001234/myscan_00002\n"
+                        "RawDatasets: 99001234/myscan_00002\n"
                         "OrigDatablocks: delete /99001234/myscan_00002\n"
-                        "OrigDatablocks: /99001234/myscan_00002\n",
+                        "OrigDatablocks: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -5332,7 +5332,7 @@ optional arguments:
                          'techniques': [],
                          'owner': 'NewOwner',
                          'ownerEmail': 'peter.smithson@fake.de',
-                         'pid': '/99001234/myscan_00002',
+                         'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -5358,7 +5358,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -5373,7 +5373,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -5388,7 +5388,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -5547,7 +5547,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
@@ -5561,18 +5561,18 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Patch scientificMetadata of dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Ingest origdatablock:'
@@ -5586,10 +5586,10 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: /99001234/myscan_00002\n"
+                        "RawDatasets: 99001234/myscan_00002\n"
                         "OrigDatablocks: delete /99001234/myscan_00002\n"
-                        "OrigDatablocks: /99001234/myscan_00002\n"
-                        "Datasets Attachments: /99001234/myscan_00002\n",
+                        "OrigDatablocks: 99001234/myscan_00002\n"
+                        "Datasets Attachments: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -5676,7 +5676,7 @@ optional arguments:
                          'techniques': [],
                          'owner': 'NewOwner',
                          'ownerEmail': 'peter.smithson@fake.de',
-                         'pid': '/99001234/myscan_00002',
+                         'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -5702,7 +5702,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -5717,7 +5717,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -5732,7 +5732,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -5933,7 +5933,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
@@ -5947,18 +5947,18 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Patch scientificMetadata of dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Ingest origdatablock:'
@@ -5970,9 +5970,9 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: /99001234/myscan_00002\n"
+                        "RawDatasets: 99001234/myscan_00002\n"
                         "OrigDatablocks: delete /99001234/myscan_00002\n"
-                        "OrigDatablocks: /99001234/myscan_00002\n",
+                        "OrigDatablocks: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -6059,7 +6059,7 @@ optional arguments:
                          'techniques': [],
                          'owner': 'NewOwner',
                          'ownerEmail': 'peter.smithson@fake.de',
-                         'pid': '/99001234/myscan_00002',
+                         'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -6085,7 +6085,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6100,7 +6100,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6115,7 +6115,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6293,7 +6293,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
@@ -6307,7 +6307,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
@@ -6323,12 +6323,12 @@ optional arguments:
                         '-o {subdir2}/{sc2}.attachment.json  '
                         '{subdir2}/{sc2}.png\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Patch scientificMetadata of dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Ingest origdatablock:'
@@ -6342,10 +6342,10 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: /99001234/myscan_00002\n"
+                        "RawDatasets: 99001234/myscan_00002\n"
                         "OrigDatablocks: delete /99001234/myscan_00002\n"
-                        "OrigDatablocks: /99001234/myscan_00002\n"
-                        "Datasets Attachments: /99001234/myscan_00002\n",
+                        "OrigDatablocks: 99001234/myscan_00002\n"
+                        "Datasets Attachments: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -6432,7 +6432,7 @@ optional arguments:
                          'techniques': [],
                          'owner': 'NewOwner',
                          'ownerEmail': 'peter.smithson@fake.de',
-                         'pid': '/99001234/myscan_00002',
+                         'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -6458,7 +6458,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6473,7 +6473,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6488,7 +6488,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6654,7 +6654,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         # 'INFO : DatasetIngestor: Ingest dataset: '
                         # '{subdir2}/{sc1}.scan.json\n'
@@ -6670,7 +6670,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
@@ -6685,7 +6685,7 @@ optional arguments:
                     self.assertEqual(
                         "Login: ingestor\n"
                         "OrigDatablocks: delete /99001234/myscan_00002\n"
-                        "OrigDatablocks: /99001234/myscan_00002\n",
+                        "OrigDatablocks: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -6768,7 +6768,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6783,7 +6783,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6798,7 +6798,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6940,7 +6940,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         # 'INFO : DatasetIngestor: Ingest dataset: '
                         # '{subdir2}/{sc1}.scan.json\n'
@@ -6956,18 +6956,18 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Post the dataset with a new pid: '
-                        '/99001234/{sc2}/2\n'
+                        '99001234/{sc2}/2\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: '
@@ -6978,7 +6978,7 @@ optional arguments:
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
@@ -6993,7 +6993,7 @@ optional arguments:
                     self.assertEqual(
                         "Login: ingestor\n"
                         "RawDatasets: 99001234/myscan_00002/2\n"
-                        "OrigDatablocks: /99001234/myscan_00002/2\n",
+                        "OrigDatablocks: 99001234/myscan_00002/2\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -7106,7 +7106,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -7121,7 +7121,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -7136,7 +7136,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002/2',
+                         'datasetId': '99001234/myscan_00002/2',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -7278,7 +7278,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         # 'INFO : DatasetIngestor: Ingest dataset: '
                         # '{subdir2}/{sc1}.scan.json\n'
@@ -7294,18 +7294,18 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Post the dataset with a new pid: '
-                        '/99001234/{sc2}/2\n'
+                        '99001234/{sc2}/2\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: '
@@ -7316,7 +7316,7 @@ optional arguments:
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
@@ -7331,7 +7331,7 @@ optional arguments:
                     self.assertEqual(
                         "Login: ingestor\n"
                         "RawDatasets: 99001234/myscan_00002/2\n"
-                        "OrigDatablocks: /99001234/myscan_00002/2\n",
+                        "OrigDatablocks: 99001234/myscan_00002/2\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -7444,7 +7444,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -7459,7 +7459,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -7474,7 +7474,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002/2',
+                         'datasetId': '99001234/myscan_00002/2',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -7588,15 +7588,15 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -7610,7 +7610,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
@@ -7619,7 +7619,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: /99001234/myscan_00001\n",
+                    "RawDatasets: 99001234/myscan_00001\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -7704,7 +7704,7 @@ optional arguments:
                      'owner': 'Smithson',
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '/99001234/myscan_00001',
+                     'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -7730,7 +7730,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -7745,7 +7745,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -7854,7 +7854,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
@@ -7867,7 +7867,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
@@ -7956,7 +7956,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -7971,7 +7971,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8080,15 +8080,15 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -8102,7 +8102,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
@@ -8111,7 +8111,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: /99001234/myscan_00001\n",
+                    "RawDatasets: 99001234/myscan_00001\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -8196,7 +8196,7 @@ optional arguments:
                      'owner': 'Smithson',
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '/99001234/myscan_00001',
+                     'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -8222,7 +8222,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8237,7 +8237,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8346,15 +8346,15 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Post the dataset with a new pid: '
-                    '/99001234/{sc1}/2\n'
+                    '99001234/{sc1}/2\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: '
@@ -8365,7 +8365,7 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
@@ -8383,7 +8383,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
@@ -8393,7 +8393,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001/2\n"
-                    "OrigDatablocks: /99001234/myscan_00001/2\n",
+                    "OrigDatablocks: 99001234/myscan_00001/2\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -8504,7 +8504,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8519,7 +8519,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8534,7 +8534,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001/2',
+                     'datasetId': '99001234/myscan_00001/2',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8638,15 +8638,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -8669,15 +8669,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -8691,9 +8691,9 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
                     "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -8771,7 +8771,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -8782,7 +8782,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8889,15 +8889,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Internal Error"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -8926,15 +8926,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'ERROR : DatasetIngestor: '
@@ -9089,13 +9089,13 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Empty access_token"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -9124,13 +9124,13 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Empty access_token"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -9243,7 +9243,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
@@ -9256,7 +9256,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
@@ -9340,7 +9340,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -9355,7 +9355,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -9479,12 +9479,12 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -9498,7 +9498,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -9513,7 +9513,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -9594,7 +9594,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -9609,7 +9609,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -9624,7 +9624,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
