@@ -371,9 +371,9 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [("scicat_ingest -m RawDatasets -c %s  "
+        commands = [("scicat_ingest -m Datasets -c %s  "
                      % (cfgfname)).split(),
-                    ("scicat_ingest --model RawDatasets --config %s "
+                    ("scicat_ingest --model Datasets --config %s "
                      % (cfgfname)).split()]
         # commands.pop()
         try:
@@ -388,9 +388,9 @@ optional arguments:
                 # print(er)
                 # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
                 self.assertEqual(
-                    "INFO : ModelIngestor: Post the RawDatasets from "
+                    "INFO : ModelIngestor: Post the Datasets from "
                     "ModelIngestTest_test_modelfile_00001.dataset.json\n"
-                    "INFO : ModelIngestor: Post the RawDatasets from "
+                    "INFO : ModelIngestor: Post the Datasets from "
                     "ModelIngestTest_test_modelfile_00002.dataset.json\n",
                     "\n".join(seri))
                 self.assertEqual(
@@ -556,9 +556,9 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [("scicat_ingest -m RawDatasets -c %s  "
+        commands = [("scicat_ingest -m Datasets -c %s  "
                      % (cfgfname)).split(),
-                    ("scicat_ingest --model RawDatasets --config %s "
+                    ("scicat_ingest --model Datasets --config %s "
                      % (cfgfname)).split()]
         # commands.pop()
         try:
@@ -574,11 +574,11 @@ optional arguments:
                 # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
                 self.assertEqual(
                     'ERROR : ModelIngestor: {"Error": "Empty username"}\n'
-                    "INFO : ModelIngestor: Post the RawDatasets from "
+                    "INFO : ModelIngestor: Post the Datasets from "
                     "ModelIngestTest_test_modelfile_wrong_username_00001."
                     "dataset.json\n"
                     'ERROR : ModelIngestor: {"Error": "Empty access_token"}\n'
-                    "INFO : ModelIngestor: Post the RawDatasets from "
+                    "INFO : ModelIngestor: Post the Datasets from "
                     "ModelIngestTest_test_modelfile_wrong_username_00002."
                     "dataset.json\n"
                     'ERROR : ModelIngestor: {"Error": "Empty access_token"}\n',
@@ -633,9 +633,9 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [("scicat_ingest -m RawDatasets -c %s  "
+        commands = [("scicat_ingest -m Datasets -c %s  "
                      % (cfgfname)).split(),
-                    ("scicat_ingest --model RawDatasets --config %s "
+                    ("scicat_ingest --model Datasets --config %s "
                      % (cfgfname)).split()]
         # commands.pop()
         try:
@@ -764,9 +764,9 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [("scicat_ingest -m RawDatasets -c %s  "
+        commands = [("scicat_ingest -m Datasets -c %s  "
                      % (cfgfname)).split(),
-                    ("scicat_ingest --model RawDatasets --config %s "
+                    ("scicat_ingest --model Datasets --config %s "
                      % (cfgfname)).split()]
         # commands.pop()
         try:
@@ -784,10 +784,10 @@ optional arguments:
                     'WARNING : invalid literal for int() with base 10: '
                     '\'ha\'\n'
                     'WARNING : \'bool\' object is not iterable\n'
-                    "INFO : ModelIngestor: Post the RawDatasets from "
+                    "INFO : ModelIngestor: Post the Datasets from "
                     "ModelIngestTest_test_modelfile_wrong_type_00001."
                     "dataset.json\n"
-                    "INFO : ModelIngestor: Post the RawDatasets from "
+                    "INFO : ModelIngestor: Post the Datasets from "
                     "ModelIngestTest_test_modelfile_wrong_type_00002."
                     "dataset.json\n",
                     "\n".join(seri))
@@ -947,9 +947,9 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [("scicat_ingest -m RawDatasets -c %s  -p %s "
+        commands = [("scicat_ingest -m Datasets -c %s  -p %s "
                      % (cfgfname, tokenfile)).split(),
-                    ("scicat_ingest --model RawDatasets "
+                    ("scicat_ingest --model Datasets "
                      "--config %s --token-file %s "
                      % (cfgfname, tokenfile)).split()]
         # commands.pop()
@@ -965,10 +965,10 @@ optional arguments:
                 # print(er)
                 # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
                 self.assertEqual(
-                    "INFO : ModelIngestor: Post the RawDatasets from "
+                    "INFO : ModelIngestor: Post the Datasets from "
                     "ModelIngestTest_test_modelfile_token_00001"
                     ".dataset.json\n"
-                    "INFO : ModelIngestor: Post the RawDatasets from "
+                    "INFO : ModelIngestor: Post the Datasets from "
                     "ModelIngestTest_test_modelfile_token_00002"
                     ".dataset.json\n",
                     "\n".join(seri))
