@@ -298,7 +298,7 @@ def main():
     """ the main program function
     """
 
-    description = "Re-ingestion script for SciCat RawDatasets."
+    description = "Re-ingestion script for SciCat Datasets."
 
     epilog = "" \
         " examples:\n" \

@@ -395,8 +395,8 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: lingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -793,8 +793,8 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: lingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -973,8 +973,8 @@ optional arguments:
                     ".dataset.json\n",
                     "\n".join(seri))
                 self.assertEqual(
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 0)
                 self.assertEqual(len(self.__server.datasets), 2)
                 self.myAssertDict(

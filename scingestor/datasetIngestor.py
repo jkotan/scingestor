@@ -606,7 +606,7 @@ class DatasetIngestor:
         #: (:obj:`str`) dataset url
         self.__dataseturl = self.__scicat_url + self.__scicat_datasets
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
-        #    "RawDatasets"
+        #    "Datasets"
         #: (:obj:`str`) dataset url
         self.__proposalurl = self.__scicat_url + self.__scicat_proposals
         # self.__proposalurl = "http://www-science3d.desy.de:3000/api/v3/" \

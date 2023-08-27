@@ -84,7 +84,7 @@ scicat_dataset_ingest: error: unrecognized arguments: """
         self.helpinfo = """usage: scicat_dataset_ingest [-h]""" \
             """[-c CONFIG] [-l LOG] [-f LOGFILE] [-t]
 
-Re-ingestion script for SciCat RawDatasets.
+Re-ingestion script for SciCat Datasets.
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -403,9 +403,9 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
@@ -623,9 +623,9 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
@@ -889,9 +889,9 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n"
                     "Datasets Attachments: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
@@ -1189,7 +1189,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 99001234/myscan_00001\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
@@ -1413,9 +1413,9 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
@@ -1687,9 +1687,9 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n"
                     "Datasets Attachments: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
@@ -2720,7 +2720,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: delete 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
@@ -3613,7 +3613,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001284/myscan_00001\n"
+                    "Datasets: 99001284/myscan_00001\n"
                     "OrigDatablocks: delete 99001284/myscan_00002\n"
                     "OrigDatablocks: 99001284/myscan_00002\n",
                     vl)
@@ -4356,7 +4356,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001/2\n"
+                    "Datasets: 99001234/myscan_00001/2\n"
                     "OrigDatablocks: 99001234/myscan_00001/2\n"
                     "OrigDatablocks: delete 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
@@ -5243,7 +5243,7 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: 99001234/myscan_00002\n"
+                        "Datasets: 99001234/myscan_00002\n"
                         "OrigDatablocks: delete 99001234/myscan_00002\n"
                         "OrigDatablocks: 99001234/myscan_00002\n",
                         vl)
@@ -5586,7 +5586,7 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: 99001234/myscan_00002\n"
+                        "Datasets: 99001234/myscan_00002\n"
                         "OrigDatablocks: delete 99001234/myscan_00002\n"
                         "OrigDatablocks: 99001234/myscan_00002\n"
                         "Datasets Attachments: 99001234/myscan_00002\n",
@@ -5970,7 +5970,7 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: 99001234/myscan_00002\n"
+                        "Datasets: 99001234/myscan_00002\n"
                         "OrigDatablocks: delete 99001234/myscan_00002\n"
                         "OrigDatablocks: 99001234/myscan_00002\n",
                         vl)
@@ -6342,7 +6342,7 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: 99001234/myscan_00002\n"
+                        "Datasets: 99001234/myscan_00002\n"
                         "OrigDatablocks: delete 99001234/myscan_00002\n"
                         "OrigDatablocks: 99001234/myscan_00002\n"
                         "Datasets Attachments: 99001234/myscan_00002\n",
@@ -6992,7 +6992,7 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: 99001234/myscan_00002/2\n"
+                        "Datasets: 99001234/myscan_00002/2\n"
                         "OrigDatablocks: 99001234/myscan_00002/2\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
@@ -7330,7 +7330,7 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: 99001234/myscan_00002/2\n"
+                        "Datasets: 99001234/myscan_00002/2\n"
                         "OrigDatablocks: 99001234/myscan_00002/2\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
@@ -7619,7 +7619,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n",
+                    "Datasets: 99001234/myscan_00001\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -8111,7 +8111,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n",
+                    "Datasets: 99001234/myscan_00001\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -8392,7 +8392,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001/2\n"
+                    "Datasets: 99001234/myscan_00001/2\n"
                     "OrigDatablocks: 99001234/myscan_00001/2\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
@@ -8690,9 +8690,9 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
@@ -8949,7 +8949,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -9792,9 +9792,9 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -10057,9 +10057,9 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -10330,9 +10330,9 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -10598,9 +10598,9 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(

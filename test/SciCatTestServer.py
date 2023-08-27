@@ -84,7 +84,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     raise Exception("Empty access_token")
                 dt = json.loads(in_data)
                 # print("Datasets: %s" % dt)
-                print("RawDatasets: %s" % dt["pid"])
+                print("Datasets: %s" % dt["pid"])
                 npid = dt["pid"]
                 dt["pid"] = npid
                 self.server.pid_dataset[npid] = json.dumps(dt)
@@ -154,7 +154,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                 self.server.datasets.append(in_data)
                 dt = json.loads(in_data)
                 # print("Datasets: %s" % dt)
-                print("RawDatasets: %s" % dt["pid"])
+                print("Datasets: %s" % dt["pid"])
                 npid = self.server.pidprefix + dt["pid"]
                 dt["pid"] = npid
                 self.server.pid_dataset[npid] = json.dumps(dt)
@@ -309,7 +309,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                 if len(dspath) == 3:
                     if pid in self.server.pid_dataset.keys():
                         self.server.pid_dataset.pop(pid)
-                        print("RawDatasets: delete %s" % pid)
+                        print("Datasets: delete %s" % pid)
             elif len(dspath) > 2 and dspath[1].lower() == "proposals":
                 pid = dspath[2].replace("%2F", "/")
                 if len(dspath) == 3:

@@ -2,7 +2,7 @@
 
 ![github workflow](https://github.com/jkotan/scingestor/actions/workflows/tests.yml/badge.svg) [![docs](https://img.shields.io/badge/Documentation-webpages-ADD8E6.svg)](https://jkotan.github.io/scingestor/index.html) [![Pypi Version](https://img.shields.io/pypi/v/scingestor.svg)](https://pypi.python.org/pypi/scingestor) [![Python Versions](https://img.shields.io/pypi/pyversions/scingestor.svg)](https://pypi.python.org/pypi/scingestor/)
 
-The `scingestor` python package provides a support for scripts which ingest RawDatasets and OrigDatablocks into the SciCat metadata server.
+The `scingestor` python package provides a support for scripts which ingest Datasets and OrigDatablocks into the SciCat metadata server.
 
 ## scicat_dataset_ingestor
 SciCat Dataset ingestor server ingests scan metadata just after a scan is finished. It can be executed by
@@ -72,7 +72,7 @@ The configuration written in YAML can contain the following variables
 * **recheck_dataset_list_interval** *(int)* , default: `1000`
 * **recheck_beamtime_file_interval** *(int)* , default: `1000`
 * **request_headers** *(dict\<str,str\>)* , default: `{"Content-Type": "application/json", "Accept": "application/json"}`
-* **scicat_datasets_path** *(str)* , default: `"RawDatasets"`
+* **scicat_datasets_path** *(str)* , default: `"Datasets"`
 * **scicat_proposals_path** *(str)* , default: `"Proposals"`
 * **scicat_datablocks_path** *(str)*, default: `"OrigDatablocks"`
 * **scicat_attachments_path** *(str)*, default: `"Datasets/{pid}/Attachments"`
@@ -101,7 +101,7 @@ Similarly, **file_dataset_metadata_generator**, **dataset_metadata_generator**, 
 
 ## scicat_dataset_ingest
 
-Re-ingestion script for SciCat RawDatasets and OrigDatablocks is usually launched at the end of the beamtime.
+Re-ingestion script for SciCat Datasets and OrigDatablocks is usually launched at the end of the beamtime.
 ```
 scicat_dataset_ingest -c ~/.scingestor.yaml
 ```

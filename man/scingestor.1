@@ -37,7 +37,7 @@ scingestor \- SciCat Dataset Ingestor Documentation
 \fI\%\fP
 .sp
 The \fBscingestor\fP python package provides a support for scripts which
-ingest RawDatasets and OrigDatablocks into the SciCat metadata server.
+ingest Datasets and OrigDatablocks into the SciCat metadata server.
 .SH SCICAT_DATASET_INGESTOR
 .sp
 SciCat Dataset ingestor server ingests scan metadata just after a scan
@@ -177,7 +177,7 @@ The configuration written in YAML can contain the following variables
 .IP \(bu 2
 \fBrequest_headers\fP \fI(dict<str,str>)\fP , default: \fB{"Content\-Type": "application/json", "Accept": "application/json"}\fP
 .IP \(bu 2
-\fBscicat_datasets_path\fP \fI(str)\fP , default: \fB"RawDatasets"\fP
+\fBscicat_datasets_path\fP \fI(str)\fP , default: \fB"Datasets"\fP
 .IP \(bu 2
 \fBscicat_proposals_path\fP \fI(str)\fP , default: \fB"Proposals"\fP
 .IP \(bu 2
@@ -214,7 +214,7 @@ The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  
 Similarly, \fBfile_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBattachment_metadata_generator\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP, \fI{hiddenattributes}\fP, \fI{ext}\fP
 .SH SCICAT_DATASET_INGEST
 .sp
-Re\-ingestion script for SciCat RawDatasets and OrigDatablocks is usually
+Re\-ingestion script for SciCat Datasets and OrigDatablocks is usually
 launched at the end of the beamtime.
 .INDENT 0.0
 .INDENT 3.5
@@ -449,7 +449,7 @@ scicat_dataset_ingestor \-c ~/.scingestor.yaml \-l debug
 .SH SCICAT_DATASET_INGEST
 .SS Description
 .sp
-Re\-ingestion script for SciCat RawDatasets.
+Re\-ingestion script for SciCat Datasets.
 .SS Synopsis
 .INDENT 0.0
 .INDENT 3.5
@@ -498,7 +498,7 @@ scicat_dataset_ingest \-c ~/.scingestor.yaml \-l debug
 .SH SCICAT_INGEST
 .SS Description
 .sp
-Re\-ingestion script for SciCat RawDatasets.
+Re\-ingestion script for SciCat Datasets.
 .SS Synopsis
 .INDENT 0.0
 .INDENT 3.5
