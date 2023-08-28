@@ -337,7 +337,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -368,7 +368,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -415,7 +415,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -438,13 +437,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -467,8 +464,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -635,7 +631,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -658,13 +653,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -687,8 +680,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -821,7 +813,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -852,7 +844,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -902,7 +894,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -925,13 +916,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -954,8 +943,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -1114,7 +1102,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -1145,7 +1133,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -1200,7 +1188,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -1223,8 +1210,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 1)
                 self.myAssertDict(
@@ -1344,7 +1330,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -1375,7 +1361,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -1426,7 +1412,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -1449,13 +1434,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -1478,8 +1461,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -1620,7 +1602,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -1651,7 +1633,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -1701,7 +1683,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -1724,13 +1705,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -1753,8 +1732,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -2202,7 +2180,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -2225,13 +2202,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -2254,8 +2229,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -2465,7 +2439,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'ownerGroup': '99001234-dmgt',
@@ -2488,13 +2461,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -2517,8 +2488,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -2740,7 +2710,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -2763,13 +2732,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -2792,13 +2759,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'new.owner@ggg.gg',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -2824,8 +2789,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -3049,7 +3013,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -3072,13 +3035,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -3101,8 +3062,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -3324,7 +3284,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -3347,13 +3306,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -3376,8 +3333,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -3633,7 +3589,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -3656,13 +3611,11 @@ optional arguments:
                          'beamtimeId': '99001284'},
                      'sourceFolder':
                      '%s/raw/special' % coredir,
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -3685,13 +3638,11 @@ optional arguments:
                          'beamtimeId': '99001284'},
                      'sourceFolder':
                      '%s/raw/special' % coredir,
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'new.owner@ggg.gg',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -3717,8 +3668,7 @@ optional arguments:
                          'beamtimeId': '99001284'},
                      'sourceFolder':
                      '%s/raw/special' % coredir,
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -4086,7 +4036,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -4109,13 +4058,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -4138,8 +4085,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -4377,7 +4323,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -4400,13 +4345,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -4429,13 +4372,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'new.owner@ggg.gg',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -4461,8 +4402,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 self.myAssertDict(
@@ -4699,7 +4639,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -4722,13 +4661,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -4751,8 +4688,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -4976,7 +4912,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -4999,13 +4934,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -5028,8 +4961,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -5263,7 +5195,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -5287,13 +5218,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -5317,13 +5246,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -5347,8 +5274,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -5607,7 +5533,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -5631,13 +5556,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -5661,13 +5584,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -5691,8 +5612,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -5992,7 +5912,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6016,13 +5935,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6046,13 +5963,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6076,8 +5991,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -6366,7 +6280,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6390,13 +6303,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6420,13 +6331,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6450,8 +6359,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -6707,7 +6615,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6731,13 +6638,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6761,8 +6666,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -7015,7 +6919,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -7039,13 +6942,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -7069,13 +6970,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -7099,8 +6998,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -7353,7 +7251,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -7377,13 +7274,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -7407,13 +7302,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -7437,8 +7330,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -7641,7 +7533,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -7664,13 +7555,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -7693,13 +7582,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -7723,8 +7610,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -7897,7 +7783,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -7920,14 +7805,12 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
                      'instrumentId': '/petra3/p00',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
                      'creationTime': '2022-05-19 09:00:00',
@@ -7949,8 +7832,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -8133,7 +8015,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8156,13 +8037,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8185,13 +8064,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8215,8 +8092,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -8415,7 +8291,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8438,13 +8313,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8467,13 +8340,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8497,8 +8368,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -8630,7 +8500,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -8661,7 +8531,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -8708,7 +8578,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8731,13 +8600,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8760,8 +8627,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -8881,7 +8747,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -8918,7 +8784,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -8964,7 +8830,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8987,8 +8852,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
@@ -9081,7 +8945,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -9116,7 +8980,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -9281,7 +9145,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -9304,13 +9167,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -9333,8 +9194,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -9535,7 +9395,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'ownerGroup': '99001234-dmgt',
@@ -9558,13 +9417,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -9587,8 +9444,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -9732,7 +9588,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
                     '-c group1,group2 -w mygroup '
                     '-b {btmeta} '
@@ -9762,7 +9618,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
                     '-c group1,group2 -w mygroup '
                     '-b {btmeta} '
@@ -9813,7 +9669,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -9834,13 +9689,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -9861,8 +9714,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -9993,7 +9845,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
@@ -10025,7 +9877,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,p00dmgt,'
                     'p00staff -w 99001234-dmgt '
@@ -10078,7 +9930,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -10101,13 +9952,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -10130,8 +9979,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -10266,7 +10114,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
@@ -10298,7 +10146,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,p00dmgt,'
                     'p00staff -w 99001234-dmgt '
@@ -10351,7 +10199,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -10374,13 +10221,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -10403,8 +10248,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -10534,7 +10378,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
@@ -10566,7 +10410,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,p00dmgt,'
                     'p00staff -w 99001234-dmgt '
@@ -10619,7 +10463,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -10642,13 +10485,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -10671,8 +10512,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -10999,7 +10839,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -11020,13 +10859,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -11047,8 +10884,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -11263,7 +11099,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'ownerGroup': 'mygroup',
@@ -11284,13 +11119,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -11312,8 +11145,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(

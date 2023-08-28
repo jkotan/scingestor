@@ -166,14 +166,14 @@ class DatasetIngestor:
         self.__attachmentpostfix = ".attachment.json"
 
         #: (:obj:`str`) nexus dataset shell command
-        self.__datasetcommandfile = "nxsfileinfo metadata " \
+        self.__datasetcommandfile = "nxsfileinfo metadata -k4 " \
             " -o {metapath}/{scanname}{scanpostfix} " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
             " {scanpath}/{scanname}.{ext}"
         #: (:obj:`str`) datablock shell command
-        self.__datasetcommand = "nxsfileinfo metadata " \
+        self.__datasetcommand = "nxsfileinfo metadata -k4 " \
             " -o {metapath}/{scanname}{scanpostfix} " \
             " -c {accessgroups}" \
             " -w {ownergroup}" \

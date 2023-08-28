@@ -450,7 +450,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -480,7 +481,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -550,7 +552,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
@@ -595,13 +596,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
@@ -646,8 +645,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -935,7 +933,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -975,7 +974,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1056,7 +1056,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
@@ -1105,13 +1104,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
@@ -1160,8 +1157,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -1455,7 +1451,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1495,7 +1492,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1578,7 +1576,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
@@ -1627,13 +1624,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
@@ -1682,8 +1677,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -1944,7 +1938,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1971,7 +1966,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1998,7 +1994,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc3}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc3}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -2025,7 +2022,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc4}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc4}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -2101,7 +2099,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
@@ -2154,8 +2151,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'type': 'raw'})
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):
@@ -2391,7 +2387,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -2427,7 +2424,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -2463,7 +2461,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc3}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc3}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -2499,7 +2498,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc4}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc4}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -2588,7 +2588,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
@@ -2657,8 +2656,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'type': 'raw'})
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):
@@ -2913,7 +2911,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -2952,7 +2951,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -2991,7 +2991,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc3}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc3}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -3030,7 +3031,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc4}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc4}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -3122,7 +3124,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
@@ -3188,8 +3189,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'type': 'raw'})
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):
@@ -3443,7 +3443,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -3482,7 +3483,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -3521,7 +3523,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc3}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc3}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -3560,7 +3563,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc4}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc4}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -3652,7 +3656,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
@@ -3721,8 +3724,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'type': 'raw'})
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):
@@ -4090,7 +4092,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
@@ -4159,8 +4160,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'type': 'raw'})
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):
@@ -4464,7 +4464,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-b {cbtmeta} '
                         '-p 99001284/myscan_00001  -w 99001284-dmgt '
                         '-c 99001284-dmgt,99001284-clbt,99001284-part,'
@@ -4492,7 +4493,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-b {cbtmeta} '
                         '-p 99001284/myscan_00002  -w 99001284-dmgt '
                         '-c 99001284-dmgt,99001284-clbt,99001284-part,'
@@ -4561,7 +4563,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
@@ -4620,13 +4621,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001284'},
                      'sourceFolder':
                      '%s/raw/special' % coredir,
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
@@ -4679,8 +4678,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001284'},
                      'sourceFolder':
                      '%s/raw/special' % coredir,
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -4944,7 +4942,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-b {cbtmeta} '
                         '-p 99001284/myscan_00001  -w 99001284-dmgt '
                         '-c 99001284-dmgt,99001284-clbt,99001284-part,'
@@ -4972,7 +4971,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-b {cbtmeta} '
                         '-p 99001284/myscan_00002  -w 99001284-dmgt '
                         '-c 99001284-dmgt,99001284-clbt,99001284-part,'
@@ -5000,7 +5000,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc3}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc3}.scan.json  '
                         '-b {cbtmeta} '
                         '-p 99001284/myscan_00003  -w 99001284-dmgt '
                         '-c 99001284-dmgt,99001284-clbt,99001284-part,'
@@ -5028,7 +5029,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc4}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc4}.scan.json  '
                         '-b {cbtmeta} '
                         '-p 99001284/myscan_00004  -w 99001284-dmgt '
                         '-c 99001284-dmgt,99001284-clbt,99001284-part,'
@@ -5108,7 +5110,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
@@ -5174,8 +5175,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                           'beamtimeId': '99001284'},
                          'sourceFolder':
                          '%s/raw/special' % coredir,
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'type': 'raw'})
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):
@@ -5447,7 +5447,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-x 0o662  -r raw/special  -b {btmeta} '
                         '-p 99001234/myscan_00001 '
                         '{subdir2}/{sc1}.nxs \n'
@@ -5471,7 +5472,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-x 0o662  -r raw/special  -b {btmeta} '
                         '-p 99001234/myscan_00002 '
                         '{subdir2}/{sc2}.nxs \n'
@@ -5534,7 +5536,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
@@ -5579,13 +5580,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
@@ -5630,8 +5629,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -6445,7 +6443,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-x 0o662  -r raw/special  -b {btmeta} '
                         '-p 99001234/myscan_00001 '
                         '{subdir2}/{sc1}.nxs \n'
@@ -6474,7 +6473,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-x 0o662  -r raw/special  -b {btmeta} '
                         '-p 99001234/myscan_00002 '
                         '{subdir2}/{sc2}.nxs \n'
@@ -6540,7 +6540,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
@@ -6585,13 +6584,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
@@ -6636,8 +6633,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.assertEqual(len(self.__server.origdatablocks), 0)
                 self.assertEqual(len(self.__server.attachments), 0)
                 if os.path.isdir(fsubdirname):
@@ -6859,7 +6855,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-x 0o662  --oned  -r raw/special  -b {btmeta} '
                         '-p 99001234/myscan_00001 '
                         '{subdir2}/{sc1}.nxs \n'
@@ -6883,7 +6880,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-x 0o662  --oned  -r raw/special  -b {btmeta} '
                         '-p 99001234/myscan_00002 '
                         '{subdir2}/{sc2}.nxs \n'
@@ -6907,7 +6905,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc3}.scan.json  '
+                        'nxsfileinfo metadata  '
+                        '-o {subdir2}/{sc3}.scan.json  '
                         '-x 0o662  --oned  -r raw/special  -b {btmeta} '
                         '-p 99001234/myscan_00003 '
                         '{subdir2}/{sc3}.nxs \n'
@@ -6931,7 +6930,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating nxs metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc4}.scan.json  '
+                        'nxsfileinfo metadata  '
+                        '-o {subdir2}/{sc4}.scan.json  '
                         '-x 0o662  --oned  -r raw/special  -b {btmeta} '
                         '-p 99001234/myscan_00004 '
                         '{subdir2}/{sc4}.nxs \n'
@@ -7004,7 +7004,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
@@ -7059,8 +7058,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         'type': 'raw'})
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):

@@ -365,7 +365,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating fio metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -395,7 +396,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating fio metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -471,7 +473,6 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'p00dmgt',
                         'p00staff'],
                      'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'datasetName': 'myscan_00001',
@@ -525,8 +526,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'techniques': [],
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime", "endTime",
                           "scientificMetadata.end_time",
                           "scientificMetadata.start_time"])
@@ -550,7 +550,6 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'p00dmgt',
                         'p00staff'],
                      'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'datasetName': 'myscan_00002',
@@ -604,8 +603,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'techniques': [],
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime", "endTime",
                           "scientificMetadata.end_time",
                           "scientificMetadata.start_time"])
@@ -820,7 +818,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating fio metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -860,7 +859,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating fio metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -948,7 +948,6 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'p00dmgt',
                         'p00staff'],
                      'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'datasetName': 'myscan_00001',
@@ -1002,8 +1001,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'techniques': [],
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime", "endTime",
                           "scientificMetadata.end_time",
                           "scientificMetadata.start_time"])
@@ -1027,7 +1025,6 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'p00dmgt',
                         'p00staff'],
                      'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'datasetName': 'myscan_00002',
@@ -1081,8 +1078,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'techniques': [],
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime", "endTime",
                           "scientificMetadata.end_time",
                           "scientificMetadata.start_time"])
@@ -1309,7 +1305,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating fio metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1336,7 +1333,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating fio metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1363,7 +1361,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating fio metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc3}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc3}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1390,7 +1389,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating fio metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc4}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc4}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1472,7 +1472,6 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                             'p00dmgt',
                             'p00staff'],
                          'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'pid': '99001234/myscan_%05i' % (i + 1),
@@ -1549,8 +1548,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                          '/asap3/petra3/'
                          'gpfs/p00/2022/data/9901234/raw/special',
                          'techniques': [],
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=["creationTime", "endTime",
                               "scientificMetadata.end_time",
                               "scientificMetadata.start_time"])
@@ -1732,7 +1730,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating fio metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1771,7 +1770,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating fio metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1810,7 +1810,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating fio metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc3}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc3}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1849,7 +1850,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating fio metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc4}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc4}.scan.json  '
                         '-b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1948,7 +1950,6 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                             'p00dmgt',
                             'p00staff'],
                          'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'pid': '99001234/myscan_%05i' % (i + 1),
@@ -2016,8 +2017,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                          '/asap3/petra3/'
                          'gpfs/p00/2022/data/9901234/raw/special',
                          'techniques': [],
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=["creationTime", "endTime",
                               "scientificMetadata.end_time",
                               "scientificMetadata.start_time"])
