@@ -1135,6 +1135,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                     json.loads(self.__server.attachments[0][1]),
                     {
                         'ownerGroup': '99001234-dmgt',
+                        'caption': '',
                         'thumbnail':
                         "data:image/png;base64,i",
                         'accessGroups': [
@@ -1152,6 +1153,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                     json.loads(self.__server.attachments[1][1]),
                     {
                         'ownerGroup': '99001234-dmgt',
+                        'caption': '',
                         'thumbnail':
                         "data:image/png;base64,i",
                         'accessGroups': [
@@ -2057,6 +2059,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         json.loads(self.__server.attachments[i][1]),
                         {
                             'thumbnail': "data:sdfsAAA%s" % i,
+                            'caption': '',
                             'ownerGroup': '99001234-dmgt',
                             'accessGroups': [
                                 '99001234-dmgt', '99001234-clbt',

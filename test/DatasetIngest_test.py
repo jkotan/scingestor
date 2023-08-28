@@ -1000,6 +1000,7 @@ optional arguments:
                                       'p00dmgt',
                                       'p00staff'],
                      'ownerGroup': '99001234-dmgt',
+                     'caption': '',
                      'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                      'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
                      'T92AAAAB3RJTUUH5wEbCAAYYJKxWgAAABl0RVh0Q29tbWVudABDc'
@@ -1799,6 +1800,7 @@ optional arguments:
                                       'p00staff'],
                      'datasetId': '99001234/myscan_00002',
                      'ownerGroup': '99001234-dmgt',
+                     'caption': '',
                      'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                      'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
                      'T92AAAAB3RJTUUH5wEbCAAYYJKxWgAAABl0RVh0Q29tbWVudABDc'
@@ -5750,6 +5752,7 @@ optional arguments:
                                           'p00dmgt',
                                           'p00staff'],
                          'ownerGroup': '99001234-dmgt',
+                         'caption': '',
                          'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                          'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
                          'T92AAAAB3RJTUUH5wMVByY7kGggYgAAARJJREFUGNMFwU1Kw0AUA'
@@ -5771,6 +5774,7 @@ optional arguments:
                                           '99001234-part',
                                           'p00dmgt',
                                           'p00staff'],
+                         'caption': '',
                          'ownerGroup': '99001234-dmgt',
                          'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                          'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
@@ -6133,6 +6137,7 @@ optional arguments:
                                           'p00dmgt',
                                           'p00staff'],
                          'ownerGroup': '99001234-dmgt',
+                         'caption': '',
                          'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                          'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
                          'T92AAAAB3RJTUUH5wMVByY7kGggYgAAARJJREFUGNMFwU1Kw0AUA'
@@ -6506,6 +6511,7 @@ optional arguments:
                                           'p00dmgt',
                                           'p00staff'],
                          'ownerGroup': '99001234-dmgt',
+                         'caption': '',
                          'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                          'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
                          'T92AAAAB3RJTUUH5wMVByY7kGggYgAAARJJREFUGNMFwU1Kw0AUA'

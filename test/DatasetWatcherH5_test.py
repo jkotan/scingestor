@@ -1723,6 +1723,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     json.loads(self.__server.attachments[0][1]),
                     {
                         'ownerGroup': '99001234-dmgt',
+                        'caption': '',
                         'thumbnail':
                         "data:image/png;base64,i",
                         'accessGroups': [
@@ -1740,6 +1741,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     json.loads(self.__server.attachments[1][1]),
                     {
                         'ownerGroup': '99001234-dmgt',
+                        'caption': '',
                         'thumbnail':
                         "data:image/png;base64,i",
                         'accessGroups': [
@@ -2686,6 +2688,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         {
                             'thumbnail': "data:sdfsAAA%s" % i,
                             'ownerGroup': '99001234-dmgt',
+                            'caption': '',
                             'accessGroups': [
                                 '99001234-dmgt', '99001234-clbt',
                                 '99001234-part', 'p00dmgt', 'p00staff']
@@ -3216,6 +3219,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         {
                             'thumbnail': "data:sdfsAAA%s" % i,
                             'ownerGroup': '99001234-dmgt',
+                            'caption': '',
                             'accessGroups': [
                                 '99001234-dmgt', '99001234-clbt',
                                 '99001234-part', 'p00dmgt', 'p00staff']
@@ -3748,6 +3752,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         {
                             'thumbnail': "data:sdfsAAA%s" % i,
                             'ownerGroup': '99001234-dmgt',
+                            'caption': '',
                             'accessGroups': [
                                 '99001234-dmgt', '99001234-clbt',
                                 '99001234-part', 'p00dmgt', 'p00staff']
@@ -4185,6 +4190,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         {
                             'thumbnail': "data:sdfsAAA%s" % i,
                             'ownerGroup': '99001234-dmgt',
+                            'caption': '',
                             'accessGroups': [
                                 '99001234-dmgt', '99001234-clbt',
                                 '99001234-part', 'p00dmgt', 'p00staff']

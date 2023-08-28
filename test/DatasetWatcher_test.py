@@ -614,7 +614,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      ' -r10 '
                      # ' -l debug -t'
                      % (cfgfname, logfname)).split()]
-        commands.pop()
+        # commands.pop()
         lastlog = None
         try:
             for cmd in commands:
@@ -1771,6 +1771,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     json.loads(self.__server.attachments[0][1]),
                     {
                         'ownerGroup': '99001234-dmgt',
+                        'caption': '',
                         'thumbnail':
                         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAA"
                         "AKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAB3RJTU"
@@ -2529,6 +2530,7 @@ class DatasetWatcherTest(unittest.TestCase):
 
         at1 = {
             'thumbnail': "data:iVBORw0KGgoAAAANSUhEAAAoAAA",
+            'caption': '',
             'ownerGroup': '99001234-dmgt',
             'accessGroups': [
                 '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -2536,6 +2538,7 @@ class DatasetWatcherTest(unittest.TestCase):
         }
         at2 = {
             'thumbnail': "data:sdfsAAA",
+            'caption': '',
             'ownerGroup': '99001234-dmgt',
             'accessGroups': [
                 '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -3313,6 +3316,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     fsubdirname2, 'myscan_%05i.attachment.json' % (i + 1)))
             ats.append({
                 'thumbnail': "data:sdfsAAA%s" % i,
+                'caption': '',
                 'ownerGroup': '99001234-dmgt',
                 'accessGroups': [
                     '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -4363,6 +4367,7 @@ class DatasetWatcherTest(unittest.TestCase):
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
+            'dataset_pid_prefix: "/"\n' \
             'scicat_url: "{url}"\n' \
             'log_generator_commands: true\n' \
             'dataset_metadata_generator: "nxsfileinfo metadata ' \
@@ -4627,7 +4632,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'updatedAt': '2022-05-14 11:54:29'},
                         skip=["creationTime"])
 
-                # print(self.__server.origdatablocks)
+                print(self.__server.origdatablocks)
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):
                     self.myAssertDict(
