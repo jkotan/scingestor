@@ -261,7 +261,7 @@ optional arguments:
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'scicat_users_login_path: "Users/login"\n' \
-            'scicat_datasets_path: "RawDatasets"\n' \
+            'scicat_datasets_path: "Datasets"\n' \
             'scicat_proposals_path: "Proposals"\n' \
             'scicat_datablocks_path: "OrigDatablocks"\n' \
             'log_generator_commands: true\n' \
@@ -363,7 +363,7 @@ optional arguments:
             '  - "\\0"\n' \
             'scicat_url: "{url}"\n' \
             'scicat_users_login_path: "Users/login"\n' \
-            'scicat_datasets_path: "RawDatasets"\n' \
+            'scicat_datasets_path: "Datasets"\n' \
             'scicat_proposals_path: "Proposals"\n' \
             'scicat_datablocks_path: "OrigDatablocks"\n' \
             'log_generator_commands: true\n' \

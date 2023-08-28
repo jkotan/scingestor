@@ -5,7 +5,7 @@ scicat_ingest
 Description
 -----------
 
-Re-ingestion script for SciCat RawDatasets.
+Re-ingestion script for SciCat Datasets.
 
 
 Synopsis

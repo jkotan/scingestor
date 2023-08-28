@@ -286,7 +286,7 @@ class DatasetWatcherTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'scicat_users_login_path: "Users/login"\n' \
-            'scicat_datasets_path: "RawDatasets"\n' \
+            'scicat_datasets_path: "Datasets"\n' \
             'scicat_proposals_path: "Proposals"\n' \
             'scicat_datablocks_path: "OrigDatablocks"\n' \
             'log_generator_commands: true\n' \
@@ -367,7 +367,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -381,20 +382,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -408,15 +410,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -447,10 +449,10 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -459,7 +461,6 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -482,12 +483,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -510,8 +509,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -523,7 +521,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-dmgt',
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -538,7 +536,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-dmgt',
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -594,7 +592,7 @@ class DatasetWatcherTest(unittest.TestCase):
             'ingestor_username: ""\n' \
             'scicat_url: "{url}"\n' \
             'scicat_users_login_path: "Users/login"\n' \
-            'scicat_datasets_path: "RawDatasets"\n' \
+            'scicat_datasets_path: "Datasets"\n' \
             'scicat_proposals_path: "Proposals"\n' \
             'scicat_datablocks_path: "OrigDatablocks"\n' \
             'log_generator_commands: true\n' \
@@ -608,9 +606,11 @@ class DatasetWatcherTest(unittest.TestCase):
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
         commands = [('scicat_dataset_ingestor -c %s -f %s -r10 '
+                     # ' -l debug -t'
                      % (cfgfname, logfname)).split(),
                     ('scicat_dataset_ingestor --config %s --log-file %s '
                      ' -r10 '
+                     # ' -l debug -t'
                      % (cfgfname, logfname)).split()]
         # commands.pop()
         lastlog = None
@@ -677,7 +677,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -691,20 +692,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'ERROR : DatasetIngestor: '
                         '{{"Error": "Empty access_token"}}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -718,13 +720,13 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'ERROR : DatasetIngestor: '
                         '{{"Error": "Empty access_token"}}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
@@ -900,7 +902,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -914,20 +917,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -941,20 +945,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc3}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc3}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -968,20 +973,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00003  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc3}.origdatablock.json  '
                         '{subdir2}/{sc3} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc3}\n'
+                        '99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc3}\n'
+                        '99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc4}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc4}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -995,15 +1001,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00004  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc4}.origdatablock.json  '
                         '{subdir2}/{sc4} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc4}\n'
+                        '99001234/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc4}\n'
+                        '99001234/{sc4}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -1035,15 +1041,15 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     'Login: myingestor\n'
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n"
                     'Login: myingestor\n'
-                    "RawDatasets: 99001234/myscan_00003\n"
-                    "OrigDatablocks: /99001234/myscan_00003\n"
-                    "RawDatasets: 99001234/myscan_00004\n"
-                    "OrigDatablocks: /99001234/myscan_00004\n", vl)
+                    "Datasets: 99001234/myscan_00003\n"
+                    "OrigDatablocks: 99001234/myscan_00003\n"
+                    "Datasets: 99001234/myscan_00004\n"
+                    "OrigDatablocks: 99001234/myscan_00004\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1056,7 +1062,6 @@ class DatasetWatcherTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
@@ -1080,8 +1085,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=["creationTime"])
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
@@ -1097,7 +1101,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'uid': 'jkotan'}],
                          'ownerGroup': '99001234-dmgt',
                          'datasetId':
-                         '/99001234/myscan_%05i' % (i + 1),
+                         '99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -1148,7 +1152,7 @@ class DatasetWatcherTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'scicat_users_login_path: "Users/login"\n' \
-            'scicat_datasets_path: "RawDatasets"\n' \
+            'scicat_datasets_path: "Datasets"\n' \
             'scicat_datablocks_path: "OrigDatablocks"\n' \
             'log_generator_commands: true\n' \
             'ingest_dataset_attachment: true\n' \
@@ -1229,7 +1233,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -1243,20 +1248,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -1270,15 +1276,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -1309,10 +1315,10 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1321,7 +1327,6 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -1344,12 +1349,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -1372,8 +1375,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -1385,7 +1387,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-dmgt',
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1400,7 +1402,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-dmgt',
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1548,7 +1550,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -1562,20 +1565,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -1589,20 +1593,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc3}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc3}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -1616,7 +1621,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00003  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc3}.origdatablock.json  '
@@ -1632,14 +1637,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.attachment.json  '
                         '{subdir2}/{sc3}.png\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc3}\n'
+                        '99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc3}\n'
+                        '99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc4}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc4}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -1653,15 +1659,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00004  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc4}.origdatablock.json  '
                         '{subdir2}/{sc4} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc4}\n'
+                        '99001234/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc4}\n'
+                        '99001234/{sc4}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -1693,16 +1699,16 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     'Login: myingestor\n'
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n"
                     'Login: myingestor\n'
-                    "RawDatasets: 99001234/myscan_00003\n"
-                    "OrigDatablocks: /99001234/myscan_00003\n"
-                    "Datasets Attachments: /99001234/myscan_00003\n"
-                    "RawDatasets: 99001234/myscan_00004\n"
-                    "OrigDatablocks: /99001234/myscan_00004\n", vl)
+                    "Datasets: 99001234/myscan_00003\n"
+                    "OrigDatablocks: 99001234/myscan_00003\n"
+                    "Datasets Attachments: 99001234/myscan_00003\n"
+                    "Datasets: 99001234/myscan_00004\n"
+                    "OrigDatablocks: 99001234/myscan_00004\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1715,7 +1721,6 @@ class DatasetWatcherTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
@@ -1739,8 +1744,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=["creationTime"])
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
@@ -1756,7 +1760,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'uid': 'jkotan'}],
                          'ownerGroup': '99001234-dmgt',
                          'datasetId':
-                         '/99001234/myscan_%05i' % (i + 1),
+                         '99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -1764,11 +1768,12 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.assertEqual(len(self.__server.attachments), 1)
                 self.assertEqual(len(self.__server.attachments[0]), 2)
                 self.assertEqual(self.__server.attachments[0][0],
-                                 '/99001234/myscan_00003')
+                                 '99001234/myscan_00003')
                 self.myAssertDict(
                     json.loads(self.__server.attachments[0][1]),
                     {
                         'ownerGroup': '99001234-dmgt',
+                        'caption': '',
                         'thumbnail':
                         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAA"
                         "AKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAB3RJTU"
@@ -1830,7 +1835,6 @@ class DatasetWatcherTest(unittest.TestCase):
             cf.write(cred)
 
         ds1 = {'contactEmail': 'appuser@fake.com',
-               'createdAt': '2022-05-14 11:54:29',
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
@@ -1858,10 +1862,8 @@ class DatasetWatcherTest(unittest.TestCase):
                    'beamtimeId': '99001234'},
                'sourceFolder':
                '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-               'type': 'raw',
-               'updatedAt': '2022-05-14 11:54:29'}
+               'type': 'raw'}
         ds2 = {'contactEmail': 'appuser@fake.com',
-               'createdAt': '2022-05-14 11:54:29',
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
@@ -1894,8 +1896,7 @@ class DatasetWatcherTest(unittest.TestCase):
                    'beamtimeId': '99001234'},
                'sourceFolder':
                '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-               'type': 'raw',
-               'updatedAt': '2022-05-14 11:54:29'}
+               'type': 'raw'}
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
@@ -1975,15 +1976,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
@@ -1993,15 +1994,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -2032,10 +2033,10 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -2056,7 +2057,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-dmgt',
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2071,7 +2072,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-dmgt',
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2121,7 +2122,6 @@ class DatasetWatcherTest(unittest.TestCase):
             cf.write(cred)
 
         ds1 = {'contactEmail': 'appuser@fake.com',
-               'createdAt': '2022-05-14 11:54:29',
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
@@ -2149,10 +2149,8 @@ class DatasetWatcherTest(unittest.TestCase):
                    'beamtimeId': '99001234'},
                'sourceFolder':
                '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-               'type': 'raw',
-               'updatedAt': '2022-05-14 11:54:29'}
+               'type': 'raw'}
         ds2 = {'contactEmail': 'appuser@fake.com',
-               'createdAt': '2022-05-14 11:54:29',
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
@@ -2185,8 +2183,7 @@ class DatasetWatcherTest(unittest.TestCase):
                    'beamtimeId': '99001234'},
                'sourceFolder':
                '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-               'type': 'raw',
-               'updatedAt': '2022-05-14 11:54:29'}
+               'type': 'raw'}
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
@@ -2300,15 +2297,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
@@ -2318,15 +2315,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -2357,10 +2354,10 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -2381,7 +2378,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-dmgt',
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2396,7 +2393,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-dmgt',
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2448,7 +2445,6 @@ class DatasetWatcherTest(unittest.TestCase):
             cf.write(cred)
 
         ds1 = {'contactEmail': 'appuser@fake.com',
-               'createdAt': '2022-05-14 11:54:29',
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
@@ -2476,10 +2472,8 @@ class DatasetWatcherTest(unittest.TestCase):
                    'beamtimeId': '99001234'},
                'sourceFolder':
                '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-               'type': 'raw',
-               'updatedAt': '2022-05-14 11:54:29'}
+               'type': 'raw'}
         ds2 = {'contactEmail': 'appuser@fake.com',
-               'createdAt': '2022-05-14 11:54:29',
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
@@ -2512,8 +2506,7 @@ class DatasetWatcherTest(unittest.TestCase):
                    'beamtimeId': '99001234'},
                'sourceFolder':
                '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-               'type': 'raw',
-               'updatedAt': '2022-05-14 11:54:29'}
+               'type': 'raw'}
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
@@ -2527,6 +2520,7 @@ class DatasetWatcherTest(unittest.TestCase):
 
         at1 = {
             'thumbnail': "data:iVBORw0KGgoAAAANSUhEAAAoAAA",
+            'caption': '',
             'ownerGroup': '99001234-dmgt',
             'accessGroups': [
                 '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -2534,6 +2528,7 @@ class DatasetWatcherTest(unittest.TestCase):
         }
         at2 = {
             'thumbnail': "data:sdfsAAA",
+            'caption': '',
             'ownerGroup': '99001234-dmgt',
             'accessGroups': [
                 '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -2612,15 +2607,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
@@ -2630,15 +2625,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -2669,12 +2664,12 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "Datasets Attachments: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n"
-                    "Datasets Attachments: /99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets Attachments: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n"
+                    "Datasets Attachments: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -2695,7 +2690,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-dmgt',
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2710,7 +2705,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-dmgt',
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2718,12 +2713,12 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.assertEqual(len(self.__server.attachments), 2)
                 self.assertEqual(len(self.__server.attachments[0]), 2)
                 self.assertEqual(self.__server.attachments[0][0],
-                                 '/99001234/myscan_00001')
+                                 '99001234/myscan_00001')
                 self.myAssertDict(
                     json.loads(self.__server.attachments[0][1]), at1)
                 self.assertEqual(len(self.__server.attachments[1]), 2)
                 self.assertEqual(self.__server.attachments[1][0],
-                                 '/99001234/myscan_00002')
+                                 '99001234/myscan_00002')
                 self.myAssertDict(
                     json.loads(self.__server.attachments[1][1]), at2)
                 if os.path.isdir(fsubdirname):
@@ -2771,7 +2766,6 @@ class DatasetWatcherTest(unittest.TestCase):
             cf.write(cred)
 
         ds1 = {'contactEmail': 'appuser@fake.com',
-               'createdAt': '2022-05-14 11:54:29',
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
@@ -2799,10 +2793,8 @@ class DatasetWatcherTest(unittest.TestCase):
                    'beamtimeId': '99001234'},
                'sourceFolder':
                '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-               'type': 'raw',
-               'updatedAt': '2022-05-14 11:54:29'}
+               'type': 'raw'}
         ds2 = {'contactEmail': 'appuser@fake.com',
-               'createdAt': '2022-05-14 11:54:29',
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
@@ -2835,8 +2827,7 @@ class DatasetWatcherTest(unittest.TestCase):
                    'beamtimeId': '99001234'},
                'sourceFolder':
                '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-               'type': 'raw',
-               'updatedAt': '2022-05-14 11:54:29'}
+               'type': 'raw'}
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
@@ -2982,7 +2973,6 @@ class DatasetWatcherTest(unittest.TestCase):
                 os.path.join(fsubdirname2, 'myscan_%05i.scan.json' % (i + 1)))
             dss.append(
                 {'contactEmail': 'appuser@fake.com',
-                 'createdAt': '2022-05-14 11:54:29',
                  'creationLocation': '/DESY/PETRA III/P00',
                  'instrumentId': '/petra3/p00',
                  'description': 'H20 distribution',
@@ -3005,8 +2995,7 @@ class DatasetWatcherTest(unittest.TestCase):
                  'sourceFolder':
                  '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                  'raw/special',
-                 'type': 'raw',
-                 'updatedAt': '2022-05-14 11:54:29'})
+                 'type': 'raw'})
 
         commands = [('scicat_dataset_ingestor -c %s -r36 --log debug'
                      % cfgfname).split(),
@@ -3080,15 +3069,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
@@ -3098,15 +3087,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc3}\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
@@ -3116,15 +3105,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00003  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc3}.origdatablock.json  '
                         '{subdir2}/{sc3} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc3}\n'
+                        '99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc3}\n'
+                        '99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc4}\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
@@ -3134,15 +3123,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00004  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc4}.origdatablock.json  '
                         '{subdir2}/{sc4} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc4}\n'
+                        '99001234/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc4}\n'
+                        '99001234/{sc4}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -3174,15 +3163,15 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     'Login: myingestor\n'
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n"
                     'Login: myingestor\n'
-                    "RawDatasets: 99001234/myscan_00003\n"
-                    "OrigDatablocks: /99001234/myscan_00003\n"
-                    "RawDatasets: 99001234/myscan_00004\n"
-                    "OrigDatablocks: /99001234/myscan_00004\n", vl)
+                    "Datasets: 99001234/myscan_00003\n"
+                    "OrigDatablocks: 99001234/myscan_00003\n"
+                    "Datasets: 99001234/myscan_00004\n"
+                    "OrigDatablocks: 99001234/myscan_00004\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -3208,7 +3197,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'uid': 'jkotan'}],
                          'ownerGroup': '99001234-dmgt',
                          'datasetId':
-                         '/99001234/myscan_%05i' % (i + 1),
+                         '99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -3281,7 +3270,6 @@ class DatasetWatcherTest(unittest.TestCase):
                 os.path.join(fsubdirname2, 'myscan_%05i.scan.json' % (i + 1)))
             dss.append(
                 {'contactEmail': 'appuser@fake.com',
-                 'createdAt': '2022-05-14 11:54:29',
                  'creationLocation': '/DESY/PETRA III/P00',
                  'instrumentId': '/petra3/p00',
                  'description': 'H20 distribution',
@@ -3304,13 +3292,13 @@ class DatasetWatcherTest(unittest.TestCase):
                  'sourceFolder':
                  '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                  'raw/special',
-                 'type': 'raw',
-                 'updatedAt': '2022-05-14 11:54:29'})
+                 'type': 'raw'})
             fats.append(
                 os.path.join(
                     fsubdirname2, 'myscan_%05i.attachment.json' % (i + 1)))
             ats.append({
                 'thumbnail': "data:sdfsAAA%s" % i,
+                'caption': '',
                 'ownerGroup': '99001234-dmgt',
                 'accessGroups': [
                     '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -3389,15 +3377,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
@@ -3407,15 +3395,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc3}\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
@@ -3425,15 +3413,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00003  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc3}.origdatablock.json  '
                         '{subdir2}/{sc3} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc3}\n'
+                        '99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc3}\n'
+                        '99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc4}\n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
@@ -3443,15 +3431,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00004  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc4}.origdatablock.json  '
                         '{subdir2}/{sc4} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc4}\n'
+                        '99001234/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc4}\n'
+                        '99001234/{sc4}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -3483,19 +3471,19 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     'Login: myingestor\n'
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "Datasets Attachments: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n"
-                    "Datasets Attachments: /99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets Attachments: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n"
+                    "Datasets Attachments: 99001234/myscan_00002\n"
                     'Login: myingestor\n'
-                    "RawDatasets: 99001234/myscan_00003\n"
-                    "OrigDatablocks: /99001234/myscan_00003\n"
-                    "Datasets Attachments: /99001234/myscan_00003\n"
-                    "RawDatasets: 99001234/myscan_00004\n"
-                    "OrigDatablocks: /99001234/myscan_00004\n"
-                    "Datasets Attachments: /99001234/myscan_00004\n", vl)
+                    "Datasets: 99001234/myscan_00003\n"
+                    "OrigDatablocks: 99001234/myscan_00003\n"
+                    "Datasets Attachments: 99001234/myscan_00003\n"
+                    "Datasets: 99001234/myscan_00004\n"
+                    "OrigDatablocks: 99001234/myscan_00004\n"
+                    "Datasets Attachments: 99001234/myscan_00004\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -3521,7 +3509,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'uid': 'jkotan'}],
                          'ownerGroup': '99001234-dmgt',
                          'datasetId':
-                         '/99001234/myscan_%05i' % (i + 1),
+                         '99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -3531,7 +3519,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 for i in range(4):
                     self.assertEqual(len(self.__server.attachments[i]), 2)
                     self.assertEqual(self.__server.attachments[i][0],
-                                     '/99001234/myscan_%05i' % (i + 1))
+                                     '99001234/myscan_%05i' % (i + 1))
                     self.myAssertDict(
                         json.loads(self.__server.attachments[i][1]), ats[i])
                 if os.path.isdir(fsubdirname):
@@ -3599,7 +3587,6 @@ class DatasetWatcherTest(unittest.TestCase):
                 os.path.join(fsubdirname2, 'myscan_%05i.scan.json' % (i + 1)))
             dss.append(
                 {'contactEmail': 'appuser@fake.com',
-                 'createdAt': '2022-05-14 11:54:29',
                  'creationLocation': '/DESY/PETRA III/P00',
                  'instrumentId': '/petra3/p00',
                  'description': 'H20 distribution',
@@ -3622,8 +3609,7 @@ class DatasetWatcherTest(unittest.TestCase):
                  'sourceFolder':
                  '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                  'raw/special',
-                 'type': 'raw',
-                 'updatedAt': '2022-05-14 11:54:29'})
+                 'type': 'raw'})
 
         commands = [('scicat_dataset_ingestor -c %s -r36 --log debug'
                      % cfgfname).split(),
@@ -3810,7 +3796,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc1} {subdir2}/{sc1}.dataset.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  '
+                        'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.dataset.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
@@ -3825,20 +3811,20 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.datablock.json,*.dataset.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc1}.datablock.json  '
                         '-r raw/special  {subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc2} {subdir2}/{sc2}.dataset.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  '
+                        'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.dataset.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
@@ -3853,15 +3839,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.datablock.json,*.dataset.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.datablock.json  '
                         '-r raw/special  {subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -3892,10 +3878,10 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -3904,7 +3890,6 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -3927,12 +3912,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -3955,8 +3938,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 # print(self.__server.origdatablocks)
                 self.myAssertDict(
@@ -3969,7 +3951,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-dmgt',
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3984,7 +3966,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001234-dmgt',
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4111,7 +4093,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -4125,20 +4108,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -4152,20 +4136,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc3}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc3}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -4179,20 +4164,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00003  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc3}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc3} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc3}\n'
+                        '99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc3}\n'
+                        '99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc4}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc4}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
                         '-b {btmeta} '
@@ -4206,15 +4192,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00004  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc4}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc4} \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc4}\n'
+                        '99001234/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc4}\n'
+                        '99001234/{sc4}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -4249,15 +4235,15 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     'Login: myingestor\n'
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n"
                     'Login: myingestor\n'
-                    "RawDatasets: 99001234/myscan_00003\n"
-                    "OrigDatablocks: /99001234/myscan_00003\n"
-                    "RawDatasets: 99001234/myscan_00004\n"
-                    "OrigDatablocks: /99001234/myscan_00004\n", vl)
+                    "Datasets: 99001234/myscan_00003\n"
+                    "OrigDatablocks: 99001234/myscan_00003\n"
+                    "Datasets: 99001234/myscan_00004\n"
+                    "OrigDatablocks: 99001234/myscan_00004\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -4270,7 +4256,6 @@ class DatasetWatcherTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
@@ -4293,8 +4278,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'beamtimeId': '99001234'},
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=["creationTime"])
 
                 # print(self.__server.origdatablocks)
@@ -4311,7 +4295,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'uid': 'jkotan'}],
                          'ownerGroup': '99001234-dmgt',
                          'datasetId':
-                         '/99001234/myscan_%05i' % (i + 1),
+                         '99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -4369,7 +4353,7 @@ class DatasetWatcherTest(unittest.TestCase):
             ' -b {{beamtimefile}} -p {{beamtimeid}}/{{scanname}} "\n' \
             'datablock_metadata_generator: "nxsfileinfo origdatablock ' \
             ' -s *.pyc,*{{datablockpostfix}},*{{scanpostfix}},*~ ' \
-            ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} ' \
+            ' -p {{pidprefix}}{{beamtimeid}}/{{scanname}} ' \
             ' -x 0o662 ' \
             ' -r {{relpath}} ' \
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt ' \
@@ -4380,7 +4364,7 @@ class DatasetWatcherTest(unittest.TestCase):
             ' -c {{beamtimeid}}-clbt,{{beamtimeid}}-dmgt,{{beamline}}dmgt' \
             ' -r {{relpath}} ' \
             ' -x 0o662 ' \
-            ' -p {{pidprefix}}/{{beamtimeid}}/{{scanname}} "\n' \
+            ' -p {{pidprefix}}{{beamtimeid}}/{{scanname}} "\n' \
             'datablock_metadata_generator_scanpath_postfix: '\
             ' " {{scanpath}}/{{scanname}}"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
@@ -4468,15 +4452,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'Generating origdatablock command: '
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,*~  '
-                        '-p /99001234/myscan_00001  -x 0o662  '
+                        '-p 99001234/myscan_00001  -x 0o662  '
                         '-r raw/special  '
                         '-c 99001234-clbt,99001234-dmgt,p00dmgt '
                         ' -o {subdir2}/{sc1}.origdatablock.json  '
                         '{subdir2}/{sc1}\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc1}\n'
+                        '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
@@ -4491,15 +4475,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'Generating origdatablock command: '
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,*~  '
-                        '-p /99001234/myscan_00002  -x 0o662  '
+                        '-p 99001234/myscan_00002  -x 0o662  '
                         '-r raw/special  '
                         '-c 99001234-clbt,99001234-dmgt,p00dmgt '
                         ' -o {subdir2}/{sc2}.origdatablock.json  '
                         '{subdir2}/{sc2}\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc3}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
@@ -4514,15 +4498,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'Generating origdatablock command: '
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,*~  '
-                        '-p /99001234/myscan_00003  -x 0o662  '
+                        '-p 99001234/myscan_00003  -x 0o662  '
                         '-r raw/special  '
                         '-c 99001234-clbt,99001234-dmgt,p00dmgt '
                         ' -o {subdir2}/{sc3}.origdatablock.json  '
                         '{subdir2}/{sc3}\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc3}\n'
+                        '99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc3}\n'
+                        '99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc4}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
@@ -4537,15 +4521,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'Generating origdatablock command: '
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,*~  '
-                        '-p /99001234/myscan_00004  -x 0o662  '
+                        '-p 99001234/myscan_00004  -x 0o662  '
                         '-r raw/special  '
                         '-c 99001234-clbt,99001234-dmgt,p00dmgt '
                         ' -o {subdir2}/{sc4}.origdatablock.json  '
                         '{subdir2}/{sc4}\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc4}\n'
+                        '99001234/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001234/{sc4}\n'
+                        '99001234/{sc4}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -4577,15 +4561,15 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     'Login: myingestor\n'
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n"
                     'Login: myingestor\n'
-                    "RawDatasets: 99001234/myscan_00003\n"
-                    "OrigDatablocks: /99001234/myscan_00003\n"
-                    "RawDatasets: 99001234/myscan_00004\n"
-                    "OrigDatablocks: /99001234/myscan_00004\n", vl)
+                    "Datasets: 99001234/myscan_00003\n"
+                    "OrigDatablocks: 99001234/myscan_00003\n"
+                    "Datasets: 99001234/myscan_00004\n"
+                    "OrigDatablocks: 99001234/myscan_00004\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -4598,12 +4582,12 @@ class DatasetWatcherTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
+                         'creationTime': '2022-05-19 09:00:00',
                          'createdAt': '2022-05-14 11:54:29',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
                          'endTime': '2022-05-19 09:00:00',
-                         'creationTime': '2022-05-19 09:00:00',
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
@@ -4639,7 +4623,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'uid': 'jkotan'}],
                          'ownerGroup': '99001234-dmgt',
                          'datasetId':
-                         '/99001234/myscan_%05i' % (i + 1),
+                         '99001234/myscan_%05i' % (i + 1),
                          'accessGroups': [
                              '99001234-clbt', '99001234-dmgt', 'p00dmgt'],
                          'size': 629}, skip=["dataFileList", "size"])
@@ -4770,7 +4754,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
                         '-b {btmeta} '
@@ -4784,22 +4769,23 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001236/myscan_00001  -w 99001236-dmgt '
+                        '-p 99001236/myscan_00001  -w 99001236-dmgt '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc1}  '
                         '{subdir2}/../lambda1/ \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001236/{sc1}\n'
+                        '99001236/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001236/{sc1}\n'
+                        '99001236/{sc1}\n'
                         'INFO : DatasetIngestor: '
                         'Ingesting: {dslist} {sc2} {det2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
                         '-b {btmeta} '
@@ -4813,16 +4799,16 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001236/myscan_00002  -w 99001236-dmgt '
+                        '-p 99001236/myscan_00002  -w 99001236-dmgt '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc2}  '
                         '{subdir2}/../lambda2/ \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001236/{sc2}\n'
+                        '99001236/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001236/{sc2}\n'
+                        '99001236/{sc2}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -4868,10 +4854,10 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001236/myscan_00001\n"
-                    "OrigDatablocks: /99001236/myscan_00001\n"
-                    "RawDatasets: 99001236/myscan_00002\n"
-                    "OrigDatablocks: /99001236/myscan_00002\n", vl)
+                    "Datasets: 99001236/myscan_00001\n"
+                    "OrigDatablocks: 99001236/myscan_00001\n"
+                    "Datasets: 99001236/myscan_00002\n"
+                    "OrigDatablocks: 99001236/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -4880,7 +4866,6 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/FS-SC/SDD01',
                      'instrumentId': '/fs-sc/sdd01',
                      'description': 'H20 distribution',
@@ -4903,13 +4888,11 @@ class DatasetWatcherTest(unittest.TestCase):
                          'beamtimeId': '99001236'},
                      'sourceFolder':
                      '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/fs-sc/sdd01',
                      'creationLocation': '/DESY/FS-SC/SDD01',
                      'description': 'H20 distribution',
@@ -4932,8 +4915,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'beamtimeId': '99001236'},
                      'sourceFolder':
                      '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -4946,7 +4928,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001236-dmgt',
-                     'datasetId': '/99001236/myscan_00001',
+                     'datasetId': '99001236/myscan_00001',
                      'accessGroups': [
                          '99001236-dmgt', '99001236-clbt', '99001236-part',
                          'sdd01dmgt', 'sdd01staff'],
@@ -4965,7 +4947,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': '99001236-dmgt',
-                     'datasetId': '/99001236/myscan_00002',
+                     'datasetId': '99001236/myscan_00002',
                      'accessGroups': [
                          '99001236-dmgt', '99001236-clbt', '99001236-part',
                          'sdd01dmgt', 'sdd01staff'],
@@ -5130,7 +5112,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
                         '-b {btmeta} '
@@ -5144,22 +5127,23 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001236/myscan_00001  -w 99001236-dmgt '
+                        '-p 99001236/myscan_00001  -w 99001236-dmgt '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc1}  '
                         '{subdir2}/../lambda1/ \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001236/{sc1}\n'
+                        '99001236/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001236/{sc1}\n'
+                        '99001236/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist}'
                         ' {sc2} {det2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc2} {subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
                         '-b {btmeta} '
@@ -5173,16 +5157,16 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001236/myscan_00002  -w 99001236-dmgt '
+                        '-p 99001236/myscan_00002  -w 99001236-dmgt '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc2}  '
                         '{subdir2}/../lambda2/ \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001236/{sc2}\n'
+                        '99001236/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001236/{sc2}\n'
+                        '99001236/{sc2}\n'
                         'INFO : ScanDirWatcher: Create ScanDirWatcher '
                         '{detdir3} {btmeta}\n'
                         'INFO : ScanDirWatcher: Adding watch {cnt8}: '
@@ -5196,7 +5180,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc3} {subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc3}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
                         '-b {btmeta} '
@@ -5210,22 +5195,23 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001236/myscan_00003  -w 99001236-dmgt '
+                        '-p 99001236/myscan_00003  -w 99001236-dmgt '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff '
                         '-o {subdir2}/{sc3}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc3}  '
                         '{subdir2}/../lambda3 \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001236/{sc3}\n'
+                        '99001236/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001236/{sc3}\n'
+                        '99001236/{sc3}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} '
                         '{sc4} {det4}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc4} {subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  -o {subdir2}/{sc4}.scan.json  '
+                        'nxsfileinfo metadata -k4  '
+                        '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
                         '-b {btmeta} '
@@ -5239,16 +5225,16 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001236/myscan_00004  -w 99001236-dmgt '
+                        '-p 99001236/myscan_00004  -w 99001236-dmgt '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff '
                         '-o {subdir2}/{sc4}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc4}  '
                         '{subdir2}/../lambda4 \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001236/{sc4}\n'
+                        '99001236/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001236/{sc4}\n'
+                        '99001236/{sc4}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -5307,15 +5293,15 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     'Login: myingestor\n'
-                    "RawDatasets: 99001236/myscan_00001\n"
-                    "OrigDatablocks: /99001236/myscan_00001\n"
-                    "RawDatasets: 99001236/myscan_00002\n"
-                    "OrigDatablocks: /99001236/myscan_00002\n"
+                    "Datasets: 99001236/myscan_00001\n"
+                    "OrigDatablocks: 99001236/myscan_00001\n"
+                    "Datasets: 99001236/myscan_00002\n"
+                    "OrigDatablocks: 99001236/myscan_00002\n"
                     'Login: myingestor\n'
-                    "RawDatasets: 99001236/myscan_00003\n"
-                    "OrigDatablocks: /99001236/myscan_00003\n"
-                    "RawDatasets: 99001236/myscan_00004\n"
-                    "OrigDatablocks: /99001236/myscan_00004\n", vl)
+                    "Datasets: 99001236/myscan_00003\n"
+                    "OrigDatablocks: 99001236/myscan_00003\n"
+                    "Datasets: 99001236/myscan_00004\n"
+                    "OrigDatablocks: 99001236/myscan_00004\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -5328,7 +5314,6 @@ class DatasetWatcherTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'creationLocation': '/DESY/FS-SC/SDD01',
                          'instrumentId': '/fs-sc/sdd01',
                          'description': 'H20 distribution',
@@ -5351,8 +5336,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'beamtimeId': '99001236'},
                          'sourceFolder':
                          '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=["creationTime"])
 
                 # print(self.__server.origdatablocks)
@@ -5369,7 +5353,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'uid': 'jkotan'}],
                          'ownerGroup': '99001236-dmgt',
                          'datasetId':
-                         '/99001236/myscan_%05i' % (i + 1),
+                         '99001236/myscan_%05i' % (i + 1),
                          'accessGroups': [
                              '99001236-dmgt', '99001236-clbt', '99001236-part',
                              'sdd01dmgt', 'sdd01staff'],
@@ -5518,7 +5502,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  '
+                        'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc1}.scan.json  '
                         '-c group1,group2 -w mygroup '
                         '-b {btmeta} '
@@ -5533,21 +5517,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001236/myscan_00001  '
+                        '-p 99001236/myscan_00001  '
                         '-w mygroup -c group1,group2 '
                         '-o {vardir}{subdir2}/{sc1}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc1}  '
                         '{subdir2}/../lambda1/ \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001236/{sc1}\n'
+                        '99001236/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001236/{sc1}\n'
+                        '99001236/{sc1}\n'
                         'INFO : DatasetIngestor: '
                         'Ingesting: {dslist} {sc2} {det2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  '
+                        'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc2}.scan.json  '
                         '-c group1,group2 -w mygroup '
                         '-b {btmeta} '
@@ -5562,15 +5546,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001236/myscan_00002  '
+                        '-p 99001236/myscan_00002  '
                         '-w mygroup -c group1,group2 '
                         '-o {vardir}{subdir2}/{sc2}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc2}  '
                         '{subdir2}/../lambda2/ \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001236/{sc2}\n'
+                        '99001236/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001236/{sc2}\n'
+                        '99001236/{sc2}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -5618,10 +5602,10 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Login: ingestor\n"
-                    "RawDatasets: 99001236/myscan_00001\n"
-                    "OrigDatablocks: /99001236/myscan_00001\n"
-                    "RawDatasets: 99001236/myscan_00002\n"
-                    "OrigDatablocks: /99001236/myscan_00002\n", vl)
+                    "Datasets: 99001236/myscan_00001\n"
+                    "OrigDatablocks: 99001236/myscan_00001\n"
+                    "Datasets: 99001236/myscan_00002\n"
+                    "OrigDatablocks: 99001236/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -5633,7 +5617,6 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/FS-SC/SDD01',
                      'instrumentId': '/fs-sc/sdd01',
                      'description': 'H20 distribution',
@@ -5654,12 +5637,10 @@ class DatasetWatcherTest(unittest.TestCase):
                          'beamtimeId': '99001236'},
                      'sourceFolder':
                      '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/fs-sc/sdd01',
                      'creationLocation': '/DESY/FS-SC/SDD01',
                      'description': 'H20 distribution',
@@ -5680,8 +5661,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'beamtimeId': '99001236'},
                      'sourceFolder':
                      '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     'type': 'raw'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -5693,7 +5673,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': 'mygroup',
-                     'datasetId': '/99001236/myscan_00001',
+                     'datasetId': '99001236/myscan_00001',
                      'accessGroups': ['group1', 'group2'],
                      'size': 629}, skip=["dataFileList", "size"])
                 dfl = json.loads(
@@ -5710,7 +5690,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
                      'ownerGroup': 'mygroup',
-                     'datasetId': '/99001236/myscan_00002',
+                     'datasetId': '99001236/myscan_00002',
                      'accessGroups': ['group1', 'group2'],
                      'size': 629}, skip=["dataFileList", "size"])
                 dfl = json.loads(
@@ -5881,7 +5861,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  '
+                        'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc1}.scan.json  '
                         '-c group1,group2 -w mygroup '
                         '-b {btmeta} '
@@ -5896,21 +5876,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001236/myscan_00001  '
+                        '-p 99001236/myscan_00001  '
                         '-w mygroup -c group1,group2 '
                         '-o {vardir}{subdir2}/{sc1}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc1}  '
                         '{subdir2}/../lambda1/ \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001236/{sc1}\n'
+                        '99001236/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001236/{sc1}\n'
+                        '99001236/{sc1}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist}'
                         ' {sc2} {det2}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  '
+                        'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc2}.scan.json  '
                         '-c group1,group2 -w mygroup '
                         '-b {btmeta} '
@@ -5925,15 +5905,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001236/myscan_00002  '
+                        '-p 99001236/myscan_00002  '
                         '-w mygroup -c group1,group2 '
                         '-o {vardir}{subdir2}/{sc2}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc2}  '
                         '{subdir2}/../lambda2/ \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001236/{sc2}\n'
+                        '99001236/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001236/{sc2}\n'
+                        '99001236/{sc2}\n'
                         'INFO : ScanDirWatcher: Create ScanDirWatcher '
                         '{detdir3} {btmeta}\n'
                         'INFO : ScanDirWatcher: Adding watch {cnt8}: '
@@ -5947,7 +5927,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc3} {vardir}{subdir2}/{sc3}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  '
+                        'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc3}.scan.json  '
                         '-c group1,group2 -w mygroup '
                         '-b {btmeta} '
@@ -5962,21 +5942,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001236/myscan_00003  '
+                        '-p 99001236/myscan_00003  '
                         '-w mygroup -c group1,group2 '
                         '-o {vardir}{subdir2}/{sc3}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc3}  '
                         '{subdir2}/../lambda3 \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001236/{sc3}\n'
+                        '99001236/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001236/{sc3}\n'
+                        '99001236/{sc3}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} '
                         '{sc4} {det4}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc4} {vardir}{subdir2}/{sc4}.scan.json\n'
                         'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata  '
+                        'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc4}.scan.json  '
                         '-c group1,group2 -w mygroup '
                         '-b {btmeta} '
@@ -5991,15 +5971,15 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001236/myscan_00004  '
+                        '-p 99001236/myscan_00004  '
                         '-w mygroup -c group1,group2 '
                         '-o {vardir}{subdir2}/{sc4}.origdatablock.json  '
                         '-r raw/special  {subdir2}/{sc4}  '
                         '{subdir2}/../lambda4 \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001236/{sc4}\n'
+                        '99001236/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
-                        '/99001236/{sc4}\n'
+                        '99001236/{sc4}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -6060,15 +6040,15 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.assertEqual(
                     'Login: myingestor\n'
                     'Login: myingestor\n'
-                    "RawDatasets: 99001236/myscan_00001\n"
-                    "OrigDatablocks: /99001236/myscan_00001\n"
-                    "RawDatasets: 99001236/myscan_00002\n"
-                    "OrigDatablocks: /99001236/myscan_00002\n"
+                    "Datasets: 99001236/myscan_00001\n"
+                    "OrigDatablocks: 99001236/myscan_00001\n"
+                    "Datasets: 99001236/myscan_00002\n"
+                    "OrigDatablocks: 99001236/myscan_00002\n"
                     'Login: myingestor\n'
-                    "RawDatasets: 99001236/myscan_00003\n"
-                    "OrigDatablocks: /99001236/myscan_00003\n"
-                    "RawDatasets: 99001236/myscan_00004\n"
-                    "OrigDatablocks: /99001236/myscan_00004\n", vl)
+                    "Datasets: 99001236/myscan_00003\n"
+                    "OrigDatablocks: 99001236/myscan_00003\n"
+                    "Datasets: 99001236/myscan_00004\n"
+                    "OrigDatablocks: 99001236/myscan_00004\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 3)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -6084,7 +6064,6 @@ class DatasetWatcherTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/fs-sc/sdd01',
                          'creationLocation': '/DESY/FS-SC/SDD01',
                          'description': 'H20 distribution',
@@ -6105,8 +6084,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'beamtimeId': '99001236'},
                          'sourceFolder':
                          '/asap3/fs-sc/gpfs/p00/2022/data/9901236',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=["creationTime"])
 
                 # print(self.__server.origdatablocks)
@@ -6123,7 +6101,7 @@ class DatasetWatcherTest(unittest.TestCase):
                              'uid': 'jkotan'}],
                          'ownerGroup': 'mygroup',
                          'datasetId':
-                         '/99001236/myscan_%05i' % (i + 1),
+                         '99001236/myscan_%05i' % (i + 1),
                          'accessGroups': ['group1', 'group2'],
                          'size': 629}, skip=["dataFileList", "size"])
                     dfl = json.loads(

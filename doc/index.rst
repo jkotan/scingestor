@@ -29,7 +29,7 @@ Scicat Dataset Ingestor
 
 
 The ``scingestor`` python package provides a support for scripts which
-ingest RawDatasets and OrigDatablocks into the SciCat metadata server.
+ingest Datasets and OrigDatablocks into the SciCat metadata server.
 
 scicat_dataset_ingestor
 -----------------------
@@ -71,8 +71,8 @@ The configuration written in YAML can contain the following variables
 * **beamtime_filename_prefix** *(str)* , default: ``".json"``
 * **datasets_filename_pattern** *(str)* , default: ``"scicat-datasets-{beamtimeid}.lst"``
 * **ingested_datasets_filename_pattern** *(str)* , default: ``"scicat-ingested-datasets-{beamtimeid}.lst"``
-* **file_dataset_metadata_generator** *(str)* , default: ``"nxsfileinfo metadata  -o {metapath}/{scanname}{scanpostfix}  -b {beamtimefile} -p {beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} {scanpath}/{scanname}.{ext}"``
-* **dataset_metadata_generator** *(str)* , default: ``"nxsfileinfo metadata  -o {metapath}/{scanname}{scanpostfix}  -c {accessgroups} -w {ownergroup} -b {beamtimefile} -p {beamtimeid}/{scanname}"``
+* **file_dataset_metadata_generator** *(str)* , default: ``"nxsfileinfo metadata -k4 -o {metapath}/{scanname}{scanpostfix}  -b {beamtimefile} -p {beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} {scanpath}/{scanname}.{ext}"``
+* **dataset_metadata_generator** *(str)* , default: ``"nxsfileinfo metadata -k4 -o {metapath}/{scanname}{scanpostfix}  -c {accessgroups} -w {ownergroup} -b {beamtimefile} -p {beamtimeid}/{scanname}"``
 * **datablock_metadata_generator** *(str)* , default: ``"nxsfileinfo origdatablock  -s *.pyc,*{datablockpostfix},*{scanpostfix},*~  -p {doiprefix}/{beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} -o {metapath}/{scanname}{datablockpostfix} "``
 * **datablock_metadata_stream_generator** *(str)* , default: ``"nxsfileinfo origdatablock  -s *.pyc,*{datablockpostfix},*{scanpostfix},*~  -w {ownergroup} -c {accessgroups} -p {doiprefix}/{beamtimeid}/{scanname} "``
 * **datablock_metadata_generator_scanpath_postfix** *(str)* , default: ``" {scanpath}/{scanname} "``
@@ -106,7 +106,7 @@ The configuration written in YAML can contain the following variables
 * **recheck_dataset_list_interval** *(int)* , default: ``1000``
 * **recheck_beamtime_file_interval** *(int)* , default: ``1000``
 * **request_headers** *(dict\<str,str\>)* , default: ``{"Content-Type": "application/json", "Accept": "application/json"}``
-* **scicat_datasets_path** *(str)* , default: ``"RawDatasets"``
+* **scicat_datasets_path** *(str)* , default: ``"Datasets"``
 * **scicat_proposals_path** *(str)* , default: ``"Proposals"``
 * **scicat_datablocks_path** *(str)*, default: ``"OrigDatablocks"``
 * **scicat_users_login_path** *(str)*, default: ``"Users/login"``
@@ -135,7 +135,7 @@ Similarly, **file_dataset_metadata_generator**, **dataset_metadata_generator**, 
 scicat_dataset_ingest
 ---------------------
 
-Re-ingestion script for SciCat RawDatasets and OrigDatablocks is usually
+Re-ingestion script for SciCat Datasets and OrigDatablocks is usually
 launched at the end of the beamtime.
 
 ::

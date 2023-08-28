@@ -84,7 +84,7 @@ scicat_dataset_ingest: error: unrecognized arguments: """
         self.helpinfo = """usage: scicat_dataset_ingest [-h]""" \
             """[-c CONFIG] [-l LOG] [-f LOGFILE] [-t]
 
-Re-ingestion script for SciCat RawDatasets.
+Re-ingestion script for SciCat Datasets.
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -337,7 +337,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -351,15 +351,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -368,7 +368,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -382,15 +382,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -403,10 +403,10 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -415,7 +415,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -438,13 +437,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -467,8 +464,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -484,7 +480,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -495,7 +491,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -595,9 +591,9 @@ optional arguments:
                     'Generating origdatablock metadata:'
                     ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -609,9 +605,9 @@ optional arguments:
                     'Generating origdatablock metadata:'
                     ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -623,10 +619,10 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -635,7 +631,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -658,13 +653,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -687,8 +680,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -704,7 +696,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -715,7 +707,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -821,7 +813,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -835,15 +827,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -852,7 +844,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -866,15 +858,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -889,11 +881,11 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n"
-                    "Datasets Attachments: /99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n"
+                    "Datasets Attachments: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -902,7 +894,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -925,13 +916,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -954,8 +943,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -971,7 +959,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -982,7 +970,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -991,7 +979,7 @@ optional arguments:
                 self.assertEqual(len(self.__server.attachments), 1)
                 self.assertEqual(
                     self.__server.attachments[0][0],
-                    "/99001234/myscan_00002")
+                    "99001234/myscan_00002")
                 self.myAssertDict(
                     json.loads(self.__server.attachments[0][1]),
                     {'accessGroups': ['99001234-dmgt',
@@ -1000,6 +988,7 @@ optional arguments:
                                       'p00dmgt',
                                       'p00staff'],
                      'ownerGroup': '99001234-dmgt',
+                     'caption': '',
                      'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                      'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
                      'T92AAAAB3RJTUUH5wEbCAAYYJKxWgAAABl0RVh0Q29tbWVudABDc'
@@ -1113,7 +1102,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -1127,15 +1116,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -1144,7 +1133,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -1158,15 +1147,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Internal Error"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -1189,8 +1178,8 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1199,7 +1188,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -1222,8 +1210,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 1)
                 self.myAssertDict(
@@ -1239,7 +1226,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.assertEqual(len(self.__server.attachments), 0)
                 if os.path.isdir(fsubdirname):
@@ -1343,7 +1330,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -1357,15 +1344,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -1374,7 +1361,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -1388,15 +1375,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -1413,10 +1400,10 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1425,7 +1412,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -1448,13 +1434,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -1477,8 +1461,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -1494,7 +1477,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -1505,7 +1488,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1619,7 +1602,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -1633,15 +1616,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -1650,7 +1633,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -1664,15 +1647,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -1687,11 +1670,11 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n"
-                    "Datasets Attachments: /99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n"
+                    "Datasets Attachments: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1700,7 +1683,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -1723,13 +1705,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -1752,8 +1732,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -1769,7 +1748,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -1780,7 +1759,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -1789,7 +1768,7 @@ optional arguments:
                 self.assertEqual(len(self.__server.attachments), 1)
                 self.assertEqual(
                     self.__server.attachments[0][0],
-                    "/99001234/myscan_00002")
+                    "99001234/myscan_00002")
                 self.myAssertDict(
                     json.loads(self.__server.attachments[0][1]),
                     {'accessGroups': ['99001234-dmgt',
@@ -1797,8 +1776,9 @@ optional arguments:
                                       '99001234-part',
                                       'p00dmgt',
                                       'p00staff'],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'ownerGroup': '99001234-dmgt',
+                     'caption': '',
                      'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                      'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
                      'T92AAAAB3RJTUUH5wEbCAAYYJKxWgAAABl0RVh0Q29tbWVudABDc'
@@ -2168,7 +2148,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
@@ -2181,7 +2161,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
@@ -2200,7 +2180,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -2223,13 +2202,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -2252,8 +2229,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -2265,7 +2241,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2280,7 +2256,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2413,12 +2389,12 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -2432,7 +2408,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -2446,8 +2422,8 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -2463,7 +2439,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'ownerGroup': '99001234-dmgt',
@@ -2486,13 +2461,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -2515,8 +2488,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -2528,7 +2500,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2543,7 +2515,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2558,7 +2530,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2684,15 +2656,15 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -2706,7 +2678,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -2720,9 +2692,9 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: /99001234/myscan_00001\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -2738,7 +2710,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -2761,13 +2732,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -2790,13 +2759,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'new.owner@ggg.gg',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -2810,7 +2777,7 @@ optional arguments:
                      'owner': 'NewOwner',
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '/99001234/myscan_00001',
+                     'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -2822,8 +2789,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -2835,7 +2801,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2850,7 +2816,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2865,7 +2831,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -2992,15 +2958,15 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Internal Error"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -3016,7 +2982,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -3030,8 +2996,8 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -3047,7 +3013,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -3070,13 +3035,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -3099,8 +3062,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -3112,7 +3074,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3127,7 +3089,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3142,7 +3104,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3269,12 +3231,12 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Internal Error"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -3290,7 +3252,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -3306,7 +3268,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -3322,7 +3284,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -3345,13 +3306,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -3374,8 +3333,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -3387,7 +3345,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3402,7 +3360,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3417,7 +3375,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -3577,15 +3535,15 @@ optional arguments:
                     '-w 99001284-dmgt '
                     '-c 99001284-dmgt,99001284-clbt,99001284-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001284/myscan_00001  '
+                    '-p 99001284/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001284/{sc1}\n'
+                    '99001284/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001284/{sc1}\n'
+                    '99001284/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '/99001284/{sc1}\n'
+                    '99001284/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -3599,7 +3557,7 @@ optional arguments:
                     '-w 99001284-dmgt '
                     '-c 99001284-dmgt,99001284-clbt,99001284-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001284/myscan_00002  '
+                    '-p 99001284/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -3613,9 +3571,9 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: /99001284/myscan_00001\n"
-                    "OrigDatablocks: delete /99001284/myscan_00002\n"
-                    "OrigDatablocks: /99001284/myscan_00002\n",
+                    "Datasets: 99001284/myscan_00001\n"
+                    "OrigDatablocks: delete 99001284/myscan_00002\n"
+                    "OrigDatablocks: 99001284/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -3631,7 +3589,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -3654,13 +3611,11 @@ optional arguments:
                          'beamtimeId': '99001284'},
                      'sourceFolder':
                      '%s/raw/special' % coredir,
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -3683,13 +3638,11 @@ optional arguments:
                          'beamtimeId': '99001284'},
                      'sourceFolder':
                      '%s/raw/special' % coredir,
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'new.owner@ggg.gg',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -3703,7 +3656,7 @@ optional arguments:
                      'owner': 'NewOwner',
                      'ownerGroup': '99001284-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '/99001284/myscan_00001',
+                     'pid': '99001284/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
@@ -3715,8 +3668,7 @@ optional arguments:
                          'beamtimeId': '99001284'},
                      'sourceFolder':
                      '%s/raw/special' % coredir,
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -3728,7 +3680,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001284/myscan_00001',
+                     'datasetId': '99001284/myscan_00001',
                      'accessGroups': [
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
                          'p00dmgt', 'p00staff'],
@@ -3743,7 +3695,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001284/myscan_00002',
+                     'datasetId': '99001284/myscan_00002',
                      'accessGroups': [
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
                          'p00dmgt', 'p00staff'],
@@ -3758,7 +3710,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001284/myscan_00002',
+                     'datasetId': '99001284/myscan_00002',
                      'accessGroups': [
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
                          'p00dmgt', 'p00staff'],
@@ -4040,7 +3992,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
@@ -4053,7 +4005,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -4067,8 +4019,8 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -4084,7 +4036,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -4107,13 +4058,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -4136,8 +4085,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -4149,7 +4097,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4164,7 +4112,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4179,7 +4127,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4306,14 +4254,14 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset with a new pid: '
-                    '/99001234/{sc1}/2\n'
+                    '99001234/{sc1}/2\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: '
@@ -4324,7 +4272,7 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
@@ -4342,7 +4290,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -4356,10 +4304,10 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001/2\n"
-                    "OrigDatablocks: /99001234/myscan_00001/2\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "Datasets: 99001234/myscan_00001/2\n"
+                    "OrigDatablocks: 99001234/myscan_00001/2\n"
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -4375,7 +4323,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -4398,13 +4345,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -4427,13 +4372,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'new.owner@ggg.gg',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -4459,8 +4402,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 self.myAssertDict(
@@ -4472,7 +4414,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4487,7 +4429,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4502,7 +4444,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001/2',
+                     'datasetId': '99001234/myscan_00001/2',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4517,7 +4459,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4645,12 +4587,12 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Internal Error"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -4666,7 +4608,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -4680,8 +4622,8 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -4697,7 +4639,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -4720,13 +4661,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -4749,8 +4688,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -4762,7 +4700,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4777,7 +4715,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4792,7 +4730,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -4920,14 +4858,14 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
-                    'Post the dataset with a new pid: /99001234/{sc1}/2\n'
+                    'Post the dataset with a new pid: 99001234/{sc1}/2\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Internal Error"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -4943,7 +4881,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -4957,8 +4895,8 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -4974,7 +4912,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
@@ -4997,13 +4934,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -5026,8 +4961,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -5039,7 +4973,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -5054,7 +4988,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -5069,7 +5003,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -5206,7 +5140,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
@@ -5220,18 +5154,18 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Patch scientificMetadata of dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Ingest origdatablock:'
@@ -5243,9 +5177,9 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: /99001234/myscan_00002\n"
-                        "OrigDatablocks: delete /99001234/myscan_00002\n"
-                        "OrigDatablocks: /99001234/myscan_00002\n",
+                        "Datasets: 99001234/myscan_00002\n"
+                        "OrigDatablocks: delete 99001234/myscan_00002\n"
+                        "OrigDatablocks: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -5261,7 +5195,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -5285,13 +5218,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -5315,13 +5246,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -5332,7 +5261,7 @@ optional arguments:
                          'techniques': [],
                          'owner': 'NewOwner',
                          'ownerEmail': 'peter.smithson@fake.de',
-                         'pid': '/99001234/myscan_00002',
+                         'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -5345,8 +5274,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -5358,7 +5286,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -5373,7 +5301,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -5388,7 +5316,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -5547,7 +5475,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
@@ -5561,18 +5489,18 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Patch scientificMetadata of dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Ingest origdatablock:'
@@ -5586,10 +5514,10 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: /99001234/myscan_00002\n"
-                        "OrigDatablocks: delete /99001234/myscan_00002\n"
-                        "OrigDatablocks: /99001234/myscan_00002\n"
-                        "Datasets Attachments: /99001234/myscan_00002\n",
+                        "Datasets: 99001234/myscan_00002\n"
+                        "OrigDatablocks: delete 99001234/myscan_00002\n"
+                        "OrigDatablocks: 99001234/myscan_00002\n"
+                        "Datasets Attachments: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -5605,7 +5533,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -5629,13 +5556,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -5659,13 +5584,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -5676,7 +5599,7 @@ optional arguments:
                          'techniques': [],
                          'owner': 'NewOwner',
                          'ownerEmail': 'peter.smithson@fake.de',
-                         'pid': '/99001234/myscan_00002',
+                         'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -5689,8 +5612,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -5702,7 +5624,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -5717,7 +5639,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -5732,7 +5654,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -5741,7 +5663,7 @@ optional arguments:
                     self.assertEqual(len(self.__server.attachments), 2)
                     self.assertEqual(
                         self.__server.attachments[0][0],
-                        "/99001234/myscan_00002")
+                        "99001234/myscan_00002")
                     self.myAssertDict(
                         json.loads(self.__server.attachments[0][1]),
                         {'accessGroups': ['99001234-dmgt',
@@ -5750,6 +5672,7 @@ optional arguments:
                                           'p00dmgt',
                                           'p00staff'],
                          'ownerGroup': '99001234-dmgt',
+                         'caption': '',
                          'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                          'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
                          'T92AAAAB3RJTUUH5wMVByY7kGggYgAAARJJREFUGNMFwU1Kw0AUA'
@@ -5763,7 +5686,7 @@ optional arguments:
                          'UVORK5CYII='})
                     self.assertEqual(
                         self.__server.attachments[1][0],
-                        "/99001234/myscan_00002")
+                        "99001234/myscan_00002")
                     self.myAssertDict(
                         json.loads(self.__server.attachments[1][1]),
                         {'accessGroups': ['99001234-dmgt',
@@ -5771,6 +5694,7 @@ optional arguments:
                                           '99001234-part',
                                           'p00dmgt',
                                           'p00staff'],
+                         'caption': '',
                          'ownerGroup': '99001234-dmgt',
                          'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                          'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
@@ -5933,7 +5857,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
@@ -5947,18 +5871,18 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Patch scientificMetadata of dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Ingest origdatablock:'
@@ -5970,9 +5894,9 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: /99001234/myscan_00002\n"
-                        "OrigDatablocks: delete /99001234/myscan_00002\n"
-                        "OrigDatablocks: /99001234/myscan_00002\n",
+                        "Datasets: 99001234/myscan_00002\n"
+                        "OrigDatablocks: delete 99001234/myscan_00002\n"
+                        "OrigDatablocks: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -5988,7 +5912,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6012,13 +5935,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6042,13 +5963,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6059,7 +5978,7 @@ optional arguments:
                          'techniques': [],
                          'owner': 'NewOwner',
                          'ownerEmail': 'peter.smithson@fake.de',
-                         'pid': '/99001234/myscan_00002',
+                         'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -6072,8 +5991,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -6085,7 +6003,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6100,7 +6018,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6115,7 +6033,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6124,7 +6042,7 @@ optional arguments:
                     self.assertEqual(len(self.__server.attachments), 1)
                     self.assertEqual(
                         self.__server.attachments[0][0],
-                        "/99001234/myscan_00002")
+                        "99001234/myscan_00002")
                     self.myAssertDict(
                         json.loads(self.__server.attachments[0][1]),
                         {'accessGroups': ['99001234-dmgt',
@@ -6133,6 +6051,7 @@ optional arguments:
                                           'p00dmgt',
                                           'p00staff'],
                          'ownerGroup': '99001234-dmgt',
+                         'caption': '',
                          'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                          'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
                          'T92AAAAB3RJTUUH5wMVByY7kGggYgAAARJJREFUGNMFwU1Kw0AUA'
@@ -6293,7 +6212,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                         'INFO : DatasetIngestor: '
@@ -6307,7 +6226,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
@@ -6323,12 +6242,12 @@ optional arguments:
                         '-o {subdir2}/{sc2}.attachment.json  '
                         '{subdir2}/{sc2}.png\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Patch scientificMetadata of dataset: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: Ingest origdatablock:'
@@ -6342,10 +6261,10 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: /99001234/myscan_00002\n"
-                        "OrigDatablocks: delete /99001234/myscan_00002\n"
-                        "OrigDatablocks: /99001234/myscan_00002\n"
-                        "Datasets Attachments: /99001234/myscan_00002\n",
+                        "Datasets: 99001234/myscan_00002\n"
+                        "OrigDatablocks: delete 99001234/myscan_00002\n"
+                        "OrigDatablocks: 99001234/myscan_00002\n"
+                        "Datasets Attachments: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -6361,7 +6280,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6385,13 +6303,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6415,13 +6331,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6432,7 +6346,7 @@ optional arguments:
                          'techniques': [],
                          'owner': 'NewOwner',
                          'ownerEmail': 'peter.smithson@fake.de',
-                         'pid': '/99001234/myscan_00002',
+                         'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -6445,8 +6359,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -6458,7 +6371,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6473,7 +6386,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6488,7 +6401,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6497,7 +6410,7 @@ optional arguments:
                     self.assertEqual(len(self.__server.attachments), 1)
                     self.assertEqual(
                         self.__server.attachments[0][0],
-                        "/99001234/myscan_00002")
+                        "99001234/myscan_00002")
                     self.myAssertDict(
                         json.loads(self.__server.attachments[0][1]),
                         {'accessGroups': ['99001234-dmgt',
@@ -6506,6 +6419,7 @@ optional arguments:
                                           'p00dmgt',
                                           'p00staff'],
                          'ownerGroup': '99001234-dmgt',
+                         'caption': '',
                          'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                          'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
                          'T92AAAAB3RJTUUH5wMVByY7kGggYgAAARJJREFUGNMFwU1Kw0AUA'
@@ -6654,7 +6568,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         # 'INFO : DatasetIngestor: Ingest dataset: '
                         # '{subdir2}/{sc1}.scan.json\n'
@@ -6670,7 +6584,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
@@ -6684,8 +6598,8 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "OrigDatablocks: delete /99001234/myscan_00002\n"
-                        "OrigDatablocks: /99001234/myscan_00002\n",
+                        "OrigDatablocks: delete 99001234/myscan_00002\n"
+                        "OrigDatablocks: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -6701,7 +6615,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6725,13 +6638,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -6755,8 +6666,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -6768,7 +6678,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6783,7 +6693,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6798,7 +6708,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -6940,7 +6850,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         # 'INFO : DatasetIngestor: Ingest dataset: '
                         # '{subdir2}/{sc1}.scan.json\n'
@@ -6956,18 +6866,18 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Post the dataset with a new pid: '
-                        '/99001234/{sc2}/2\n'
+                        '99001234/{sc2}/2\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: '
@@ -6978,7 +6888,7 @@ optional arguments:
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
@@ -6992,8 +6902,8 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: 99001234/myscan_00002/2\n"
-                        "OrigDatablocks: /99001234/myscan_00002/2\n",
+                        "Datasets: 99001234/myscan_00002/2\n"
+                        "OrigDatablocks: 99001234/myscan_00002/2\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -7009,7 +6919,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -7033,13 +6942,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -7063,13 +6970,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -7093,8 +6998,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -7106,7 +7010,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -7121,7 +7025,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -7136,7 +7040,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002/2',
+                         'datasetId': '99001234/myscan_00002/2',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -7278,7 +7182,7 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00001  '
+                        '-p 99001234/myscan_00001  '
                         '{subdir2}/{sc1} \n'
                         # 'INFO : DatasetIngestor: Ingest dataset: '
                         # '{subdir2}/{sc1}.scan.json\n'
@@ -7294,18 +7198,18 @@ optional arguments:
                         '-w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-p /99001234/myscan_00002  '
+                        '-p 99001234/myscan_00002  '
                         '{subdir2}/{sc2} \n'
                         'INFO : DatasetIngestor: '
                         'Generating origdatablock metadata:'
                         ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Find the dataset by id: '
-                        '/99001234/{sc2}\n'
+                        '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: '
                         'Post the dataset with a new pid: '
-                        '/99001234/{sc2}/2\n'
+                        '99001234/{sc2}/2\n'
                         'INFO : DatasetIngestor: Ingest dataset: '
                         '{subdir2}/{sc2}.scan.json\n'
                         'INFO : DatasetIngestor: '
@@ -7316,7 +7220,7 @@ optional arguments:
                         'nxsfileinfo origdatablock  '
                         '-s *.pyc,*.origdatablock.json,*.scan.json,'
                         '*.attachment.json,*~  '
-                        '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc2}.origdatablock.json  '
@@ -7330,8 +7234,8 @@ optional arguments:
                         nodebug)
                     self.assertEqual(
                         "Login: ingestor\n"
-                        "RawDatasets: 99001234/myscan_00002/2\n"
-                        "OrigDatablocks: /99001234/myscan_00002/2\n",
+                        "Datasets: 99001234/myscan_00002/2\n"
+                        "OrigDatablocks: 99001234/myscan_00002/2\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
                     self.assertEqual(
@@ -7347,7 +7251,6 @@ optional arguments:
                     self.myAssertDict(
                         json.loads(self.__server.datasets[0]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -7371,13 +7274,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[1]),
                         {'contactEmail': 'appuser@fake.com',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -7401,13 +7302,11 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.myAssertDict(
                         json.loads(self.__server.datasets[2]),
                         {'contactEmail': 'new.owner@ggg.gg',
-                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': 'H20 distribution',
@@ -7431,8 +7330,7 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         'type': 'raw'},
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 3)
                     self.myAssertDict(
@@ -7444,7 +7342,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00001',
+                         'datasetId': '99001234/myscan_00001',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -7459,7 +7357,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002',
+                         'datasetId': '99001234/myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -7474,7 +7372,7 @@ optional arguments:
                              'size': 629,
                              'time': '2022-07-05T19:07:16.683673+0200',
                              'uid': 'jkotan'}],
-                         'datasetId': '/99001234/myscan_00002/2',
+                         'datasetId': '99001234/myscan_00002/2',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
@@ -7588,15 +7486,15 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -7610,7 +7508,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
@@ -7619,7 +7517,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: /99001234/myscan_00001\n",
+                    "Datasets: 99001234/myscan_00001\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -7635,7 +7533,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -7658,13 +7555,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -7687,13 +7582,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -7704,7 +7597,7 @@ optional arguments:
                      'owner': 'Smithson',
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '/99001234/myscan_00001',
+                     'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -7717,8 +7610,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -7730,7 +7622,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -7745,7 +7637,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -7854,7 +7746,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
@@ -7867,7 +7759,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
@@ -7891,7 +7783,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -7914,14 +7805,12 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
                      'instrumentId': '/petra3/p00',
-                     'createdAt': '2022-05-14 11:54:29',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
                      'creationTime': '2022-05-19 09:00:00',
@@ -7943,8 +7832,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -7956,7 +7844,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -7971,7 +7859,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8080,15 +7968,15 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Patch scientificMetadata of dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -8102,7 +7990,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
@@ -8111,7 +7999,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: /99001234/myscan_00001\n",
+                    "Datasets: 99001234/myscan_00001\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -8127,7 +8015,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8150,13 +8037,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8179,13 +8064,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8196,7 +8079,7 @@ optional arguments:
                      'owner': 'Smithson',
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '/99001234/myscan_00001',
+                     'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -8209,8 +8092,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -8222,7 +8104,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8237,7 +8119,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8346,15 +8228,15 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: '
                     'Post the dataset with a new pid: '
-                    '/99001234/{sc1}/2\n'
+                    '99001234/{sc1}/2\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: '
@@ -8365,7 +8247,7 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
@@ -8383,7 +8265,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
@@ -8392,8 +8274,8 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001/2\n"
-                    "OrigDatablocks: /99001234/myscan_00001/2\n",
+                    "Datasets: 99001234/myscan_00001/2\n"
+                    "OrigDatablocks: 99001234/myscan_00001/2\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -8409,7 +8291,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8432,13 +8313,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8461,13 +8340,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8491,8 +8368,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=["creationTime"])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -8504,7 +8380,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8519,7 +8395,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8534,7 +8410,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001/2',
+                     'datasetId': '99001234/myscan_00001/2',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8624,7 +8500,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -8638,15 +8514,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -8655,7 +8531,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -8669,15 +8545,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
@@ -8690,10 +8566,10 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: /99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "OrigDatablocks: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -8702,7 +8578,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8725,13 +8600,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8754,8 +8627,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -8771,7 +8643,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'size': 629}, skip=["dataFileList", "size"])
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[1]),
@@ -8782,7 +8654,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -8875,7 +8747,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -8889,15 +8761,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Internal Error"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -8912,7 +8784,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -8926,15 +8798,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Post the dataset: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
                     'ERROR : DatasetIngestor: '
@@ -8949,7 +8821,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -8958,7 +8830,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -8981,8 +8852,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
@@ -9054,7 +8924,8 @@ optional arguments:
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
                 self.__server.reset()
-                self.__server.error_requests = [1, 2, 3]
+                # self.__server.error_requests = [1, 2, 3]
+                self.__server.error_requests = [1]
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
@@ -9074,7 +8945,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc1}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -9088,15 +8959,15 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00001  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00001  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc1}.origdatablock.json  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'ERROR : DatasetIngestor: '
-                    '{{"Error": "Internal Error"}}\n'
+                    '{{"Error": "Empty access_token"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'ERROR : DatasetIngestor: '
@@ -9109,7 +8980,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  -o {subdir2}/{sc2}.scan.json  '
+                    'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-b {btmeta} '
@@ -9123,13 +8994,13 @@ optional arguments:
                     'nxsfileinfo origdatablock  '
                     '-s *.pyc,*.origdatablock.json,*.scan.json,'
                     '*.attachment.json,*~  '
-                    '-p /99001234/myscan_00002  -w 99001234-dmgt '
+                    '-p 99001234/myscan_00002  -w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
                     '-o {subdir2}/{sc2}.origdatablock.json  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc2}\n'
+                    '99001234/{sc2}\n'
                     'ERROR : DatasetIngestor: '
                     '{{"Error": "Empty access_token"}}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
@@ -9242,7 +9113,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
                     'INFO : DatasetIngestor: Checking origdatablock metadata:'
@@ -9255,7 +9126,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     .format(basedir=fdirname,
                             subdir2=fsubdirname2,
@@ -9274,7 +9145,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -9297,13 +9167,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -9326,8 +9194,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -9339,7 +9206,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -9354,7 +9221,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -9478,12 +9345,12 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00001  '
+                    '-p 99001234/myscan_00001  '
                     '{subdir2}/{sc1} \n'
                     'INFO : DatasetIngestor: Check if dataset exists: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Find the dataset by id: '
-                    '/99001234/{sc1}\n'
+                    '99001234/{sc1}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Checking: {dslist} {sc2}\n'
@@ -9497,7 +9364,7 @@ optional arguments:
                     '-w 99001234-dmgt '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff '
-                    '-p /99001234/myscan_00002  '
+                    '-p 99001234/myscan_00002  '
                     '{subdir2}/{sc2} \n'
                     'INFO : DatasetIngestor: '
                     'Generating origdatablock metadata:'
@@ -9511,8 +9378,8 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "OrigDatablocks: delete /99001234/myscan_00002\n"
-                    "OrigDatablocks: /99001234/myscan_00002\n",
+                    "OrigDatablocks: delete 99001234/myscan_00002\n"
+                    "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -9528,7 +9395,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'ownerGroup': '99001234-dmgt',
@@ -9551,13 +9417,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -9580,8 +9444,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -9593,7 +9456,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00001',
+                     'datasetId': '99001234/myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -9608,7 +9471,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -9623,7 +9486,7 @@ optional arguments:
                          'size': 629,
                          'time': '2022-07-05T19:07:16.683673+0200',
                          'uid': 'jkotan'}],
-                     'datasetId': '/99001234/myscan_00002',
+                     'datasetId': '99001234/myscan_00002',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
@@ -9681,7 +9544,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
@@ -9725,7 +9588,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
                     '-c group1,group2 -w mygroup '
                     '-b {btmeta} '
@@ -9755,7 +9618,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
                     '-c group1,group2 -w mygroup '
                     '-b {btmeta} '
@@ -9791,9 +9654,9 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -9806,7 +9669,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -9827,13 +9689,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -9854,8 +9714,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -9939,7 +9798,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
@@ -9986,7 +9845,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
@@ -10018,7 +9877,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,p00dmgt,'
                     'p00staff -w 99001234-dmgt '
@@ -10056,9 +9915,9 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -10071,7 +9930,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -10094,13 +9952,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -10123,8 +9979,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -10212,7 +10067,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
@@ -10238,7 +10093,7 @@ optional arguments:
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
                 self.__server.reset()
-                self.__server.error_requests = [3]
+                self.__server.error_requests = [2]
                 self.__server.pid_proposal["99001234"] = "sdfsd:["
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -10259,7 +10114,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
@@ -10291,7 +10146,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,p00dmgt,'
                     'p00staff -w 99001234-dmgt '
@@ -10329,9 +10184,9 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -10344,7 +10199,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -10367,13 +10221,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -10396,8 +10248,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -10481,7 +10332,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
@@ -10527,7 +10378,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc1} {vardir}{subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
@@ -10559,7 +10410,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating metadata: '
                     '{sc2} {vardir}{subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
-                    'nxsfileinfo metadata  '
+                    'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,p00dmgt,'
                     'p00staff -w 99001234-dmgt '
@@ -10597,9 +10448,9 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Login: ingestor\n"
-                    "RawDatasets: 99001234/myscan_00001\n"
+                    "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "RawDatasets: 99001234/myscan_00002\n"
+                    "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -10612,7 +10463,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -10635,13 +10485,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -10664,8 +10512,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -10754,7 +10601,7 @@ optional arguments:
             'scicat_url: "{url}"\n' \
             'ingestor_username: ""\n' \
             'ingest_dataset_attachment: true\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
@@ -10910,7 +10757,7 @@ optional arguments:
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
@@ -10992,7 +10839,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -11013,13 +10859,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -11040,8 +10884,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
@@ -11124,7 +10967,7 @@ optional arguments:
             'scicat_url: "{url}"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
-            'dataset_pid_prefix: "10.3204"\n' \
+            'dataset_pid_prefix: "10.3204/"\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -11256,7 +11099,6 @@ optional arguments:
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'ownerGroup': 'mygroup',
@@ -11277,13 +11119,11 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
-                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
@@ -11305,8 +11145,7 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'},
+                     'type': 'raw'},
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(

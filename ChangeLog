@@ -1,3 +1,7 @@
+2023-08-26 Jan Kotanski <jan.kotanski@desy.de>
+	* change REST API to the nestjs backend (#234)
+	* tagged as 0.7.0
+
 2023-04-06 Jan Kotanski <jan.kotanski@desy.de>
 	* add max_oned_size and max_oned_dataset_generator_switch configuration variables(#227)
 	* tagged as 0.6.0

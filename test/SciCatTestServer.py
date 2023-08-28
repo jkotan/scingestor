@@ -71,7 +71,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         message = ""
 
         if self.path.lower().startswith(
-                '/rawdatasets/') and \
+                '/datasets/') and \
                 contenttype == 'application/json':
             self.server.datasets.append(in_data)
             # print(in_data)
@@ -84,7 +84,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     raise Exception("Empty access_token")
                 dt = json.loads(in_data)
                 # print("Datasets: %s" % dt)
-                print("RawDatasets: %s" % dt["pid"])
+                print("Datasets: %s" % dt["pid"])
                 npid = dt["pid"]
                 dt["pid"] = npid
                 self.server.pid_dataset[npid] = json.dumps(dt)
@@ -143,7 +143,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             self.set_json_header(resp)
 
         elif self.path.lower().startswith(
-                '/rawdatasets?access_token=') and \
+                '/datasets?access_token=') and \
                 contenttype == 'application/json':
             # print(in_data)
             # print(type(in_data))
@@ -154,7 +154,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                 self.server.datasets.append(in_data)
                 dt = json.loads(in_data)
                 # print("Datasets: %s" % dt)
-                print("RawDatasets: %s" % dt["pid"])
+                print("Datasets: %s" % dt["pid"])
                 npid = self.server.pidprefix + dt["pid"]
                 dt["pid"] = npid
                 self.server.pid_dataset[npid] = json.dumps(dt)
@@ -242,49 +242,37 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             if not spath[-1]:
                 raise Exception("Empty access_token")
 
-            if len(dspath) > 2 and dspath[1].lower() == "rawdatasets":
+            if len(dspath) > 2 and dspath[1].lower() == "datasets":
                 pid = dspath[2].replace("%2F", "/")
-                if len(dspath) == 4 and dspath[3].lower() == "exists":
-                    message = json.dumps(
-                        {'exists': (pid in self.server.pid_dataset.keys())})
-                elif len(dspath) == 3:
-                    message = self.server.pid_dataset[pid]
+                if len(dspath) == 3:
+                    if pid in self.server.pid_dataset:
+                        message = self.server.pid_dataset[pid]
+                    else:
+                        message = ""
+                elif (len(dspath) == 4 and
+                      dspath[3].lower() == "origdatablocks"):
+                    odbs = []
+                    for odb in self.server.id_origdatablock.values():
+                        jodb = json.loads(odb)
+                        if "datasetId" in jodb.keys() and \
+                           jodb["datasetId"] == pid:
+                            odbs.append(jodb)
+                    message = json.dumps(odbs)
             elif len(dspath) > 2 and dspath[1].lower() == "proposals":
                 pid = dspath[2].replace("%2F", "/")
-                if len(dspath) == 4 and dspath[3].lower() == "exists":
-                    message = json.dumps(
-                        {'exists': (pid in self.server.pid_proposal.keys())})
-                elif len(dspath) == 3:
-                    message = self.server.pid_proposal[pid]
+                if len(dspath) == 3:
+                    if pid in self.server.pid_proposal:
+                        message = self.server.pid_proposal[pid]
+                    else:
+                        message = ''
             elif len(dspath) > 2 and dspath[1].lower() == "origdatablocks":
                 pid = requests.utils.unquote(dspath[2])
-                if len(dspath) == 4 and dspath[3].lower() == "exists":
+                if len(dspath) == 3:
                     pid = dspath[2].replace("%2F", "/")
-                    message = json.dumps(
-                        {'exists':
-                         (pid in self.server.id_origdatablock.keys())})
-                elif len(dspath) == 3 and \
-                        pid.startswith('findOne?filter={"where"'):
-                    where = json.loads(pid[15:])["where"]
-                    if "datasetId" in where.keys():
-                        pid = where["datasetId"]
-                        pid = pid.replace("%2F", "/")
-                        found = False
-                        for odb in self.server.id_origdatablock.values():
-                            jodb = json.loads(odb)
-                            if "datasetId" in jodb.keys() and \
-                               jodb["datasetId"] == pid:
-                                message = odb
-                                found = True
-                                # print("found", pid )
-                                break
-                    if not found:
-                        self.send_error(
-                            404, 'Unknown "OrigDatablock" id "undefined"')
-                        return
-                elif len(dspath) == 3:
-                    pid = dspath[2].replace("%2F", "/")
-                    message = self.server.id_origdatablock[pid]
+                    if pid in self.server.id_origdatablock:
+                        message = self.server.id_origdatablock[pid]
+                    else:
+                        message = ""
             resp = 200
         except Exception as e:
             message = json.dumps({"Error": str(e)})
@@ -316,12 +304,12 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             if not spath[-1]:
                 raise Exception("Empty access_token")
 
-            if len(dspath) > 2 and dspath[1].lower() == "rawdatasets":
+            if len(dspath) > 2 and dspath[1].lower() == "datasets":
                 pid = dspath[2].replace("%2F", "/")
                 if len(dspath) == 3:
                     if pid in self.server.pid_dataset.keys():
                         self.server.pid_dataset.pop(pid)
-                        print("RawDatasets: delete %s" % pid)
+                        print("Datasets: delete %s" % pid)
             elif len(dspath) > 2 and dspath[1].lower() == "proposals":
                 pid = dspath[2].replace("%2F", "/")
                 if len(dspath) == 3:
@@ -374,7 +362,7 @@ class SciCatTestServer(HTTPServer):
         #: (:obj:`int`) request ids with error
         self.error_requests = []
         #: (:obj:`str`) pid prefix
-        self.pidprefix = "/"
+        self.pidprefix = ""
         # self.pidprefix = "10.3204/"
 
     def reset(self):

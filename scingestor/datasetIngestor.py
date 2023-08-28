@@ -109,7 +109,7 @@ class DatasetIngestor:
 
         #: (:obj:`str`) doi prefix
         self.__pidprefix = ""
-        # self.__pidprefix = "10.3204"
+        # self.__pidprefix = "10.3204/"
         #: (:obj:`str`) username
         self.__username = 'ingestor'
         #: (:obj:`str`) update strategy
@@ -123,7 +123,7 @@ class DatasetIngestor:
         #: (:obj:`str`) scicat users login
         self.__scicat_users_login = "Users/login"
         #: (:obj:`str`) scicat datasets class
-        self.__scicat_datasets = "RawDatasets"
+        self.__scicat_datasets = "Datasets"
         #: (:obj:`str`) scicat proposal class
         self.__scicat_proposals = "Proposals"
         #: (:obj:`str`) scicat datablock class
@@ -166,14 +166,14 @@ class DatasetIngestor:
         self.__attachmentpostfix = ".attachment.json"
 
         #: (:obj:`str`) nexus dataset shell command
-        self.__datasetcommandfile = "nxsfileinfo metadata " \
+        self.__datasetcommandfile = "nxsfileinfo metadata -k4 " \
             " -o {metapath}/{scanname}{scanpostfix} " \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
             " {scanpath}/{scanname}.{ext}"
         #: (:obj:`str`) datablock shell command
-        self.__datasetcommand = "nxsfileinfo metadata " \
+        self.__datasetcommand = "nxsfileinfo metadata -k4 " \
             " -o {metapath}/{scanname}{scanpostfix} " \
             " -c {accessgroups}" \
             " -w {ownergroup}" \
@@ -182,7 +182,7 @@ class DatasetIngestor:
         self.__datablockcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*{datablockpostfix},*{scanpostfix}," \
             "*{attachmentpostfix},*~ " \
-            " -p {pidprefix}/{beamtimeid}/{scanname} " \
+            " -p {pidprefix}{beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
             " -o {metapath}/{scanname}{datablockpostfix} "
@@ -192,7 +192,7 @@ class DatasetIngestor:
             "*{attachmentpostfix},*~ " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
-            " -p {pidprefix}/{beamtimeid}/{scanname} "
+            " -p {pidprefix}{beamtimeid}/{scanname} "
         #: (:obj:`str`) datablock path postfix
         self.__datablockscanpath = " {scanpath}/{scanname} "
         #: (:obj:`str`) attachment shell command
@@ -606,7 +606,7 @@ class DatasetIngestor:
         #: (:obj:`str`) dataset url
         self.__dataseturl = self.__scicat_url + self.__scicat_datasets
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
-        #    "RawDatasets"
+        #    "Datasets"
         #: (:obj:`str`) dataset url
         self.__proposalurl = self.__scicat_url + self.__scicat_proposals
         # self.__proposalurl = "http://www-science3d.desy.de:3000/api/v3/" \
@@ -823,7 +823,6 @@ class DatasetIngestor:
             except Exception as e:
                 get_logger().warning('%s: %s' % (scan, str(e)))
                 dnwmeta = None
-            # print("M2", dnwmeta)
             if dnwmeta is not None:
                 if not self._metadataEqual(dmeta, dnwmeta) or force:
                     get_logger().info(
@@ -932,23 +931,21 @@ class DatasetIngestor:
         bid = self.__meta["beamtimeId"]
         try:
             resexists = requests.get(
-                "{url}/{pid}/exists?access_token={token}"
+                "{url}/{pid}"
                 .format(
                     url=self.__proposalurl,
-                    pid=bid.replace("/", "%2F"),
-                    token=token))
+                    pid=bid.replace("/", "%2F")),
+                params={"access_token": token}
+            )
 
             if resexists.ok:
-                pexists = json.loads(resexists.content)["exists"]
+                pexists = bool(resexists.content)
             else:
-                raise Exception("Proposal %s: %s" % (bid, resexists.text))
+                raise Exception(
+                    "Proposal %s: %s"
+                    % (bid, resexists.text or '{\"exists\": false}'))
             if pexists:
-                resget = requests.get(
-                    "{url}/{pid}?access_token={token}"
-                    .format(
-                        url=self.__proposalurl,
-                        pid=bid.replace("/", "%2F"),
-                        token=token))
+                resget = resexists
                 if resget.ok:
                     proposal = json.loads(resget.content)
                     if "ownerGroup" not in self.__meta and \
@@ -968,7 +965,8 @@ class DatasetIngestor:
                     raise Exception(
                         "Proposal %s: %s" % (bid, resget.text))
             else:
-                raise Exception("Proposal %s: %s" % (bid, resexists.text))
+                raise Exception("Proposal %s: %s" %
+                                (bid, resexists.text or '{\"exists\": false}'))
         except Exception as e:
             get_logger().warning('%s' % (str(e)))
         return self.__meta
@@ -992,8 +990,12 @@ class DatasetIngestor:
         npid = mdic["pid"]
         ipid = mdct["pid"]
         while pexist:
+            npre = ""
+            if npid.startswith(self.__pidprefix):
+                npre = self.__pidprefix
+                npid = npid[len(npre):]
             spid = npid.split("/")
-            if len(spid) > 3:
+            if len(spid) > 2:
                 try:
                     ver = int(spid[-1])
                     spid[-1] = str(ver + 1)
@@ -1001,18 +1003,17 @@ class DatasetIngestor:
                     spid.append("2")
             else:
                 spid.append("2")
-            npid = "/".join(spid)
+            npid = npre + "/".join(spid)
             if len(spid) > 0:
-                ipid = "/".join(spid[1:])
+                ipid = npre + "/".join(spid)
             resexists = requests.get(
-                "{url}/{pid}/exists?access_token={token}"
+                "{url}/{pid}"
                 .format(
                     url=self.__dataseturl,
-                    pid=npid.replace("/", "%2F"),
-                    token=token))
+                    pid=(npre + npid.replace("/", "%2F"))),
+                params={"access_token": token})
             if resexists.ok:
-                pexist = json.loads(
-                    resexists.content)["exists"]
+                pexist = bool(resexists.content)
             else:
                 raise Exception("%s" % resexists.text)
 
@@ -1023,9 +1024,10 @@ class DatasetIngestor:
             'Post the dataset with a new pid: %s' % (npid))
 
         # post the dataset with the new pid
+        self.__headers["Authorization"] = "Bearer {}".format(token)
         response = requests.post(
-            "%s?access_token=%s"
-            % (self.__dataseturl, token),
+            self.__dataseturl,
+            params={"access_token": token},
             headers=self.__headers,
             data=nmeta)
         if response.ok:
@@ -1051,12 +1053,13 @@ class DatasetIngestor:
             'DatasetIngestor: '
             'Patch scientificMetadata of dataset:'
             ' %s' % (pid))
+        self.__headers["Authorization"] = "Bearer {}".format(token)
         response = requests.patch(
-            "{url}/{pid}?access_token={token}"
+            "{url}/{pid}"
             .format(
                 url=self.__dataseturl,
-                pid=pid.replace("/", "%2F"),
-                token=token),
+                pid=pid.replace("/", "%2F")),
+            params={"access_token": token},
             headers=self.__headers,
             data=nmeta)
         if response.ok:
@@ -1077,7 +1080,7 @@ class DatasetIngestor:
         :rtype: :obj:`str`
         """
         try:
-            pid = "%s/%s" % (self.__pidprefix, mdct["pid"])
+            pid = "%s%s" % (self.__pidprefix, mdct["pid"])
             # check if dataset with the pid exists
             get_logger().info(
                 'DatasetIngestor: Check if dataset exists: %s' % (pid))
@@ -1085,33 +1088,39 @@ class DatasetIngestor:
             counter = 0
             while checking:
                 resexists = requests.get(
-                    "{url}/{pid}/exists?access_token={token}".format(
+                    "{url}/{pid}".format(
                         url=self.__dataseturl,
-                        pid=pid.replace("/", "%2F"),
-                        token=token))
+                        pid=pid.replace("/", "%2F")),
+                    params={"access_token": token}
+                )
                 if hasattr(resexists, "content"):
                     try:
                         json.loads(resexists.content)
                         checking = False
                     except Exception:
                         time.sleep(0.1)
-                else:
-                    time.sleep(0.1)
+                        if resexists.ok and hasattr(resexists, "content") and \
+                           not bool(resexists.content):
+                            checking = False
+                        else:
+                            time.sleep(0.1)
                 if counter == self.__maxcounter:
                     checking = False
                 counter += 1
             if resexists.ok and hasattr(resexists, "content"):
                 try:
-                    exists = json.loads(resexists.content)["exists"]
+                    exists = bool(resexists.content)
                 except Exception:
                     exists = False
                 if not exists:
                     # post the new dataset since it does not exist
                     get_logger().info(
                         'DatasetIngestor: Post the dataset: %s' % (pid))
+                    self.__headers["Authorization"] = "Bearer {}".format(token)
                     response = requests.post(
-                        "%s?access_token=%s" % (self.__dataseturl, token),
+                        self.__dataseturl,
                         headers=self.__headers,
+                        params={"access_token": token},
                         data=metadata)
                     if response.ok:
                         return mdct["pid"]
@@ -1122,10 +1131,11 @@ class DatasetIngestor:
                     get_logger().info(
                         'DatasetIngestor: Find the dataset by id: %s' % (pid))
                     resds = requests.get(
-                        "{url}/{pid}?access_token={token}".format(
+                        "{url}/{pid}".format(
                             url=self.__dataseturl,
-                            pid=pid.replace("/", "%2F"),
-                            token=token))
+                            pid=pid.replace("/", "%2F")),
+                        params={"access_token": token}
+                    )
                     if resds.ok:
                         dsmeta = json.loads(resds.content)
                         mdic = dict(mdct)
@@ -1175,9 +1185,11 @@ class DatasetIngestor:
         :rtype: :obj:`bool`
         """
         try:
+            self.__headers["Authorization"] = "Bearer {}".format(token)
             response = requests.post(
-                "%s?access_token=%s" % (self.__datablockurl, token),
+                self.__datablockurl,
                 headers=self.__headers,
+                params={"access_token": token},
                 data=metadata)
             if response.ok:
                 return True
@@ -1202,13 +1214,15 @@ class DatasetIngestor:
         """
         try:
             dsid = datasetid.replace("/", "%2F")
-            url = self.__attachmenturl + "?access_token={token}"
+            url = self.__attachmenturl
             # get_logger().debug(
             #     'DatasetIngestor: ingest attachment %s' % (
             #         url.format(pid=dsid, token=token)))
+            self.__headers["Authorization"] = "Bearer {}".format(token)
             response = requests.post(
-                url.format(pid=dsid, token=token),
+                url.format(pid=dsid),
                 headers=self.__headers,
+                params={"access_token": token},
                 data=metadata)
             if response.ok:
                 return True
@@ -1219,27 +1233,26 @@ class DatasetIngestor:
                 'DatasetIngestor: %s' % (str(e)))
         return False
 
-    def _get_id_first_origdatablock(self, datasetid, token):
-        """ get id of first origdatablock with datasetid
+    def _get_origdatablocks(self, datasetid, token):
+        """ get origdatablocks with datasetid
 
         :param datasetid: dataset id
         :type datasetid: :obj:`str`
         :param token: ingestor token
         :type token: :obj:`str`
-        :returns: origdatablock id
-        :rtype: :obj:`str`
+        :returns: list of  origdatablocks
+        :rtype: :obj:`str` <:obj:`str`>
         """
         try:
-            where = requests.utils.quote(
-                '{"where": {"datasetId":"%s"}}'
-                % datasetid.replace("/", "%2F"))
+            self.__headers["Authorization"] = "Bearer {}".format(token)
             response = requests.get(
-                self.__datablockurl + "/findOne?filter=" + where
-                + "&access_token=" + token,
+                self.__dataseturl + "/%s/%s" %
+                (datasetid.replace("/", "%2F"), self.__scicat_datablocks),
+                params={"access_token": token},
                 headers=self.__headers)
             if response.ok:
                 js = response.json()
-                return js['id']
+                return js
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
@@ -1255,11 +1268,12 @@ class DatasetIngestor:
         """
         try:
             response = requests.delete(
-                "{url}/{pid}?access_token={token}"
+                "{url}/{pid}"
                 .format(
                     url=self.__datablockurl,
-                    pid=did.replace("/", "%2F"),
-                    token=token))
+                    pid=did.replace("/", "%2F")),
+                params={"access_token": token},
+            )
             if response.ok:
                 return True
             else:
@@ -1331,15 +1345,11 @@ class DatasetIngestor:
         :rtype: :obj:`str`
         """
         try:
-            datasetid = "%s/%s" % (self.__pidprefix, pid)
-            did = self._get_id_first_origdatablock(datasetid, token)
-            lastdid = [did]
-            while did:
-                self._get_delete_origdatablock(did, token)
-                did = self._get_id_first_origdatablock(datasetid, token)
-                if did in lastdid:
-                    break
-                lastdid.append(did)
+            datasetid = "%s%s" % (self.__pidprefix, pid)
+            odbs = self._get_origdatablocks(datasetid, token) or []
+            for odb in odbs:
+                if "id" in odb:
+                    self._get_delete_origdatablock(odb["id"], token)
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
@@ -1364,8 +1374,8 @@ class DatasetIngestor:
                     "Wrong origdatablock datasetId %s for DESY beamtimeId "
                     "%s in  %s"
                     % (pid, self.__bid, metafile))
-            if mt["datasetId"] != "%s/%s" % (self.__pidprefix, pid):
-                mt["datasetId"] = "%s/%s" % (self.__pidprefix, pid)
+            if mt["datasetId"] != "%s%s" % (self.__pidprefix, pid):
+                mt["datasetId"] = "%s%s" % (self.__pidprefix, pid)
                 smt = json.dumps(mt)
                 with open(metafile, "w") as mf:
                     mf.write(smt)
@@ -1397,12 +1407,12 @@ class DatasetIngestor:
                         "Wrong attachment datasetId %s for DESY beamtimeId "
                         "%s in  %s"
                         % (pid, self.__bid, metafile))
-                if mt["datasetId"] != "%s/%s" % (self.__pidprefix, pid):
-                    mt["datasetId"] = "%s/%s" % (self.__pidprefix, pid)
+                if mt["datasetId"] != "%s%s" % (self.__pidprefix, pid):
+                    mt["datasetId"] = "%s%s" % (self.__pidprefix, pid)
                     smt = json.dumps(mt)
                     with open(metafile, "w") as mf:
                         mf.write(smt)
-            dsid = "%s/%s" % (self.__pidprefix, pid)
+            dsid = "%s%s" % (self.__pidprefix, pid)
             status = self._ingest_attachment(smt, dsid, token)
             if status:
                 return dsid
