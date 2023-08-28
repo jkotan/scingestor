@@ -4367,7 +4367,6 @@ class DatasetWatcherTest(unittest.TestCase):
 
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
-            'dataset_pid_prefix: "/"\n' \
             'scicat_url: "{url}"\n' \
             'log_generator_commands: true\n' \
             'dataset_metadata_generator: "nxsfileinfo metadata ' \
@@ -4632,7 +4631,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'updatedAt': '2022-05-14 11:54:29'},
                         skip=["creationTime"])
 
-                print(self.__server.origdatablocks)
+                # print(self.__server.origdatablocks)
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):
                     self.myAssertDict(
