@@ -5536,6 +5536,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
+                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
@@ -5580,11 +5581,13 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw'})
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
+                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
@@ -5629,7 +5632,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw'})
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'})
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
@@ -6540,6 +6544,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
+                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
@@ -6584,11 +6589,13 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw'})
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
+                     'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
@@ -6633,7 +6640,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw'})
+                     'type': 'raw',
+                     'updatedAt': '2022-05-14 11:54:29'})
                 self.assertEqual(len(self.__server.origdatablocks), 0)
                 self.assertEqual(len(self.__server.attachments), 0)
                 if os.path.isdir(fsubdirname):
@@ -7004,6 +7012,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
+                         'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
@@ -7058,7 +7067,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw'})
+                         'type': 'raw',
+                         'updatedAt': '2022-05-14 11:54:29'})
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):
