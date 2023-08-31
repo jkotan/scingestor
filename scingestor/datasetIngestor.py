@@ -1688,8 +1688,18 @@ class DatasetIngestor:
                     for sc in idsf.read().split("\n")
                     if sc.strip()]
         if not reingest:
-            ingested = [(" ".join(sc[:-3]) if len(sc) > 3 else sc[0])
-                        for sc in self.__sc_ingested]
+            ingested = []
+            for sc in self.__sc_ingested:
+                if len(sc) > 3:
+                    try:
+                        if float(sc[-1]) >= 0 \
+                           and float(sc[-2]) > 0 and float(sc[-3]) > 0:
+                            ingested.append(" ".join(sc[:-3]))
+                    except Exception as e:
+                        get_logger().debug("%s" % str(e))
+                else:
+                    ingested.append(sc[0])
+
             self.__sc_waiting = [
                 sc for sc in scans if sc not in ingested]
         else:
