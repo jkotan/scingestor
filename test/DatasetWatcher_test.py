@@ -1213,7 +1213,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 ser = er.split("\n")
                 seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
                 dseri = [ln for ln in seri
-                         if ("DEBUG :" not in ln  and "ERROR :" not in ln)]
+                         if ("DEBUG :" not in ln and "ERROR :" not in ln)]
                 eseri = [ln for ln in seri if "ERROR :" in ln]
                 # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
                 # print(er)
