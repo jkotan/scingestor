@@ -142,6 +142,8 @@ class DatasetIngestor:
         self.__attachmentframe = None
         #: (:obj:`bool`) ingest attachment flag
         self.__ingest_attachment = False
+        #: (:obj:`bool`) retry failed dataset ingestion on next event
+        self.__retry_failed_dataset_ingestion = False
         #: (:obj:`str`) metadata copy map file
         self.__copymapfile = None
         #: (:obj:`bool`) oned metadata flag
@@ -373,6 +375,9 @@ class DatasetIngestor:
         if "ingest_dataset_attachment" in self.__config.keys():
             self.__ingest_attachment = \
                 self.__config["ingest_dataset_attachment"]
+        if "retry_failed_dataset_ingestion" in self.__config.keys():
+            self.__retry_failed_dataset_ingestion = \
+                self.__config["retry_failed_dataset_ingestion"]
         if "add_empty_units" in self.__config.keys():
             self.__emptyunits = self.__config["add_empty_units"]
 
@@ -1688,17 +1693,21 @@ class DatasetIngestor:
                     for sc in idsf.read().split("\n")
                     if sc.strip()]
         if not reingest:
-            ingested = []
-            for sc in self.__sc_ingested:
-                if len(sc) > 3:
-                    try:
-                        if float(sc[-1]) >= 0 \
-                           and float(sc[-2]) > 0 and float(sc[-3]) > 0:
-                            ingested.append(" ".join(sc[:-3]))
-                    except Exception as e:
-                        get_logger().debug("%s" % str(e))
-                else:
-                    ingested.append(sc[0])
+            if self.__retry_failed_dataset_ingestion:
+                ingested = []
+                for sc in self.__sc_ingested:
+                    if len(sc) > 3:
+                        try:
+                            if float(sc[-1]) >= 0 \
+                               and float(sc[-2]) > 0 and float(sc[-3]) > 0:
+                                ingested.append(" ".join(sc[:-3]))
+                        except Exception as e:
+                            get_logger().debug("%s" % str(e))
+                    else:
+                        ingested.append(sc[0])
+            else:
+                ingested = [(" ".join(sc[:-3]) if len(sc) > 3 else sc[0])
+                            for sc in self.__sc_ingested]
 
             self.__sc_waiting = [
                 sc for sc in scans if sc not in ingested]

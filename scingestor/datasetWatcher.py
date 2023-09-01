@@ -186,9 +186,10 @@ class DatasetWatcher(threading.Thread):
         if self.__ingestor.waiting_datasets():
             try:
                 token = self.__ingestor.get_token()
-                for scan in self.__ingestor.waiting_datasets():
-                    self.__ingestor.ingest(scan, token)
-                self.__ingestor.clear_waiting_datasets()
+                if token:
+                    for scan in self.__ingestor.waiting_datasets():
+                        self.__ingestor.ingest(scan, token)
+                    self.__ingestor.clear_waiting_datasets()
             except Exception as e:
                 get_logger().warning(str(e))
 
@@ -280,13 +281,14 @@ class DatasetWatcher(threading.Thread):
                     except Exception as e:
                         get_logger().warning(str(e))
                         continue
-                    for scan in self.__ingestor.waiting_datasets():
-                        try:
-                            self.__ingestor.ingest(scan, token)
-                        except Exception as e:
-                            get_logger().warning(str(e))
-                            continue
-                    self.__ingestor.clear_waiting_datasets()
+                    if token:
+                        for scan in self.__ingestor.waiting_datasets():
+                            try:
+                                self.__ingestor.ingest(scan, token)
+                            except Exception as e:
+                                get_logger().warning(str(e))
+                                continue
+                        self.__ingestor.clear_waiting_datasets()
                 # else:
                 #     time.sleep(self.__timeout)
         finally:
