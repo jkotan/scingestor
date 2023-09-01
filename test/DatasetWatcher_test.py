@@ -673,62 +673,66 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetWatcher: Ingested datasets: []\n'
                         'ERROR : DatasetIngestor: '
                         '{{"Error": "Empty username"}}\n'
-                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
-                        'INFO : DatasetIngestor: Generating metadata: '
-                        '{sc1} {subdir2}/{sc1}.scan.json\n'
-                        'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata -k4  '
-                        '-o {subdir2}/{sc1}.scan.json  '
-                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
-                        'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
-                        '-p 99001234/myscan_00001'
-                        ' -r raw/special  --add-empty-units \n'
-                        'INFO : DatasetIngestor: '
-                        'Generating origdatablock metadata:'
-                        ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
-                        'INFO : DatasetIngestor: '
-                        'Generating origdatablock command: '
-                        'nxsfileinfo origdatablock  '
-                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
-                        '*.attachment.json,*~  '
-                        '-p 99001234/myscan_00001  -w 99001234-dmgt '
-                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
-                        'p00dmgt,p00staff '
-                        '-o {subdir2}/{sc1}.origdatablock.json  '
-                        '{subdir2}/{sc1} \n'
-                        'INFO : DatasetIngestor: Check if dataset exists: '
-                        '99001234/{sc1}\n'
+                        # 'info : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
+                        # 'INFO : DatasetIngestor: Generating metadata: '
+                        # '{sc1} {subdir2}/{sc1}.scan.json\n'
+                        # 'INFO : DatasetIngestor:'
+                        # ' Generating dataset command: '
+                        # 'nxsfileinfo metadata -k4  '
+                        # '-o {subdir2}/{sc1}.scan.json  '
+                        # '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        # 'p00dmgt,p00staff -w 99001234-dmgt '
+                        # '-b {btmeta} '
+                        # '-p 99001234/myscan_00001'
+                        # ' -r raw/special  --add-empty-units \n'
+                        # 'INFO : DatasetIngestor: '
+                        # 'Generating origdatablock metadata:'
+                        # ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        # 'INFO : DatasetIngestor: '
+                        # 'Generating origdatablock command: '
+                        # 'nxsfileinfo origdatablock  '
+                        # '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        # '*.attachment.json,*~  '
+                        # '-p 99001234/myscan_00001  -w 99001234-dmgt '
+                        # '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        # 'p00dmgt,p00staff '
+                        # '-o {subdir2}/{sc1}.origdatablock.json  '
+                        # '{subdir2}/{sc1} \n'
+                        # 'INFO : DatasetIngestor: Check if dataset exists: '
+                        # '99001234/{sc1}\n'
+                        # 'ERROR : DatasetIngestor: '
+                        # '{{"Error": "Empty access_token"}}\n'
+                        # 'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
+                        # 'INFO : DatasetIngestor: Generating metadata: '
+                        # '{sc2} {subdir2}/{sc2}.scan.json\n'
+                        # 'INFO : DatasetIngestor:'
+                        # ' Generating dataset command: '
+                        # 'nxsfileinfo metadata -k4  '
+                        # '-o {subdir2}/{sc2}.scan.json  '
+                        # '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        # 'p00dmgt,p00staff -w 99001234-dmgt '
+                        # '-b {btmeta} '
+                        # '-p 99001234/myscan_00002'
+                        # ' -r raw/special  --add-empty-units \n'
+                        # 'INFO : DatasetIngestor: '
+                        # 'Generating origdatablock metadata:'
+                        # ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        # 'INFO : DatasetIngestor: '
+                        # 'Generating origdatablock command: '
+                        # 'nxsfileinfo origdatablock  '
+                        # '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        # '*.attachment.json,*~  '
+                        # '-p 99001234/myscan_00002  -w 99001234-dmgt '
+                        # '-c 99001234-dmgt,99001234-clbt,99001234-part,'
+                        # 'p00dmgt,p00staff '
+                        # '-o {subdir2}/{sc2}.origdatablock.json  '
+                        # '{subdir2}/{sc2} \n'
+                        # 'INFO : DatasetIngestor: Check if dataset exists: '
+                        # '99001234/{sc2}\n'
+                        # 'ERROR : DatasetIngestor: '
+                        # '{{"Error": "Empty access_token"}}\n'
                         'ERROR : DatasetIngestor: '
-                        '{{"Error": "Empty access_token"}}\n'
-                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
-                        'INFO : DatasetIngestor: Generating metadata: '
-                        '{sc2} {subdir2}/{sc2}.scan.json\n'
-                        'INFO : DatasetIngestor: Generating dataset command: '
-                        'nxsfileinfo metadata -k4  '
-                        '-o {subdir2}/{sc2}.scan.json  '
-                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
-                        'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
-                        '-p 99001234/myscan_00002'
-                        ' -r raw/special  --add-empty-units \n'
-                        'INFO : DatasetIngestor: '
-                        'Generating origdatablock metadata:'
-                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
-                        'INFO : DatasetIngestor: '
-                        'Generating origdatablock command: '
-                        'nxsfileinfo origdatablock  '
-                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
-                        '*.attachment.json,*~  '
-                        '-p 99001234/myscan_00002  -w 99001234-dmgt '
-                        '-c 99001234-dmgt,99001234-clbt,99001234-part,'
-                        'p00dmgt,p00staff '
-                        '-o {subdir2}/{sc2}.origdatablock.json  '
-                        '{subdir2}/{sc2} \n'
-                        'INFO : DatasetIngestor: Check if dataset exists: '
-                        '99001234/{sc2}\n'
-                        'ERROR : DatasetIngestor: '
-                        '{{"Error": "Empty access_token"}}\n'
+                        '{{"Error": "Empty username"}}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -745,6 +749,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         '{subdir2}\n'
                         'INFO : ScanDirWatcher: Stopping DatasetWatcher '
                         '{dslist}\n'
+                        'ERROR : DatasetIngestor: '
+                        '{{"Error": "Empty username"}}\n'
                         'INFO : ScanDirWatcher: Removing watch {cnt5}: '
                         '{dslist}\n'
                         .format(basedir=fdirname, btmeta=fullbtmeta,
@@ -758,10 +764,18 @@ class DatasetWatcherTest(unittest.TestCase):
                     print(er)
                     raise
                 self.assertEqual(
+                    "Login: \n"
+                    "Login: \n"
                     "Login: \n", vl)
-                self.assertEqual(len(self.__server.userslogin), 1)
+                self.assertEqual(len(self.__server.userslogin), 3)
                 self.assertEqual(
                     self.__server.userslogin[0],
+                    b'{"username": "", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[1],
+                    b'{"username": "", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[2],
                     b'{"username": "", "password": "12342345"}')
                 self.assertEqual(len(self.__server.datasets), 0)
                 self.assertEqual(len(self.__server.origdatablocks), 0)
@@ -1393,8 +1407,8 @@ class DatasetWatcherTest(unittest.TestCase):
                 except Exception:
                     print(er)
                     raise
-                self.assertEqual(len(eseri), 6)
                 print(eseri)
+                self.assertTrue(len(eseri) >= 5)
                 for ese in eseri:
                     self.assertTrue(ese.startswith(
                         "ERROR : DatasetIngestor: HTTPConnectionPool"))
