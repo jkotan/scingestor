@@ -119,7 +119,7 @@ class DatasetIngestor:
         #: (:obj:`bool`) relative path in datablock flag
         self.__relpath_in_datablock = False
         #: (:obj:`str`) scicat url
-        self.__scicat_url = "http://localhost:8881"
+        self.__scicat_url = "http://localhost:3000/api/v3"
         #: (:obj:`str`) scicat users login
         self.__scicat_users_login = "Users/login"
         #: (:obj:`str`) scicat datasets class

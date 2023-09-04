@@ -61,7 +61,7 @@ class ModelIngest:
                           'Accept': 'application/json'}
 
         #: (:obj:`str`) scicat url
-        self.__scicat_url = "http://localhost:8881"
+        self.__scicat_url = "http://localhost:3000/api/v3"
 
         #: (:obj:`int`) maximal counter value for post tries
         self.__maxcounter = 100
