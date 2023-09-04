@@ -14,4 +14,5 @@ dataset_pid_prefix: ""
 datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
 ingested_datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
 oned_in_metadata: true
+ingest_dataset_attachment: true
 # hidden_attributes: "nexdatas_source,nexdatas_strategy,units,NX_class"
