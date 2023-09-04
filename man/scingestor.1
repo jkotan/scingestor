@@ -57,7 +57,7 @@ scicat_dataset_ingestor \-c ~/.scingestor.yaml
 The configuration written in YAML can contain the following variables
 .INDENT 0.0
 .IP \(bu 2
-\fBscicat_url\fP \fI(str)\fP , default: \fB"http://localhost:8881"\fP
+\fBscicat_url\fP \fI(str)\fP , default: \fB"http://localhost:3000/api/v3"\fP
 .IP \(bu 2
 \fBingestor_credential_file\fP \fI(str)\fP , default: \fBNone\fP
 .IP \(bu 2
@@ -201,7 +201,7 @@ e.g.
 beamtime_dirs:
   \- "{homepath}/gpfs/current"
   \- "{homepath}/gpfs/commissioning"
-scicat_url: http://localhost:8881
+scicat_url: http://localhost:3000/api/v3
 ingestor_credential_file: "{homepath}/gpfs/pwd"
 .ft P
 .fi
