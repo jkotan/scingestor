@@ -76,7 +76,7 @@ class DatasetIngestTest(unittest.TestCase):
 
         self.maxDiff = None
         self.helperror = "Error: too few arguments\n"
-        self.idata = isoDate("2022-05-19 09:00:00.000000")
+        self.idate = isoDate("2022-05-19 09:00:00.000000")
         self.helpshort = """usage: scicat_dataset_ingest [-h]""" \
             """[-c CONFIG] [-l LOG] [-f LOGFILE] [-t]
 scicat_dataset_ingest: error: unrecognized arguments: """
