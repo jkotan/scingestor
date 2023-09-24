@@ -46,7 +46,7 @@ Configuration variables
 
 The configuration written in YAML can contain the following variables
 
-* **scicat_url** *(str)* , default: ``"http://localhost:8881"``
+* **scicat_url** *(str)* , default: ``"http://localhost:3000/api/v3"``
 * **ingestor_credential_file** *(str)* , default: ``None``
 * **beamtime_dirs** *(list\<str\>)* , default: ``[]``
 * **beamtime_base_dir** *(str)* , default: ``""``
@@ -122,7 +122,7 @@ e.g.
    beamtime_dirs:
      - "{homepath}/gpfs/current"
      - "{homepath}/gpfs/commissioning"
-   scicat_url: http://localhost:8881
+   scicat_url: http://localhost:3000/api/v3
    ingestor_credential_file: "{homepath}/gpfs/pwd"
 
 Pattern keywords for configuration variables
