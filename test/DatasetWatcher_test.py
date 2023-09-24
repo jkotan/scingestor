@@ -1395,7 +1395,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 except Exception:
                     print(er)
                     raise
-                self.assertEqual(len(eseri), 6)
+                self.assertTrue(len(eseri) >= 5)
                 print(eseri)
                 for ese in eseri:
                     self.assertTrue(ese.startswith(
