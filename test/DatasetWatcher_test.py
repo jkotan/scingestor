@@ -34,6 +34,7 @@ from scingestor import beamtimeWatcher
 from scingestor import safeINotifier
 from scingestor import pathConverter
 
+from nxstools.nxsfileparser import isoDate
 
 try:
     from .SciCatTestServer import SciCatTestServer, SciCatMockHandler
@@ -79,6 +80,7 @@ class DatasetWatcherTest(unittest.TestCase):
 
         self.maxDiff = None
         self.notifier = safeINotifier.SafeINotifier()
+        self.idate = isoDate("2022-05-19 09:00:00.000000")
 
     def myAssertDict(self, dct, dct2, skip=None, parent=None):
         parent = parent or ""
@@ -464,8 +466,8 @@ class DatasetWatcherTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
-                     'creationTime': '2022-05-19 09:00:00',
+                     'endTime': self.idate,
+                     'creationTime': self.idate,
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -490,8 +492,8 @@ class DatasetWatcherTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
-                     'creationTime': '2022-05-19 09:00:00',
+                     'endTime': self.idate,
+                     'creationTime': self.idate,
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -673,11 +675,13 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetWatcher: Ingested datasets: []\n'
                         'ERROR : DatasetIngestor: '
                         '{{"Error": "Empty username"}}\n'
-                        # 'info : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
+                        'ERROR : DatasetIngestor: '
+                        '{{"Error": "Empty username"}}\n'
+                        # 'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
                         # 'INFO : DatasetIngestor: Generating metadata: '
                         # '{sc1} {subdir2}/{sc1}.scan.json\n'
-                        # 'INFO : DatasetIngestor:'
-                        # ' Generating dataset command: '
+                        # 'INFO : '
+                        # 'DatasetIngestor: Generating dataset command: '
                         # 'nxsfileinfo metadata -k4  '
                         # '-o {subdir2}/{sc1}.scan.json  '
                         # '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -705,8 +709,8 @@ class DatasetWatcherTest(unittest.TestCase):
                         # 'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
                         # 'INFO : DatasetIngestor: Generating metadata: '
                         # '{sc2} {subdir2}/{sc2}.scan.json\n'
-                        # 'INFO : DatasetIngestor:'
-                        # ' Generating dataset command: '
+                        # 'INFO : '
+                        # 'DatasetIngestor: Generating dataset command: '
                         # 'nxsfileinfo metadata -k4  '
                         # '-o {subdir2}/{sc2}.scan.json  '
                         # '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -731,8 +735,6 @@ class DatasetWatcherTest(unittest.TestCase):
                         # '99001234/{sc2}\n'
                         # 'ERROR : DatasetIngestor: '
                         # '{{"Error": "Empty access_token"}}\n'
-                        'ERROR : DatasetIngestor: '
-                        '{{"Error": "Empty username"}}\n'
                         'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: '
@@ -1079,8 +1081,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationLocation': '/DESY/PETRA III/P00',
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
-                         'endTime': '2022-05-19 09:00:00',
-                         'creationTime': '2022-05-19 09:00:00',
+                         'endTime': self.idate,
+                         'creationTime': self.idate,
                          'isPublished': False,
                          'owner': 'Smithson',
                          'techniques': [],
@@ -1438,8 +1440,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationLocation': '/DESY/PETRA III/P00',
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
-                         'endTime': '2022-05-19 09:00:00',
-                         'creationTime': '2022-05-19 09:00:00',
+                         'endTime': self.idate,
+                         'creationTime': self.idate,
                          'isPublished': False,
                          'owner': 'Smithson',
                          'techniques': [],
@@ -1792,8 +1794,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationLocation': '/DESY/PETRA III/P00',
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
-                         'endTime': '2022-05-19 09:00:00',
-                         'creationTime': '2022-05-19 09:00:00',
+                         'endTime': self.idate,
+                         'creationTime': self.idate,
                          'isPublished': False,
                          'owner': 'Smithson',
                          'techniques': [],
@@ -2143,8 +2145,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationLocation': '/DESY/PETRA III/P00',
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
-                         'endTime': '2022-05-19 09:00:00',
-                         'creationTime': '2022-05-19 09:00:00',
+                         'endTime': self.idate,
+                         'creationTime': self.idate,
                          'isPublished': False,
                          'owner': 'Smithson',
                          'techniques': [],
@@ -2408,8 +2410,8 @@ class DatasetWatcherTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
-                     'creationTime': '2022-05-19 09:00:00',
+                     'endTime': self.idate,
+                     'creationTime': self.idate,
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -2434,8 +2436,8 @@ class DatasetWatcherTest(unittest.TestCase):
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
-                     'creationTime': '2022-05-19 09:00:00',
+                     'endTime': self.idate,
+                     'creationTime': self.idate,
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -2802,8 +2804,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationLocation': '/DESY/PETRA III/P00',
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
-                         'endTime': '2022-05-19 09:00:00',
-                         'creationTime': '2022-05-19 09:00:00',
+                         'endTime': self.idate,
+                         'creationTime': self.idate,
                          'isPublished': False,
                          'owner': 'Smithson',
                          'techniques': [],
@@ -2916,7 +2918,7 @@ class DatasetWatcherTest(unittest.TestCase):
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
-               'endTime': '2022-05-19 09:00:00',
+               'endTime': self.idate,
                'isPublished': False,
                'techniques': [
                    {
@@ -2945,7 +2947,7 @@ class DatasetWatcherTest(unittest.TestCase):
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
-               'endTime': '2022-05-19 09:00:00',
+               'endTime': self.idate,
                'isPublished': False,
                'techniques': [
                 {
@@ -3203,7 +3205,7 @@ class DatasetWatcherTest(unittest.TestCase):
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
-               'endTime': '2022-05-19 09:00:00',
+               'endTime': self.idate,
                'isPublished': False,
                'techniques': [
                    {
@@ -3232,7 +3234,7 @@ class DatasetWatcherTest(unittest.TestCase):
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
-               'endTime': '2022-05-19 09:00:00',
+               'endTime': self.idate,
                'isPublished': False,
                'techniques': [
                 {
@@ -3526,7 +3528,7 @@ class DatasetWatcherTest(unittest.TestCase):
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
-               'endTime': '2022-05-19 09:00:00',
+               'endTime': self.idate,
                'isPublished': False,
                'techniques': [
                    {
@@ -3555,7 +3557,7 @@ class DatasetWatcherTest(unittest.TestCase):
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
-               'endTime': '2022-05-19 09:00:00',
+               'endTime': self.idate,
                'isPublished': False,
                'techniques': [
                 {
@@ -3847,7 +3849,7 @@ class DatasetWatcherTest(unittest.TestCase):
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
-               'endTime': '2022-05-19 09:00:00',
+               'endTime': self.idate,
                'isPublished': False,
                'techniques': [
                    {
@@ -3876,7 +3878,7 @@ class DatasetWatcherTest(unittest.TestCase):
                'creationLocation': '/DESY/PETRA III/P00',
                'instrumentId': '/petra3/p00',
                'description': 'H20 distribution',
-               'endTime': '2022-05-19 09:00:00',
+               'endTime': self.idate,
                'isPublished': False,
                'techniques': [
                 {
@@ -4054,7 +4056,7 @@ class DatasetWatcherTest(unittest.TestCase):
                  'creationLocation': '/DESY/PETRA III/P00',
                  'instrumentId': '/petra3/p00',
                  'description': 'H20 distribution',
-                 'endTime': '2022-05-19 09:00:00',
+                 'endTime': self.idate,
                  'isPublished': False,
                  'owner': 'Smithson',
                  'techniques': [],
@@ -4351,7 +4353,7 @@ class DatasetWatcherTest(unittest.TestCase):
                  'creationLocation': '/DESY/PETRA III/P00',
                  'instrumentId': '/petra3/p00',
                  'description': 'H20 distribution',
-                 'endTime': '2022-05-19 09:00:00',
+                 'endTime': self.idate,
                  'isPublished': False,
                  'owner': 'Smithson',
                  'techniques': [],
@@ -4668,7 +4670,7 @@ class DatasetWatcherTest(unittest.TestCase):
                  'creationLocation': '/DESY/PETRA III/P00',
                  'instrumentId': '/petra3/p00',
                  'description': 'H20 distribution',
-                 'endTime': '2022-05-19 09:00:00',
+                 'endTime': self.idate,
                  'isPublished': False,
                  'owner': 'Smithson',
                  'techniques': [],
@@ -4971,8 +4973,8 @@ class DatasetWatcherTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
-                     'creationTime': '2022-05-19 09:00:00',
+                     'endTime': self.idate,
+                     'creationTime': self.idate,
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -4997,8 +4999,8 @@ class DatasetWatcherTest(unittest.TestCase):
                      'creationLocation': '/DESY/PETRA III/P00',
                      'instrumentId': '/petra3/p00',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
-                     'creationTime': '2022-05-19 09:00:00',
+                     'endTime': self.idate,
+                     'creationTime': self.idate,
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -5337,8 +5339,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationLocation': '/DESY/PETRA III/P00',
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
-                         'endTime': '2022-05-19 09:00:00',
-                         'creationTime': '2022-05-19 09:00:00',
+                         'endTime': self.idate,
+                         'creationTime': self.idate,
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
@@ -5660,12 +5662,12 @@ class DatasetWatcherTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
-                         'creationTime': '2022-05-19 09:00:00',
+                         'creationTime': self.idate,
                          'createdAt': '2022-05-14 11:54:29',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
-                         'endTime': '2022-05-19 09:00:00',
+                         'endTime': self.idate,
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
@@ -5947,8 +5949,8 @@ class DatasetWatcherTest(unittest.TestCase):
                      'creationLocation': '/DESY/FS-SC/SDD01',
                      'instrumentId': '/fs-sc/sdd01',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
-                     'creationTime': '2022-05-19 09:00:00',
+                     'endTime': self.idate,
+                     'creationTime': self.idate,
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -5974,8 +5976,8 @@ class DatasetWatcherTest(unittest.TestCase):
                      'instrumentId': '/fs-sc/sdd01',
                      'creationLocation': '/DESY/FS-SC/SDD01',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
-                     'creationTime': '2022-05-19 09:00:00',
+                     'endTime': self.idate,
+                     'creationTime': self.idate,
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -6395,8 +6397,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationLocation': '/DESY/FS-SC/SDD01',
                          'instrumentId': '/fs-sc/sdd01',
                          'description': 'H20 distribution',
-                         'endTime': '2022-05-19 09:00:00',
-                         'creationTime': '2022-05-19 09:00:00',
+                         'endTime': self.idate,
+                         'creationTime': self.idate,
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
@@ -6698,8 +6700,8 @@ class DatasetWatcherTest(unittest.TestCase):
                      'creationLocation': '/DESY/FS-SC/SDD01',
                      'instrumentId': '/fs-sc/sdd01',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
-                     'creationTime': '2022-05-19 09:00:00',
+                     'endTime': self.idate,
+                     'creationTime': self.idate,
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -6722,8 +6724,8 @@ class DatasetWatcherTest(unittest.TestCase):
                      'instrumentId': '/fs-sc/sdd01',
                      'creationLocation': '/DESY/FS-SC/SDD01',
                      'description': 'H20 distribution',
-                     'endTime': '2022-05-19 09:00:00',
-                     'creationTime': '2022-05-19 09:00:00',
+                     'endTime': self.idate,
+                     'creationTime': self.idate,
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
@@ -7145,8 +7147,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'instrumentId': '/fs-sc/sdd01',
                          'creationLocation': '/DESY/FS-SC/SDD01',
                          'description': 'H20 distribution',
-                         'endTime': '2022-05-19 09:00:00',
-                         'creationTime': '2022-05-19 09:00:00',
+                         'endTime': self.idate,
+                         'creationTime': self.idate,
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
