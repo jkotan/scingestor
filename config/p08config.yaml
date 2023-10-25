@@ -15,6 +15,7 @@ datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
 ingested_datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
 oned_in_metadata: true
 hidden_attributes: "nexdatas_source,nexdatas_strategy,units,NX_class"
+retry_failed_dataset_ingestion: true
 # relative_path_in_datablock: False
 # scandir_blacklist:
 #   - /gpfs/current/scratch_bl
