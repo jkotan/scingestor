@@ -1496,11 +1496,15 @@ class DatasetIngestor:
                     pid = self._get_pid(rdss[0])
                 dbstatus = self._ingest_origdatablock_metadata(
                     odb, pid, token)
+                if not dbstatus:
+                    mtmdb = -1
             if self.__ingest_attachment and ads and ads[0] and pid:
                 if pid is None and adss and adss[0]:
                     pid = self._get_pid(rdss[0])
                 dastatus = self._ingest_attachment_metadata(
                     ads, pid, token)
+                if not dastatus:
+                    mtmda = -1
         if pid is None:
             mtmds = 0
         if dbstatus is None:
@@ -1641,6 +1645,8 @@ class DatasetIngestor:
                     odb, pid, token)
                 get_logger().info(
                     "DatasetIngestor: Ingest origdatablock: %s" % (odb))
+                if not dastatus:
+                    mtmdb = -1
 
             if self.__ingest_attachment:
                 if ads and reingest_attachment:
@@ -1655,6 +1661,8 @@ class DatasetIngestor:
                             ads, pid, token)
                         get_logger().info(
                             "DatasetIngestor: Ingest attachment: %s" % (ads))
+                        if not dastatus:
+                            mtmda = -1
         mtmda = 0
         if ads:
             mtmda = os.path.getmtime(ads)
@@ -1699,13 +1707,13 @@ class DatasetIngestor:
                     if sc.strip()]
         if not reingest:
             if self.__retry_failed_dataset_ingestion:
-                check_attach = self.__retry_failed_attachament_ingestion \
+                check_attach = self.__retry_failed_attachment_ingestion \
                     and self.__ingest_attachment
                 ingested = []
                 for sc in self.__sc_ingested:
                     if len(sc) > 3:
                         try:
-                            if float(sc[-1]) >= 0 \
+                            if float(sc[-1]) != -1 \
                                and (not check_attach or float(sc[-1]) > 0) \
                                and float(sc[-2]) > 0 and float(sc[-3]) > 0:
                                 ingested.append(" ".join(sc[:-3]))
