@@ -95,6 +95,7 @@ The configuration written in YAML can contain the following variables
 * **ingest_dataset_attachment** *(bool)* , default: ``False``
 * **override_attachment_signals** *(bool)* , default: ``False``
 * **retry_failed_dataset_ingestion** *(bool)* , default:``False``
+* **retry_failed_attachment_ingestion** *(bool)* , default:``False``
 * **log_generator_commands** *(bool)* , default: ``False``
 * **add_empty_units_generator_switch** *(str)* , default: ``" --add-empty-units "``
 * **add_empty_units** *(bool)* , default: ``True``

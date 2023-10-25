@@ -144,6 +144,8 @@ class DatasetIngestor:
         self.__ingest_attachment = False
         #: (:obj:`bool`) retry failed dataset ingestion on next event
         self.__retry_failed_dataset_ingestion = False
+        #: (:obj:`bool`) retry failed attachement ingestion on next event
+        self.__retry_failed_attachment_ingestion = False
         #: (:obj:`str`) metadata copy map file
         self.__copymapfile = None
         #: (:obj:`bool`) oned metadata flag
@@ -378,6 +380,9 @@ class DatasetIngestor:
         if "retry_failed_dataset_ingestion" in self.__config.keys():
             self.__retry_failed_dataset_ingestion = \
                 self.__config["retry_failed_dataset_ingestion"]
+        if "retry_failed_attachment_ingestion" in self.__config.keys():
+            self.__retry_failed_attachment_ingestion = \
+                self.__config["retry_failed_attachment_ingestion"]
         if "add_empty_units" in self.__config.keys():
             self.__emptyunits = self.__config["add_empty_units"]
 
@@ -1694,11 +1699,14 @@ class DatasetIngestor:
                     if sc.strip()]
         if not reingest:
             if self.__retry_failed_dataset_ingestion:
+                check_attach = self.__retry_failed_attachament_ingestion \
+                    and self.__ingest_attachment
                 ingested = []
                 for sc in self.__sc_ingested:
                     if len(sc) > 3:
                         try:
                             if float(sc[-1]) >= 0 \
+                               and (not check_attach or float(sc[-1]) > 0) \
                                and float(sc[-2]) > 0 and float(sc[-3]) > 0:
                                 ingested.append(" ".join(sc[:-3]))
                         except Exception as e:
