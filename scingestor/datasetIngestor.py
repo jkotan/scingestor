@@ -144,6 +144,8 @@ class DatasetIngestor:
         self.__ingest_attachment = False
         #: (:obj:`bool`) retry failed dataset ingestion on next event
         self.__retry_failed_dataset_ingestion = False
+        #: (:obj:`bool`) retry failed attachement ingestion on next event
+        self.__retry_failed_attachment_ingestion = False
         #: (:obj:`str`) metadata copy map file
         self.__copymapfile = None
         #: (:obj:`bool`) oned metadata flag
@@ -255,6 +257,9 @@ class DatasetIngestor:
         #: (:obj:`dict`<:obj:`str`, :obj:`list`<:obj:`str`>>)
         #:   ingested scan names
         self.__sc_ingested_map = {}
+        #: (:obj:`dict`<:obj:`str`, :obj:`list`<:obj:`str`>>)
+        #:   semi-ingested scan names
+        self.__sc_seingested_map = {}
 
         #: (:obj:`list` <:obj:`str`>) master file extension list
         self.__master_file_extension_list = ["nxs", "h5", "ndf", "nx", "fio"]
@@ -378,6 +383,9 @@ class DatasetIngestor:
         if "retry_failed_dataset_ingestion" in self.__config.keys():
             self.__retry_failed_dataset_ingestion = \
                 self.__config["retry_failed_dataset_ingestion"]
+        if "retry_failed_attachment_ingestion" in self.__config.keys():
+            self.__retry_failed_attachment_ingestion = \
+                self.__config["retry_failed_attachment_ingestion"]
         if "add_empty_units" in self.__config.keys():
             self.__emptyunits = self.__config["add_empty_units"]
 
@@ -1491,20 +1499,36 @@ class DatasetIngestor:
                     pid = self._get_pid(rdss[0])
                 dbstatus = self._ingest_origdatablock_metadata(
                     odb, pid, token)
+                if not dbstatus:
+                    mtmdb = -1
+            if pid is None and rdss and rdss[0]:
+                pid = self._get_pid(rdss[0])
             if self.__ingest_attachment and ads and ads[0] and pid:
                 if pid is None and adss and adss[0]:
                     pid = self._get_pid(rdss[0])
                 dastatus = self._ingest_attachment_metadata(
                     ads, pid, token)
+                if not dastatus:
+                    mtmda = -1
         if pid is None:
-            mtmds = 0
+            if scan in self.__sc_seingested_map.keys():
+                mtmds = self.__sc_seingested_map[scan][-3]
+            else:
+                mtmds = 0
         if dbstatus is None:
-            mtmdb = 0
+            if scan in self.__sc_seingested_map.keys():
+                mtmdb = self.__sc_seingested_map[scan][-2]
+            else:
+                mtmdb = 0
         if dastatus is None:
-            mtmda = 0
+            if scan in self.__sc_seingested_map.keys():
+                mtmda = self.__sc_seingested_map[scan][-2]
+            else:
+                mtmda = 0
 
         sscan.extend([str(mtmds), str(mtmdb), str(mtmda)])
         self.__sc_ingested.append(sscan)
+        self.__sc_seingested_map[scan] = [mtmds, mtmdb, mtmda]
         with open(self.__idsfile, 'a+') as f:
             f.write("%s %s %s %s\n" % (scan, mtmds, mtmdb, mtmda))
 
@@ -1636,6 +1660,8 @@ class DatasetIngestor:
                     odb, pid, token)
                 get_logger().info(
                     "DatasetIngestor: Ingest origdatablock: %s" % (odb))
+                if not dbstatus:
+                    mtmdb = -1
 
             if self.__ingest_attachment:
                 if ads and reingest_attachment:
@@ -1650,6 +1676,8 @@ class DatasetIngestor:
                             ads, pid, token)
                         get_logger().info(
                             "DatasetIngestor: Ingest attachment: %s" % (ads))
+                        if not dastatus:
+                            mtmda = -1
         mtmda = 0
         if ads:
             mtmda = os.path.getmtime(ads)
@@ -1676,6 +1704,7 @@ class DatasetIngestor:
 
         sscan.extend([str(mtmds), str(mtmdb), str(mtmda)])
         self.__sc_ingested.append(sscan)
+        self.__sc_seingested_map[scan] = [mtmds, mtmdb, mtmda]
         with open(self.__idsfiletmp, 'a+') as f:
             f.write("%s %s %s %s\n" % (scan, mtmds, mtmdb, mtmda))
 
@@ -1692,13 +1721,25 @@ class DatasetIngestor:
                     sc.strip().split(" ")
                     for sc in idsf.read().split("\n")
                     if sc.strip()]
+                for sc in self.__sc_ingested:
+                    try:
+                        if len(sc) > 3:
+                            self.__sc_seingested_map[" ".join(sc[:-3])] = \
+                                                     [float(sc[-3]),
+                                                      float(sc[-2]),
+                                                      float(sc[-1])]
+                    except Exception as e:
+                        get_logger().debug("%s" % str(e))
         if not reingest:
             if self.__retry_failed_dataset_ingestion:
+                check_attach = self.__retry_failed_attachment_ingestion \
+                    and self.__ingest_attachment
                 ingested = []
                 for sc in self.__sc_ingested:
                     if len(sc) > 3:
                         try:
-                            if float(sc[-1]) >= 0 \
+                            if float(sc[-1]) != -1 \
+                               and (not check_attach or float(sc[-1]) > 0) \
                                and float(sc[-2]) > 0 and float(sc[-3]) > 0:
                                 ingested.append(" ".join(sc[:-3]))
                         except Exception as e:
