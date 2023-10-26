@@ -1645,7 +1645,7 @@ class DatasetIngestor:
                     odb, pid, token)
                 get_logger().info(
                     "DatasetIngestor: Ingest origdatablock: %s" % (odb))
-                if not dastatus:
+                if not dbstatus:
                     mtmdb = -1
 
             if self.__ingest_attachment:
