@@ -257,6 +257,9 @@ class DatasetIngestor:
         #: (:obj:`dict`<:obj:`str`, :obj:`list`<:obj:`str`>>)
         #:   ingested scan names
         self.__sc_ingested_map = {}
+        #: (:obj:`dict`<:obj:`str`, :obj:`list`<:obj:`str`>>)
+        #:   semi-ingested scan names
+        self.__sc_seingested_map = {}
 
         #: (:obj:`list` <:obj:`str`>) master file extension list
         self.__master_file_extension_list = ["nxs", "h5", "ndf", "nx", "fio"]
@@ -1498,6 +1501,8 @@ class DatasetIngestor:
                     odb, pid, token)
                 if not dbstatus:
                     mtmdb = -1
+            if pid is None and rdss and rdss[0]:
+                pid = self._get_pid(rdss[0])
             if self.__ingest_attachment and ads and ads[0] and pid:
                 if pid is None and adss and adss[0]:
                     pid = self._get_pid(rdss[0])
@@ -1506,14 +1511,24 @@ class DatasetIngestor:
                 if not dastatus:
                     mtmda = -1
         if pid is None:
-            mtmds = 0
+            if scan in self.__sc_seingested_map.keys():
+                mtmds = self.__sc_seingested_map[scan][-3]
+            else:
+                mtmds = 0
         if dbstatus is None:
-            mtmdb = 0
+            if scan in self.__sc_seingested_map.keys():
+                mtmdb = self.__sc_seingested_map[scan][-2]
+            else:
+                mtmdb = 0
         if dastatus is None:
-            mtmda = 0
+            if scan in self.__sc_seingested_map.keys():
+                mtmda = self.__sc_seingested_map[scan][-2]
+            else:
+                mtmda = 0
 
         sscan.extend([str(mtmds), str(mtmdb), str(mtmda)])
         self.__sc_ingested.append(sscan)
+        self.__sc_seingested_map[scan] = [mtmds, mtmdb, mtmda]
         with open(self.__idsfile, 'a+') as f:
             f.write("%s %s %s %s\n" % (scan, mtmds, mtmdb, mtmda))
 
@@ -1689,6 +1704,7 @@ class DatasetIngestor:
 
         sscan.extend([str(mtmds), str(mtmdb), str(mtmda)])
         self.__sc_ingested.append(sscan)
+        self.__sc_seingested_map[scan] = [mtmds, mtmdb, mtmda]
         with open(self.__idsfiletmp, 'a+') as f:
             f.write("%s %s %s %s\n" % (scan, mtmds, mtmdb, mtmda))
 
@@ -1705,6 +1721,15 @@ class DatasetIngestor:
                     sc.strip().split(" ")
                     for sc in idsf.read().split("\n")
                     if sc.strip()]
+                for sc in self.__sc_ingested:
+                    try:
+                        if len(sc) > 3:
+                            self.__sc_seingested_map[" ".join(sc[:-3])] = \
+                                                     [float(sc[-3]),
+                                                      float(sc[-2]),
+                                                      float(sc[-1])]
+                    except Exception as e:
+                        get_logger().debug("%s" % str(e))
         if not reingest:
             if self.__retry_failed_dataset_ingestion:
                 check_attach = self.__retry_failed_attachment_ingestion \
