@@ -1,3 +1,7 @@
+2023-10-27 Jan Kotanski <jan.kotanski@desy.de>
+	* retry_failed_attachement_ingestion configuratio variable (#)
+	* tagged as 0.8.0
+
 2023-09-04 Jan Kotanski <jan.kotanski@desy.de>
 	* add ingest_dataset_attachment: true to the default template configuration
 	* change default scicat_url to http://localhost:3000/api/v3
