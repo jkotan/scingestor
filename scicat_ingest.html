@@ -4,20 +4,24 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>scicat_ingest &#8212; SciCat Dataset Ingestor 0.7.1 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>scicat_ingest &#8212; SciCat Dataset Ingestor 0.8.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="scingestor package" href="scingestor.html" />
     <link rel="prev" title="scicat_dataset_ingest" href="scicat_dataset_ingest.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -27,17 +31,19 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
-  <div class="section" id="scicat-ingest">
-<h1>scicat_ingest<a class="headerlink" href="#scicat-ingest" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+  <section id="scicat-ingest">
+<h1>scicat_ingest<a class="headerlink" href="#scicat-ingest" title="Permalink to this heading">¶</a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading">¶</a></h2>
 <p>Re-ingestion script for SciCat Datasets.</p>
-</div>
-<div class="section" id="synopsis">
-<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>scicat_ingest <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-c CONFIG<span class="o">]</span> <span class="o">[</span>-r RUNTIME<span class="o">]</span> <span class="o">[</span>-l LOG<span class="o">]</span> <span class="o">[</span>-f LOGFILE<span class="o">]</span> <span class="o">[</span>-t<span class="o">]</span> <span class="o">[</span>-p TOKENFILE<span class="o">]</span>   metadata_json_file <span class="o">[</span>metadata_json_file ...<span class="o">]</span>
+</section>
+<section id="synopsis">
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>scicat_ingest<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-c<span class="w"> </span>CONFIG<span class="o">]</span><span class="w"> </span><span class="o">[</span>-r<span class="w"> </span>RUNTIME<span class="o">]</span><span class="w"> </span><span class="o">[</span>-l<span class="w"> </span>LOG<span class="o">]</span><span class="w"> </span><span class="o">[</span>-f<span class="w"> </span>LOGFILE<span class="o">]</span><span class="w"> </span><span class="o">[</span>-t<span class="o">]</span><span class="w"> </span><span class="o">[</span>-p<span class="w"> </span>TOKENFILE<span class="o">]</span><span class="w">   </span>metadata_json_file<span class="w"> </span><span class="o">[</span>metadata_json_file<span class="w"> </span>...<span class="o">]</span>
 </pre></div>
 </div>
 <dl>
@@ -65,19 +71,20 @@
 </dl>
 </dd>
 </dl>
-</div>
-<div class="section" id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>scicat_ingest -m Samples -c ~/.scingestor.yaml ./metadata.json
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>scicat_ingest<span class="w"> </span>-m<span class="w"> </span>Samples<span class="w"> </span>-c<span class="w"> </span>~/.scingestor.yaml<span class="w"> </span>./metadata.json
 
-scicat_ingest -m Attachments -c ~/.scingestor.yaml -p ~/.mytoken.cfg ./metadata.json
+scicat_ingest<span class="w"> </span>-m<span class="w"> </span>Attachments<span class="w"> </span>-c<span class="w"> </span>~/.scingestor.yaml<span class="w"> </span>-p<span class="w"> </span>~/.mytoken.cfg<span class="w"> </span>./metadata.json
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -92,7 +99,7 @@ scicat_ingest -m Attachments -c ~/.scingestor.yaml -p ~/.mytoken.cfg ./metadata.
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="scicat_dataset_ingestor.html">scicat_dataset_ingestor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="scicat_dataset_ingest.html">scicat_dataset_ingest</a></li>
@@ -118,12 +125,20 @@ scicat_ingest -m Attachments -c ~/.scingestor.yaml -p ~/.mytoken.cfg ./metadata.
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -132,8 +147,8 @@ scicat_ingest -m Attachments -c ~/.scingestor.yaml -p ~/.mytoken.cfg ./metadata.
       &copy;2022, DESY, Jan Kotanski.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
       <a href="_sources/scicat_ingest.rst.txt"
