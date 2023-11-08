@@ -1,6 +1,6 @@
 2023-11-08 Jan Kotanski <jan.kotanski@desy.de>
 	* add headers to proposal queries (#250)
-	* tagged as 0.8.0
+	* tagged as 0.8.1
 
 2023-10-27 Jan Kotanski <jan.kotanski@desy.de>
 	* retry_failed_attachement_ingestion configuratio variable (#246)
