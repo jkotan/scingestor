@@ -175,7 +175,7 @@ class DatasetIngestor:
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
-            " {scanpath}/{scanname}.{ext}"
+            " {masterfile}"
         #: (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata -k4 " \
             " -o {metapath}/{scanname}{scanpostfix} " \
@@ -203,7 +203,7 @@ class DatasetIngestor:
         self.__attachmentcommand = "nxsfileinfo attachment " \
             " -w {ownergroup} -c {accessgroups} " \
             "-o {metapath}/{scanname}{attachmentpostfix} " \
-            " {scanpath}/{scanname}.{plotext}"
+            " {plotfile}"
 
         #: (:obj:`str`) oned generator switch
         self.__oned_switch = " --oned "
@@ -582,6 +582,8 @@ class DatasetIngestor:
             "chmod": self.__chmod,
             "hiddenattributes": self.__hiddenattributes,
             "copymapfile": self.__copymapfile,
+            "plotfile": "",
+            "masterfile": "",
             "scanpath": self.__path,
             "metapath": self.__metapath,
             "relpath": self.__relpath,
@@ -603,6 +605,10 @@ class DatasetIngestor:
             "frame": self.__attachmentframe,
             "maxonedsize": self.__max_oned_size,
         }
+        self.__dctfmt["masterfile"] = \
+            "{scanpath}/{scanname}.{ext}".format(**self.__dctfmt)
+        self.__dctfmt["plotfile"] = \
+            "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)
 
         get_logger().debug(
             'DatasetIngestor: Parameters: %s' % str(self.__dctfmt))
@@ -647,13 +653,30 @@ class DatasetIngestor:
         """
         self.__ext = ""
 
+        self.__dctfmt["masterfile"] = \
+            "{scanpath}/{scanname}/{scanname}.{ext}".format(**self.__dctfmt)
         for ext in self.__master_file_extension_list:
             self.__dctfmt["ext"] = ext
 
             if os.path.isfile(
                     "{scanpath}/{scanname}.{ext}".format(**self.__dctfmt)):
                 self.__ext = ext
+                self.__dctfmt["masterfile"] = \
+                    "{scanpath}/{scanname}.{ext}".format(**self.__dctfmt)
                 break
+        else:
+            for ext in self.__master_file_extension_list:
+                self.__dctfmt["ext"] = ext
+
+                if os.path.isfile(
+                        "{scanpath}/{scanname}/{scanname}.{ext}".
+                        format(**self.__dctfmt)):
+                    self.__ext = ext
+                    self.__dctfmt["masterfile"] = \
+                        "{scanpath}/{scanname}/{scanname}.{ext}".format(
+                            **self.__dctfmt)
+                    break
+
         self.__dctfmt["ext"] = self.__ext
 
         if self.__ext:
@@ -738,6 +761,8 @@ class DatasetIngestor:
         """
         self.__plotext = ""
 
+        self.__dctfmt["plotfile"] = \
+            "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)
         for ext in self.__plot_file_extension_list:
             self.__dctfmt["plotext"] = ext
 
@@ -745,6 +770,18 @@ class DatasetIngestor:
                     "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)):
                 self.__plotext = ext
                 break
+        else:
+            for ext in self.__plot_file_extension_list:
+                self.__dctfmt["plotext"] = ext
+
+                if os.path.isfile(
+                        "{scanpath}/{scanname}/{scanname}.{plotext}".
+                        format(**self.__dctfmt)):
+                    self.__plotext = ext
+                    self.__dctfmt["plotfile"] = \
+                        "{scanpath}/{scanname}/{scanname}.{plotext}".format(
+                            **self.__dctfmt)
+                    break
         self.__dctfmt["plotext"] = self.__plotext
 
         if self.__dctfmt["plotext"]:

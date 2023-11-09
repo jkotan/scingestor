@@ -3,6 +3,11 @@
 	* change default scicat_url to http://localhost:3000/api/v3
 	* tagged as 0.7.1
 
+2023-09-04 Jan Kotanski <jan.kotanski@desy.de>
+	* add ingest_dataset_attachment: true to the default template configuration
+	* change default scicat_url to http://localhost:3000/api/v3
+	* tagged as 0.7.1
+
 2023-08-31 Jan Kotanski <jan.kotanski@desy.de>
 	* add retry_failed_dataset_ingestion configuration variable (#238)
 	* retry to ingest datasets on the scicat server error (#236)
