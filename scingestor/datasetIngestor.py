@@ -980,11 +980,13 @@ class DatasetIngestor:
         token = self.get_token()
         bid = self.__meta["beamtimeId"]
         try:
+            self.__headers["Authorization"] = "Bearer {}".format(token)
             resexists = requests.get(
                 "{url}/{pid}"
                 .format(
                     url=self.__proposalurl,
                     pid=bid.replace("/", "%2F")),
+                headers=self.__headers,
                 params={"access_token": token}
             )
 
