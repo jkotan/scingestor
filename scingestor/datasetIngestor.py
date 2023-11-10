@@ -769,6 +769,8 @@ class DatasetIngestor:
             if os.path.isfile(
                     "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)):
                 self.__plotext = ext
+                self.__dctfmt["plotfile"] = \
+                    "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)
                 break
         else:
             for ext in self.__plot_file_extension_list:
