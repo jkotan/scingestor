@@ -2787,6 +2787,10 @@ class DatasetWatcherH5Test(unittest.TestCase):
             ' {{scanpath}}/{{scanname}}.{{plotext}} ' \
             '-o {{metapath}}/{{scanname}}{{attachmentpostfix}} "\n' \
             'scicat_attachments_path: "Datasets/{{pid}}/Attachments"\n' \
+            'metadata_generated_callback: "echo \\" APPEND ' \
+            '{{scanpath}}/{{scanname}}.scan.json ' \
+            '{{scanpath}}/{{scanname}}.origdatablock.json ' \
+            '{{scanpath}}/{{scanname}}.attachment.json\\""\n' \
             'ingest_dataset_attachment: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_username: "{username}"\n' \
@@ -2975,6 +2979,10 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff  {subdir2}/{sc1}.nxs '
                         '-o {subdir2}/{sc1}.attachment.json \n'
+                        'INFO : DatasetIngestor: Metadata generated callback: '
+                        'echo " APPEND {subdir2}/{sc1}.scan.json '
+                        '{subdir2}/{sc1}.origdatablock.json '
+                        '{subdir2}/{sc1}.attachment.json" \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '99001234/{sc1}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
@@ -3012,6 +3020,10 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff  {subdir2}/{sc2}.nxs '
                         '-o {subdir2}/{sc2}.attachment.json \n'
+                        'INFO : DatasetIngestor: Metadata generated callback: '
+                        'echo " APPEND {subdir2}/{sc2}.scan.json '
+                        '{subdir2}/{sc2}.origdatablock.json '
+                        '{subdir2}/{sc2}.attachment.json" \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '99001234/{sc2}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
@@ -3049,6 +3061,10 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff  {subdir2}/{sc3}.nxs '
                         '-o {subdir2}/{sc3}.attachment.json \n'
+                        'INFO : DatasetIngestor: Metadata generated callback: '
+                        'echo " APPEND {subdir2}/{sc3}.scan.json '
+                        '{subdir2}/{sc3}.origdatablock.json '
+                        '{subdir2}/{sc3}.attachment.json" \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '99001234/{sc3}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
@@ -3086,6 +3102,10 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff  {subdir2}/{sc4}.nxs '
                         '-o {subdir2}/{sc4}.attachment.json \n'
+                        'INFO : DatasetIngestor: Metadata generated callback: '
+                        'echo " APPEND {subdir2}/{sc4}.scan.json '
+                        '{subdir2}/{sc4}.origdatablock.json '
+                        '{subdir2}/{sc4}.attachment.json" \n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '99001234/{sc4}\n'
                         'INFO : DatasetIngestor: Post the dataset: '
