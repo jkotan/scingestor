@@ -37,12 +37,12 @@ The configuration written in YAML can contain the following variables
 * **beamtime_filename_prefix** *(str)* , default: `".json"`
 * **datasets_filename_pattern** *(str)* , default: `"scicat-datasets-{beamtimeid}.lst"`
 * **ingested_datasets_filename_pattern** *(str)* , default: `"scicat-ingested-datasets-{beamtimeid}.lst"`
-* **file_dataset_metadata_generator** *(str)* , default: `"nxsfileinfo metadata -k4  -o {metapath}/{scanname}{scanpostfix}  -b {beamtimefile} -p {beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} {scanpath}/{scanname}.{ext}"`
+* **file_dataset_metadata_generator** *(str)* , default: `"nxsfileinfo metadata -k4  -o {metapath}/{scanname}{scanpostfix}  -b {beamtimefile} -p {beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} {mastefile}"`
 * **dataset_metadata_generator** *(str)* , default: `"nxsfileinfo metadata -k4  -o {metapath}/{scanname}{scanpostfix}  -c {accessgroups} -w {ownergroup} -b {beamtimefile} -p {beamtimeid}/{scanname}"`
 * **datablock_metadata_generator** *(str)* , default: `"nxsfileinfo origdatablock  -s *.pyc,*{datablockpostfix},*{scanpostfix},*~  -p {pidprefix}{beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} -o {metapath}/{scanname}{datablockpostfix} "`
 * **datablock_metadata_stream_generator** *(str)* , default: `"nxsfileinfo origdatablock  -s *.pyc,*{datablockpostfix},*{scanpostfix},*~  -w {ownergroup} -c {accessgroups} -p {pidprefix}{beamtimeid}/{scanname} "`
 * **datablock_metadata_generator_scanpath_postfix** *(str)* , default: `" {scanpath}/{scanname} "`
-* **attachment_metadata_generator** *(str)* , default: `"nxsfileinfo attachment  -w {ownergroup} -c {accessgroups} -o {metapath}/{scanname}{attachmentpostfix} "`
+* **attachment_metadata_generator** *(str)* , default: `"nxsfileinfo attachment  -w {ownergroup} -c {accessgroups} -o {metapath}/{scanname}{attachmentpostfix} {plotfile} "`
 * **plot_file_extension_list** *(list\<str\>)* , default: `["png", "nxs", "h5", "ndf", "nx", "fio"]`
 * **master_file_extension_list** *(list\<str\>)* , default: `["nxs", "h5", "ndf", "nx", "fio"]`
 * **chmod_generator_switch** *(str)* , default: `" -x {chmod} "`
@@ -97,8 +97,10 @@ The  **datasets_filename_pattern**, **ingested_datasets_filename_pattern**  and 
 
 The  **beamtime_dirs**, **beamtime_base_dir**, **ingestor_var_dir**, **ingestor_credential_file**, **scandir_blacklist** can contain the *{homepath}* keyword.
 
-Similarly, **file_dataset_metadata_generator**, **dataset_metadata_generator**, **datablock_metadata_generator**,  **datablock_metadata_stream_generator**, **datablock_metadata_generator_scanpath_postfix**, **attachment_metadata_generator**, **chmod_generator_switch**, **relative_path_generator_switch** can contain the following keywords: *{beamtimeid}* , *{scanname}*, *{chmod}*, *{scanpath}*, *{metapath}*, *{relpath}*, *{beamtimeid}*, *{beamline}*, *{pidprefix}*, *{beamtimefile}*, *{scanpostfix}*, *{datablockpostfix}*, *{ownergroup}*, *{accessgroups}*, *{hostname}*, *{homepath}*, *{hiddenattributes}*, *{ext}*
+Similarly, **file_dataset_metadata_generator**, **dataset_metadata_generator**, **datablock_metadata_generator**,  **datablock_metadata_stream_generator**, **datablock_metadata_generator_scanpath_postfix**, **attachment_metadata_generator**, **chmod_generator_switch**, **relative_path_generator_switch** can contain the following keywords: *{beamtimeid}* , *{scanname}*, *{chmod}*, *{scanpath}*, *{metapath}*, *{relpath}*, *{beamtimeid}*, *{beamline}*, *{pidprefix}*, *{beamtimefile}*, *{scanpostfix}*, *{datablockpostfix}*, *{ownergroup}*, *{accessgroups}*, *{hostname}*, *{homepath}*, *{hiddenattributes}*, *{ext}*, "{masterfile}", "{plotfile}"
 
+The "{masterfile}" is either equal to   "{scanpath}/{scanname}.{ext}" or "{scanpath}/{scanname}/{scanname}.{ext}". Also
+the "{plotfile}" is either equal to  "{scanpath}/{scanname}.{plotext}" or "{scanpath}/{scanname}/{scanname}.{plotext}".
 
 
 ## scicat_dataset_ingest
