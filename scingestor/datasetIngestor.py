@@ -204,6 +204,8 @@ class DatasetIngestor:
             " -w {ownergroup} -c {accessgroups} " \
             "-o {metapath}/{scanname}{attachmentpostfix} " \
             " {plotfile}"
+        #: (:obj:`str`) metadata generated  shell callback
+        self.__metadatageneratedcallback = ""
 
         #: (:obj:`str`) oned generator switch
         self.__oned_switch = " --oned "
@@ -417,6 +419,10 @@ class DatasetIngestor:
         if "attachment_metadata_generator" in self.__config.keys():
             self.__attachmentcommand = \
                 self.__config["attachment_metadata_generator"]
+
+        if "metadata_generated_callback" in self.__config.keys():
+            self.__metadatageneratedcallback = \
+                self.__config["metadata_generated_callback"]
 
         if "chmod_generator_switch" in self.__config.keys():
             self.__chmod_switch = \
@@ -1528,6 +1534,18 @@ class DatasetIngestor:
                     self.__dctfmt["scanname"])
             if ads:
                 mtmda = os.path.getmtime(ads)
+
+        if self.__metadatageneratedcallback and rds and odb:
+            command = self.__metadatageneratedcallback.format(**self.__dctfmt)
+            if self.__logcommands:
+                get_logger().info(
+                    'DatasetIngestor: Metadata generated callback: %s ' % (
+                        command))
+            else:
+                get_logger().debug(
+                    'DatasetIngestor: Metadata generated callback: %s ' % (
+                        command))
+            subprocess.run(command, shell=True, check=True)
 
         dbstatus = None
         dastatus = None
