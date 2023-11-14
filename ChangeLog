@@ -1,5 +1,6 @@
 2023-11-10 Jan Kotanski <jan.kotanski@desy.de>
-	* add {masterfile} and {plotfile} format variables
+	* add {masterfile} and {plotfile} format variables (#253)
+	* add metadata generated callback (#254)
 	* tagged as 0.9.0
 
 2023-11-08 Jan Kotanski <jan.kotanski@desy.de>
