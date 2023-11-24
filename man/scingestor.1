@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "SCINGESTOR" "1" "Nov 09, 2023" "0.9" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "Nov 24, 2023" "0.10" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .sp
@@ -118,6 +118,26 @@ The configuration written in YAML can contain the following variables
 \fBdatablock_metadata_generator_scanpath_postfix\fP \fI(str)\fP , default: \fB\(dq {scanpath}/{scanname} \(dq\fP
 .IP \(bu 2
 \fBattachment_metadata_generator\fP \fI(str)\fP , default: \fB\(dqnxsfileinfo attachment  \-w {ownergroup} \-c {accessgroups} \-o {metapath}/{scanname}{attachmentpostfix} {plotfile} \(dq\fP
+.IP \(bu 2
+\fBmetadata_generated_callback\fP \fI(str)\fP , default: \fB\(dqnxsfileinfo groupmetadata  {lastmeasurement} \-m {metapath}/{scanname}{scanpostfix} \-d {metapath}/{scanname}{datablockpostfix} \-a {metapath}/{scanname}{attachmentpostfix} \-p {beamtimeid}/{lastmeasurement} \-f \-k4 \(dq\fP
+.IP \(bu 2
+\fBmetadata_group_map_file\fP \fI(str)\fP , default: \fB\(dq\(dq\fP
+.IP \(bu 2
+\fBraw_metadata_callback\fP \fI(bool)\fP , default: \fBFalse\fP
+.IP \(bu 2
+\fBskip_multi_datablock_ingestion\fP \fI(bool)\fP , default: \fBFalse\fP
+.IP \(bu 2
+\fBskip_multi_attachment_ingestion\fP \fI(bool)\fP , default: \fBFalse\fP
+.IP \(bu 2
+\fBskip_scan_dataset_ingestion\fP \fI(bool)\fP , default: \fBFalse\fP
+.IP \(bu 2
+\fBcall_metadata_generated_callback\fP \fI(bool)\fP , default: \fBFalse\fP
+.IP \(bu 2
+\fBmetadata_group_map_file_generator_switch\fP \fI(str)\fP , default: \fB\(dq \-\-group\-map\-file {groupmapfile} \(dq\fP
+.IP \(bu 2
+\fBraw_metadata_callback_switch\fP \fI(str)\fP , default: \fB\(dq \-\-raw \(dq\fP
+.IP \(bu 2
+\fBexecute_commands\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
 \fBplot_file_extension_list\fP \fI(list<str>)\fP , default: \fB[\(dqpng\(dq, \(dqnxs\(dq, \(dqh5\(dq, \(dqndf\(dq, \(dqnx\(dq, \(dqfio\(dq]\fP
 .IP \(bu 2
@@ -759,6 +779,21 @@ re\-ingest scan
 \fBtoken\fP (\fI\%str\fP) \-\- access token
 .UNINDENT
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B start_measurement(measurement)
+start measurement
+.INDENT 7.0
+.TP
+.B Parameters
+\fBmeasurement\fP (\fI\%str\fP) \-\- measurement name
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B stop_measurement()
+stop measurement
 .UNINDENT
 .INDENT 7.0
 .TP

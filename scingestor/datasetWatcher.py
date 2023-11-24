@@ -74,11 +74,19 @@ class DatasetWatcher(threading.Thread):
             self.__usecorepath = bool(
                 self.__config["use_corepath_as_scandir"])
 
+        #: (:obj:`bool`) execute command
+        self.__executecommands = False
+        if "execute_commands" in self.__config.keys():
+            self.__executecommands = bool(
+                self.__config["execute_commands"])
+
         #: (:class:`scingestor.datasetWatcher.DatasetWatcher`) use core path
         self.__conv = PathConverter(
             self.__corepath, self.__bpath,
             self.__usecorepath and self.__corepath)
 
+        #: (:obj:`str`) file with a dataset list
+        self.__measurement_name = ""
         #: (:obj:`str`) file with a dataset list
         self.__dsfile = dsfile
         #: (:obj:`str`) file with a ingested dataset list
@@ -188,7 +196,20 @@ class DatasetWatcher(threading.Thread):
                 token = self.__ingestor.get_token()
                 if token:
                     for scan in self.__ingestor.waiting_datasets():
-                        self.__ingestor.ingest(scan, token)
+                        if scan and scan.startswith("__command__ "):
+                            if self.__executecommands:
+                                sscan = scan.split(" ")
+                                if len(sscan) > 1:
+                                    cmd = sscan[1]
+                                    if cmd == "stop":
+                                        self.__ingestor.stop_measurement()
+                                    if cmd == "start":
+                                        if len(sscan) > 2:
+                                            groupname = sscan[2]
+                                        self.__ingestor.start_measurement(
+                                            groupname)
+                        else:
+                            self.__ingestor.ingest(scan, token)
                     self.__ingestor.clear_waiting_datasets()
             except Exception as e:
                 get_logger().warning(str(e))
@@ -283,11 +304,24 @@ class DatasetWatcher(threading.Thread):
                         continue
                     if token:
                         for scan in self.__ingestor.waiting_datasets():
-                            try:
-                                self.__ingestor.ingest(scan, token)
-                            except Exception as e:
-                                get_logger().warning(str(e))
-                                continue
+                            if scan and scan.startswith("__command__ "):
+                                if self.__executecommands:
+                                    sscan = scan.split(" ")
+                                    if len(sscan) > 1:
+                                        cmd = sscan[1]
+                                        if cmd == "stop":
+                                            self.__ingestor.stop_measurement()
+                                        if cmd == "start":
+                                            if len(sscan) > 2:
+                                                groupname = sscan[2]
+                                            self.__ingestor.start_measurement(
+                                                groupname)
+                            else:
+                                try:
+                                    self.__ingestor.ingest(scan, token)
+                                except Exception as e:
+                                    get_logger().warning(str(e))
+                                    continue
                         self.__ingestor.clear_waiting_datasets()
                 # else:
                 #     time.sleep(self.__timeout)

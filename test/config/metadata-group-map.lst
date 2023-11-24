@@ -1,0 +1,8 @@
+scientificMetadata.ScanCommand scientificMetadata.ScanCommand
+scientificMetadata.pressure_shape scientificMetadata.data.sample_pressure.shape
+scientificMetadata.pressure scientificMetadata.data.sample_pressure
+scientificMetadata.temperature scientificMetadata.sample.temperature.value
+scientificMetadata.point_nb scientificMetadata.point_nb
+scientificMetadata.static_vector scientificMetadata.static_vector
+scientificMetadata.dynamic_vector scientificMetadata.dynamic_vector
+scientificMetadata.user_comments scientificMetadata.user_comments

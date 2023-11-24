@@ -148,8 +148,12 @@ class DatasetIngestor:
         self.__retry_failed_attachment_ingestion = False
         #: (:obj:`str`) metadata copy map file
         self.__copymapfile = None
+        #: (:obj:`str`) metadata group map file
+        self.__groupmapfile = None
         #: (:obj:`bool`) oned metadata flag
         self.__oned = False
+        #: (:obj:`bool`) raw groups flag
+        self.__raw_groups = False
         #: (:obj:`int`) max oned size of metadata record
         self.__max_oned_size = None
         #: (:obj:`bool`) override attachment signals flag
@@ -158,6 +162,12 @@ class DatasetIngestor:
         self.__logcommands = False
         #: (:obj:`bool`) empty units flag
         self.__emptyunits = True
+        #: (:obj:`bool`) skip multiple datablock ingestion
+        self.__skip_multi_datablock = False
+        #: (:obj:`bool`) skip multiple attachment ingestion
+        self.__skip_multi_attachment = False
+        #: (:obj:`bool`) skip scan dataset ingestion
+        self.__skip_scan_dataset_ingestion = False
 
         #: (:obj:`int`) maximal counter value for post tries
         self.__maxcounter = 100
@@ -172,6 +182,7 @@ class DatasetIngestor:
         #: (:obj:`str`) nexus dataset shell command
         self.__datasetcommandfile = "nxsfileinfo metadata -k4 " \
             " -o {metapath}/{scanname}{scanpostfix} " \
+            " -z '{measurement}'" \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
@@ -181,6 +192,7 @@ class DatasetIngestor:
             " -o {metapath}/{scanname}{scanpostfix} " \
             " -c {accessgroups}" \
             " -w {ownergroup}" \
+            " -z '{measurement}'" \
             " -b {beamtimefile} -p {beamtimeid}/{scanname}"
         #: (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
@@ -204,15 +216,29 @@ class DatasetIngestor:
             " -w {ownergroup} -c {accessgroups} " \
             "-o {metapath}/{scanname}{attachmentpostfix} " \
             " {plotfile}"
+        #: (:obj:`str`) last measurement
+        self.__measurement = ""
+        #: (:obj:`bool`) measurement status
+        self.__measurement_status = False
+        #: (:obj:`bool`) call callback after each step
+        self.__callcallback = False
         #: (:obj:`str`) metadata generated  shell callback
-        self.__metadatageneratedcallback = ""
+        self.__metadatageneratedcallback = "nxsfileinfo groupmetadata " \
+            " {lastmeasurement} -m {metapath}/{scanname}{scanpostfix}" \
+            " -d {metapath}/{scanname}{datablockpostfix}" \
+            " -a {metapath}/{scanname}{attachmentpostfix}" \
+            " -p {beamtimeid}/{lastmeasurement} -f -k4 "
 
         #: (:obj:`str`) oned generator switch
         self.__oned_switch = " --oned "
+        #: (:obj:`str`) raw group generator switch
+        self.__raw_groups_switch = " --raw "
         #: (:obj:`str`) max oned size generator switch
         self.__max_oned_switch = " --max-oned-size {maxonedsize} "
         #: (:obj:`str`) copy map file generator switch
         self.__copymapfile_switch = " --copy-map-file {copymapfile} "
+        #: (:obj:`str`) group map file generator switch
+        self.__groupmapfile_switch = " --group-map-file {groupmapfile} "
         #: (:obj:`str`) empty units generator switch
         self.__emptyunits_switch = " --add-empty-units "
         #: (:obj:`str`) chmod generator switch
@@ -371,8 +397,14 @@ class DatasetIngestor:
             self.__copymapfile = \
                 self.__config["metadata_copy_map_file"].format(
                     homepath=self.__homepath)
+        if "metadata_group_map_file" in self.__config.keys():
+            self.__groupmapfile = \
+                self.__config["metadata_group_map_file"].format(
+                    homepath=self.__homepath)
         if "oned_in_metadata" in self.__config.keys():
             self.__oned = self.__config["oned_in_metadata"]
+        if "raw_metadata_callback" in self.__config.keys():
+            self.__raw_groups = self.__config["raw_metadata_callback"]
         if "max_oned_size" in self.__config.keys():
             self.__max_oned_size = self.__config["max_oned_size"]
         if "override_attachment_signals" in self.__config.keys():
@@ -390,6 +422,16 @@ class DatasetIngestor:
                 self.__config["retry_failed_attachment_ingestion"]
         if "add_empty_units" in self.__config.keys():
             self.__emptyunits = self.__config["add_empty_units"]
+
+        if "skip_multi_datablock_ingestion" in self.__config.keys():
+            self.__skip_multi_datablock = \
+                self.__config["skip_multi_datablock_ingestion"]
+        if "skip_multi_attachment_ingestion" in self.__config.keys():
+            self.__skip_multi_attachment = \
+                self.__config["skip_multi_attachment_ingestion"]
+        if "skip_scan_dataset_ingestion" in self.__config.keys():
+            self.__skip_scan_dataset_ingestion = \
+                self.__config["skip_scan_dataset_ingestion"]
 
         if "scan_metadata_postfix" in self.__config.keys():
             self.__scanpostfix = self.__config["scan_metadata_postfix"]
@@ -420,6 +462,10 @@ class DatasetIngestor:
             self.__attachmentcommand = \
                 self.__config["attachment_metadata_generator"]
 
+        if "call_metadata_generated_callback" in self.__config.keys():
+            self.__callcallback = bool(
+                self.__config["call_metadata_generated_callback"])
+
         if "metadata_generated_callback" in self.__config.keys():
             self.__metadatageneratedcallback = \
                 self.__config["metadata_generated_callback"]
@@ -448,6 +494,10 @@ class DatasetIngestor:
             self.__copymapfile_switch = \
                 self.__config["metadata_copy_map_file_generator_switch"]
 
+        if "metadata_group_map_file_generator_switch" in self.__config.keys():
+            self.__groupmapfile_switch = \
+                self.__config["metadata_group_map_file_generator_switch"]
+
         if "relative_path_generator_switch" in self.__config.keys():
             self.__relpath_switch = \
                 self.__config["relative_path_generator_switch"]
@@ -455,6 +505,10 @@ class DatasetIngestor:
         if "oned_dataset_generator_switch" in self.__config.keys():
             self.__oned_switch = \
                 self.__config["oned_dataset_generator_switch"]
+
+        if "raw_metadata_callback_switch" in self.__config.keys():
+            self.__raw_groups_switch = \
+                self.__config["raw_metadata_callback_switch"]
 
         if "max_oned_dataset_generator_switch" in self.__config.keys():
             self.__max_oned_switch = \
@@ -502,6 +556,21 @@ class DatasetIngestor:
             if "attachment_metadata_generator" not in self.__config.keys():
                 self.__attachmentcommand = \
                     self.__attachmentcommand + self.__chmod_switch
+            if "metadata_generated_callback" not in self.__config.keys():
+                self.__metadatageneratedcallback = \
+                    self.__metadatageneratedcallback + self.__chmod_switch
+
+        if self.__groupmapfile is not None:
+            if "metadata_generated_callback" not in self.__config.keys():
+                self.__metadatageneratedcallback = \
+                    self.__metadatageneratedcallback + \
+                    self.__groupmapfile_switch
+
+        if self.__raw_groups:
+            if "metadata_generated_callback" not in self.__config.keys():
+                self.__metadatageneratedcallback = \
+                    self.__metadatageneratedcallback + \
+                    self.__raw_groups_switch
 
         if self.__hiddenattributes is not None:
             if "dataset_metadata_generator" not in self.__config.keys():
@@ -610,6 +679,10 @@ class DatasetIngestor:
             "axes": self.__attachmentaxes,
             "frame": self.__attachmentframe,
             "maxonedsize": self.__max_oned_size,
+            "measurement": self.__measurement,
+            "lastmeasurement": self.__measurement,
+            "groupmapfile": self.__groupmapfile,
+
         }
         self.__dctfmt["masterfile"] = \
             "{scanpath}/{scanname}.{ext}".format(**self.__dctfmt)
@@ -1377,7 +1450,7 @@ class DatasetIngestor:
             with open(metafile) as fl:
                 smt = fl.read()
                 mt = json.loads(smt)
-            if mt["proposalId"] != self.__bid:
+            if mt["type"] == "raw" and mt["proposalId"] != self.__bid:
                 raise Exception(
                     "Wrong SC proposalId %s for DESY beamtimeId %s in %s"
                     % (mt["proposalId"], self.__bid, metafile))
@@ -1516,11 +1589,21 @@ class DatasetIngestor:
                 metapath=self.__dctfmt["metapath"]))
         if odbs and odbs[0]:
             odb = odbs[0]
+            todb = [odb]
+            with open(odb) as fl:
+                dbmt = json.loads(fl.read())
+                if isinstance(dbmt, list):
+                    if self.__skip_multi_datablock:
+                        todb = []
+                    else:
+                        todb = dbmt
         else:
             odb = self._generate_origdatablock_metadata(scan)
+            todb = [odb]
         mtmdb = 0
         if odb:
             mtmdb = os.path.getmtime(odb)
+        mtmda = 0
         if self.__ingest_attachment:
             adss = glob.glob(
                 "{metapath}/{scan}{postfix}".format(
@@ -1529,46 +1612,53 @@ class DatasetIngestor:
                     metapath=self.__dctfmt["metapath"]))
             if adss and adss[0]:
                 ads = adss[0]
+                tads = [ads]
+                with open(ads) as fl:
+                    admt = json.loads(fl.read())
+                    if isinstance(admt, list):
+                        if self.__skip_multi_attachment:
+                            tads = []
+                        else:
+                            tads = admt
             else:
                 ads = self._generate_attachment_metadata(
                     self.__dctfmt["scanname"])
+                tads = [ads]
             if ads:
                 mtmda = os.path.getmtime(ads)
 
-        if self.__metadatageneratedcallback and rds and odb:
+        if (self.__callcallback or self.__measurement_status) \
+           and self.__metadatageneratedcallback \
+           and rds and odb:
             command = self.__metadatageneratedcallback.format(**self.__dctfmt)
-            if self.__logcommands:
-                get_logger().info(
-                    'DatasetIngestor: Metadata generated callback: %s ' % (
-                        command))
-            else:
-                get_logger().debug(
-                    'DatasetIngestor: Metadata generated callback: %s ' % (
-                        command))
+            get_logger().info(
+                'DatasetIngestor: Metadata generated callback: %s ' % (
+                    command))
             subprocess.run(command, shell=True, check=True)
-
         dbstatus = None
         dastatus = None
         pid = None
-        if rds and odb:
+        if rds and odb and not self.__skip_scan_dataset_ingestion:
             if rds and rds[0]:
                 pid = self._ingest_rawdataset_metadata(rds, token)
-            if odb and odb[0] and pid:
+            if todb and todb[0] and pid:
                 if pid is None and rdss and rdss[0]:
                     pid = self._get_pid(rdss[0])
-                dbstatus = self._ingest_origdatablock_metadata(
-                    odb, pid, token)
-                if not dbstatus:
-                    mtmdb = -1
+                for odb in todb:
+                    dbstatus = self._ingest_origdatablock_metadata(
+                        odb, pid, token)
+                    if not dbstatus:
+                        mtmdb = -1
             if pid is None and rdss and rdss[0]:
                 pid = self._get_pid(rdss[0])
-            if self.__ingest_attachment and ads and ads[0] and pid:
-                if pid is None and adss and adss[0]:
+            if self.__ingest_attachment and tads and tads[0] and pid:
+                if pid is None and rdss and rdss[0]:
                     pid = self._get_pid(rdss[0])
-                dastatus = self._ingest_attachment_metadata(
-                    ads, pid, token)
-                if not dastatus:
-                    mtmda = -1
+                for ads in tads:
+                    dastatus = self._ingest_attachment_metadata(
+                        ads, pid, token)
+                    if not dastatus:
+                        mtmda = -1
         if pid is None:
             if scan in self.__sc_seingested_map.keys():
                 mtmds = self.__sc_seingested_map[scan][-3]
@@ -1856,3 +1946,24 @@ class DatasetIngestor:
         :rtype: :obj:`list` <:obj:`str`>
         """
         return list(self.__sc_ingested)
+
+    def stop_measurement(self):
+        """ stop measurement
+
+        """
+        self.__measurement_status = False
+        self.__dctfmt["measurement"] = ""
+        get_logger().debug("Stop Measurement: %s" % self.__measurement)
+
+    def start_measurement(self, measurement):
+        """ start measurement
+
+        :param measurement:  measurement name
+        :type measurement: :obj:`str`
+
+        """
+        self.__measurement = measurement
+        self.__dctfmt["measurement"] = self.__measurement
+        self.__dctfmt["lastmeasurement"] = self.__measurement
+        self.__measurement_status = True
+        get_logger().debug("Start Measurement: %s" % self.__measurement)

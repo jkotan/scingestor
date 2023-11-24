@@ -340,7 +340,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00001'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -371,7 +371,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00002'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -423,6 +423,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -450,6 +451,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -639,6 +641,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -666,6 +669,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -816,7 +820,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00001'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -847,7 +851,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00002'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -902,6 +906,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -929,6 +934,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -1105,7 +1111,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00001'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -1136,7 +1142,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00002'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -1196,6 +1202,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -1333,7 +1340,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00001'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -1364,7 +1371,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00002'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -1420,6 +1427,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -1447,6 +1455,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -1605,7 +1614,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00001'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -1636,7 +1645,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00002'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -1691,6 +1700,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -1718,6 +1728,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -2188,6 +2199,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -2215,6 +2227,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00002',
@@ -2448,6 +2461,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
@@ -2474,6 +2488,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -2718,6 +2733,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -2744,6 +2760,7 @@ optional arguments:
                      'endTime': self.idate,
                      'isPublished': False,
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'techniques': [],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
@@ -2775,6 +2792,7 @@ optional arguments:
                          'pid':
                          'http://purl.org/pan-science/PaNET/PaNET01188'}],
                      'owner': 'NewOwner',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -3021,6 +3039,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -3047,6 +3066,7 @@ optional arguments:
                      'endTime': self.idate,
                      'isPublished': False,
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'techniques': [],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
@@ -3292,6 +3312,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -3318,6 +3339,7 @@ optional arguments:
                      'endTime': self.idate,
                      'isPublished': False,
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'techniques': [],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
@@ -3597,6 +3619,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001284-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001284/myscan_00001',
@@ -3623,6 +3646,7 @@ optional arguments:
                      'endTime': self.idate,
                      'isPublished': False,
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'techniques': [],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001284-dmgt',
@@ -3654,6 +3678,7 @@ optional arguments:
                          'pid':
                          'http://purl.org/pan-science/PaNET/PaNET01188'}],
                      'owner': 'NewOwner',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001284-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001284/myscan_00001',
@@ -4044,6 +4069,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -4070,6 +4096,7 @@ optional arguments:
                      'endTime': self.idate,
                      'isPublished': False,
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'techniques': [],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
@@ -4331,6 +4358,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -4358,6 +4386,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00002',
@@ -4388,6 +4417,7 @@ optional arguments:
                          'pid':
                          'http://purl.org/pan-science/PaNET/PaNET01188'}],
                      'owner': 'NewOwner',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001/2',
@@ -4647,6 +4677,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -4674,6 +4705,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00002',
@@ -4920,6 +4952,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -4947,6 +4980,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00002',
@@ -5203,6 +5237,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerGroup': '99001234-dmgt',
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00001',
@@ -5232,6 +5267,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
@@ -5260,6 +5296,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'NewOwner',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
@@ -5541,6 +5578,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerGroup': '99001234-dmgt',
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00001',
@@ -5570,6 +5608,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
@@ -5598,6 +5637,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'NewOwner',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
@@ -5920,6 +5960,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerGroup': '99001234-dmgt',
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00001',
@@ -5949,6 +5990,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
@@ -5977,6 +6019,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'NewOwner',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
@@ -6288,6 +6331,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerGroup': '99001234-dmgt',
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00001',
@@ -6317,6 +6361,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
@@ -6345,6 +6390,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'NewOwner',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
@@ -6623,6 +6669,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerGroup': '99001234-dmgt',
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00001',
@@ -6652,6 +6699,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
@@ -6927,6 +6975,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerGroup': '99001234-dmgt',
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00001',
@@ -6956,6 +7005,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
@@ -6984,6 +7034,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'NewOwner',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00002/2',
                          'datasetName': 'myscan_00002',
@@ -7259,6 +7310,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerGroup': '99001234-dmgt',
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00001',
@@ -7288,6 +7340,7 @@ optional arguments:
                          'techniques': [],
                          'isPublished': False,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
@@ -7316,6 +7369,7 @@ optional arguments:
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'NewOwner',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_00002/2',
                          'datasetName': 'myscan_00002',
@@ -7541,6 +7595,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -7568,6 +7623,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00002',
@@ -7595,6 +7651,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -7791,6 +7848,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -7818,6 +7876,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00002',
@@ -8023,6 +8082,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -8050,6 +8110,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00002',
@@ -8077,6 +8138,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -8299,6 +8361,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -8326,6 +8389,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00002',
@@ -8353,6 +8417,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001/2',
@@ -8503,7 +8568,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00001'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -8534,7 +8599,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00002'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -8586,6 +8651,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -8613,6 +8679,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -8750,7 +8817,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00001'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -8787,7 +8854,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00002'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -8838,6 +8905,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -8948,7 +9016,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00001'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -8983,7 +9051,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00002'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -9153,6 +9221,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -9180,6 +9249,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00002',
@@ -9404,6 +9474,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
@@ -9430,6 +9501,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -9591,7 +9663,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
                     '-c group1,group2 -w mygroup '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00001'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -9621,7 +9693,7 @@ optional arguments:
                     'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
                     '-c group1,group2 -w mygroup '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00002'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -9677,6 +9749,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': 'mygroup',
                      'accessGroups': ['group1', 'group2'],
                      'ownerEmail': 'peter.smithson@fake.de',
@@ -9702,6 +9775,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'accessGroups': ['group1', 'group2'],
                      'ownerGroup': 'mygroup',
                      'ownerEmail': 'peter.smithson@fake.de',
@@ -9849,7 +9923,7 @@ optional arguments:
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00001'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -9881,7 +9955,7 @@ optional arguments:
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,p00dmgt,'
                     'p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00002'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -9938,6 +10012,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'accessGroups': ['99001234-dmgt', '99001234-clbt',
                                       '99001234-part', 'p00dmgt',
@@ -9965,6 +10040,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'accessGroups': ['99001234-dmgt', '99001234-clbt',
                                       '99001234-part', 'p00dmgt',
@@ -10118,7 +10194,7 @@ optional arguments:
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00001'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -10150,7 +10226,7 @@ optional arguments:
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,p00dmgt,'
                     'p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00002'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -10207,6 +10283,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'accessGroups': ['99001234-dmgt', '99001234-clbt',
                                       '99001234-part', 'p00dmgt',
@@ -10234,6 +10311,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'accessGroups': ['99001234-dmgt', '99001234-clbt',
                                       '99001234-part', 'p00dmgt',
@@ -10382,7 +10460,7 @@ optional arguments:
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00001'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -10414,7 +10492,7 @@ optional arguments:
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,p00dmgt,'
                     'p00staff -w 99001234-dmgt '
-                    '-b {btmeta} '
+                    '-z \'\' -b {btmeta} '
                     '-p 99001234/myscan_00002'
                     ' -r raw/special  --add-empty-units \n'
                     'INFO : DatasetIngestor: '
@@ -10471,6 +10549,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'accessGroups': ['99001234-dmgt', '99001234-clbt',
                                       '99001234-part', 'p00dmgt',
@@ -10498,6 +10577,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'accessGroups': ['99001234-dmgt', '99001234-clbt',
                                       '99001234-part', 'p00dmgt',
@@ -10848,6 +10928,7 @@ optional arguments:
                      'techniques': [],
                      'ownerGroup': 'mygroup',
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
@@ -10872,6 +10953,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': 'mygroup',
                      'pid': '99001234/myscan_00002',
@@ -11108,6 +11190,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
@@ -11132,6 +11215,7 @@ optional arguments:
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': 'mygroup',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',

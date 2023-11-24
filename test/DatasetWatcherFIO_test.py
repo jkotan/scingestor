@@ -367,7 +367,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -398,7 +398,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -481,6 +481,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'endTime': 'Thu Dec  8 17:00:50 2022',
                      'isPublished': False,
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00001',
@@ -558,6 +559,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'endTime': 'Thu Dec  8 17:00:50 2022',
                      'isPublished': False,
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00002',
@@ -820,7 +822,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -861,7 +863,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -956,6 +958,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'endTime': 'Thu Dec  8 17:00:50 2022',
                      'isPublished': False,
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00001',
@@ -1033,6 +1036,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'endTime': 'Thu Dec  8 17:00:50 2022',
                      'isPublished': False,
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerEmail': 'peter.smithson@fake.de',
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00002',
@@ -1307,7 +1311,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -1335,7 +1339,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -1363,7 +1367,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc3}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -1391,7 +1395,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc4}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -1481,6 +1485,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                          'endTime': 'Thu Dec  8 17:00:50 2022',
                          'isPublished': False,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'ownerGroup': '99001234-dmgt',
                          'principalInvestigator': 'appuser@fake.com',
@@ -1732,7 +1737,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -1772,7 +1777,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -1812,7 +1817,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc3}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -1852,7 +1857,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc4}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -1959,6 +1964,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                          'endTime': 'Thu Dec  8 17:00:50 2022',
                          'isPublished': False,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'ownerGroup': '99001234-dmgt',
                          'principalInvestigator': 'appuser@fake.com',
