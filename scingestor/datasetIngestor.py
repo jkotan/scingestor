@@ -1635,7 +1635,6 @@ class DatasetIngestor:
                 'DatasetIngestor: Metadata generated callback: %s ' % (
                     command))
             subprocess.run(command, shell=True, check=True)
-
         dbstatus = None
         dastatus = None
         pid = None
@@ -1954,7 +1953,7 @@ class DatasetIngestor:
         """
         self.__measurement_status = False
         self.__dctfmt["measurement"] = ""
-        get_logger().info("Stop Measurement: %s" % self.__measurement)
+        get_logger().debug("Stop Measurement: %s" % self.__measurement)
 
     def start_measurement(self, measurement):
         """ start measurement
@@ -1967,4 +1966,4 @@ class DatasetIngestor:
         self.__dctfmt["measurement"] = self.__measurement
         self.__dctfmt["lastmeasurement"] = self.__measurement
         self.__measurement_status = True
-        get_logger().info("Start Measurement: %s" % self.__measurement)
+        get_logger().debug("Start Measurement: %s" % self.__measurement)

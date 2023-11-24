@@ -4967,6 +4967,1081 @@ class DatasetWatcherTest(unittest.TestCase):
             if os.path.isdir(fdirname):
                 shutil.rmtree(fdirname)
 
+    def test_datasetfile_exist_json_attachment_group(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
+        btmeta = "beamtime-metadata-99011234.json"
+        dslist = "scicat-datasets-99011234.lst"
+        idslist = "scicat-ingested-datasets-99011234.lst"
+        mglist = "metadata-group-map.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        msource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               mglist)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fds1 = os.path.join(fsubdirname2, "myscan_00001.scan.json")
+        fds2 = os.path.join(fsubdirname2, "myscan_00002.scan.json")
+        fat1 = os.path.join(fsubdirname2, "myscan_00001.attachment.json")
+        fat2 = os.path.join(fsubdirname2, "myscan_00002.attachment.json")
+        fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        ds1 = {'contactEmail': 'appuser@fake.com',
+               'creationLocation': '/DESY/PETRA III/P00',
+               'instrumentId': '/petra3/p00',
+               'description': 'H20 distribution',
+               'endTime': self.idate,
+               'isPublished': False,
+               'techniques': [
+                   {
+                       'name': 'small angle x-ray scattering',
+                       'pid':
+                       'http://purl.org/pan-science/PaNET/PaNET01188'
+                   }
+               ],
+               'owner': 'Smithson',
+               'keywords': ['scan'],
+               'ownerGroup': '99011234-dmgt',
+               'ownerEmail': 'peter.smithson@fake.de',
+               'pid': '99011234/myscan_00001',
+               'accessGroups': [
+                   '99011234-dmgt', '99011234-clbt', '99011234-part',
+                   'p00dmgt', 'p00staff'],
+               'datasetName': 'myscan_00001',
+               'principalInvestigator': 'appuser@fake.com',
+               'proposalId': '99011234',
+               'scientificMetadata': {
+                   'DOOR_proposalId': '99991173',
+                   'ScanCommand': 'ascan mot02 3 5 4 0.1',
+                   "point_nb": 5,
+                   "static_vector": [0, 1, 0],
+                   "dynamic_vector": [1.1, 3.4],
+                   "user_comments": ["my comment 1", "my comment 2"],
+                   "data": {
+                       "sample_pressure": {
+                           "shape": [5],
+                           "unit": "mbar",
+                           "value": [
+                               999.0,
+                               999.1,
+                               999.2,
+                               999.0,
+                               998.9
+                           ]
+                       }
+                   },
+                   "sample": {
+                       "temperature": {
+                           "value": {
+                               "unit": "W",
+                               "value": 0.82
+                           }
+                       }
+                   },
+                   'beamtimeId': '99011234'},
+               'sourceFolder':
+               '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+               'type': 'raw'}
+        ds2 = {'contactEmail': 'appuser@fake.com',
+               'creationLocation': '/DESY/PETRA III/P00',
+               'instrumentId': '/petra3/p00',
+               'description': 'H20 distribution',
+               'endTime': self.idate,
+               'isPublished': False,
+               'techniques': [
+                {
+                    'name': 'wide angle x-ray scattering',
+                    'pid':
+                    'http://purl.org/pan-science/PaNET/PaNET01191'
+                },
+                {
+                    'name': 'grazing incidence diffraction',
+                    'pid':
+                    'http://purl.org/pan-science/PaNET/PaNET01098'
+                }
+               ],
+               'owner': 'Smithson',
+               'keywords': ['scan'],
+               'ownerGroup': '99011234-dmgt',
+               'ownerEmail': 'peter.smithson@fake.de',
+               'pid': '99011234/myscan_00002',
+               'accessGroups': [
+                   '99011234-dmgt', '99011234-clbt', '99011234-part',
+                   'p00dmgt', 'p00staff'],
+               'datasetName': 'myscan_00002',
+               'principalInvestigator': 'appuser@fake.com',
+               'proposalId': '99011234',
+               'scientificMetadata': {
+                   'DOOR_proposalId': '99991173',
+                   "point_nb": 6,
+                   'ScanCommand': 'ascan mot01 0 10 5 0.1',
+                   "static_vector": [0, 1, 0],
+                   "dynamic_vector": [1.2, 4.4],
+                   "user_comments": ["my comment 3", "my comment 2"],
+                   "data": {
+                       "sample_pressure": {
+                           "shape": [6],
+                           "unit": "mbar",
+                           "value": [
+                               998.6,
+                               999.4,
+                               999.2,
+                               999.3,
+                               999.0,
+                               998.9]
+                       }
+                   },
+                   "sample": {
+                       "temperature": {
+                           "value": {
+                               "unit": "W",
+                               "value": 0.80
+                           }
+                       }
+                   },
+                   'beamtimeId': '99011234'},
+               'sourceFolder':
+               '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+               'type': 'raw'}
+        gds = {
+            'accessGroups': [
+                '99011234-dmgt',
+                '99011234-clbt',
+                '99011234-part',
+                'p00dmgt',
+                'p00staff'],
+            'contactEmail': 'appuser@fake.com',
+            'description': 'H20 distribution',
+            'inputDatasets': [
+                '99011234/myscan_00001',
+                '99011234/myscan_00002'],
+            'investigator': 'appuser@fake.com',
+            'isPublished': False,
+            'jobParameters': {'command': 'nxsfileinfo groupmetadata'},
+            'keywords': ['measurement', 'mycalib'],
+            'owner': 'Smithson',
+            'ownerEmail': 'peter.smithson@fake.de',
+            'ownerGroup': '99011234-dmgt',
+            'pid': '99011234/mycalib',
+            'scientificMetadata': {
+                'DOOR_proposalId': '99991173',
+                'beamtimeId': '99011234',
+                'ScanCommand': [
+                    'ascan mot02 3 5 4 0.1',
+                    'ascan mot01 0 10 5 0.1'],
+                'creationLocation': '/DESY/PETRA III/P00',
+                'instrumentId': '/petra3/p00',
+                "point_nb": {
+                    "counts": 2,
+                    "max": 6,
+                    "min": 5,
+                    "std": 0.7071067811865476,
+                    "unit": "",
+                    "value": 5.5
+                },
+                "user_comments": [
+                    "my comment 1",
+                    "my comment 2",
+                    "my comment 3"
+                ],
+                "static_vector": [
+                    [
+                        0,
+                        1,
+                        0
+                    ]
+                ],
+                "dynamic_vector": [[1.1, 3.4], [1.2, 4.4]],
+                "pressure": {
+                    "counts": 11,
+                    "max": 999.4,
+                    "min": 998.6,
+                    "std": 0.23221956404645228,
+                    "unit": "mbar",
+                    "value": 999.0545454545453
+                },
+                "pressure_shape": [
+                        [5], [6]
+                ],
+                "temperature": {
+                    "counts": 2,
+                    "max": 0.82,
+                    "min": 0.8,
+                    "std": 0.014142135623730885,
+                    "unit": "W",
+                    "value": 0.81
+                },
+                'proposalId': '99011234'},
+            'sourceFolder':
+            '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+            'techniques': [
+                {'name': 'small angle x-ray scattering',
+                 'pid': 'http://purl.org/pan-science/PaNET/PaNET01188'}],
+            'type': 'derived',
+            'usedSoftware': 'https://github.com/nexdatas/nxstools'}
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'max_scandir_depth: 2\n' \
+            'log_generator_commands: true\n' \
+            'execute_commands: true\n' \
+            'metadata_group_map_file: "{basedir}/metadata-group-map.lst"\n' \
+            'ingest_dataset_attachment: true\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
+
+        at1 = {
+            'thumbnail': "data:iVBORw0KGgoAAAANSUhEAAAoAAA",
+            'caption': '',
+            'ownerGroup': '99011234-dmgt',
+            'accessGroups': [
+                '99011234-dmgt', '99011234-clbt', '99011234-part',
+                'p00dmgt', 'p00staff'],
+        }
+        at2 = {
+            'thumbnail': "data:sdfsAAA",
+            'caption': '',
+            'ownerGroup': '99011234-dmgt',
+            'accessGroups': [
+                '99011234-dmgt', '99011234-clbt', '99011234-part',
+                'p00dmgt', 'p00staff'],
+        }
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r10 --log debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r10 -l debug'
+                     % cfgfname).split()]
+        # commands.pop()
+        try:
+            for cmd in commands:
+                time.sleep(1)
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                os.mkdir(fsubdirname3)
+                with open(fds1, "w") as cf:
+                    cf.write(json.dumps(ds1))
+                with open(fds2, "w") as cf:
+                    cf.write(json.dumps(ds2))
+                with open(fat1, "w") as cf:
+                    cf.write(json.dumps(at1))
+                with open(fat2, "w") as cf:
+                    cf.write(json.dumps(at2))
+                shutil.copy(source, fdirname)
+                shutil.copy(msource, fdirname)
+                shutil.copy(lsource, fsubdirname2)
+                with open(fdslist, "a+") as fds:
+                    fds.write("myscan_00002\n")
+                    fds.write("__command__ stop\n")
+                    fds.write("mycalib\n")
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                self.__server.reset()
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                vl, er = self.runtest(cmd)
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                dseri = [ln for ln in seri if "DEBUG :" not in ln]
+                # print(vl)
+                # print(er)
+
+                # nodebug = "\n".join([ee for ee in er.split("\n")
+                #                      if (("DEBUG :" not in ee) and
+                #                          (not ee.startswith("127.0.0.1")))])
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                        '{basedir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir2} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Creating DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : DatasetWatcher: Adding watch {cnt5}: '
+                        '{dslist} {idslist}\n'
+                        'INFO : DatasetWatcher: Waiting datasets: '
+                        '[\'__command__ start mycalib\', \'{sc1}\', '
+                        '\'{sc2}\', \'__command__ stop\', \'mycalib\']\n'
+                        'INFO : DatasetWatcher: Ingested datasets: []\n'
+                        # 'INFO : Start Measurement: mycalib\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-p 99011234/myscan_00001  -w 99011234-dmgt '
+                        '-c 99011234-dmgt,99011234-clbt,99011234-part,'
+                        'p00dmgt,p00staff '
+                        '-o {subdir2}/{sc1}.origdatablock.json  '
+                        '{subdir2}/{sc1} \n'
+                        'INFO : DatasetIngestor: Metadata generated callback:'
+                        ' nxsfileinfo groupmetadata  mycalib '
+                        '-m {subdir2}/{sc1}.scan.json '
+                        '-d {subdir2}/{sc1}.origdatablock.json '
+                        '-a {subdir2}/{sc1}.attachment.json '
+                        '-p 99011234/mycalib -f -k4  '
+                        '--group-map-file {basedir}/metadata-group-map.lst  \n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '99011234/{sc1}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '99011234/{sc1}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-p 99011234/myscan_00002  -w 99011234-dmgt '
+                        '-c 99011234-dmgt,99011234-clbt,99011234-part,'
+                        'p00dmgt,p00staff '
+                        '-o {subdir2}/{sc2}.origdatablock.json  '
+                        '{subdir2}/{sc2} \n'
+                        'INFO : DatasetIngestor: Metadata generated callback:'
+                        ' nxsfileinfo groupmetadata  mycalib '
+                        '-m {subdir2}/{sc2}.scan.json '
+                        '-d {subdir2}/{sc2}.origdatablock.json '
+                        '-a {subdir2}/{sc2}.attachment.json '
+                        '-p 99011234/mycalib -f -k4  '
+                        '--group-map-file {basedir}/metadata-group-map.lst  \n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '99011234/{sc2}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '99011234/{sc2}\n'
+                        # 'INFO : Stop Measurement: mycalib\n'
+                        'INFO : DatasetIngestor: Ingesting: '
+                        '{subdir2}/scicat-datasets-99011234.lst mycalib\n'
+                        'INFO : DatasetIngestor: '
+                        'Check if dataset exists: 99011234/mycalib\n'
+                        'INFO : DatasetIngestor: '
+                        'Post the dataset: 99011234/mycalib\n'
+                        'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: '
+                        'Stopping ScanDirWatcher {btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Stopping DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt5}: '
+                        '{dslist}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                subdir=fsubdirname, subdir2=fsubdirname2,
+                                dslist=fdslist, idslist=fidslist,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                                cnt4=(cnt + 3), cnt5=(cnt + 4),
+                                sc1='myscan_00001', sc2='myscan_00002'),
+                        '\n'.join(dseri))
+                except Exception:
+                    print(er)
+                    raise
+                self.assertEqual(
+                    "Login: ingestor\n"
+                    "Datasets: 99011234/myscan_00001\n"
+                    "OrigDatablocks: 99011234/myscan_00001\n"
+                    "Datasets Attachments: 99011234/myscan_00001\n"
+                    "Datasets: 99011234/myscan_00002\n"
+                    "OrigDatablocks: 99011234/myscan_00002\n"
+                    "Datasets Attachments: 99011234/myscan_00002\n"
+                    "Datasets: 99011234/mycalib\n"
+                    "OrigDatablocks: 99011234/mycalib\n"
+                    "OrigDatablocks: 99011234/mycalib\n"
+                    "Datasets Attachments: 99011234/mycalib\n"
+                    "Datasets Attachments: 99011234/mycalib\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 1)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 3)
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[0]), ds1)
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[1]), ds2)
+                # print(json.loads(self.__server.datasets[2]))
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[2]), gds)
+                self.assertEqual(len(self.__server.origdatablocks), 4)
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[0]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'ownerGroup': '99011234-dmgt',
+                     'datasetId': '99011234/myscan_00001',
+                     'accessGroups': [
+                         '99011234-dmgt', '99011234-clbt', '99011234-part',
+                         'p00dmgt', 'p00staff'],
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[1]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'ownerGroup': '99011234-dmgt',
+                     'datasetId': '99011234/myscan_00002',
+                     'accessGroups': [
+                         '99011234-dmgt', '99011234-clbt', '99011234-part',
+                         'p00dmgt', 'p00staff'],
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[2]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'ownerGroup': '99011234-dmgt',
+                     'datasetId': '99011234/mycalib',
+                     'accessGroups': [
+                         '99011234-dmgt', '99011234-clbt', '99011234-part',
+                         'p00dmgt', 'p00staff'],
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[3]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'ownerGroup': '99011234-dmgt',
+                     'datasetId': '99011234/mycalib',
+                     'accessGroups': [
+                         '99011234-dmgt', '99011234-clbt', '99011234-part',
+                         'p00dmgt', 'p00staff'],
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.attachments), 4)
+                self.assertEqual(len(self.__server.attachments[0]), 2)
+                self.assertEqual(self.__server.attachments[0][0],
+                                 '99011234/myscan_00001')
+                self.myAssertDict(
+                    json.loads(self.__server.attachments[0][1]), at1)
+                self.assertEqual(len(self.__server.attachments[1]), 2)
+                self.assertEqual(self.__server.attachments[1][0],
+                                 '99011234/myscan_00002')
+                self.myAssertDict(
+                    json.loads(self.__server.attachments[1][1]), at2)
+                self.assertEqual(len(self.__server.attachments[2]), 2)
+                self.assertEqual(self.__server.attachments[2][0],
+                                 '99011234/mycalib')
+                self.myAssertDict(
+                    json.loads(self.__server.attachments[2][1]), at1)
+                self.assertEqual(len(self.__server.attachments[3]), 2)
+                self.assertEqual(self.__server.attachments[3][0],
+                                 '99011234/mycalib')
+                self.myAssertDict(
+                    json.loads(self.__server.attachments[3][1]), at2)
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
+    def test_datasetfile_add_json_attachment_group(self):
+        fun = sys._getframe().f_code.co_name
+        # print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        dirname = "test_current"
+        while os.path.exists(dirname):
+            dirname = dirname + '_1'
+        fdirname = os.path.abspath(dirname)
+        fsubdirname = os.path.abspath(os.path.join(dirname, "raw"))
+        fsubdirname2 = os.path.abspath(os.path.join(fsubdirname, "special"))
+        fsubdirname3 = os.path.abspath(os.path.join(fsubdirname2, "scansub"))
+        btmeta = "beamtime-metadata-99011234.json"
+        dslist = "scicat-datasets-99011234.lst"
+        idslist = "scicat-ingested-datasets-99011234.lst"
+        mglist = "metadata-group-map.lst"
+        source = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                              "config",
+                              btmeta)
+        msource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               mglist)
+        lsource = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                               "config",
+                               dslist)
+        fullbtmeta = os.path.join(fdirname, btmeta)
+        fdslist = os.path.join(fsubdirname2, dslist)
+        fds1 = os.path.join(fsubdirname2, "myscan_00001.scan.json")
+        fds2 = os.path.join(fsubdirname2, "myscan_00002.scan.json")
+        fat1 = os.path.join(fsubdirname2, "myscan_00001.attachment.json")
+        fat2 = os.path.join(fsubdirname2, "myscan_00002.attachment.json")
+        fidslist = os.path.join(fsubdirname2, idslist)
+        credfile = os.path.join(fdirname, 'pwd')
+        url = 'http://localhost:8881'
+        vardir = "/"
+        cred = "12342345"
+        os.mkdir(fdirname)
+        with open(credfile, "w") as cf:
+            cf.write(cred)
+
+        ds1 = {'contactEmail': 'appuser@fake.com',
+               'creationLocation': '/DESY/PETRA III/P00',
+               'instrumentId': '/petra3/p00',
+               'description': 'H20 distribution',
+               'endTime': self.idate,
+               'isPublished': False,
+               'techniques': [
+                   {
+                       'name': 'small angle x-ray scattering',
+                       'pid':
+                       'http://purl.org/pan-science/PaNET/PaNET01188'
+                   }
+               ],
+               'owner': 'Smithson',
+               'keywords': ['scan'],
+               'ownerGroup': '99011234-dmgt',
+               'ownerEmail': 'peter.smithson@fake.de',
+               'pid': '99011234/myscan_00001',
+               'accessGroups': [
+                   '99011234-dmgt', '99011234-clbt', '99011234-part',
+                   'p00dmgt', 'p00staff'],
+               'datasetName': 'myscan_00001',
+               'principalInvestigator': 'appuser@fake.com',
+               'proposalId': '99011234',
+               'scientificMetadata': {
+                   'DOOR_proposalId': '99991173',
+                   'ScanCommand': 'ascan mot02 3 5 4 0.1',
+                   "point_nb": 5,
+                   "static_vector": [0, 1, 0],
+                   "dynamic_vector": [1.1, 3.4],
+                   "user_comments": ["my comment 1", "my comment 2"],
+                   "data": {
+                       "sample_pressure": {
+                           "shape": [5],
+                           "unit": "mbar",
+                           "value": [
+                               999.0,
+                               999.1,
+                               999.2,
+                               999.0,
+                               998.9
+                           ]
+                       }
+                   },
+                   "sample": {
+                       "temperature": {
+                           "value": {
+                               "unit": "W",
+                               "value": 0.82
+                           }
+                       }
+                   },
+                   'beamtimeId': '99011234'},
+               'sourceFolder':
+               '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+               'type': 'raw'}
+        ds2 = {'contactEmail': 'appuser@fake.com',
+               'creationLocation': '/DESY/PETRA III/P00',
+               'instrumentId': '/petra3/p00',
+               'description': 'H20 distribution',
+               'endTime': self.idate,
+               'isPublished': False,
+               'techniques': [
+                {
+                    'name': 'wide angle x-ray scattering',
+                    'pid':
+                    'http://purl.org/pan-science/PaNET/PaNET01191'
+                },
+                {
+                    'name': 'grazing incidence diffraction',
+                    'pid':
+                    'http://purl.org/pan-science/PaNET/PaNET01098'
+                }
+               ],
+               'owner': 'Smithson',
+               'keywords': ['scan'],
+               'ownerGroup': '99011234-dmgt',
+               'ownerEmail': 'peter.smithson@fake.de',
+               'pid': '99011234/myscan_00002',
+               'accessGroups': [
+                   '99011234-dmgt', '99011234-clbt', '99011234-part',
+                   'p00dmgt', 'p00staff'],
+               'datasetName': 'myscan_00002',
+               'principalInvestigator': 'appuser@fake.com',
+               'proposalId': '99011234',
+               'scientificMetadata': {
+                   'DOOR_proposalId': '99991173',
+                   "point_nb": 6,
+                   'ScanCommand': 'ascan mot01 0 10 5 0.1',
+                   "static_vector": [0, 1, 0],
+                   "dynamic_vector": [1.2, 4.4],
+                   "user_comments": ["my comment 3", "my comment 2"],
+                   "data": {
+                       "sample_pressure": {
+                           "shape": [6],
+                           "unit": "mbar",
+                           "value": [
+                               998.6,
+                               999.4,
+                               999.2,
+                               999.3,
+                               999.0,
+                               998.9]
+                       }
+                   },
+                   "sample": {
+                       "temperature": {
+                           "value": {
+                               "unit": "W",
+                               "value": 0.80
+                           }
+                       }
+                   },
+                   'beamtimeId': '99011234'},
+               'sourceFolder':
+               '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+               'type': 'raw'}
+        gds = {
+            'accessGroups': [
+                '99011234-dmgt',
+                '99011234-clbt',
+                '99011234-part',
+                'p00dmgt',
+                'p00staff'],
+            'contactEmail': 'appuser@fake.com',
+            'description': 'H20 distribution',
+            'inputDatasets': [
+                '99011234/myscan_00001',
+                '99011234/myscan_00002'],
+            'investigator': 'appuser@fake.com',
+            'isPublished': False,
+            'jobParameters': {'command': 'nxsfileinfo groupmetadata'},
+            'keywords': ['measurement', 'mycalib'],
+            'owner': 'Smithson',
+            'ownerEmail': 'peter.smithson@fake.de',
+            'ownerGroup': '99011234-dmgt',
+            'pid': '99011234/mycalib',
+            'scientificMetadata': {
+                'DOOR_proposalId': '99991173',
+                'beamtimeId': '99011234',
+                'ScanCommand': [
+                    'ascan mot02 3 5 4 0.1',
+                    'ascan mot01 0 10 5 0.1'],
+                'creationLocation': '/DESY/PETRA III/P00',
+                'instrumentId': '/petra3/p00',
+                "point_nb": {
+                    "counts": 2,
+                    "max": 6,
+                    "min": 5,
+                    "std": 0.7071067811865476,
+                    "unit": "",
+                    "value": 5.5
+                },
+                "user_comments": [
+                    "my comment 1",
+                    "my comment 2",
+                    "my comment 3"
+                ],
+                "static_vector": [
+                    [
+                        0,
+                        1,
+                        0
+                    ]
+                ],
+                "dynamic_vector": [[1.1, 3.4], [1.2, 4.4]],
+                "pressure": {
+                    "counts": 11,
+                    "max": 999.4,
+                    "min": 998.6,
+                    "std": 0.23221956404645228,
+                    "unit": "mbar",
+                    "value": 999.0545454545453
+                },
+                "pressure_shape": [
+                        [5], [6]
+                ],
+                "temperature": {
+                    "counts": 2,
+                    "max": 0.82,
+                    "min": 0.8,
+                    "std": 0.014142135623730885,
+                    "unit": "W",
+                    "value": 0.81
+                },
+                'proposalId': '99011234'},
+            'sourceFolder':
+            '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
+            'techniques': [
+                {'name': 'small angle x-ray scattering',
+                 'pid': 'http://purl.org/pan-science/PaNET/PaNET01188'}],
+            'type': 'derived',
+            'usedSoftware': 'https://github.com/nexdatas/nxstools'}
+
+        cfg = 'beamtime_dirs:\n' \
+            '  - "{basedir}"\n' \
+            'scicat_url: "{url}"\n' \
+            'max_scandir_depth: 2\n' \
+            'log_generator_commands: true\n' \
+            'execute_commands: true\n' \
+            'metadata_group_map_file: "{basedir}/metadata-group-map.lst"\n' \
+            'ingest_dataset_attachment: true\n' \
+            'ingestor_var_dir: "{vardir}"\n' \
+            'ingestor_credential_file: "{credfile}"\n'.format(
+                basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
+
+        at1 = {
+            'thumbnail': "data:iVBORw0KGgoAAAANSUhEAAAoAAA",
+            'caption': '',
+            'ownerGroup': '99011234-dmgt',
+            'accessGroups': [
+                '99011234-dmgt', '99011234-clbt', '99011234-part',
+                'p00dmgt', 'p00staff'],
+        }
+        at2 = {
+            'thumbnail': "data:sdfsAAA",
+            'caption': '',
+            'ownerGroup': '99011234-dmgt',
+            'accessGroups': [
+                '99011234-dmgt', '99011234-clbt', '99011234-part',
+                'p00dmgt', 'p00staff'],
+        }
+        cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
+        with open(cfgfname, "w+") as cf:
+            cf.write(cfg)
+        commands = [('scicat_dataset_ingestor -c %s -r30 --log debug'
+                     % cfgfname).split(),
+                    ('scicat_dataset_ingestor --config %s -r30 -l debug'
+                     % cfgfname).split()]
+
+        def tst_thread():
+            """ test thread which adds and removes beamtime metadata file """
+            time.sleep(3)
+            shutil.copy(lsource, fsubdirname2)
+            time.sleep(5)
+            with open(fdslist, "a+") as fds:
+                fds.write("myscan_00002\n")
+                fds.write("__command__ stop\n")
+                fds.write("mycalib\n")
+
+        try:
+            for cmd in commands:
+                time.sleep(1)
+                os.mkdir(fsubdirname)
+                os.mkdir(fsubdirname2)
+                os.mkdir(fsubdirname3)
+                with open(fds1, "w") as cf:
+                    cf.write(json.dumps(ds1))
+                with open(fds2, "w") as cf:
+                    cf.write(json.dumps(ds2))
+                with open(fat1, "w") as cf:
+                    cf.write(json.dumps(at1))
+                with open(fat2, "w") as cf:
+                    cf.write(json.dumps(at2))
+                shutil.copy(source, fdirname)
+                shutil.copy(msource, fdirname)
+                shutil.copy(lsource, fsubdirname2)
+                self.notifier = safeINotifier.SafeINotifier()
+                cnt = self.notifier.id_queue_counter + 1
+                self.__server.reset()
+                if os.path.exists(fidslist):
+                    os.remove(fidslist)
+                th = threading.Thread(target=tst_thread)
+                th.start()
+                vl, er = self.runtest(cmd)
+                ser = er.split("\n")
+                seri = [ln for ln in ser if not ln.startswith("127.0.0.1")]
+                dseri = [ln for ln in seri if "DEBUG :" not in ln]
+                # print(vl)
+                # print(er)
+
+                # nodebug = "\n".join([ee for ee in er.split("\n")
+                #                      if (("DEBUG :" not in ee) and
+                #                          (not ee.startswith("127.0.0.1")))])
+                # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
+                try:
+                    self.assertEqual(
+                        'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: Create ScanDirWatcher '
+                        '{basedir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir2} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Creating DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : DatasetWatcher: Adding watch {cnt5}: '
+                        '{dslist} {idslist}\n'
+                        'INFO : DatasetWatcher: Waiting datasets: '
+                        '[\'__command__ start mycalib\', \'{sc1}\']\n'
+                        'INFO : DatasetWatcher: Ingested datasets: []\n'
+                        # 'INFO : Start Measurement: mycalib\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc1} {subdir2}/{sc1}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-p 99011234/myscan_00001  -w 99011234-dmgt '
+                        '-c 99011234-dmgt,99011234-clbt,99011234-part,'
+                        'p00dmgt,p00staff '
+                        '-o {subdir2}/{sc1}.origdatablock.json  '
+                        '{subdir2}/{sc1} \n'
+                        'INFO : DatasetIngestor: Metadata generated callback:'
+                        ' nxsfileinfo groupmetadata  mycalib '
+                        '-m {subdir2}/{sc1}.scan.json '
+                        '-d {subdir2}/{sc1}.origdatablock.json '
+                        '-a {subdir2}/{sc1}.attachment.json '
+                        '-p 99011234/mycalib -f -k4  '
+                        '--group-map-file {basedir}/metadata-group-map.lst  \n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '99011234/{sc1}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '99011234/{sc1}\n'
+                        'INFO : DatasetIngestor: Ingesting: {dslist} {sc2}\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock metadata:'
+                        ' {sc2} {subdir2}/{sc2}.origdatablock.json\n'
+                        'INFO : DatasetIngestor: '
+                        'Generating origdatablock command: '
+                        'nxsfileinfo origdatablock  '
+                        '-s *.pyc,*.origdatablock.json,*.scan.json,'
+                        '*.attachment.json,*~  '
+                        '-p 99011234/myscan_00002  -w 99011234-dmgt '
+                        '-c 99011234-dmgt,99011234-clbt,99011234-part,'
+                        'p00dmgt,p00staff '
+                        '-o {subdir2}/{sc2}.origdatablock.json  '
+                        '{subdir2}/{sc2} \n'
+                        'INFO : DatasetIngestor: Metadata generated callback:'
+                        ' nxsfileinfo groupmetadata  mycalib '
+                        '-m {subdir2}/{sc2}.scan.json '
+                        '-d {subdir2}/{sc2}.origdatablock.json '
+                        '-a {subdir2}/{sc2}.attachment.json '
+                        '-p 99011234/mycalib -f -k4  '
+                        '--group-map-file {basedir}/metadata-group-map.lst  \n'
+                        'INFO : DatasetIngestor: Check if dataset exists: '
+                        '99011234/{sc2}\n'
+                        'INFO : DatasetIngestor: Post the dataset: '
+                        '99011234/{sc2}\n'
+                        # 'INFO : Stop Measurement: mycalib\n'
+                        'INFO : DatasetIngestor: Ingesting: '
+                        '{subdir2}/scicat-datasets-99011234.lst mycalib\n'
+                        'INFO : DatasetIngestor: '
+                        'Check if dataset exists: 99011234/mycalib\n'
+                        'INFO : DatasetIngestor: '
+                        'Post the dataset: 99011234/mycalib\n'
+                        'INFO : BeamtimeWatcher: Removing watch {cnt1}: '
+                        '{basedir}\n'
+                        'INFO : BeamtimeWatcher: '
+                        'Stopping ScanDirWatcher {btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt2}: '
+                        '{basedir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt3}: '
+                        '{subdir}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt4}: '
+                        '{subdir2}\n'
+                        'INFO : ScanDirWatcher: Stopping DatasetWatcher '
+                        '{dslist}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt5}: '
+                        '{dslist}\n'
+                        .format(basedir=fdirname, btmeta=fullbtmeta,
+                                subdir=fsubdirname, subdir2=fsubdirname2,
+                                dslist=fdslist, idslist=fidslist,
+                                cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
+                                cnt4=(cnt + 3), cnt5=(cnt + 4),
+                                sc1='myscan_00001', sc2='myscan_00002'),
+                        '\n'.join(dseri))
+                except Exception:
+                    print(er)
+                    raise
+                self.assertEqual(
+                    "Login: ingestor\n"
+                    "Datasets: 99011234/myscan_00001\n"
+                    "OrigDatablocks: 99011234/myscan_00001\n"
+                    "Datasets Attachments: 99011234/myscan_00001\n"
+                    "Login: ingestor\n"
+                    "Datasets: 99011234/myscan_00002\n"
+                    "OrigDatablocks: 99011234/myscan_00002\n"
+                    "Datasets Attachments: 99011234/myscan_00002\n"
+                    "Datasets: 99011234/mycalib\n"
+                    "OrigDatablocks: 99011234/mycalib\n"
+                    "OrigDatablocks: 99011234/mycalib\n"
+                    "Datasets Attachments: 99011234/mycalib\n"
+                    "Datasets Attachments: 99011234/mycalib\n"
+                    "Login: ingestor\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 3)
+                self.assertEqual(
+                    self.__server.userslogin[0],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[1],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(
+                    self.__server.userslogin[2],
+                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(len(self.__server.datasets), 3)
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[0]), ds1)
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[1]), ds2)
+                # print(json.loads(self.__server.datasets[2]))
+                self.myAssertDict(
+                    json.loads(self.__server.datasets[2]), gds)
+                self.assertEqual(len(self.__server.origdatablocks), 4)
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[0]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'ownerGroup': '99011234-dmgt',
+                     'datasetId': '99011234/myscan_00001',
+                     'accessGroups': [
+                         '99011234-dmgt', '99011234-clbt', '99011234-part',
+                         'p00dmgt', 'p00staff'],
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[1]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'ownerGroup': '99011234-dmgt',
+                     'datasetId': '99011234/myscan_00002',
+                     'accessGroups': [
+                         '99011234-dmgt', '99011234-clbt', '99011234-part',
+                         'p00dmgt', 'p00staff'],
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[2]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'ownerGroup': '99011234-dmgt',
+                     'datasetId': '99011234/mycalib',
+                     'accessGroups': [
+                         '99011234-dmgt', '99011234-clbt', '99011234-part',
+                         'p00dmgt', 'p00staff'],
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.myAssertDict(
+                    json.loads(self.__server.origdatablocks[3]),
+                    {'dataFileList': [
+                        {'gid': 'jkotan',
+                         'path': 'myscan_00001.scan.json',
+                         'perm': '-rw-r--r--',
+                         'size': 629,
+                         'time': '2022-07-05T19:07:16.683673+0200',
+                         'uid': 'jkotan'}],
+                     'ownerGroup': '99011234-dmgt',
+                     'datasetId': '99011234/mycalib',
+                     'accessGroups': [
+                         '99011234-dmgt', '99011234-clbt', '99011234-part',
+                         'p00dmgt', 'p00staff'],
+                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.attachments), 4)
+                self.assertEqual(len(self.__server.attachments[0]), 2)
+                self.assertEqual(self.__server.attachments[0][0],
+                                 '99011234/myscan_00001')
+                self.myAssertDict(
+                    json.loads(self.__server.attachments[0][1]), at1)
+                self.assertEqual(len(self.__server.attachments[1]), 2)
+                self.assertEqual(self.__server.attachments[1][0],
+                                 '99011234/myscan_00002')
+                self.myAssertDict(
+                    json.loads(self.__server.attachments[1][1]), at2)
+                self.assertEqual(len(self.__server.attachments[2]), 2)
+                self.assertEqual(self.__server.attachments[2][0],
+                                 '99011234/mycalib')
+                self.myAssertDict(
+                    json.loads(self.__server.attachments[2][1]), at1)
+                self.assertEqual(len(self.__server.attachments[3]), 2)
+                self.assertEqual(self.__server.attachments[3][0],
+                                 '99011234/mycalib')
+                self.myAssertDict(
+                    json.loads(self.__server.attachments[3][1]), at2)
+                if os.path.isdir(fsubdirname):
+                    shutil.rmtree(fsubdirname)
+        finally:
+            if os.path.exists(cfgfname):
+                os.remove(cfgfname)
+            if os.path.isdir(fdirname):
+                shutil.rmtree(fdirname)
+
     def test_datasetfile_exist_json_depth(self):
         fun = sys._getframe().f_code.co_name
         # print("Run: %s.%s() " % (self.__class__.__name__, fun))

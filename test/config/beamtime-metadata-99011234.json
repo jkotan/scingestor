@@ -1,0 +1,47 @@
+{
+    "applicant": {
+        "email": "appuser@fake.com",
+        "institute": "Academy of Sciences",
+        "lastname": "Ouruser",
+        "userId": "990123",
+        "username": "John_Ouruser"
+    },
+    "beamline": "p00",
+    "beamlineAlias": "P00",
+    "beamlineSetup": "Microprobe",
+    "beamtimeId": "99011234",
+    "contact": "BSName",
+    "corePath": "/asap3/petra3/gpfs/p00/2022/data/9901234",
+    "eventEnd": "2022-05-19 09:00:00",
+    "eventStart": "2022-05-14 09:00:00",
+    "facility": "PETRA III",
+    "generated": "2022-05-14 11:54:29",
+    "leader": {
+        "email": "peter.smithson@fake.de",
+        "institute": "Academy of Sciences",
+        "lastname": "Smithson",
+        "userId": "9987",
+        "username": "psmithson"
+    },
+    "pi": {
+        "email": "appuser@fake.com",
+        "institute": "Academy of Sciences",
+        "lastname": "Ouruser",
+        "userId": "990123",
+        "username": "John_Ouruser"
+    },
+    "proposalId": "99991173",
+    "proposalType": "I",
+    "title": "H20 distribution",
+    "unixId": "None",
+    "users": {
+        "doorDb": [
+            "asdgf",
+            "asaaa",
+            "asdsd",
+            "jarre"
+        ],
+        "special": [],
+        "unknown": []
+    }
+}
