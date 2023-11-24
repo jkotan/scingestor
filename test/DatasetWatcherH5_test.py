@@ -452,7 +452,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -483,7 +483,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -560,6 +560,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'techniques': ltechs[0],
                      'sampleId': sids[0],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -609,6 +610,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'techniques': ltechs[1],
                      'sampleId': sids[1],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -935,7 +937,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -976,7 +978,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -1064,6 +1066,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'techniques': ltechs[0],
                      'sampleId': sids[0],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -1117,6 +1120,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'techniques': ltechs[1],
                      'sampleId': sids[1],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -1453,7 +1457,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -1494,7 +1498,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -1584,6 +1588,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'techniques': ltechs[0],
                      'sampleId': sids[0],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -1637,6 +1642,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'techniques': ltechs[1],
                      'sampleId': sids[1],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -2012,7 +2018,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -2053,7 +2059,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -2143,6 +2149,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'techniques': ltechs[0],
                      'sampleId': sids[0],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -2196,6 +2203,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'techniques': ltechs[1],
                      'sampleId': sids[1],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -2499,7 +2507,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -2527,7 +2535,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -2555,7 +2563,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc3}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -2583,7 +2591,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc4}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -2665,6 +2673,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'isPublished': False,
                          'techniques': ltech,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
@@ -2787,6 +2796,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             ' {{scanpath}}/{{scanname}}.{{plotext}} ' \
             '-o {{metapath}}/{{scanname}}{{attachmentpostfix}} "\n' \
             'scicat_attachments_path: "Datasets/{{pid}}/Attachments"\n' \
+            'call_metadata_generated_callback: True\n' \
             'metadata_generated_callback: "echo \\" APPEND ' \
             '{{scanpath}}/{{scanname}}.scan.json ' \
             '{{scanpath}}/{{scanname}}.origdatablock.json ' \
@@ -2952,7 +2962,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -2993,7 +3003,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -3034,7 +3044,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc3}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -3075,7 +3085,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc4}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -3174,6 +3184,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'isPublished': False,
                          'techniques': ltech,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
@@ -3492,7 +3503,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -3532,7 +3543,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -3572,7 +3583,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc3}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -3612,7 +3623,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc4}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -3710,6 +3721,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'isPublished': False,
                          'techniques': ltech,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
@@ -4024,7 +4036,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -4064,7 +4076,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -4104,7 +4116,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc3}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -4144,7 +4156,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc4}.scan.json  '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
@@ -4242,6 +4254,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'isPublished': False,
                          'techniques': ltech,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
@@ -4678,6 +4691,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'isPublished': False,
                          'techniques': ltech,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
@@ -5045,7 +5059,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {cbtmeta} '
+                        '-z \'\' -b {cbtmeta} '
                         '-p 99001284/myscan_00001  -w 99001284-dmgt '
                         '-c 99001284-dmgt,99001284-clbt,99001284-part,'
                         'p00dmgt,p00staff '
@@ -5074,7 +5088,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {cbtmeta} '
+                        '-z \'\' -b {cbtmeta} '
                         '-p 99001284/myscan_00002  -w 99001284-dmgt '
                         '-c 99001284-dmgt,99001284-clbt,99001284-part,'
                         'p00dmgt,p00staff '
@@ -5149,6 +5163,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'isPublished': False,
                      'techniques': ltechs[0],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001284-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001284/myscan_00001',
@@ -5212,6 +5227,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'isPublished': False,
                      'techniques': ltechs[1],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001284-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001284/myscan_00002',
@@ -5523,7 +5539,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-b {cbtmeta} '
+                        '-z \'\' -b {cbtmeta} '
                         '-p 99001284/myscan_00001  -w 99001284-dmgt '
                         '-c 99001284-dmgt,99001284-clbt,99001284-part,'
                         'p00dmgt,p00staff '
@@ -5552,7 +5568,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-b {cbtmeta} '
+                        '-z \'\' -b {cbtmeta} '
                         '-p 99001284/myscan_00002  -w 99001284-dmgt '
                         '-c 99001284-dmgt,99001284-clbt,99001284-part,'
                         'p00dmgt,p00staff '
@@ -5581,7 +5597,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc3}.scan.json  '
-                        '-b {cbtmeta} '
+                        '-z \'\' -b {cbtmeta} '
                         '-p 99001284/myscan_00003  -w 99001284-dmgt '
                         '-c 99001284-dmgt,99001284-clbt,99001284-part,'
                         'p00dmgt,p00staff '
@@ -5610,7 +5626,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc4}.scan.json  '
-                        '-b {cbtmeta} '
+                        '-z \'\' -b {cbtmeta} '
                         '-p 99001284/myscan_00004  -w 99001284-dmgt '
                         '-c 99001284-dmgt,99001284-clbt,99001284-part,'
                         'p00dmgt,p00staff '
@@ -5696,6 +5712,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'isPublished': False,
                          'techniques': ltech,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001284/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
@@ -5839,7 +5856,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'ingestor_var_dir: "{vardir}"\n' \
             'file_dataset_metadata_generator: "nxsfileinfo metadata ' \
             ' -o {{scanpath}}/{{scanname}}{{scanpostfix}} ' \
-            ' -x 0o662 ' \
+            ' -k3 -x 0o662 ' \
             ' -r {{relpath}} ' \
             ' -b {{beamtimefile}} -p {{beamtimeid}}/{{scanname}} ' \
             '{{scanpath}}/{{scanname}}.nxs"\n' \
@@ -6028,7 +6045,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '-x 0o662  -r raw/special  -b {btmeta} '
+                        '-k3 -x 0o662  -r raw/special  -b {btmeta} '
                         '-p 99001234/myscan_00001 '
                         '{subdir2}/{sc1}.nxs \n'
                         'INFO : DatasetIngestor: '
@@ -6053,7 +6070,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '-x 0o662  -r raw/special  -b {btmeta} '
+                        '-k3 -x 0o662  -r raw/special  -b {btmeta} '
                         '-p 99001234/myscan_00002 '
                         '{subdir2}/{sc2}.nxs \n'
                         'INFO : DatasetIngestor: '
@@ -6123,6 +6140,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'isPublished': False,
                      'techniques': ltechs[0],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -6174,6 +6192,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'isPublished': False,
                      'techniques': ltechs[1],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -7123,7 +7142,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     json.loads(self.__server.datasets[0]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[0][6],
-                     'createdAt': '2022-05-14 11:54:29',
+                     # 'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[0][1],
@@ -7131,6 +7150,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'isPublished': False,
                      'techniques': ltechs[0],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -7168,13 +7188,13 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     # 'updatedAt': '2022-05-14 11:54:29',
+                     'type': 'raw'})
                 self.myAssertDict(
                     json.loads(self.__server.datasets[1]),
                     {'contactEmail': 'appuser@fake.com',
                      'creationTime': args[1][6],
-                     'createdAt': '2022-05-14 11:54:29',
+                     # 'createdAt': '2022-05-14 11:54:29',
                      'instrumentId': '/petra3/p00',
                      'creationLocation': '/DESY/PETRA III/P00',
                      'description': args[1][1],
@@ -7182,6 +7202,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                      'isPublished': False,
                      'techniques': ltechs[1],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -7219,8 +7240,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                       'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw',
-                     'updatedAt': '2022-05-14 11:54:29'})
+                     # 'updatedAt': '2022-05-14 11:54:29',
+                     'type': 'raw'})
                 self.assertEqual(len(self.__server.origdatablocks), 0)
                 self.assertEqual(len(self.__server.attachments), 0)
                 if os.path.isdir(fsubdirname):
@@ -7591,7 +7612,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
                          'creationTime': arg[6],
-                         'createdAt': '2022-05-14 11:54:29',
+                         # 'createdAt': '2022-05-14 11:54:29',
                          'instrumentId': '/petra3/p00',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'description': arg[1],
@@ -7600,6 +7621,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'techniques': ltech,
                          'sampleId': sid,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
@@ -7646,8 +7668,8 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'})
+                         # 'updatedAt': '2022-05-14 11:54:29',
+                         'type': 'raw'})
 
                 self.assertEqual(len(self.__server.origdatablocks), 4)
                 for i in range(4):

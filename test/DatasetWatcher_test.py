@@ -373,7 +373,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -401,7 +401,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -471,6 +471,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -497,6 +498,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -686,7 +688,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         # '-o {subdir2}/{sc1}.scan.json  '
                         # '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         # 'p00dmgt,p00staff -w 99001234-dmgt '
-                        # '-b {btmeta} '
+                        # '-z \'\' -b {btmeta} '
                         # '-p 99001234/myscan_00001'
                         # ' -r raw/special  --add-empty-units \n'
                         # 'INFO : DatasetIngestor: '
@@ -715,7 +717,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         # '-o {subdir2}/{sc2}.scan.json  '
                         # '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         # 'p00dmgt,p00staff -w 99001234-dmgt '
-                        # '-b {btmeta} '
+                        # '-z \'\' -b {btmeta} '
                         # '-p 99001234/myscan_00002'
                         # ' -r raw/special  --add-empty-units \n'
                         # 'INFO : DatasetIngestor: '
@@ -922,7 +924,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -950,7 +952,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -978,7 +980,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1006,7 +1008,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1085,6 +1087,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationTime': self.idate,
                          'isPublished': False,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'techniques': [],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
@@ -1264,7 +1267,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1292,7 +1295,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1332,7 +1335,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1360,7 +1363,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1444,6 +1447,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationTime': self.idate,
                          'isPublished': False,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'techniques': [],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
@@ -1623,7 +1627,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1653,7 +1657,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1686,7 +1690,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1714,7 +1718,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1798,6 +1802,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationTime': self.idate,
                          'isPublished': False,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'techniques': [],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % myi[i],
@@ -1996,7 +2001,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2026,7 +2031,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2059,7 +2064,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2087,7 +2092,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2183,6 +2188,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationTime': self.idate,
                          'isPublished': False,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'techniques': [],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % myi[i],
@@ -2389,7 +2395,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2419,7 +2425,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2459,7 +2465,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2487,7 +2493,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2575,6 +2581,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationTime': self.idate,
                          'isPublished': False,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'techniques': [],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % myi[i],
@@ -2763,7 +2770,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2793,7 +2800,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2826,7 +2833,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2854,7 +2861,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2938,6 +2945,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationTime': self.idate,
                          'isPublished': False,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'techniques': [],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % myi[i],
@@ -3117,7 +3125,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3147,7 +3155,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3180,7 +3188,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3208,7 +3216,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3289,6 +3297,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationTime': self.idate,
                          'isPublished': False,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'techniques': [],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % myi[i],
@@ -3457,7 +3466,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3485,7 +3494,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3555,6 +3564,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -3581,6 +3591,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -3774,7 +3785,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3802,7 +3813,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3830,7 +3841,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3868,7 +3879,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3948,6 +3959,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'creationTime': self.idate,
                          'isPublished': False,
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'techniques': [],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
@@ -4068,6 +4080,7 @@ class DatasetWatcherTest(unittest.TestCase):
                    }
                ],
                'owner': 'Smithson',
+               'keywords': ['scan'],
                'ownerGroup': '99001234-dmgt',
                'ownerEmail': 'peter.smithson@fake.de',
                'pid': '99001234/myscan_00001',
@@ -4102,6 +4115,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 }
                ],
                'owner': 'Smithson',
+               'keywords': ['scan'],
                'ownerGroup': '99001234-dmgt',
                'ownerEmail': 'peter.smithson@fake.de',
                'pid': '99001234/myscan_00002',
@@ -4355,6 +4369,7 @@ class DatasetWatcherTest(unittest.TestCase):
                    }
                ],
                'owner': 'Smithson',
+               'keywords': ['scan'],
                'ownerGroup': '99001234-dmgt',
                'ownerEmail': 'peter.smithson@fake.de',
                'pid': '99001234/myscan_00001',
@@ -4389,6 +4404,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 }
                ],
                'owner': 'Smithson',
+               'keywords': ['scan'],
                'ownerGroup': '99001234-dmgt',
                'ownerEmail': 'peter.smithson@fake.de',
                'pid': '99001234/myscan_00002',
@@ -4678,6 +4694,7 @@ class DatasetWatcherTest(unittest.TestCase):
                    }
                ],
                'owner': 'Smithson',
+               'keywords': ['scan'],
                'ownerGroup': '99001234-dmgt',
                'ownerEmail': 'peter.smithson@fake.de',
                'pid': '99001234/myscan_00001',
@@ -4712,6 +4729,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 }
                ],
                'owner': 'Smithson',
+               'keywords': ['scan'],
                'ownerGroup': '99001234-dmgt',
                'ownerEmail': 'peter.smithson@fake.de',
                'pid': '99001234/myscan_00002',
@@ -4999,6 +5017,7 @@ class DatasetWatcherTest(unittest.TestCase):
                    }
                ],
                'owner': 'Smithson',
+               'keywords': ['scan'],
                'ownerGroup': '99001234-dmgt',
                'ownerEmail': 'peter.smithson@fake.de',
                'pid': '99001234/myscan_00001',
@@ -5033,6 +5052,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 }
                ],
                'owner': 'Smithson',
+               'keywords': ['scan'],
                'ownerGroup': '99001234-dmgt',
                'ownerEmail': 'peter.smithson@fake.de',
                'pid': '99001234/myscan_00002',
@@ -5199,6 +5219,7 @@ class DatasetWatcherTest(unittest.TestCase):
                  'endTime': self.idate,
                  'isPublished': False,
                  'owner': 'Smithson',
+                 'keywords': ['scan'],
                  'techniques': [],
                  'ownerEmail': 'peter.smithson@fake.de',
                  'pid': '99001234/myscan_%05i' % (i + 1),
@@ -5496,6 +5517,7 @@ class DatasetWatcherTest(unittest.TestCase):
                  'endTime': self.idate,
                  'isPublished': False,
                  'owner': 'Smithson',
+                 'keywords': ['scan'],
                  'techniques': [],
                  'ownerEmail': 'peter.smithson@fake.de',
                  'pid': '99001234/myscan_%05i' % (i + 1),
@@ -5813,6 +5835,7 @@ class DatasetWatcherTest(unittest.TestCase):
                  'endTime': self.idate,
                  'isPublished': False,
                  'owner': 'Smithson',
+                 'keywords': ['scan'],
                  'techniques': [],
                  'ownerEmail': 'peter.smithson@fake.de',
                  'pid': '99001234/myscan_%05i' % (i + 1),
@@ -6020,7 +6043,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.dataset.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -6048,7 +6071,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.dataset.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -6118,6 +6141,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00001',
@@ -6144,6 +6168,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001234/myscan_00002',
@@ -6317,7 +6342,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -6345,7 +6370,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -6373,7 +6398,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -6401,7 +6426,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -6484,6 +6509,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
@@ -6803,7 +6829,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         json.loads(self.__server.datasets[i]),
                         {'contactEmail': 'appuser@fake.com',
                          'creationTime': self.idate,
-                         'createdAt': '2022-05-14 11:54:29',
+                         # 'createdAt': '2022-05-14 11:54:29',
                          'creationLocation': '/DESY/PETRA III/P00',
                          'instrumentId': '/petra3/p00',
                          'description': 'H20 distribution',
@@ -6811,6 +6837,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001234/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
@@ -6826,7 +6853,8 @@ class DatasetWatcherTest(unittest.TestCase):
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234',
                          'type': 'raw',
-                         'updatedAt': '2022-05-14 11:54:29'},
+                         # 'updatedAt': '2022-05-14 11:54:29'
+                         },
                         skip=["creationTime"])
 
                 # print(self.__server.origdatablocks)
@@ -6978,7 +7006,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001236/myscan_00001'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -7008,7 +7036,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001236/myscan_00002'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -7094,6 +7122,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001236-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001236/myscan_00001',
@@ -7121,6 +7150,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': '99001236-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001236/myscan_00002',
@@ -7336,7 +7366,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001236/myscan_00001'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -7366,7 +7396,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001236/myscan_00002'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -7404,7 +7434,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001236/myscan_00003'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -7434,7 +7464,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001236/myscan_00004'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -7542,6 +7572,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001236/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),
@@ -7725,7 +7756,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc1}.scan.json  '
                         '-c group1,group2 -w mygroup '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001236/myscan_00001'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -7754,7 +7785,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc2}.scan.json  '
                         '-c group1,group2 -w mygroup '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001236/myscan_00002'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -7845,6 +7876,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': 'mygroup',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001236/myscan_00001',
@@ -7869,6 +7901,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'isPublished': False,
                      'techniques': [],
                      'owner': 'Smithson',
+                     'keywords': ['scan'],
                      'ownerGroup': 'mygroup',
                      'ownerEmail': 'peter.smithson@fake.de',
                      'pid': '99001236/myscan_00002',
@@ -8084,7 +8117,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc1}.scan.json  '
                         '-c group1,group2 -w mygroup '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001236/myscan_00001'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -8113,7 +8146,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc2}.scan.json  '
                         '-c group1,group2 -w mygroup '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001236/myscan_00002'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -8150,7 +8183,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc3}.scan.json  '
                         '-c group1,group2 -w mygroup '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001236/myscan_00003'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -8179,7 +8212,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc4}.scan.json  '
                         '-c group1,group2 -w mygroup '
-                        '-b {btmeta} '
+                        '-z \'\' -b {btmeta} '
                         '-p 99001236/myscan_00004'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -8292,6 +8325,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          'isPublished': False,
                          'techniques': [],
                          'owner': 'Smithson',
+                         'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
                          'pid': '99001236/myscan_%05i' % (i + 1),
                          'datasetName': 'myscan_%05i' % (i + 1),

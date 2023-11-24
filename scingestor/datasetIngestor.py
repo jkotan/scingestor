@@ -166,6 +166,8 @@ class DatasetIngestor:
         self.__skip_multi_datablock = False
         #: (:obj:`bool`) skip multiple attachment ingestion
         self.__skip_multi_attachment = False
+        #: (:obj:`bool`) skip scan dataset ingestion
+        self.__skip_scan_dataset_ingestion = False
 
         #: (:obj:`int`) maximal counter value for post tries
         self.__maxcounter = 100
@@ -180,10 +182,10 @@ class DatasetIngestor:
         #: (:obj:`str`) nexus dataset shell command
         self.__datasetcommandfile = "nxsfileinfo metadata -k4 " \
             " -o {metapath}/{scanname}{scanpostfix} " \
+            " -z '{measurement}'" \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
-            " -z '{measurement}'" \
             " {masterfile}"
         #: (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata -k4 " \
@@ -427,6 +429,9 @@ class DatasetIngestor:
         if "skip_multi_attachment_ingestion" in self.__config.keys():
             self.__skip_multi_attachment = \
                 self.__config["skip_multi_attachment_ingestion"]
+        if "skip_scan_dataset_ingestion" in self.__config.keys():
+            self.__skip_scan_dataset_ingestion = \
+                self.__config["skip_scan_dataset_ingestion"]
 
         if "scan_metadata_postfix" in self.__config.keys():
             self.__scanpostfix = self.__config["scan_metadata_postfix"]
@@ -1634,7 +1639,7 @@ class DatasetIngestor:
         dbstatus = None
         dastatus = None
         pid = None
-        if rds and odb:
+        if rds and odb and not self.__skip_scan_dataset_ingestion:
             if rds and rds[0]:
                 pid = self._ingest_rawdataset_metadata(rds, token)
             if todb and todb[0] and pid:

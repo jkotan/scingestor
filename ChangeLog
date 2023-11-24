@@ -1,3 +1,7 @@
+2023-11-24 Jan Kotanski <jan.kotanski@desy.de>
+	* add support for start/stop measurement command (#257)
+	* tagged as 0.10.0
+
 2023-11-10 Jan Kotanski <jan.kotanski@desy.de>
 	* add {masterfile} and {plotfile} format variables (#253)
 	* add metadata generated callback (#254)

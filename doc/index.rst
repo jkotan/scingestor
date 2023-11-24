@@ -77,7 +77,16 @@ The configuration written in YAML can contain the following variables
 * **datablock_metadata_stream_generator** *(str)* , default: ``"nxsfileinfo origdatablock  -s *.pyc,*{datablockpostfix},*{scanpostfix},*~  -w {ownergroup} -c {accessgroups} -p {doiprefix}/{beamtimeid}/{scanname} "``
 * **datablock_metadata_generator_scanpath_postfix** *(str)* , default: ``" {scanpath}/{scanname} "``
 * **attachment_metadata_generator** *(str)* , default: ``"nxsfileinfo attachment  -w {ownergroup} -c {accessgroups} -o {metapath}/{scanname}{attachmentpostfix} {plotfile} "``
-* **metadata_generated_callback** *(str)* , default: ``""``
+* **metadata_generated_callback** *(str)* , default: ``"nxsfileinfo groupmetadata  {lastmeasurement} -m {metapath}/{scanname}{scanpostfix} -d {metapath}/{scanname}{datablockpostfix} -a {metapath}/{scanname}{attachmentpostfix} -p {beamtimeid}/{lastmeasurement} -f -k4 "``
+* **metadata_group_map_file** *(str)* , default: ``""``
+* **raw_metadata_callback** *(bool)* , default: ``False``
+* **skip_multi_datablock_ingestion** *(bool)* , default: ``False``
+* **skip_multi_attachment_ingestion** *(bool)* , default: ``False``
+* **skip_scan_dataset_ingestion** *(bool)* , default: ``False``
+* **call_metadata_generated_callback** *(bool)* , default: ``False``
+* **metadata_group_map_file_generator_switch** *(str)* , default: ``" --group-map-file {groupmapfile} "``
+* **raw_metadata_callback_switch** *(str)* , default: ``" --raw "``
+* **execute_commands** *(bool)* , default: ``False``
 * **plot_file_extension_list** *(list\<str\>)* , default: ``["png", "nxs", "h5", "ndf", "nx", "fio"]``
 * **master_file_extension_list** *(list\<str\>)* , default: ``["nxs", "h5", "ndf", "nx", "fio"]``
 * **chmod_generator_switch** *(str)* , default: ``" -x {chmod} "``

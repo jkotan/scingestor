@@ -266,7 +266,8 @@ class DatasetIngest:
                 if ingestor.waiting_datasets():
                     token = ingestor.get_token()
                     for scan in ingestor.waiting_datasets():
-                        ingestor.reingest(scan, token)
+                        if scan and not scan.startswith("__command__ "):
+                            ingestor.reingest(scan, token)
                 ingestor.update_from_tmpfile()
             except Exception as e:
                 get_logger().warning(str(e))

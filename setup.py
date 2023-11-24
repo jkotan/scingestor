@@ -39,7 +39,7 @@ pytest_runner = ['pytest-runner'] if needs_pytest else []
 
 install_requires = [
     'argcomplete',
-    'nxstools>=3.48.0',
+    'nxstools>=3.52.0',
     'requests',
     'pyyaml',
     'h5py',
