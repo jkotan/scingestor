@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>scingestor.datasetIngestor &#8212; SciCat Dataset Ingestor 0.7.1 documentation</title>
+    <title>scingestor.datasetIngestor &#8212; SciCat Dataset Ingestor 0.9.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -174,10 +174,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ingest_attachment</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) retry failed dataset ingestion on next event</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__retry_failed_dataset_ingestion</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) retry failed attachement ingestion on next event</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__retry_failed_attachment_ingestion</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`str`) metadata copy map file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__copymapfile</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#: (:obj:`str`) metadata group map file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__groupmapfile</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`bool`) oned metadata flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__oned</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) raw groups flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__raw_groups</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`int`) max oned size of metadata record</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__max_oned_size</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1">#: (:obj:`bool`) override attachment signals flag</span>
@@ -186,6 +192,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__logcommands</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) empty units flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__emptyunits</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`bool`) skip multiple datablock ingestion</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__skip_multi_datablock</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) skip multiple attachment ingestion</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__skip_multi_attachment</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) skip scan dataset ingestion</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__skip_scan_dataset_ingestion</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1">#: (:obj:`int`) maximal counter value for post tries</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__maxcounter</span> <span class="o">=</span> <span class="mi">100</span>
@@ -200,15 +212,17 @@
         <span class="c1">#: (:obj:`str`) nexus dataset shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandfile</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata -k4 &quot;</span> \
             <span class="s2">&quot; -o </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scanpostfix}</span><span class="s2"> &quot;</span> \
+            <span class="s2">&quot; -z &#39;</span><span class="si">{measurement}</span><span class="s2">&#39;&quot;</span> \
             <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot; -w </span><span class="si">{ownergroup}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -c </span><span class="si">{accessgroups}</span><span class="s2">&quot;</span> \
-            <span class="s2">&quot; </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{ext}</span><span class="s2">&quot;</span>
+            <span class="s2">&quot; </span><span class="si">{masterfile}</span><span class="s2">&quot;</span>
         <span class="c1">#: (:obj:`str`) datablock shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata -k4 &quot;</span> \
             <span class="s2">&quot; -o </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scanpostfix}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot; -c </span><span class="si">{accessgroups}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -w </span><span class="si">{ownergroup}</span><span class="s2">&quot;</span> \
+            <span class="s2">&quot; -z &#39;</span><span class="si">{measurement}</span><span class="s2">&#39;&quot;</span> \
             <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">&quot;</span>
         <span class="c1">#: (:obj:`str`) datablock shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datablockcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo origdatablock &quot;</span> \
@@ -231,14 +245,30 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__attachmentcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo attachment &quot;</span> \
             <span class="s2">&quot; -w </span><span class="si">{ownergroup}</span><span class="s2"> -c </span><span class="si">{accessgroups}</span><span class="s2"> &quot;</span> \
             <span class="s2">&quot;-o </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{attachmentpostfix}</span><span class="s2"> &quot;</span> \
-            <span class="s2">&quot; </span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{plotext}</span><span class="s2">&quot;</span>
+            <span class="s2">&quot; </span><span class="si">{plotfile}</span><span class="s2">&quot;</span>
+        <span class="c1">#: (:obj:`str`) last measurement</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1">#: (:obj:`bool`) measurement status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__measurement_status</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`bool`) call callback after each step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__callcallback</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#: (:obj:`str`) metadata generated  shell callback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__metadatageneratedcallback</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo groupmetadata &quot;</span> \
+            <span class="s2">&quot; </span><span class="si">{lastmeasurement}</span><span class="s2"> -m </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scanpostfix}</span><span class="s2">&quot;</span> \
+            <span class="s2">&quot; -d </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{datablockpostfix}</span><span class="s2">&quot;</span> \
+            <span class="s2">&quot; -a </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{attachmentpostfix}</span><span class="s2">&quot;</span> \
+            <span class="s2">&quot; -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{lastmeasurement}</span><span class="s2"> -f -k4 &quot;</span>
 
         <span class="c1">#: (:obj:`str`) oned generator switch</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__oned_switch</span> <span class="o">=</span> <span class="s2">&quot; --oned &quot;</span>
+        <span class="c1">#: (:obj:`str`) raw group generator switch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__raw_groups_switch</span> <span class="o">=</span> <span class="s2">&quot; --raw &quot;</span>
         <span class="c1">#: (:obj:`str`) max oned size generator switch</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__max_oned_switch</span> <span class="o">=</span> <span class="s2">&quot; --max-oned-size </span><span class="si">{maxonedsize}</span><span class="s2"> &quot;</span>
         <span class="c1">#: (:obj:`str`) copy map file generator switch</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__copymapfile_switch</span> <span class="o">=</span> <span class="s2">&quot; --copy-map-file </span><span class="si">{copymapfile}</span><span class="s2"> &quot;</span>
+        <span class="c1">#: (:obj:`str`) group map file generator switch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__groupmapfile_switch</span> <span class="o">=</span> <span class="s2">&quot; --group-map-file </span><span class="si">{groupmapfile}</span><span class="s2"> &quot;</span>
         <span class="c1">#: (:obj:`str`) empty units generator switch</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__emptyunits_switch</span> <span class="o">=</span> <span class="s2">&quot; --add-empty-units &quot;</span>
         <span class="c1">#: (:obj:`str`) chmod generator switch</span>
@@ -285,6 +315,9 @@
         <span class="c1">#: (:obj:`dict`&lt;:obj:`str`, :obj:`list`&lt;:obj:`str`&gt;&gt;)</span>
         <span class="c1">#:   ingested scan names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1">#: (:obj:`dict`&lt;:obj:`str`, :obj:`list`&lt;:obj:`str`&gt;&gt;)</span>
+        <span class="c1">#:   semi-ingested scan names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_seingested_map</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) master file extension list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__master_file_extension_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nxs&quot;</span><span class="p">,</span> <span class="s2">&quot;h5&quot;</span><span class="p">,</span> <span class="s2">&quot;ndf&quot;</span><span class="p">,</span> <span class="s2">&quot;nx&quot;</span><span class="p">,</span> <span class="s2">&quot;fio&quot;</span><span class="p">]</span>
@@ -394,8 +427,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__copymapfile</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;metadata_copy_map_file&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">homepath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__homepath</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;metadata_group_map_file&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__groupmapfile</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;metadata_group_map_file&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">homepath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__homepath</span><span class="p">)</span>
         <span class="k">if</span> <span class="s2">&quot;oned_in_metadata&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__oned</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;oned_in_metadata&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;raw_metadata_callback&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__raw_groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;raw_metadata_callback&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="s2">&quot;max_oned_size&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__max_oned_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;max_oned_size&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="s2">&quot;override_attachment_signals&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -408,8 +447,21 @@
         <span class="k">if</span> <span class="s2">&quot;retry_failed_dataset_ingestion&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__retry_failed_dataset_ingestion</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;retry_failed_dataset_ingestion&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;retry_failed_attachment_ingestion&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__retry_failed_attachment_ingestion</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;retry_failed_attachment_ingestion&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="s2">&quot;add_empty_units&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__emptyunits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;add_empty_units&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;skip_multi_datablock_ingestion&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__skip_multi_datablock</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;skip_multi_datablock_ingestion&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;skip_multi_attachment_ingestion&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__skip_multi_attachment</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;skip_multi_attachment_ingestion&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;skip_scan_dataset_ingestion&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__skip_scan_dataset_ingestion</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;skip_scan_dataset_ingestion&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="s2">&quot;scan_metadata_postfix&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__scanpostfix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;scan_metadata_postfix&quot;</span><span class="p">]</span>
@@ -440,6 +492,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__attachmentcommand</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;attachment_metadata_generator&quot;</span><span class="p">]</span>
 
+        <span class="k">if</span> <span class="s2">&quot;call_metadata_generated_callback&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__callcallback</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;call_metadata_generated_callback&quot;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="s2">&quot;metadata_generated_callback&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__metadatageneratedcallback</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;metadata_generated_callback&quot;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="s2">&quot;chmod_generator_switch&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__chmod_switch</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;chmod_generator_switch&quot;</span><span class="p">]</span>
@@ -464,6 +524,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__copymapfile_switch</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;metadata_copy_map_file_generator_switch&quot;</span><span class="p">]</span>
 
+        <span class="k">if</span> <span class="s2">&quot;metadata_group_map_file_generator_switch&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__groupmapfile_switch</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;metadata_group_map_file_generator_switch&quot;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="s2">&quot;relative_path_generator_switch&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__relpath_switch</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;relative_path_generator_switch&quot;</span><span class="p">]</span>
@@ -471,6 +535,10 @@
         <span class="k">if</span> <span class="s2">&quot;oned_dataset_generator_switch&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__oned_switch</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;oned_dataset_generator_switch&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;raw_metadata_callback_switch&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__raw_groups_switch</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;raw_metadata_callback_switch&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="s2">&quot;max_oned_dataset_generator_switch&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__max_oned_switch</span> <span class="o">=</span> \
@@ -518,6 +586,21 @@
             <span class="k">if</span> <span class="s2">&quot;attachment_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__attachmentcommand</span> <span class="o">=</span> \
                     <span class="bp">self</span><span class="o">.</span><span class="n">__attachmentcommand</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__chmod_switch</span>
+            <span class="k">if</span> <span class="s2">&quot;metadata_generated_callback&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__metadatageneratedcallback</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__metadatageneratedcallback</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__chmod_switch</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__groupmapfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;metadata_generated_callback&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__metadatageneratedcallback</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__metadatageneratedcallback</span> <span class="o">+</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__groupmapfile_switch</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__raw_groups</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;metadata_generated_callback&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__metadatageneratedcallback</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__metadatageneratedcallback</span> <span class="o">+</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__raw_groups_switch</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hiddenattributes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="s2">&quot;dataset_metadata_generator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -604,6 +687,8 @@
             <span class="s2">&quot;chmod&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__chmod</span><span class="p">,</span>
             <span class="s2">&quot;hiddenattributes&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hiddenattributes</span><span class="p">,</span>
             <span class="s2">&quot;copymapfile&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__copymapfile</span><span class="p">,</span>
+            <span class="s2">&quot;plotfile&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;masterfile&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="s2">&quot;scanpath&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">,</span>
             <span class="s2">&quot;metapath&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metapath</span><span class="p">,</span>
             <span class="s2">&quot;relpath&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__relpath</span><span class="p">,</span>
@@ -624,7 +709,15 @@
             <span class="s2">&quot;axes&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__attachmentaxes</span><span class="p">,</span>
             <span class="s2">&quot;frame&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__attachmentframe</span><span class="p">,</span>
             <span class="s2">&quot;maxonedsize&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__max_oned_size</span><span class="p">,</span>
+            <span class="s2">&quot;measurement&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span><span class="p">,</span>
+            <span class="s2">&quot;lastmeasurement&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span><span class="p">,</span>
+            <span class="s2">&quot;groupmapfile&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__groupmapfile</span><span class="p">,</span>
+
         <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;masterfile&quot;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{ext}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;plotfile&quot;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{plotext}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
 
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s1">&#39;DatasetIngestor: Parameters: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">))</span>
@@ -669,13 +762,30 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ext</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;masterfile&quot;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{ext}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__master_file_extension_list</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;ext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ext</span>
 
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span>
                     <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{ext}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__ext</span> <span class="o">=</span> <span class="n">ext</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;masterfile&quot;</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{ext}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
                 <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__master_file_extension_list</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;ext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ext</span>
+
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{ext}</span><span class="s2">&quot;</span><span class="o">.</span>
+                        <span class="nb">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ext</span> <span class="o">=</span> <span class="n">ext</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;masterfile&quot;</span><span class="p">]</span> <span class="o">=</span> \
+                        <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{ext}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
+                    <span class="k">break</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;ext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ext</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ext</span><span class="p">:</span>
@@ -760,13 +870,29 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__plotext</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;plotfile&quot;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{plotext}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__plot_file_extension_list</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;plotext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ext</span>
 
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span>
                     <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{plotext}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__plotext</span> <span class="o">=</span> <span class="n">ext</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;plotfile&quot;</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{plotext}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
                 <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__plot_file_extension_list</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;plotext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ext</span>
+
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{plotext}</span><span class="s2">&quot;</span><span class="o">.</span>
+                        <span class="nb">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__plotext</span> <span class="o">=</span> <span class="n">ext</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;plotfile&quot;</span><span class="p">]</span> <span class="o">=</span> \
+                        <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2">.</span><span class="si">{plotext}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
+                    <span class="k">break</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;plotext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__plotext</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;plotext&quot;</span><span class="p">]:</span>
@@ -965,11 +1091,13 @@
         <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_token</span><span class="p">()</span>
         <span class="n">bid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__meta</span><span class="p">[</span><span class="s2">&quot;beamtimeId&quot;</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__headers</span><span class="p">[</span><span class="s2">&quot;Authorization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Bearer </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
             <span class="n">resexists</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                 <span class="s2">&quot;</span><span class="si">{url}</span><span class="s2">/</span><span class="si">{pid}</span><span class="s2">&quot;</span>
                 <span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__proposalurl</span><span class="p">,</span>
                     <span class="n">pid</span><span class="o">=</span><span class="n">bid</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%2F</span><span class="s2">&quot;</span><span class="p">)),</span>
+                <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__headers</span><span class="p">,</span>
                 <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;access_token&quot;</span><span class="p">:</span> <span class="n">token</span><span class="p">}</span>
             <span class="p">)</span>
 
@@ -1352,7 +1480,7 @@
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metafile</span><span class="p">)</span> <span class="k">as</span> <span class="n">fl</span><span class="p">:</span>
                 <span class="n">smt</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
                 <span class="n">mt</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">smt</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;proposalId&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;raw&quot;</span> <span class="ow">and</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;proposalId&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                     <span class="s2">&quot;Wrong SC proposalId </span><span class="si">%s</span><span class="s2"> for DESY beamtimeId </span><span class="si">%s</span><span class="s2"> in </span><span class="si">%s</span><span class="s2">&quot;</span>
                     <span class="o">%</span> <span class="p">(</span><span class="n">mt</span><span class="p">[</span><span class="s2">&quot;proposalId&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">,</span> <span class="n">metafile</span><span class="p">))</span>
@@ -1491,11 +1619,21 @@
                 <span class="n">metapath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;metapath&quot;</span><span class="p">]))</span>
         <span class="k">if</span> <span class="n">odbs</span> <span class="ow">and</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="n">odb</span> <span class="o">=</span> <span class="n">odbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">todb</span> <span class="o">=</span> <span class="p">[</span><span class="n">odb</span><span class="p">]</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">odb</span><span class="p">)</span> <span class="k">as</span> <span class="n">fl</span><span class="p">:</span>
+                <span class="n">dbmt</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fl</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dbmt</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__skip_multi_datablock</span><span class="p">:</span>
+                        <span class="n">todb</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">todb</span> <span class="o">=</span> <span class="n">dbmt</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">odb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_origdatablock_metadata</span><span class="p">(</span><span class="n">scan</span><span class="p">)</span>
+            <span class="n">todb</span> <span class="o">=</span> <span class="p">[</span><span class="n">odb</span><span class="p">]</span>
         <span class="n">mtmdb</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">odb</span><span class="p">:</span>
             <span class="n">mtmdb</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">odb</span><span class="p">)</span>
+        <span class="n">mtmda</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingest_attachment</span><span class="p">:</span>
             <span class="n">adss</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
                 <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -1504,37 +1642,72 @@
                     <span class="n">metapath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;metapath&quot;</span><span class="p">]))</span>
             <span class="k">if</span> <span class="n">adss</span> <span class="ow">and</span> <span class="n">adss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                 <span class="n">ads</span> <span class="o">=</span> <span class="n">adss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">tads</span> <span class="o">=</span> <span class="p">[</span><span class="n">ads</span><span class="p">]</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ads</span><span class="p">)</span> <span class="k">as</span> <span class="n">fl</span><span class="p">:</span>
+                    <span class="n">admt</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fl</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">admt</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__skip_multi_attachment</span><span class="p">:</span>
+                            <span class="n">tads</span> <span class="o">=</span> <span class="p">[]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">tads</span> <span class="o">=</span> <span class="n">admt</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ads</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_attachment_metadata</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">])</span>
+                <span class="n">tads</span> <span class="o">=</span> <span class="p">[</span><span class="n">ads</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">ads</span><span class="p">:</span>
                 <span class="n">mtmda</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">ads</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__callcallback</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurement_status</span><span class="p">)</span> \
+           <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadatageneratedcallback</span> \
+           <span class="ow">and</span> <span class="n">rds</span> <span class="ow">and</span> <span class="n">odb</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadatageneratedcallback</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s1">&#39;DatasetIngestor: Metadata generated callback: </span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">command</span><span class="p">))</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">dbstatus</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">dastatus</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">pid</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">rds</span> <span class="ow">and</span> <span class="n">odb</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">rds</span> <span class="ow">and</span> <span class="n">odb</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__skip_scan_dataset_ingestion</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">rds</span> <span class="ow">and</span> <span class="n">rds</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                 <span class="n">pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ingest_rawdataset_metadata</span><span class="p">(</span><span class="n">rds</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">odb</span> <span class="ow">and</span> <span class="n">odb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">pid</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">todb</span> <span class="ow">and</span> <span class="n">todb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">pid</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rdss</span> <span class="ow">and</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                     <span class="n">pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pid</span><span class="p">(</span><span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="n">dbstatus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ingest_origdatablock_metadata</span><span class="p">(</span>
-                    <span class="n">odb</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingest_attachment</span> <span class="ow">and</span> <span class="n">ads</span> <span class="ow">and</span> <span class="n">ads</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">pid</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">adss</span> <span class="ow">and</span> <span class="n">adss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">odb</span> <span class="ow">in</span> <span class="n">todb</span><span class="p">:</span>
+                    <span class="n">dbstatus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ingest_origdatablock_metadata</span><span class="p">(</span>
+                        <span class="n">odb</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">dbstatus</span><span class="p">:</span>
+                        <span class="n">mtmdb</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rdss</span> <span class="ow">and</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pid</span><span class="p">(</span><span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingest_attachment</span> <span class="ow">and</span> <span class="n">tads</span> <span class="ow">and</span> <span class="n">tads</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">pid</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rdss</span> <span class="ow">and</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                     <span class="n">pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pid</span><span class="p">(</span><span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="n">dastatus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ingest_attachment_metadata</span><span class="p">(</span>
-                    <span class="n">ads</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">ads</span> <span class="ow">in</span> <span class="n">tads</span><span class="p">:</span>
+                    <span class="n">dastatus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ingest_attachment_metadata</span><span class="p">(</span>
+                        <span class="n">ads</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">dastatus</span><span class="p">:</span>
+                        <span class="n">mtmda</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">mtmds</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_seingested_map</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">mtmds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_seingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mtmds</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">dbstatus</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">mtmdb</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_seingested_map</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">mtmdb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_seingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mtmdb</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">dastatus</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">mtmda</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_seingested_map</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">mtmda</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_seingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mtmda</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="n">sscan</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">mtmds</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">mtmdb</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">mtmda</span><span class="p">)])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_seingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">mtmds</span><span class="p">,</span> <span class="n">mtmdb</span><span class="p">,</span> <span class="n">mtmda</span><span class="p">]</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__idsfile</span><span class="p">,</span> <span class="s1">&#39;a+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">mtmds</span><span class="p">,</span> <span class="n">mtmdb</span><span class="p">,</span> <span class="n">mtmda</span><span class="p">))</span></div>
 
@@ -1666,6 +1839,8 @@
                     <span class="n">odb</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                     <span class="s2">&quot;DatasetIngestor: Ingest origdatablock: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">odb</span><span class="p">))</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">dbstatus</span><span class="p">:</span>
+                    <span class="n">mtmdb</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingest_attachment</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">ads</span> <span class="ow">and</span> <span class="n">reingest_attachment</span><span class="p">:</span>
@@ -1680,6 +1855,8 @@
                             <span class="n">ads</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
                         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                             <span class="s2">&quot;DatasetIngestor: Ingest attachment: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ads</span><span class="p">))</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">dastatus</span><span class="p">:</span>
+                            <span class="n">mtmda</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="n">mtmda</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">ads</span><span class="p">:</span>
             <span class="n">mtmda</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">ads</span><span class="p">)</span>
@@ -1706,6 +1883,7 @@
 
         <span class="n">sscan</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">mtmds</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">mtmdb</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">mtmda</span><span class="p">)])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_seingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">mtmds</span><span class="p">,</span> <span class="n">mtmdb</span><span class="p">,</span> <span class="n">mtmda</span><span class="p">]</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__idsfiletmp</span><span class="p">,</span> <span class="s1">&#39;a+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">mtmds</span><span class="p">,</span> <span class="n">mtmdb</span><span class="p">,</span> <span class="n">mtmda</span><span class="p">))</span></div>
 
@@ -1722,13 +1900,25 @@
                     <span class="n">sc</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">sc</span> <span class="ow">in</span> <span class="n">idsf</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">sc</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+                <span class="k">for</span> <span class="n">sc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__sc_seingested_map</span><span class="p">[</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sc</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">])]</span> <span class="o">=</span> \
+                                                     <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]),</span>
+                                                      <span class="nb">float</span><span class="p">(</span><span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]),</span>
+                                                      <span class="nb">float</span><span class="p">(</span><span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">reingest</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__retry_failed_dataset_ingestion</span><span class="p">:</span>
+                <span class="n">check_attach</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__retry_failed_attachment_ingestion</span> \
+                    <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingest_attachment</span>
                 <span class="n">ingested</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">sc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span><span class="p">:</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
                         <span class="k">try</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="mi">0</span> \
+                            <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> \
+                               <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">check_attach</span> <span class="ow">or</span> <span class="nb">float</span><span class="p">(</span><span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> \
                                <span class="ow">and</span> <span class="nb">float</span><span class="p">(</span><span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">float</span><span class="p">(</span><span class="n">sc</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                                 <span class="n">ingested</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sc</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]))</span>
                         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -1785,7 +1975,28 @@
 <span class="sd">        :returns:  ingested datasets list</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DatasetIngestor.stop_measurement"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.stop_measurement">[docs]</a>    <span class="k">def</span> <span class="nf">stop_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; stop measurement</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__measurement_status</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;measurement&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Stop Measurement: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DatasetIngestor.start_measurement"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.start_measurement">[docs]</a>    <span class="k">def</span> <span class="nf">start_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; start measurement</span>
+
+<span class="sd">        :param measurement:  measurement name</span>
+<span class="sd">        :type measurement: :obj:`str`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span> <span class="o">=</span> <span class="n">measurement</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;measurement&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;lastmeasurement&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__measurement_status</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start Measurement: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>

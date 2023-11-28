@@ -1,66 +1,43 @@
 
-
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-
-    <title>scicat_dataset_ingestor &#8212; SciCat Dataset Ingestor 0.8.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
-    
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>scicat_dataset_ingestor &#8212; SciCat Dataset Ingestor 0.9.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="scicat_dataset_ingest" href="scicat_dataset_ingest.html" />
     <link rel="prev" title="Scicat Dataset Ingestor" href="index.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
-    <![endif]-->
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="scicat_dataset_ingest.html" title="scicat_dataset_ingest"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Scicat Dataset Ingestor"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">SciCat Dataset Ingestor 0.8.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">scicat_dataset_ingestor</a></li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="scicat-dataset-ingestor">
-<h1>scicat_dataset_ingestor<a class="headerlink" href="#scicat-dataset-ingestor" title="Permalink to this heading">¶</a></h1>
-<section id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading">¶</a></h2>
+  <div class="section" id="scicat-dataset-ingestor">
+<h1>scicat_dataset_ingestor<a class="headerlink" href="#scicat-dataset-ingestor" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p>BeamtimeWatcher service SciCat Dataset ingestor.</p>
-</section>
-<section id="synopsis">
-<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this heading">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>scicat_dataset_ingestor<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-c<span class="w"> </span>CONFIG<span class="o">]</span><span class="w"> </span><span class="o">[</span>-r<span class="w"> </span>RUNTIME<span class="o">]</span><span class="w"> </span><span class="o">[</span>-l<span class="w"> </span>LOG<span class="o">]</span><span class="w"> </span><span class="o">[</span>-f<span class="w"> </span>LOGFILE<span class="o">]</span><span class="w"> </span><span class="o">[</span>-t<span class="o">]</span>
+</div>
+<div class="section" id="synopsis">
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>scicat_dataset_ingestor <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-c CONFIG<span class="o">]</span> <span class="o">[</span>-r RUNTIME<span class="o">]</span> <span class="o">[</span>-l LOG<span class="o">]</span> <span class="o">[</span>-f LOGFILE<span class="o">]</span> <span class="o">[</span>-t<span class="o">]</span>
 </pre></div>
 </div>
 <dl>
@@ -86,89 +63,83 @@
 </dl>
 </dd>
 </dl>
-</section>
-<section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>scicat_dataset_ingestor<span class="w"> </span>-c<span class="w"> </span>~/.scingestor.yaml
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>scicat_dataset_ingestor -c ~/.scingestor.yaml
 
-scicat_dataset_ingestor<span class="w"> </span>-c<span class="w"> </span>~/.scingestor.yaml<span class="w"> </span>-l<span class="w"> </span>debug
+scicat_dataset_ingestor -c ~/.scingestor.yaml -l debug
 </pre></div>
 </div>
-</section>
-</section>
+</div>
+</div>
 
 
-            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">scicat_dataset_ingestor</a><ul>
-<li><a class="reference internal" href="#description">Description</a></li>
-<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
-<li><a class="reference internal" href="#example">Example</a></li>
+<h1 class="logo"><a href="index.html">SciCat Dataset Ingestor</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">scicat_dataset_ingestor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="scicat_dataset_ingest.html">scicat_dataset_ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scicat_ingest.html">scicat_ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scingestor.html">scingestor package</a></li>
 </ul>
 
-  </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="index.html"
-                          title="previous chapter">Scicat Dataset Ingestor</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="scicat_dataset_ingest.html"
-                          title="next chapter">scicat_dataset_ingest</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/scicat_dataset_ingestor.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Scicat Dataset Ingestor</a></li>
+      <li>Next: <a href="scicat_dataset_ingest.html" title="next chapter">scicat_dataset_ingest</a></li>
+  </ul></li>
+</ul>
+</div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="scicat_dataset_ingest.html" title="scicat_dataset_ingest"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Scicat Dataset Ingestor"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">SciCat Dataset Ingestor 0.8.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">scicat_dataset_ingestor</a></li> 
-      </ul>
+    <div class="footer">
+      &copy;2022, DESY, Jan Kotanski.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/scicat_dataset_ingestor.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, DESY, Jan Kotanski.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
-    </div>
+
+    
+
+    
   </body>
 </html>

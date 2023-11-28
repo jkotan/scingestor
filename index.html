@@ -1,70 +1,50 @@
 
-
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-
-    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 0.8.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
-    
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 0.9.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="scicat_dataset_ingestor" href="scicat_dataset_ingestor.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
-    <![endif]-->
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="scicat_dataset_ingestor.html" title="scicat_dataset_ingestor"
-             accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">SciCat Dataset Ingestor 0.8.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Scicat Dataset Ingestor</a></li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="scicat-dataset-ingestor">
-<h1>Scicat Dataset Ingestor<a class="headerlink" href="#scicat-dataset-ingestor" title="Permalink to this heading">¶</a></h1>
+  <div class="section" id="scicat-dataset-ingestor">
+<h1>Scicat Dataset Ingestor<a class="headerlink" href="#scicat-dataset-ingestor" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference external" href="https://github.com/jkotan/scingestor/actions"><img alt="" src="https://github.com/jkotan/scingestor/actions/workflows/tests.yml/badge.svg" /></a>
 <a class="reference external" href="https://jkotan.github.io/scingestor/index.html"><img alt="" src="https://img.shields.io/badge/Documentation-webpages-ADD8E6.svg" /></a>
 <a class="reference external" href="https://pypi.python.org/pypi/scingestor"><img alt="" src="https://img.shields.io/pypi/v/scingestor.svg" /></a>
 <a class="reference external" href="https://pypi.python.org/pypi/scingestor/"><img alt="" src="https://img.shields.io/pypi/pyversions/scingestor.svg" /></a></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">scingestor</span></code> python package provides a support for scripts which
 ingest Datasets and OrigDatablocks into the SciCat metadata server.</p>
-<section id="id1">
-<h2>scicat_dataset_ingestor<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h2>
+<div class="section" id="id1">
+<h2>scicat_dataset_ingestor<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>SciCat Dataset ingestor server ingests scan metadata just after a scan
 is finished. It can be executed by</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scicat_dataset_ingestor</span> <span class="o">-</span><span class="n">c</span> <span class="o">~/.</span><span class="n">scingestor</span><span class="o">.</span><span class="n">yaml</span>
 </pre></div>
 </div>
-<section id="configuration-variables">
-<h3>Configuration variables<a class="headerlink" href="#configuration-variables" title="Permalink to this heading">¶</a></h3>
+<div class="section" id="configuration-variables">
+<h3>Configuration variables<a class="headerlink" href="#configuration-variables" title="Permalink to this headline">¶</a></h3>
 <p>The configuration written in YAML can contain the following variables</p>
 <ul class="simple">
 <li><p><strong>scicat_url</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;http://localhost:3000/api/v3&quot;</span></code></p></li>
@@ -92,12 +72,22 @@ is finished. It can be executed by</p>
 <li><p><strong>beamtime_filename_prefix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.json&quot;</span></code></p></li>
 <li><p><strong>datasets_filename_pattern</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;scicat-datasets-{beamtimeid}.lst&quot;</span></code></p></li>
 <li><p><strong>ingested_datasets_filename_pattern</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{beamtimeid}.lst&quot;</span></code></p></li>
-<li><p><strong>file_dataset_metadata_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">metadata</span> <span class="pre">-k4</span> <span class="pre">-o</span> <span class="pre">{metapath}/{scanname}{scanpostfix}</span>&#160; <span class="pre">-b</span> <span class="pre">{beamtimefile}</span> <span class="pre">-p</span> <span class="pre">{beamtimeid}/{scanname}</span>&#160; <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">{scanpath}/{scanname}.{ext}&quot;</span></code></p></li>
+<li><p><strong>file_dataset_metadata_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">metadata</span> <span class="pre">-k4</span> <span class="pre">-o</span> <span class="pre">{metapath}/{scanname}{scanpostfix}</span>&#160; <span class="pre">-b</span> <span class="pre">{beamtimefile}</span> <span class="pre">-p</span> <span class="pre">{beamtimeid}/{scanname}</span>&#160; <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">{masterfile}</span></code></p></li>
 <li><p><strong>dataset_metadata_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">metadata</span> <span class="pre">-k4</span> <span class="pre">-o</span> <span class="pre">{metapath}/{scanname}{scanpostfix}</span>&#160; <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-b</span> <span class="pre">{beamtimefile}</span> <span class="pre">-p</span> <span class="pre">{beamtimeid}/{scanname}&quot;</span></code></p></li>
 <li><p><strong>datablock_metadata_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">origdatablock</span>&#160; <span class="pre">-s</span> <span class="pre">*.pyc,*{datablockpostfix},*{scanpostfix},*~</span>&#160; <span class="pre">-p</span> <span class="pre">{doiprefix}/{beamtimeid}/{scanname}</span>&#160; <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">-o</span> <span class="pre">{metapath}/{scanname}{datablockpostfix}</span> <span class="pre">&quot;</span></code></p></li>
 <li><p><strong>datablock_metadata_stream_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">origdatablock</span>&#160; <span class="pre">-s</span> <span class="pre">*.pyc,*{datablockpostfix},*{scanpostfix},*~</span>&#160; <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">-p</span> <span class="pre">{doiprefix}/{beamtimeid}/{scanname}</span> <span class="pre">&quot;</span></code></p></li>
 <li><p><strong>datablock_metadata_generator_scanpath_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">{scanpath}/{scanname}</span> <span class="pre">&quot;</span></code></p></li>
-<li><p><strong>attachment_metadata_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">attachment</span>&#160; <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">-o</span> <span class="pre">{metapath}/{scanname}{attachmentpostfix}</span> <span class="pre">&quot;</span></code></p></li>
+<li><p><strong>attachment_metadata_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">attachment</span>&#160; <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">-o</span> <span class="pre">{metapath}/{scanname}{attachmentpostfix}</span> <span class="pre">{plotfile}</span> <span class="pre">&quot;</span></code></p></li>
+<li><p><strong>metadata_generated_callback</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">groupmetadata</span>&#160; <span class="pre">{lastmeasurement}</span> <span class="pre">-m</span> <span class="pre">{metapath}/{scanname}{scanpostfix}</span> <span class="pre">-d</span> <span class="pre">{metapath}/{scanname}{datablockpostfix}</span> <span class="pre">-a</span> <span class="pre">{metapath}/{scanname}{attachmentpostfix}</span> <span class="pre">-p</span> <span class="pre">{beamtimeid}/{lastmeasurement}</span> <span class="pre">-f</span> <span class="pre">-k4</span> <span class="pre">&quot;</span></code></p></li>
+<li><p><strong>metadata_group_map_file</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></li>
+<li><p><strong>raw_metadata_callback</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>skip_multi_datablock_ingestion</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>skip_multi_attachment_ingestion</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>skip_scan_dataset_ingestion</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>call_metadata_generated_callback</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>metadata_group_map_file_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">--group-map-file</span> <span class="pre">{groupmapfile}</span> <span class="pre">&quot;</span></code></p></li>
+<li><p><strong>raw_metadata_callback_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">--raw</span> <span class="pre">&quot;</span></code></p></li>
+<li><p><strong>execute_commands</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>plot_file_extension_list</strong> <em>(list&lt;str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">[&quot;png&quot;,</span> <span class="pre">&quot;nxs&quot;,</span> <span class="pre">&quot;h5&quot;,</span> <span class="pre">&quot;ndf&quot;,</span> <span class="pre">&quot;nx&quot;,</span> <span class="pre">&quot;fio&quot;]</span></code></p></li>
 <li><p><strong>master_file_extension_list</strong> <em>(list&lt;str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">[&quot;nxs&quot;,</span> <span class="pre">&quot;h5&quot;,</span> <span class="pre">&quot;ndf&quot;,</span> <span class="pre">&quot;nx&quot;,</span> <span class="pre">&quot;fio&quot;]</span></code></p></li>
 <li><p><strong>chmod_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">-x</span> <span class="pre">{chmod}</span> <span class="pre">&quot;</span></code></p></li>
@@ -145,31 +135,33 @@ is finished. It can be executed by</p>
 <span class="n">ingestor_credential_file</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{homepath}</span><span class="s2">/gpfs/pwd&quot;</span>
 </pre></div>
 </div>
-</section>
-<section id="pattern-keywords-for-configuration-variables">
-<h3>Pattern keywords for configuration variables<a class="headerlink" href="#pattern-keywords-for-configuration-variables" title="Permalink to this heading">¶</a></h3>
+</div>
+<div class="section" id="pattern-keywords-for-configuration-variables">
+<h3>Pattern keywords for configuration variables<a class="headerlink" href="#pattern-keywords-for-configuration-variables" title="Permalink to this headline">¶</a></h3>
 <p>The  <strong>datasets_filename_pattern</strong>, <strong>ingested_datasets_filename_pattern</strong>  and <strong>ingestor_var_dir</strong> can contain the <em>{beamtimeid}</em> and <em>{hostname}</em> keywords,  e.g. <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{beamtimeid}.lst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{hostname}-{beamtimeid}.lst&quot;</span></code>  which is instantiated during the ingestor execution.</p>
-<p>Similarly, <strong>file_dataset_metadata_generator</strong>, <strong>dataset_metadata_generator</strong>, <strong>datablock_metadata_generator</strong>,  <strong>datablock_metadata_stream_generator</strong>, <strong>datablock_metadata_generator_scanpath_postfix</strong>, <strong>attachment_metadata_generator</strong>, <strong>chmod_generator_switch</strong>, <strong>relative_path_generator_switch</strong>  can contain the following keywords: <em>{beamtimeid}</em> , <em>{scanname}</em>, <em>{chmod}</em>, <em>{scanpath}</em>, <em>{metapath}</em>, <em>{relpath}</em>, <em>{beamtimeid}</em>, <em>{beamline}</em>, <em>{doiprefix}</em>, <em>{beamtimefile}</em>, <em>{scanpostfix}</em>, <em>{datablockpostfix}</em>, <em>{ownergroup}</em>, <em>{accessgroups}</em>, <em>{hostname}</em>, <em>{hiddenattributes}</em>, <em>{ext}</em></p>
-</section>
-</section>
-<section id="scicat-dataset-ingest">
-<h2>scicat_dataset_ingest<a class="headerlink" href="#scicat-dataset-ingest" title="Permalink to this heading">¶</a></h2>
+<p>Similarly, <strong>file_dataset_metadata_generator</strong>, <strong>dataset_metadata_generator</strong>, <strong>datablock_metadata_generator</strong>,  <strong>datablock_metadata_stream_generator</strong>, <strong>datablock_metadata_generator_scanpath_postfix</strong>, <strong>attachment_metadata_generator</strong>, <strong>chmod_generator_switch</strong>, <strong>relative_path_generator_switch</strong>  can contain the following keywords: <em>{beamtimeid}</em> , <em>{scanname}</em>, <em>{chmod}</em>, <em>{scanpath}</em>, <em>{metapath}</em>, <em>{relpath}</em>, <em>{beamtimeid}</em>, <em>{beamline}</em>, <em>{doiprefix}</em>, <em>{beamtimefile}</em>, <em>{scanpostfix}</em>, <em>{datablockpostfix}</em>, <em>{ownergroup}</em>, <em>{accessgroups}</em>, <em>{hostname}</em>, <em>{hiddenattributes}</em>, <em>{ext}</em>, &quot;{masterfile}&quot;, &quot;{plotfile}&quot;</p>
+<p>The &quot;{masterfile}&quot; is either equal to   &quot;{scanpath}/{scanname}.{ext}&quot; or &quot;{scanpath}/{scanname}/{scanname}.{ext}&quot;. Also
+the &quot;{plotfile}&quot; is either equal to  &quot;{scanpath}/{scanname}.{plotext}&quot; or &quot;{scanpath}/{scanname}/{scanname}.{plotext}&quot;.</p>
+</div>
+</div>
+<div class="section" id="scicat-dataset-ingest">
+<h2>scicat_dataset_ingest<a class="headerlink" href="#scicat-dataset-ingest" title="Permalink to this headline">¶</a></h2>
 <p>Re-ingestion script for SciCat Datasets and OrigDatablocks is usually
 launched at the end of the beamtime.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scicat_dataset_ingest</span> <span class="o">-</span><span class="n">c</span> <span class="o">~/.</span><span class="n">scingestor</span><span class="o">.</span><span class="n">yaml</span>
 </pre></div>
 </div>
 <p>Its configuration written YAML like for <code class="docutils literal notranslate"><span class="pre">scicat_dataset_ingestor</span></code></p>
-</section>
-<section id="scicat-ingest">
-<h2>scicat_ingest<a class="headerlink" href="#scicat-ingest" title="Permalink to this heading">¶</a></h2>
+</div>
+<div class="section" id="scicat-ingest">
+<h2>scicat_ingest<a class="headerlink" href="#scicat-ingest" title="Permalink to this headline">¶</a></h2>
 <p>General ingestion script for SciCat Models could be used for manual scicat model ingestion, e.g. Sample, Instrument or DerivedDataset.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scicat_ingest</span>  <span class="o">-</span><span class="n">m</span> <span class="n">Samples</span>  <span class="o">-</span><span class="n">c</span> <span class="o">~/.</span><span class="n">scingestor</span><span class="o">.</span><span class="n">yaml</span>  <span class="o">./</span><span class="n">metadata</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
 <p>Its configuration written YAML like for <code class="docutils literal notranslate"><span class="pre">scicat_dataset_ingestor</span></code></p>
-<section id="required-packages">
-<h3>Required packages<a class="headerlink" href="#required-packages" title="Permalink to this heading">¶</a></h3>
+<div class="section" id="required-packages">
+<h3>Required packages<a class="headerlink" href="#required-packages" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>python3 &gt;= 3.7</p></li>
 <li><p>nxstools &gt;= 3.38.0</p></li>
@@ -180,9 +172,9 @@ launched at the end of the beamtime.</p>
 <li><p>pytest (to run tests)</p></li>
 <li><p>sphinx (to build the documentation)</p></li>
 </ul>
-</section>
-<section id="install-from-sources">
-<h3>Install from sources<a class="headerlink" href="#install-from-sources" title="Permalink to this heading">¶</a></h3>
+</div>
+<div class="section" id="install-from-sources">
+<h3>Install from sources<a class="headerlink" href="#install-from-sources" title="Permalink to this headline">¶</a></h3>
 <p>The code from <a class="reference external" href="https://github.com/jkotan/scingestor">https://github.com/jkotan/scingestor</a> can be built with</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
@@ -197,9 +189,9 @@ the root directory of the source distribution.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pytest</span> <span class="n">test</span>
 </pre></div>
 </div>
-</section>
-<section id="install-in-conda-or-pip-environment">
-<h3>Install in conda or pip environment<a class="headerlink" href="#install-in-conda-or-pip-environment" title="Permalink to this heading">¶</a></h3>
+</div>
+<div class="section" id="install-in-conda-or-pip-environment">
+<h3>Install in conda or pip environment<a class="headerlink" href="#install-in-conda-or-pip-environment" title="Permalink to this headline">¶</a></h3>
 <p>The code can be installed in your conda environment by</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">myenv</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span>
 <span class="n">conda</span> <span class="n">activate</span> <span class="n">myenv</span>
@@ -216,9 +208,9 @@ the root directory of the source distribution.</p>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">scingestor</span>
 </pre></div>
 </div>
-</section>
-<section id="debian-and-ubuntu-packages">
-<h3>Debian and Ubuntu packages<a class="headerlink" href="#debian-and-ubuntu-packages" title="Permalink to this heading">¶</a></h3>
+</div>
+<div class="section" id="debian-and-ubuntu-packages">
+<h3>Debian and Ubuntu packages<a class="headerlink" href="#debian-and-ubuntu-packages" title="Permalink to this headline">¶</a></h3>
 <p>Debian <code class="docutils literal notranslate"><span class="pre">bookworm</span></code>, <code class="docutils literal notranslate"><span class="pre">bullseye</span></code>, <code class="docutils literal notranslate"><span class="pre">buster</span></code> or Ubuntu <code class="docutils literal notranslate"><span class="pre">lunar</span></code>, <code class="docutils literal notranslate"><span class="pre">jammy</span></code>, <code class="docutils literal notranslate"><span class="pre">focal</span></code> packages
 can be found in the HDRI repository.</p>
 <p>To install the debian packages, add the PGP repository key</p>
@@ -243,13 +235,13 @@ can be found in the HDRI repository.</p>
 <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">scingestor</span>
 </pre></div>
 </div>
-</section>
-</section>
-</section>
-<section id="contents">
-<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this heading">¶</a></h1>
+</div>
+</div>
+</div>
+<div class="section" id="contents">
+<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="scicat_dataset_ingestor.html">scicat_dataset_ingestor</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="scicat_dataset_ingestor.html#description">Description</a></li>
@@ -271,204 +263,91 @@ can be found in the HDRI repository.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="scingestor.html">scingestor package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="scingestor.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.beamtimeWatcher">scingestor.beamtimeWatcher module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.beamtimeWatcher.BeamtimeWatcher"><code class="docutils literal notranslate"><span class="pre">BeamtimeWatcher</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.beamtimeWatcher.BeamtimeWatcher.running"><code class="docutils literal notranslate"><span class="pre">BeamtimeWatcher.running</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.beamtimeWatcher.BeamtimeWatcher.start"><code class="docutils literal notranslate"><span class="pre">BeamtimeWatcher.start()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.beamtimeWatcher.BeamtimeWatcher.stop"><code class="docutils literal notranslate"><span class="pre">BeamtimeWatcher.stop()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.beamtimeWatcher.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.configuration">scingestor.configuration module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.configuration.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.datasetIngest">scingestor.datasetIngest module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.datasetIngest.DatasetIngest"><code class="docutils literal notranslate"><span class="pre">DatasetIngest</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngest.DatasetIngest.start"><code class="docutils literal notranslate"><span class="pre">DatasetIngest.start()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.datasetIngest.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.datasetIngestor">scingestor.datasetIngestor module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.DatasetIngestor"><code class="docutils literal notranslate"><span class="pre">DatasetIngestor</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.DatasetIngestor.append_proposal_groups"><code class="docutils literal notranslate"><span class="pre">DatasetIngestor.append_proposal_groups()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.DatasetIngestor.check_list"><code class="docutils literal notranslate"><span class="pre">DatasetIngestor.check_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.DatasetIngestor.clear_tmpfile"><code class="docutils literal notranslate"><span class="pre">DatasetIngestor.clear_tmpfile()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.DatasetIngestor.clear_waiting_datasets"><code class="docutils literal notranslate"><span class="pre">DatasetIngestor.clear_waiting_datasets()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.DatasetIngestor.get_token"><code class="docutils literal notranslate"><span class="pre">DatasetIngestor.get_token()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.DatasetIngestor.ingest"><code class="docutils literal notranslate"><span class="pre">DatasetIngestor.ingest()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.DatasetIngestor.ingested_datasets"><code class="docutils literal notranslate"><span class="pre">DatasetIngestor.ingested_datasets()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.DatasetIngestor.reingest"><code class="docutils literal notranslate"><span class="pre">DatasetIngestor.reingest()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.DatasetIngestor.update_from_tmpfile"><code class="docutils literal notranslate"><span class="pre">DatasetIngestor.update_from_tmpfile()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.DatasetIngestor.waiting_datasets"><code class="docutils literal notranslate"><span class="pre">DatasetIngestor.waiting_datasets()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.UpdateStrategy"><code class="docutils literal notranslate"><span class="pre">UpdateStrategy</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.UpdateStrategy.CREATE"><code class="docutils literal notranslate"><span class="pre">UpdateStrategy.CREATE</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.UpdateStrategy.MIXED"><code class="docutils literal notranslate"><span class="pre">UpdateStrategy.MIXED</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.UpdateStrategy.NO"><code class="docutils literal notranslate"><span class="pre">UpdateStrategy.NO</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetIngestor.UpdateStrategy.PATCH"><code class="docutils literal notranslate"><span class="pre">UpdateStrategy.PATCH</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.datasetWatcher">scingestor.datasetWatcher module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.datasetWatcher.DatasetWatcher"><code class="docutils literal notranslate"><span class="pre">DatasetWatcher</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetWatcher.DatasetWatcher.run"><code class="docutils literal notranslate"><span class="pre">DatasetWatcher.run()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetWatcher.DatasetWatcher.running"><code class="docutils literal notranslate"><span class="pre">DatasetWatcher.running</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.datasetWatcher.DatasetWatcher.stop"><code class="docutils literal notranslate"><span class="pre">DatasetWatcher.stop()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.logger">scingestor.logger module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.logger.AccSecFormatter"><code class="docutils literal notranslate"><span class="pre">AccSecFormatter</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.logger.AccSecFormatter.converter"><code class="docutils literal notranslate"><span class="pre">AccSecFormatter.converter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.logger.AccSecFormatter.formatTime"><code class="docutils literal notranslate"><span class="pre">AccSecFormatter.formatTime()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.logger.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.logger.init_logger"><code class="docutils literal notranslate"><span class="pre">init_logger()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.modelIngest">scingestor.modelIngest module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.modelIngest.ModelIngest"><code class="docutils literal notranslate"><span class="pre">ModelIngest</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.modelIngest.ModelIngest.get_token"><code class="docutils literal notranslate"><span class="pre">ModelIngest.get_token()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.modelIngest.ModelIngest.start"><code class="docutils literal notranslate"><span class="pre">ModelIngest.start()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.modelIngest.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.pathConverter">scingestor.pathConverter module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.pathConverter.PathConverter"><code class="docutils literal notranslate"><span class="pre">PathConverter</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.pathConverter.PathConverter.from_core"><code class="docutils literal notranslate"><span class="pre">PathConverter.from_core()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.pathConverter.PathConverter.to_core"><code class="docutils literal notranslate"><span class="pre">PathConverter.to_core()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.safeINotifier">scingestor.safeINotifier module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.safeINotifier.EventData"><code class="docutils literal notranslate"><span class="pre">EventData</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.safeINotifier.EventData.masks"><code class="docutils literal notranslate"><span class="pre">EventData.masks</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.safeINotifier.EventData.name"><code class="docutils literal notranslate"><span class="pre">EventData.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.safeINotifier.SafeINotifier"><code class="docutils literal notranslate"><span class="pre">SafeINotifier</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.safeINotifier.SafeINotifier.add_watch"><code class="docutils literal notranslate"><span class="pre">SafeINotifier.add_watch()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.safeINotifier.SafeINotifier.daemon"><code class="docutils literal notranslate"><span class="pre">SafeINotifier.daemon</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.safeINotifier.SafeINotifier.init"><code class="docutils literal notranslate"><span class="pre">SafeINotifier.init()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.safeINotifier.SafeINotifier.rm_watch"><code class="docutils literal notranslate"><span class="pre">SafeINotifier.rm_watch()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.safeINotifier.SafeINotifier.run"><code class="docutils literal notranslate"><span class="pre">SafeINotifier.run()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.safeINotifier.SafeINotifier.stop"><code class="docutils literal notranslate"><span class="pre">SafeINotifier.stop()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.scanDirWatcher">scingestor.scanDirWatcher module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="scingestor.html#scingestor.scanDirWatcher.ScanDirWatcher"><code class="docutils literal notranslate"><span class="pre">ScanDirWatcher</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.scanDirWatcher.ScanDirWatcher.run"><code class="docutils literal notranslate"><span class="pre">ScanDirWatcher.run()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.scanDirWatcher.ScanDirWatcher.running"><code class="docutils literal notranslate"><span class="pre">ScanDirWatcher.running</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="scingestor.html#scingestor.scanDirWatcher.ScanDirWatcher.stop"><code class="docutils literal notranslate"><span class="pre">ScanDirWatcher.stop()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.beamtimeWatcher">scingestor.beamtimeWatcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.configuration">scingestor.configuration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.datasetIngest">scingestor.datasetIngest module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.datasetIngestor">scingestor.datasetIngestor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.datasetWatcher">scingestor.datasetWatcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.logger">scingestor.logger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.modelIngest">scingestor.modelIngest module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.pathConverter">scingestor.pathConverter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.safeINotifier">scingestor.safeINotifier module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor.scanDirWatcher">scingestor.scanDirWatcher module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scingestor.html#module-scingestor">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </div>
-</section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h1>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-</section>
+</div>
 
 
-            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="#">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">Scicat Dataset Ingestor</a><ul>
-<li><a class="reference internal" href="#id1">scicat_dataset_ingestor</a><ul>
-<li><a class="reference internal" href="#configuration-variables">Configuration variables</a></li>
-<li><a class="reference internal" href="#pattern-keywords-for-configuration-variables">Pattern keywords for configuration variables</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#scicat-dataset-ingest">scicat_dataset_ingest</a></li>
-<li><a class="reference internal" href="#scicat-ingest">scicat_ingest</a><ul>
-<li><a class="reference internal" href="#required-packages">Required packages</a></li>
-<li><a class="reference internal" href="#install-from-sources">Install from sources</a></li>
-<li><a class="reference internal" href="#install-in-conda-or-pip-environment">Install in conda or pip environment</a></li>
-<li><a class="reference internal" href="#debian-and-ubuntu-packages">Debian and Ubuntu packages</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#contents">Contents</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<h1 class="logo"><a href="#">SciCat Dataset Ingestor</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="scicat_dataset_ingestor.html">scicat_dataset_ingestor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scicat_dataset_ingest.html">scicat_dataset_ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scicat_ingest.html">scicat_ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scingestor.html">scingestor package</a></li>
 </ul>
 
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="scicat_dataset_ingestor.html"
-                          title="next chapter">scicat_dataset_ingestor</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="scicat_dataset_ingestor.html" title="next chapter">scicat_dataset_ingestor</a></li>
+  </ul></li>
+</ul>
+</div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="scicat_dataset_ingestor.html" title="scicat_dataset_ingestor"
-             >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">SciCat Dataset Ingestor 0.8.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Scicat Dataset Ingestor</a></li> 
-      </ul>
+    <div class="footer">
+      &copy;2022, DESY, Jan Kotanski.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, DESY, Jan Kotanski.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
-    </div>
+
+    
+
+    
   </body>
 </html>

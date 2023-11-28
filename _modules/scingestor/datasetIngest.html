@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>scingestor.datasetIngest &#8212; SciCat Dataset Ingestor 0.7.1 documentation</title>
+    <title>scingestor.datasetIngest &#8212; SciCat Dataset Ingestor 0.9.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -296,7 +296,8 @@
                 <span class="k">if</span> <span class="n">ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
                     <span class="n">token</span> <span class="o">=</span> <span class="n">ingestor</span><span class="o">.</span><span class="n">get_token</span><span class="p">()</span>
                     <span class="k">for</span> <span class="n">scan</span> <span class="ow">in</span> <span class="n">ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
-                        <span class="n">ingestor</span><span class="o">.</span><span class="n">reingest</span><span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">scan</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">scan</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;__command__ &quot;</span><span class="p">):</span>
+                            <span class="n">ingestor</span><span class="o">.</span><span class="n">reingest</span><span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
                 <span class="n">ingestor</span><span class="o">.</span><span class="n">update_from_tmpfile</span><span class="p">()</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
