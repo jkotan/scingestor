@@ -196,25 +196,24 @@ class DatasetWatcher(threading.Thread):
                 token = self.__ingestor.get_token()
                 if token:
                     for scan in self.__ingestor.waiting_datasets():
+                        sscan = scan.split(" ")
                         if scan and scan.startswith("__command__ "):
-                            if self.__executecommands:
-                                sscan = scan.split(" ")
-                                if len(sscan) > 0 and ":" in sscan[0]:
-                                    try:
-                                        self.__ingestor.reingest(
-                                            scan, token)
-                                    except Exception as e:
-                                        get_logger().warning(str(e))
-                                        continue
-                                elif len(sscan) > 1:
-                                    cmd = sscan[1]
-                                    if cmd == "stop":
-                                        self.__ingestor.stop_measurement()
-                                    if cmd == "start":
-                                        if len(sscan) > 2:
-                                            groupname = sscan[2]
-                                        self.__ingestor.start_measurement(
-                                            groupname)
+                            if self.__executecommands and len(sscan) > 1:
+                                cmd = sscan[1]
+                                if cmd == "stop":
+                                    self.__ingestor.stop_measurement()
+                                if cmd == "start":
+                                    if len(sscan) > 2:
+                                        groupname = sscan[2]
+                                    self.__ingestor.start_measurement(
+                                        groupname)
+                        elif len(sscan) > 0 and ":" in sscan[0]:
+                            try:
+                                self.__ingestor.reingest(
+                                    scan, token)
+                            except Exception as e:
+                                get_logger().warning(str(e))
+                                continue
                         else:
                             self.__ingestor.ingest(scan, token)
                     self.__ingestor.clear_waiting_datasets()
@@ -311,25 +310,24 @@ class DatasetWatcher(threading.Thread):
                         continue
                     if token:
                         for scan in self.__ingestor.waiting_datasets():
+                            sscan = scan.split(" ")
                             if scan and scan.startswith("__command__ "):
-                                if self.__executecommands:
-                                    sscan = scan.split(" ")
-                                    if len(sscan) > 0 and ":" in sscan[0]:
-                                        try:
-                                            self.__ingestor.reingest(
-                                                scan, token)
-                                        except Exception as e:
-                                            get_logger().warning(str(e))
-                                            continue
-                                    elif len(sscan) > 1:
-                                        cmd = sscan[1]
-                                        if cmd == "stop":
-                                            self.__ingestor.stop_measurement()
-                                        if cmd == "start":
-                                            if len(sscan) > 2:
-                                                groupname = sscan[2]
-                                            self.__ingestor.start_measurement(
-                                                groupname)
+                                if self.__executecommands and len(sscan) > 1:
+                                    cmd = sscan[1]
+                                    if cmd == "stop":
+                                        self.__ingestor.stop_measurement()
+                                    if cmd == "start":
+                                        if len(sscan) > 2:
+                                            groupname = sscan[2]
+                                        self.__ingestor.start_measurement(
+                                            groupname)
+                            elif len(sscan) > 0 and ":" in sscan[0]:
+                                try:
+                                    self.__ingestor.reingest(
+                                        scan, token)
+                                except Exception as e:
+                                    get_logger().warning(str(e))
+                                    continue
                             else:
                                 try:
                                     self.__ingestor.ingest(scan, token)
