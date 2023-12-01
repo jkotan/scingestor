@@ -199,7 +199,14 @@ class DatasetWatcher(threading.Thread):
                         if scan and scan.startswith("__command__ "):
                             if self.__executecommands:
                                 sscan = scan.split(" ")
-                                if len(sscan) > 1:
+                                if len(sscan) > 0 and ":" in sscan[0]:
+                                    try:
+                                        self.__ingestor.reingest(
+                                            scan, token)
+                                    except Exception as e:
+                                        get_logger().warning(str(e))
+                                        continue
+                                elif len(sscan) > 1:
                                     cmd = sscan[1]
                                     if cmd == "stop":
                                         self.__ingestor.stop_measurement()
@@ -307,7 +314,14 @@ class DatasetWatcher(threading.Thread):
                             if scan and scan.startswith("__command__ "):
                                 if self.__executecommands:
                                     sscan = scan.split(" ")
-                                    if len(sscan) > 1:
+                                    if len(sscan) > 0 and ":" in sscan[0]:
+                                        try:
+                                            self.__ingestor.reingest(
+                                                scan, token)
+                                        except Exception as e:
+                                            get_logger().warning(str(e))
+                                            continue
+                                    elif len(sscan) > 1:
                                         cmd = sscan[1]
                                         if cmd == "stop":
                                             self.__ingestor.stop_measurement()

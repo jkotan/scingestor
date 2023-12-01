@@ -1697,7 +1697,15 @@ class DatasetIngestor:
         reingest_origdatablock = False
         reingest_attachment = False
         sscan = scan.split(" ")
-        self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
+        pscan = scan
+
+        self.__dctfmt["scanname"] = ""
+        if len(sscan) > 0:
+            if ":" in sscan[0]:
+                self.__dctfmt["scanname"] = sscan[0].split(":")[0]
+                pscan = " ".join([self.__dctfmt["scanname"]] + sscan[1:])
+            else:
+                self.__dctfmt["scanname"] = sscan[0]
         rds = None
         rdss = glob.glob(
             "{metapath}/{scan}{postfix}".format(
@@ -1748,7 +1756,7 @@ class DatasetIngestor:
                     reingest_origdatablock)
                 )
             self._regenerate_origdatablock_metadata(
-                scan, reingest_origdatablock)
+                pscan, reingest_origdatablock)
             mtm = os.path.getmtime(odb)
 
             if scan in self.__sc_ingested_map.keys():
@@ -1761,7 +1769,7 @@ class DatasetIngestor:
                or mtm > self.__sc_ingested_map[scan][-2]:
                 reingest_origdatablock = True
         else:
-            odb = self._generate_origdatablock_metadata(scan)
+            odb = self._generate_origdatablock_metadata(pscan)
             get_logger().debug("DB No File: %s True" % (scan))
             reingest_origdatablock = True
         mtmdb = 0
