@@ -144,7 +144,7 @@ class DatasetIngestor:
         self.__ingest_attachment = False
         #: (:obj:`bool`) retry failed dataset ingestion on next event
         self.__retry_failed_dataset_ingestion = False
-        #: (:obj:`bool`) retry failed attachement ingestion on next event
+        #: (:obj:`bool`) retry failed attachment ingestion on next event
         self.__retry_failed_attachment_ingestion = False
         #: (:obj:`str`) metadata copy map file
         self.__copymapfile = None
@@ -716,7 +716,7 @@ class DatasetIngestor:
         #     "OrigDatablocks"
         #: (:obj:`str`) origdatablock url
 
-        #: (:obj:`str`) attachement url
+        #: (:obj:`str`) attachment url
         self.__attachmenturl = self.__scicat_url + self.__scicat_attachments
         # self.__dataseturl = "http://www-science3d.desy.de:3000/api/v3/" \
         #     "Datasets/{pid}/Attachments"
@@ -1416,6 +1416,58 @@ class DatasetIngestor:
                 'DatasetIngestor: %s' % (str(e)))
         return None
 
+    def _get_attachments(self, datasetid, token):
+        """ get attachments with datasetid
+
+        :param datasetid: dataset id
+        :type datasetid: :obj:`str`
+        :param token: ingestor token
+        :type token: :obj:`str`
+        :returns: list of  attachments
+        :rtype: :obj:`str` <:obj:`str`>
+        """
+        try:
+            self.__headers["Authorization"] = "Bearer {}".format(token)
+            response = requests.get(self.__attachmenturl.format(
+                pid=datasetid.replace("/", "%2F")),
+                params={"access_token": token},
+                headers=self.__headers
+            )
+            if response.ok:
+                js = response.json()
+                return js
+        except Exception as e:
+            get_logger().error(
+                'DatasetIngestor: %s' % (str(e)))
+        return None
+
+    def _get_delete_attachment(self, did, token):
+        """ ingets attachment
+
+        :param did: attachment id
+        :type did: :obj:`str`
+        :param token: ingestor token
+        :type token: :obj:`str`
+        """
+        try:
+            self.__headers["Authorization"] = "Bearer {}".format(token)
+            response = requests.delete(
+                "{url}/{pid}"
+                .format(
+                    url=(self.__scicat_url + "/Attachments"),
+                    pid=did.replace("/", "%2F")),
+                params={"access_token": token},
+                headers=self.__headers
+            )
+            if response.ok:
+                return True
+            else:
+                raise Exception("%s" % response.text)
+        except Exception as e:
+            get_logger().error(
+                'DatasetIngestor: %s' % (str(e)))
+        return None
+
     def _get_pid(self, metafile):
         """ get pid from raw dataset metadata
 
@@ -1488,6 +1540,30 @@ class DatasetIngestor:
                 'DatasetIngestor: %s' % (str(e)))
         return ""
 
+    def _delete_attachments(self, pid, token):
+        """ delete attachment with given dataset pid
+
+        :param pid: dataset id
+        :type pid: :obj:`str`
+        :param token: ingestor token
+        :type token: :obj:`str`
+        :returns: dataset id
+        :rtype: :obj:`str`
+        """
+        try:
+            datasetid = "%s%s" % (self.__pidprefix, pid)
+            # get_logger().info("DA %s %s" % (pid, datasetid))
+            odbs = self._get_attachments(datasetid, token) or []
+            # get_logger().info("DA2 %s %s" % (pid, odbs))
+            for odb in odbs:
+                if "id" in odb:
+                    # get_logger().info("DA3 %s %s" % (odb["id"], odb))
+                    self._get_delete_attachment(odb["id"], token)
+        except Exception as e:
+            get_logger().error(
+                'DatasetIngestor: %s' % (str(e)))
+        return ""
+
     def _ingest_origdatablock_metadata(self, metafile, pid, token):
         """ ingest origdatablock metadata
 
@@ -1545,6 +1621,11 @@ class DatasetIngestor:
                     smt = json.dumps(mt)
                     with open(metafile, "w") as mf:
                         mf.write(smt)
+            else:
+                mt["datasetId"] = "%s%s" % (self.__pidprefix, pid)
+                smt = json.dumps(mt)
+                with open(metafile, "w") as mf:
+                    mf.write(smt)
             dsid = "%s%s" % (self.__pidprefix, pid)
             status = self._ingest_attachment(smt, dsid, token)
             if status:
@@ -1681,13 +1762,15 @@ class DatasetIngestor:
         with open(self.__idsfile, 'a+') as f:
             f.write("%s %s %s %s\n" % (scan, mtmds, mtmdb, mtmda))
 
-    def reingest(self, scan, token):
+    def reingest(self, scan, token, notmp=False):
         """ re-ingest scan
 
         :param scan: scan name
         :type scan: :obj:`str`
         :param token: access token
         :type token: :obj:`str`
+        :param token: no tmp file flag
+        :type token: :obj:`book`
         """
         get_logger().info(
             'DatasetIngestor: Checking: %s %s' % (
@@ -1743,6 +1826,16 @@ class DatasetIngestor:
                 metapath=self.__dctfmt["metapath"]))
         if odbs and odbs[0]:
             odb = odbs[0]
+            todb = [odb]
+            olst = False
+            with open(odb) as fl:
+                dbmt = json.loads(fl.read())
+                if isinstance(dbmt, list):
+                    olst = True
+                    if self.__skip_multi_datablock:
+                        todb = []
+                    else:
+                        todb = dbmt
 
             mtm0 = os.path.getmtime(odb)
             if scan not in self.__sc_ingested_map.keys() \
@@ -1755,8 +1848,9 @@ class DatasetIngestor:
                     mtm0 - self.__sc_ingested_map[scan][-2],
                     reingest_origdatablock)
                 )
-            self._regenerate_origdatablock_metadata(
-                pscan, reingest_origdatablock)
+            if not olst:
+                self._regenerate_origdatablock_metadata(
+                    pscan, reingest_origdatablock)
             mtm = os.path.getmtime(odb)
 
             if scan in self.__sc_ingested_map.keys():
@@ -1770,6 +1864,7 @@ class DatasetIngestor:
                 reingest_origdatablock = True
         else:
             odb = self._generate_origdatablock_metadata(pscan)
+            todb = [odb]
             get_logger().debug("DB No File: %s True" % (scan))
             reingest_origdatablock = True
         mtmdb = 0
@@ -1787,6 +1882,14 @@ class DatasetIngestor:
                     metapath=self.__dctfmt["metapath"]))
             if adss and adss[0]:
                 ads = adss[0]
+                tads = [ads]
+                with open(ads) as fl:
+                    admt = json.loads(fl.read())
+                    if isinstance(admt, list):
+                        if self.__skip_multi_attachment:
+                            tads = []
+                        else:
+                            tads = admt
                 mtm0 = os.path.getmtime(ads)
                 if scan not in self.__sc_ingested_map.keys() \
                    or mtm0 > self.__sc_ingested_map[scan][-1]:
@@ -1795,6 +1898,7 @@ class DatasetIngestor:
                 ads = self._generate_attachment_metadata(
                     self.__dctfmt["scanname"])
                 reingest_attachment = True
+                tads = [ads]
             if ads:
                 mtm0 = os.path.getmtime(ads)
 
@@ -1806,33 +1910,36 @@ class DatasetIngestor:
                     "DatasetIngestor: Ingest dataset: %s" % (rds))
                 oldpid = self._get_pid(rds)
                 if pid and oldpid != pid:
-                    # get_logger().info("PID %s %s %s" % (scan,pid,oldpid))
                     odb = self._generate_origdatablock_metadata(scan)
                     reingest_origdatablock = True
-            if odb and reingest_origdatablock:
+            if todb and todb[0] and reingest_origdatablock:
                 if pid is None and rdss and rdss[0]:
                     pid = self._get_pid(rdss[0])
                 self._delete_origdatablocks(pid, token)
-                dbstatus = self._ingest_origdatablock_metadata(
-                    odb, pid, token)
-                get_logger().info(
-                    "DatasetIngestor: Ingest origdatablock: %s" % (odb))
+                for odb in todb:
+                    dbstatus = self._ingest_origdatablock_metadata(
+                        odb, pid, token)
+                    get_logger().info(
+                        "DatasetIngestor: Ingest origdatablock: %s" % (odb))
                 if not dbstatus:
                     mtmdb = -1
 
             if self.__ingest_attachment:
-                if ads and reingest_attachment:
-                    if pid is None and adss and adss[0]:
-                        pid = self._get_pid(adss[0])
+                if tads and tads[0] and reingest_attachment:
+                    if pid is None and rdss and rdss[0]:
+                        pid = self._get_pid(rdss[0])
                     if not pid:
                         get_logger().error(
                             "DatasetIngestor: No dataset pid "
                             "for the attachment found: %s" % (ads))
                     else:
-                        dastatus = self._ingest_attachment_metadata(
-                            ads, pid, token)
-                        get_logger().info(
-                            "DatasetIngestor: Ingest attachment: %s" % (ads))
+                        self._delete_attachments(pid, token)
+                        for ads in tads:
+                            dastatus = self._ingest_attachment_metadata(
+                                ads, pid, token)
+                            get_logger().info(
+                                "DatasetIngestor: Ingest attachment: %s"
+                                % (ads))
                         if not dastatus:
                             mtmda = -1
         mtmda = 0
@@ -1862,7 +1969,10 @@ class DatasetIngestor:
         sscan.extend([str(mtmds), str(mtmdb), str(mtmda)])
         self.__sc_ingested.append(sscan)
         self.__sc_seingested_map[scan] = [mtmds, mtmdb, mtmda]
-        with open(self.__idsfiletmp, 'a+') as f:
+        lfile = self.__idsfiletmp
+        if notmp:
+            lfile = self.__idsfile
+        with open(lfile, 'a+') as f:
             f.write("%s %s %s %s\n" % (scan, mtmds, mtmdb, mtmda))
 
     def check_list(self, reingest=False):
@@ -1906,7 +2016,17 @@ class DatasetIngestor:
             else:
                 ingested = [(" ".join(sc[:-3]) if len(sc) > 3 else sc[0])
                             for sc in self.__sc_ingested]
-
+            self.__sc_ingested_map = {}
+            for sc in self.__sc_ingested:
+                try:
+                    if len(sc) > 3 and float(sc[-1]) >= 0 \
+                       and float(sc[-2]) > 0 and float(sc[-3]) > 0:
+                        sc[-1] = float(sc[-1])
+                        sc[-2] = float(sc[-2])
+                        sc[-3] = float(sc[-3])
+                        self.__sc_ingested_map[" ".join(sc[:-3])] = sc
+                except Exception as e:
+                    get_logger().debug("%s" % str(e))
             self.__sc_waiting = [
                 sc for sc in scans if sc not in ingested]
         else:

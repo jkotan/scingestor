@@ -210,7 +210,7 @@ class DatasetWatcher(threading.Thread):
                         elif len(sscan) > 0 and ":" in sscan[0]:
                             try:
                                 self.__ingestor.reingest(
-                                    scan, token)
+                                    scan, token, notmp=True)
                             except Exception as e:
                                 get_logger().warning(str(e))
                                 continue
@@ -324,7 +324,7 @@ class DatasetWatcher(threading.Thread):
                             elif len(sscan) > 0 and ":" in sscan[0]:
                                 try:
                                     self.__ingestor.reingest(
-                                        scan, token)
+                                        scan, token, notmp=True)
                                 except Exception as e:
                                     get_logger().warning(str(e))
                                     continue

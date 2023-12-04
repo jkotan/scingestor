@@ -186,6 +186,11 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                         self.server.attachments.append((pid, in_data))
                         try:
                             dt = json.loads(in_data)
+                            npid = str(uuid.uuid4())
+                            dt["id"] = npid
+                            self.server.id_attachment[npid] = json.dumps(dt)
+                            # print("IDA POST %s" % self.server.id_attachment)
+                            resp = 200
                             message = "{}"
                         except Exception as e:
                             message = json.dumps({"Error": str(e)})
@@ -213,7 +218,6 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                 message = json.dumps({"Error": str(e)})
                 resp = 400
             self.set_json_header(resp)
-
         else:
             self.set_json_header()
             self.server.others.append(in_data)
@@ -264,6 +268,16 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                            jodb["datasetId"] == pid:
                             odbs.append(jodb)
                     message = json.dumps(odbs)
+                elif (len(dspath) == 4 and
+                      dspath[3].lower() == "attachments"):
+                    odbs = []
+                    # print("IDA DS GET %s" % self.server.id_attachment)
+                    for odb in self.server.id_attachment.values():
+                        jodb = json.loads(odb)
+                        if "datasetId" in jodb.keys() and \
+                           jodb["datasetId"] == pid:
+                            odbs.append(jodb)
+                    message = json.dumps(odbs)
             elif len(dspath) > 2 and dspath[1].lower() == "proposals":
                 pid = dspath[2].replace("%2F", "/")
                 if len(dspath) == 3:
@@ -277,6 +291,15 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     pid = dspath[2].replace("%2F", "/")
                     if pid in self.server.id_origdatablock:
                         message = self.server.id_origdatablock[pid]
+                    else:
+                        message = ""
+            elif len(dspath) > 2 and dspath[1].lower() == "attachments":
+                pid = requests.utils.unquote(dspath[2])
+                if len(dspath) == 3:
+                    pid = dspath[2].replace("%2F", "/")
+                    # print("IDA GET %s" % self.server.id_attachment)
+                    if pid in self.server.id_attachament:
+                        message = self.server.id_attachament[pid]
                     else:
                         message = ""
             resp = 200
@@ -308,6 +331,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         else:
             spath = [path]
         dspath = spath[0].split("/")
+        # print("PATH1", dspath)
         try:
             if not spath[-1]:
                 raise Exception("Empty access_token")
@@ -330,6 +354,15 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     if pid in self.server.id_origdatablock.keys():
                         dt = self.server.id_origdatablock.pop(pid)
                         print("OrigDatablocks: delete %s"
+                              % json.loads(dt)['datasetId'])
+            elif len(dspath) > 2 and dspath[1].lower() == "attachments":
+                # print("PATH", dspath)
+                pid = dspath[2].replace("%2F", "/")
+                if len(dspath) == 3:
+                    # print("IDA DELETE %s" % self.server.id_attachment)
+                    if pid in self.server.id_attachment.keys():
+                        dt = self.server.id_attachment.pop(pid)
+                        print("Datasets Attachments: delete %s"
                               % json.loads(dt)['datasetId'])
             resp = 200
         except Exception as e:
@@ -365,6 +398,8 @@ class SciCatTestServer(HTTPServer):
         self.pid_proposal = {}
         #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with datablocks
         self.id_origdatablock = {}
+        #: (:obj:`dict`<:obj:`str`, :obj:`str`>) dictionary with attachements
+        self.id_attachment = {}
         #: (:obj:`int`) id counter
         self.counter = 0
         #: (:obj:`int`) request ids with error
@@ -382,6 +417,7 @@ class SciCatTestServer(HTTPServer):
         self.pid_dataset = {}
         self.pid_proposal = {}
         self.id_origdatablock = {}
+        self.id_attachment = {}
         self.counter = 0
         self.error_requests = []
 
