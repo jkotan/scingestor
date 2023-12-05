@@ -5220,7 +5220,7 @@ class DatasetWatcherTest(unittest.TestCase):
 
         at1 = {
             'thumbnail': "data:iVBORw0KGgoAAAANSUhEAAAoAAA",
-            'datasetId': '99001234/myscan_00001',
+            'datasetId': '99011234/myscan_00001',
             'caption': '',
             'ownerGroup': '99011234-dmgt',
             'accessGroups': [
@@ -5229,7 +5229,7 @@ class DatasetWatcherTest(unittest.TestCase):
         }
         at2 = {
             'thumbnail': "data:sdfsAAA",
-            'datasetId': '99001234/myscan_00002',
+            'datasetId': '99011234/myscan_00002',
             'caption': '',
             'ownerGroup': '99011234-dmgt',
             'accessGroups': [
@@ -5238,7 +5238,7 @@ class DatasetWatcherTest(unittest.TestCase):
         }
         gat1 = {
             'thumbnail': "data:iVBORw0KGgoAAAANSUhEAAAoAAA",
-            'datasetId': '99001234/mycalib',
+            'datasetId': '99011234/mycalib',
             'caption': '',
             'ownerGroup': '99011234-dmgt',
             'accessGroups': [
@@ -5247,7 +5247,7 @@ class DatasetWatcherTest(unittest.TestCase):
         }
         gat2 = {
             'thumbnail': "data:sdfsAAA",
-            'datasetId': '99001234/mycalib',
+            'datasetId': '99011234/mycalib',
             'caption': '',
             'ownerGroup': '99011234-dmgt',
             'accessGroups': [
