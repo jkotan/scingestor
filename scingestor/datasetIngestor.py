@@ -1454,7 +1454,7 @@ class DatasetIngestor:
             response = requests.delete(
                 "{url}/{pid}"
                 .format(
-                    url=(self.__scicat_url + "/Attachments"),
+                    url=(self.__scicat_url + "Attachments"),
                     pid=did.replace("/", "%2F")),
                 params={"access_token": token},
                 headers=self.__headers
@@ -1924,6 +1924,8 @@ class DatasetIngestor:
                 if not dbstatus:
                     mtmdb = -1
 
+            get_logger().debug("Ingest Attachment %s %s"
+                               % (self.__ingest_attachment, tads))
             if self.__ingest_attachment:
                 if tads and tads[0] and reingest_attachment:
                     if pid is None and rdss and rdss[0]:
@@ -1933,6 +1935,8 @@ class DatasetIngestor:
                             "DatasetIngestor: No dataset pid "
                             "for the attachment found: %s" % (ads))
                     else:
+                        get_logger().debug("Attachment PID  %s %s"
+                                           % (tads, pid))
                         self._delete_attachments(pid, token)
                         for ads in tads:
                             dastatus = self._ingest_attachment_metadata(
