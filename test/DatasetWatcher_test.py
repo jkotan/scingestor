@@ -1939,6 +1939,8 @@ class DatasetWatcherTest(unittest.TestCase):
             ats.append({
                 'thumbnail': "data:sdfsAAA%s" % i,
                 'caption': '',
+                'datasetId':
+                '99001234/myscan_%05i' % (i + 1),
                 'ownerGroup': '99001234-dmgt',
                 'accessGroups': [
                     '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -2334,6 +2336,8 @@ class DatasetWatcherTest(unittest.TestCase):
             ats.append({
                 'thumbnail': "data:sdfsAAA%s" % i,
                 'caption': '',
+                'datasetId':
+                '99001234/myscan_%05i' % (i + 1),
                 'ownerGroup': '99001234-dmgt',
                 'accessGroups': [
                     '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -4005,6 +4009,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     json.loads(self.__server.attachments[0][1]),
                     {
                         'ownerGroup': '99001234-dmgt',
+                        'datasetId': '99001234/myscan_00003',
                         'caption': '',
                         'thumbnail':
                         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAA"
@@ -4758,6 +4763,7 @@ class DatasetWatcherTest(unittest.TestCase):
 
         at1 = {
             'thumbnail': "data:iVBORw0KGgoAAAANSUhEAAAoAAA",
+            'datasetId': '99001234/myscan_00001',
             'caption': '',
             'ownerGroup': '99001234-dmgt',
             'accessGroups': [
@@ -4766,6 +4772,7 @@ class DatasetWatcherTest(unittest.TestCase):
         }
         at2 = {
             'thumbnail': "data:sdfsAAA",
+            'datasetId': '99001234/myscan_00002',
             'caption': '',
             'ownerGroup': '99001234-dmgt',
             'accessGroups': [
@@ -5213,6 +5220,7 @@ class DatasetWatcherTest(unittest.TestCase):
 
         at1 = {
             'thumbnail': "data:iVBORw0KGgoAAAANSUhEAAAoAAA",
+            'datasetId': '99001234/myscan_00001',
             'caption': '',
             'ownerGroup': '99011234-dmgt',
             'accessGroups': [
@@ -5221,6 +5229,25 @@ class DatasetWatcherTest(unittest.TestCase):
         }
         at2 = {
             'thumbnail': "data:sdfsAAA",
+            'datasetId': '99001234/myscan_00002',
+            'caption': '',
+            'ownerGroup': '99011234-dmgt',
+            'accessGroups': [
+                '99011234-dmgt', '99011234-clbt', '99011234-part',
+                'p00dmgt', 'p00staff'],
+        }
+        gat1 = {
+            'thumbnail': "data:iVBORw0KGgoAAAANSUhEAAAoAAA",
+            'datasetId': '99001234/mycalib',
+            'caption': '',
+            'ownerGroup': '99011234-dmgt',
+            'accessGroups': [
+                '99011234-dmgt', '99011234-clbt', '99011234-part',
+                'p00dmgt', 'p00staff'],
+        }
+        gat2 = {
+            'thumbnail': "data:sdfsAAA",
+            'datasetId': '99001234/mycalib',
             'caption': '',
             'ownerGroup': '99011234-dmgt',
             'accessGroups': [
@@ -5483,12 +5510,12 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.assertEqual(self.__server.attachments[2][0],
                                  '99011234/mycalib')
                 self.myAssertDict(
-                    json.loads(self.__server.attachments[2][1]), at1)
+                    json.loads(self.__server.attachments[2][1]), gat1)
                 self.assertEqual(len(self.__server.attachments[3]), 2)
                 self.assertEqual(self.__server.attachments[3][0],
                                  '99011234/mycalib')
                 self.myAssertDict(
-                    json.loads(self.__server.attachments[3][1]), at2)
+                    json.loads(self.__server.attachments[3][1]), gat2)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
         finally:
@@ -5743,6 +5770,7 @@ class DatasetWatcherTest(unittest.TestCase):
 
         at1 = {
             'thumbnail': "data:iVBORw0KGgoAAAANSUhEAAAoAAA",
+            'datasetId': '99011234/myscan_00001',
             'caption': '',
             'ownerGroup': '99011234-dmgt',
             'accessGroups': [
@@ -5751,6 +5779,25 @@ class DatasetWatcherTest(unittest.TestCase):
         }
         at2 = {
             'thumbnail': "data:sdfsAAA",
+            'datasetId': '99011234/myscan_00002',
+            'caption': '',
+            'ownerGroup': '99011234-dmgt',
+            'accessGroups': [
+                '99011234-dmgt', '99011234-clbt', '99011234-part',
+                'p00dmgt', 'p00staff'],
+        }
+        gat1 = {
+            'thumbnail': "data:iVBORw0KGgoAAAANSUhEAAAoAAA",
+            'datasetId': '99011234/mycalib',
+            'caption': '',
+            'ownerGroup': '99011234-dmgt',
+            'accessGroups': [
+                '99011234-dmgt', '99011234-clbt', '99011234-part',
+                'p00dmgt', 'p00staff'],
+        }
+        gat2 = {
+            'thumbnail': "data:sdfsAAA",
+            'datasetId': '99011234/mycalib',
             'caption': '',
             'ownerGroup': '99011234-dmgt',
             'accessGroups': [
@@ -5818,6 +5865,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '{basedir} {btmeta}\n'
                         'INFO : ScanDirWatcher: Adding watch {cnt2}: '
                         '{basedir}\n'
+
                         'INFO : ScanDirWatcher: Create ScanDirWatcher '
                         '{subdir} {btmeta}\n'
                         'INFO : ScanDirWatcher: Adding watch {cnt3}: '
@@ -5833,6 +5881,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetWatcher: Waiting datasets: '
                         '[\'__command__ start mycalib\', \'{sc1}\']\n'
                         'INFO : DatasetWatcher: Ingested datasets: []\n'
+
                         # 'INFO : Start Measurement: mycalib\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
                         'INFO : DatasetIngestor: '
@@ -5848,6 +5897,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'p00dmgt,p00staff '
                         '-o {subdir2}/{sc1}.origdatablock.json  '
                         '{subdir2}/{sc1} \n'
+
                         'INFO : DatasetIngestor: Metadata generated callback:'
                         ' nxsfileinfo groupmetadata  mycalib '
                         '-m {subdir2}/{sc1}.scan.json '
@@ -6028,12 +6078,12 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.assertEqual(self.__server.attachments[2][0],
                                  '99011234/mycalib')
                 self.myAssertDict(
-                    json.loads(self.__server.attachments[2][1]), at1)
+                    json.loads(self.__server.attachments[2][1]), gat1)
                 self.assertEqual(len(self.__server.attachments[3]), 2)
                 self.assertEqual(self.__server.attachments[3][0],
                                  '99011234/mycalib')
                 self.myAssertDict(
-                    json.loads(self.__server.attachments[3][1]), at2)
+                    json.loads(self.__server.attachments[3][1]), gat2)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
         finally:
@@ -6362,8 +6412,8 @@ class DatasetWatcherTest(unittest.TestCase):
 
         at1 = {
             'thumbnail': "data:iVBORw0KGgoAAAANSUhEAAAoAAA",
-            'caption': '',
             'datasetId': '99011234/myscan_00001',
+            'caption': '',
             'ownerGroup': '99011234-dmgt',
             'accessGroups': [
                 '99011234-dmgt', '99011234-clbt', '99011234-part',
@@ -7308,6 +7358,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     fsubdirname2, 'myscan_%05i.attachment.json' % (i + 1)))
             ats.append({
                 'thumbnail': "data:sdfsAAA%s" % i,
+                'datasetId': '99001234/myscan_%05i' % (i + 1),
                 'caption': '',
                 'ownerGroup': '99001234-dmgt',
                 'accessGroups': [

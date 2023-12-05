@@ -1480,8 +1480,8 @@ class DatasetIngestor:
         try:
             with open(metafile) as fl:
                 smt = fl.read()
-                mt = json.loads(smt)
-                pid = mt["pid"]
+            mt = json.loads(smt)
+            pid = mt["pid"]
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
