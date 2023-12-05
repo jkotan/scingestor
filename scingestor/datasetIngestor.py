@@ -1454,7 +1454,7 @@ class DatasetIngestor:
             response = requests.delete(
                 "{url}/{pid}"
                 .format(
-                    url=(self.__scicat_url + "/Attachments"),
+                    url=(self.__scicat_url + "Attachments"),
                     pid=did.replace("/", "%2F")),
                 params={"access_token": token},
                 headers=self.__headers
