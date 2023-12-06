@@ -1874,6 +1874,7 @@ class DatasetIngestor:
         dastatus = None
         dbstatus = None
         ads = None
+        tads = []
         if self.__ingest_attachment:
             adss = glob.glob(
                 "{metapath}/{scan}{postfix}".format(
@@ -1924,6 +1925,8 @@ class DatasetIngestor:
                 if not dbstatus:
                     mtmdb = -1
 
+            get_logger().debug("Ingest Attachment %s %s" % (
+                self.__ingest_attachment, tads))
             if self.__ingest_attachment:
                 if tads and tads[0] and reingest_attachment:
                     if pid is None and rdss and rdss[0]:
@@ -1933,7 +1936,11 @@ class DatasetIngestor:
                             "DatasetIngestor: No dataset pid "
                             "for the attachment found: %s" % (ads))
                     else:
+                        get_logger().debug("Attachment PID  %s %s"
+                                           % (tads, pid))
                         self._delete_attachments(pid, token)
+                        get_logger().debug("Attachment LOOP %s %s"
+                                           % (tads, pid))
                         for ads in tads:
                             dastatus = self._ingest_attachment_metadata(
                                 ads, pid, token)
