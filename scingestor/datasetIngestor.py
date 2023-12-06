@@ -1892,6 +1892,10 @@ class DatasetIngestor:
                         else:
                             tads = admt
                 mtm0 = os.path.getmtime(ads)
+                if scan in self.__sc_ingested_map.keys():
+                    get_logger().debug(
+                        "ATTRIBUTE REINGEST check: %s ?? %s"
+                        % (mtm0, self.__sc_ingested_map[scan][-1]))
                 if scan not in self.__sc_ingested_map.keys() \
                    or mtm0 > self.__sc_ingested_map[scan][-1]:
                     reingest_attachment = True
@@ -1925,8 +1929,8 @@ class DatasetIngestor:
                 if not dbstatus:
                     mtmdb = -1
 
-            get_logger().debug("Ingest Attachment %s %s" % (
-                self.__ingest_attachment, tads))
+            get_logger().debug("Ingest Attachment %s %s %s" % (
+                self.__ingest_attachment, tads, reingest_attachment))
             if self.__ingest_attachment:
                 if tads and tads[0] and reingest_attachment:
                     if pid is None and rdss and rdss[0]:
