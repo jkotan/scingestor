@@ -5490,7 +5490,7 @@ optional arguments:
                 nodebug = "\n".join([ee for ee in seri
                                      if "DEBUG :" not in ee])
                 # print(vl)
-                # print(er)
+                print(er)
                 try:
                     # print(er)
                     # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
