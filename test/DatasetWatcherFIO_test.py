@@ -1135,6 +1135,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                     json.loads(self.__server.attachments[0][1]),
                     {
                         'ownerGroup': '99001234-dmgt',
+                        'datasetId': '99001234/myscan_00001',
                         'caption': '',
                         'thumbnail':
                         "data:image/png;base64,i",
@@ -1153,6 +1154,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                     json.loads(self.__server.attachments[1][1]),
                     {
                         'ownerGroup': '99001234-dmgt',
+                        'datasetId': '99001234/myscan_00002',
                         'caption': '',
                         'thumbnail':
                         "data:image/png;base64,i",
@@ -2066,6 +2068,8 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         {
                             'thumbnail': "data:sdfsAAA%s" % i,
                             'caption': '',
+                            'datasetId':
+                            '99001234/myscan_%05i' % (i + 1),
                             'ownerGroup': '99001234-dmgt',
                             'accessGroups': [
                                 '99001234-dmgt', '99001234-clbt',

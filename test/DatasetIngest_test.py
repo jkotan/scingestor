@@ -994,6 +994,7 @@ optional arguments:
                                       'p00dmgt',
                                       'p00staff'],
                      'ownerGroup': '99001234-dmgt',
+                     'datasetId': '99001234/myscan_00002',
                      'caption': '',
                      'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                      'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
@@ -1172,7 +1173,7 @@ optional arguments:
                     '{subdir2}/{sc2}.origdatablock.json\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
                     '{subdir2}/{sc2}.origdatablock.json\n'
-                    'ERROR : DatasetIngestor: \'pid\'\n'
+                    # 'ERROR : DatasetIngestor: \'pid\'\n'
                     'ERROR : DatasetIngestor: No dataset '
                     'pid for the attachment found: '
                     '{subdir2}/{sc2}.attachment.json\n'
@@ -1319,7 +1320,7 @@ optional arguments:
                 shutil.copy(asource, fsubdirname2)
 
                 self.__server.reset()
-                self.__server.error_requests = [10]
+                self.__server.error_requests = [11]
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
@@ -5451,7 +5452,7 @@ optional arguments:
                 # print(vl)
                 # print(er)
                 # import time
-                # time.sleep(0.1)
+                time.sleep(0.1)
                 scfname2 = "%s/%s.scan.json" % (fsubdirname2, 'myscan_00002')
                 odbfname2 = "%s/%s.origdatablock.json" \
                     % (fsubdirname2, 'myscan_00002')
@@ -5554,6 +5555,7 @@ optional arguments:
                         "Datasets: 99001234/myscan_00002\n"
                         "OrigDatablocks: delete 99001234/myscan_00002\n"
                         "OrigDatablocks: 99001234/myscan_00002\n"
+                        "Datasets Attachments: delete 99001234/myscan_00002\n"
                         "Datasets Attachments: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
@@ -5712,6 +5714,7 @@ optional arguments:
                                           'p00dmgt',
                                           'p00staff'],
                          'ownerGroup': '99001234-dmgt',
+                         'datasetId': '99001234/myscan_00002',
                          'caption': '',
                          'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                          'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
@@ -5735,6 +5738,7 @@ optional arguments:
                                           'p00dmgt',
                                           'p00staff'],
                          'caption': '',
+                         'datasetId': '99001234/myscan_00002',
                          'ownerGroup': '99001234-dmgt',
                          'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                          'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
@@ -6095,6 +6099,7 @@ optional arguments:
                                           'p00staff'],
                          'ownerGroup': '99001234-dmgt',
                          'caption': '',
+                         'datasetId': '99001234/myscan_00002',
                          'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                          'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
                          'T92AAAAB3RJTUUH5wMVByY7kGggYgAAARJJREFUGNMFwU1Kw0AUA'
@@ -6466,6 +6471,7 @@ optional arguments:
                                           'p00staff'],
                          'ownerGroup': '99001234-dmgt',
                          'caption': '',
+                         'datasetId': '99001234/myscan_00002',
                          'thumbnail': 'data:image/png;base64,iVBORw0KGgoAAAANS'
                          'UhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4p'
                          'T92AAAAB3RJTUUH5wMVByY7kGggYgAAARJJREFUGNMFwU1Kw0AUA'

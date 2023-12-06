@@ -549,7 +549,7 @@ class BeamtimeWatcher:
                         raise KeyboardInterrupt()
                     elif self._test_interrupt == 2:
                         signal.pthread_kill(
-                            threading.currentThread().ident, signal.SIGTERM)
+                            threading.current_thread().ident, signal.SIGTERM)
         except KeyboardInterrupt:
             get_logger().warning('Keyboard interrupt (SIGINT) received...')
             self.stop()
