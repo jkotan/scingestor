@@ -5555,7 +5555,8 @@ optional arguments:
                         "Datasets: 99001234/myscan_00002\n"
                         "OrigDatablocks: delete 99001234/myscan_00002\n"
                         "OrigDatablocks: 99001234/myscan_00002\n"
-                        # "Datasets Attachments: delete 99001234/myscan_00002\n"
+                        # "Datasets Attachments: "
+                        # "delete 99001234/myscan_00002\n"
                         "Datasets Attachments: 99001234/myscan_00002\n",
                         vl)
                     self.assertEqual(len(self.__server.userslogin), 2)
