@@ -1139,11 +1139,13 @@ class DatasetIngestor:
             npid = npre + "/".join(spid)
             if len(spid) > 0:
                 ipid = npre + "/".join(spid)
+            self.__headers["Authorization"] = "Bearer {}".format(token)
             resexists = requests.get(
                 "{url}/{pid}"
                 .format(
                     url=self.__dataseturl,
                     pid=(npre + npid.replace("/", "%2F"))),
+                headers=self.__headers,
                 params={"access_token": token})
             if resexists.ok:
                 pexist = bool(resexists.content)
@@ -1219,11 +1221,13 @@ class DatasetIngestor:
                 'DatasetIngestor: Check if dataset exists: %s' % (pid))
             checking = True
             counter = 0
+            self.__headers["Authorization"] = "Bearer {}".format(token)
             while checking:
                 resexists = requests.get(
                     "{url}/{pid}".format(
                         url=self.__dataseturl,
                         pid=pid.replace("/", "%2F")),
+                    headers=self.__headers,
                     params={"access_token": token}
                 )
                 if hasattr(resexists, "content"):
@@ -1267,6 +1271,7 @@ class DatasetIngestor:
                         "{url}/{pid}".format(
                             url=self.__dataseturl,
                             pid=pid.replace("/", "%2F")),
+                        headers=self.__headers,
                         params={"access_token": token}
                     )
                     if resds.ok:
@@ -1400,12 +1405,14 @@ class DatasetIngestor:
         :type token: :obj:`str`
         """
         try:
+            self.__headers["Authorization"] = "Bearer {}".format(token)
             response = requests.delete(
                 "{url}/{pid}"
                 .format(
                     url=self.__datablockurl,
                     pid=did.replace("/", "%2F")),
                 params={"access_token": token},
+                headers=self.__headers,
             )
             if response.ok:
                 return True
@@ -1563,6 +1570,43 @@ class DatasetIngestor:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
         return ""
+
+    def _update_attachments(self, tads, pid, token):
+        """ delete attachment with given dataset pid
+
+        :param pid: dataset id
+        :type pid: :obj:`str`
+        :param token: ingestor token
+        :type token: :obj:`str`
+        :returns: dataset id
+        :rtype: :obj:`str`
+        """
+        dastatus = ""
+        try:
+            datasetid = "%s%s" % (self.__pidprefix, pid)
+            # get_logger().info("DA %s %s" % (pid, datasetid))
+            odbs = self._get_attachments(datasetid, token) or []
+            # get_logger().info("DA2 %s %s" % (pid, odbs))
+
+            for fads in tads:
+                with open(fads) as fl:
+                    smt = fl.read()
+                    ads = json.loads(smt)
+                if "thumbnail" in ads:
+                    for odb in odbs:
+                        if "thumbnail" in odb and \
+                           odb["thumbnail"] == ads["thumbnail"]:
+                            break
+                    else:
+                        dastatus = self._ingest_attachment_metadata(
+                            fads, pid, token)
+                        get_logger().info(
+                            "DatasetIngestor: Ingest attachment: %s"
+                            % (fads))
+        except Exception as e:
+            get_logger().error(
+                'DatasetIngestor: %s' % (str(e)))
+        return dastatus
 
     def _ingest_origdatablock_metadata(self, metafile, pid, token):
         """ ingest origdatablock metadata
@@ -1942,15 +1986,17 @@ class DatasetIngestor:
                     else:
                         get_logger().debug("Attachment PID  %s %s"
                                            % (tads, pid))
-                        self._delete_attachments(pid, token)
-                        get_logger().debug("Attachment LOOP %s %s"
-                                           % (tads, pid))
-                        for ads in tads:
-                            dastatus = self._ingest_attachment_metadata(
-                                ads, pid, token)
-                            get_logger().info(
-                                "DatasetIngestor: Ingest attachment: %s"
-                                % (ads))
+                        if self.__strategy in [UpdateStrategy.PATCH,
+                                               UpdateStrategy.MIXED]:
+                            dastatus = self._update_attachments(tads, pid, token)
+                        else:
+                            self._delete_attachments(pid, token)
+                            for ads in tads:
+                                dastatus = self._ingest_attachment_metadata(
+                                    ads, pid, token)
+                                get_logger().info(
+                                    "DatasetIngestor: Ingest attachment: %s"
+                                    % (ads))
                         if not dastatus:
                             mtmda = -1
         mtmda = 0
