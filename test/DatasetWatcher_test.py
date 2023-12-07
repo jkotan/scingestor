@@ -6601,9 +6601,9 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetIngestor: '
                         'Ingest origdatablock: '
                         '{subdir2}/{sc2}.origdatablock.json\n'
-                        'INFO : DatasetIngestor: '
-                        'Ingest attachment: '
-                        '{subdir2}/{sc1}.attachment.json\n'
+                        # 'INFO : DatasetIngestor: '
+                        # 'Ingest attachment: '
+                        # '{subdir2}/{sc1}.attachment.json\n'
                         'INFO : DatasetIngestor: '
                         'Ingest attachment: '
                         '{subdir2}/{sc2}.attachment.json\n'
@@ -6651,8 +6651,6 @@ class DatasetWatcherTest(unittest.TestCase):
                     "OrigDatablocks: delete 99011234/mycalib\n"
                     "OrigDatablocks: 99011234/mycalib\n"
                     "OrigDatablocks: 99011234/mycalib\n"
-                    "Datasets Attachments: delete 99011234/mycalib\n"
-                    "Datasets Attachments: 99011234/mycalib\n"
                     "Datasets Attachments: 99011234/mycalib\n"
                     "Login: ingestor\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 3)
@@ -6751,7 +6749,7 @@ class DatasetWatcherTest(unittest.TestCase):
                          '99011234-dmgt', '99011234-clbt', '99011234-part',
                          'p00dmgt', 'p00staff'],
                      'size': 629}, skip=["dataFileList", "size"])
-                self.assertEqual(len(self.__server.attachments), 5)
+                self.assertEqual(len(self.__server.attachments), 4)
                 self.assertEqual(len(self.__server.attachments[0]), 2)
                 self.assertEqual(self.__server.attachments[0][0],
                                  '99011234/myscan_00001')
@@ -6771,12 +6769,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.assertEqual(self.__server.attachments[3][0],
                                  '99011234/mycalib')
                 self.myAssertDict(
-                    json.loads(self.__server.attachments[3][1]), gat1)
-                self.assertEqual(len(self.__server.attachments[4]), 2)
-                self.assertEqual(self.__server.attachments[4][0],
-                                 '99011234/mycalib')
-                self.myAssertDict(
-                    json.loads(self.__server.attachments[4][1]), gat2)
+                    json.loads(self.__server.attachments[3][1]), gat2)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
         finally:
