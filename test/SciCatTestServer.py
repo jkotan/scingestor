@@ -342,6 +342,13 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     if pid in self.server.pid_dataset.keys():
                         self.server.pid_dataset.pop(pid)
                         print("Datasets: delete %s" % pid)
+                elif len(dspath) == 4 and dspath[3].lower() == "attachments":
+                    aid = dspath[4].replace("%2F", "/")
+                    # print("IDA DELETE %s" % self.server.id_attachment)
+                    if aid in self.server.id_attachment.keys():
+                        dt = self.server.id_attachment.pop(aid)
+                        print("Datasets Attachments: delete %s"
+                              % json.loads(dt)['datasetId'])
             elif len(dspath) > 2 and dspath[1].lower() == "proposals":
                 pid = dspath[2].replace("%2F", "/")
                 if len(dspath) == 3:
@@ -354,15 +361,6 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     if pid in self.server.id_origdatablock.keys():
                         dt = self.server.id_origdatablock.pop(pid)
                         print("OrigDatablocks: delete %s"
-                              % json.loads(dt)['datasetId'])
-            elif len(dspath) > 2 and dspath[1].lower() == "attachments":
-                # print("PATH", dspath)
-                pid = dspath[2].replace("%2F", "/")
-                if len(dspath) == 3:
-                    # print("IDA DELETE %s" % self.server.id_attachment)
-                    if pid in self.server.id_attachment.keys():
-                        dt = self.server.id_attachment.pop(pid)
-                        print("Datasets Attachments: delete %s"
                               % json.loads(dt)['datasetId'])
             resp = 200
         except Exception as e:

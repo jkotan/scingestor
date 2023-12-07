@@ -1448,24 +1448,24 @@ class DatasetIngestor:
                 'DatasetIngestor: %s' % (str(e)))
         return None
 
-    def _get_delete_attachment(self, did, token):
+    def _get_delete_attachment(self, datasetid, aid, token):
         """ ingets attachment
 
-        :param did: attachment id
-        :type did: :obj:`str`
+        :param datasetid: dataset id
+        :type datasetid: :obj:`str`
+        :param aid: attachment id
+        :type aid: :obj:`str`
         :param token: ingestor token
         :type token: :obj:`str`
         """
         try:
             self.__headers["Authorization"] = "Bearer {}".format(token)
             response = requests.delete(
-                "{url}/{pid}"
-                .format(
-                    url=(self.__scicat_url + "Attachments"),
-                    pid=did.replace("/", "%2F")),
+                self.__attachmenturl.format(
+                    pid=datasetid.replace("/", "%2F"))
+                + "/{aid}".format(aid=aid.replace("/", "%2F")),
                 params={"access_token": token},
-                headers=self.__headers
-            )
+                headers=self.__headers)
             if response.ok:
                 return True
             else:
@@ -1541,7 +1541,7 @@ class DatasetIngestor:
             odbs = self._get_origdatablocks(datasetid, token) or []
             for odb in odbs:
                 if "id" in odb:
-                    self._get_delete_origdatablock(odb["id"], token)
+                    self._get_delete_origdatablock(datasetid, odb["id"], token)
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
@@ -1565,7 +1565,7 @@ class DatasetIngestor:
             for odb in odbs:
                 if "id" in odb:
                     # get_logger().info("DA3 %s %s" % (odb["id"], odb))
-                    self._get_delete_attachment(odb["id"], token)
+                    self._get_delete_attachment(datasetid, odb["id"], token)
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
@@ -1587,7 +1587,7 @@ class DatasetIngestor:
             # get_logger().info("DA %s %s" % (pid, datasetid))
             odbs = self._get_attachments(datasetid, token) or []
             # get_logger().info("DA2 %s %s" % (pid, odbs))
-
+            found = []
             for fads in tads:
                 with open(fads) as fl:
                     smt = fl.read()
@@ -1596,6 +1596,8 @@ class DatasetIngestor:
                     for odb in odbs:
                         if "thumbnail" in odb and \
                            odb["thumbnail"] == ads["thumbnail"]:
+                            if "id" in odb:
+                                found.append(odb["id"])
                             break
                     else:
                         dastatus = self._ingest_attachment_metadata(
@@ -1603,6 +1605,10 @@ class DatasetIngestor:
                         get_logger().info(
                             "DatasetIngestor: Ingest attachment: %s"
                             % (fads))
+            for odb in odbs:
+                if "id" in odb and odb["id"] not in found:
+                    self._get_delete_attachment(datasetid, odb["id"], token)
+
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
@@ -1988,7 +1994,8 @@ class DatasetIngestor:
                                            % (tads, pid))
                         if self.__strategy in [UpdateStrategy.PATCH,
                                                UpdateStrategy.MIXED]:
-                            dastatus = self._update_attachments(tads, pid, token)
+                            dastatus = self._update_attachments(
+                                tads, pid, token)
                         else:
                             self._delete_attachments(pid, token)
                             for ads in tads:
