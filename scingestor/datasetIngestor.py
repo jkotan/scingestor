@@ -1541,7 +1541,7 @@ class DatasetIngestor:
             odbs = self._get_origdatablocks(datasetid, token) or []
             for odb in odbs:
                 if "id" in odb:
-                    self._get_delete_origdatablock(datasetid, odb["id"], token)
+                    self._get_delete_origdatablock(odb["id"], token)
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
