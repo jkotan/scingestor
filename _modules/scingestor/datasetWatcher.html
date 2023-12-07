@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>scingestor.datasetWatcher &#8212; SciCat Dataset Ingestor 0.9.0 documentation</title>
+    <title>scingestor.datasetWatcher &#8212; SciCat Dataset Ingestor 0.10.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -226,18 +226,24 @@
                 <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">get_token</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">token</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
+                        <span class="n">sscan</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">scan</span> <span class="ow">and</span> <span class="n">scan</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;__command__ &quot;</span><span class="p">):</span>
-                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executecommands</span><span class="p">:</span>
-                                <span class="n">sscan</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
-                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                                    <span class="n">cmd</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                                    <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">stop_measurement</span><span class="p">()</span>
-                                    <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span>
-                                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-                                            <span class="n">groupname</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">start_measurement</span><span class="p">(</span>
-                                            <span class="n">groupname</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executecommands</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                                <span class="n">cmd</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                                <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">stop_measurement</span><span class="p">()</span>
+                                <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                                        <span class="n">groupname</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">start_measurement</span><span class="p">(</span>
+                                        <span class="n">groupname</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">reingest</span><span class="p">(</span>
+                                    <span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">notmp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                                <span class="k">continue</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">ingest</span><span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">clear_waiting_datasets</span><span class="p">()</span>
@@ -334,18 +340,24 @@
                         <span class="k">continue</span>
                     <span class="k">if</span> <span class="n">token</span><span class="p">:</span>
                         <span class="k">for</span> <span class="n">scan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">waiting_datasets</span><span class="p">():</span>
+                            <span class="n">sscan</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
                             <span class="k">if</span> <span class="n">scan</span> <span class="ow">and</span> <span class="n">scan</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;__command__ &quot;</span><span class="p">):</span>
-                                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executecommands</span><span class="p">:</span>
-                                    <span class="n">sscan</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
-                                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                                        <span class="n">cmd</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                                        <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">stop_measurement</span><span class="p">()</span>
-                                        <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span>
-                                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-                                                <span class="n">groupname</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">start_measurement</span><span class="p">(</span>
-                                                <span class="n">groupname</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__executecommands</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                                    <span class="n">cmd</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                                    <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">stop_measurement</span><span class="p">()</span>
+                                    <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span>
+                                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                                            <span class="n">groupname</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">start_measurement</span><span class="p">(</span>
+                                            <span class="n">groupname</span><span class="p">)</span>
+                            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                                <span class="k">try</span><span class="p">:</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">reingest</span><span class="p">(</span>
+                                        <span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">notmp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                                    <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                                    <span class="k">continue</span>
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="k">try</span><span class="p">:</span>
                                     <span class="bp">self</span><span class="o">.</span><span class="n">__ingestor</span><span class="o">.</span><span class="n">ingest</span><span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
