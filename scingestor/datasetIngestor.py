@@ -1965,7 +1965,8 @@ class DatasetIngestor:
                     "DatasetIngestor: Ingest dataset: %s" % (rds))
                 oldpid = self._get_pid(rds)
                 if pid and oldpid != pid:
-                    odb = self._generate_origdatablock_metadata(scan)
+                    if not olst:
+                        odb = self._generate_origdatablock_metadata(scan)
                     reingest_origdatablock = True
             if todb and todb[0] and reingest_origdatablock:
                 if pid is None and rdss and rdss[0]:
