@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>scingestor.datasetIngestor &#8212; SciCat Dataset Ingestor 0.10.0 documentation</title>
+    <title>scingestor.datasetIngestor &#8212; SciCat Dataset Ingestor 0.10.1 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -1995,7 +1995,8 @@
                     <span class="s2">&quot;DatasetIngestor: Ingest dataset: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rds</span><span class="p">))</span>
                 <span class="n">oldpid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pid</span><span class="p">(</span><span class="n">rds</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">pid</span> <span class="ow">and</span> <span class="n">oldpid</span> <span class="o">!=</span> <span class="n">pid</span><span class="p">:</span>
-                    <span class="n">odb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_origdatablock_metadata</span><span class="p">(</span><span class="n">scan</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">olst</span><span class="p">:</span>
+                        <span class="n">odb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_origdatablock_metadata</span><span class="p">(</span><span class="n">scan</span><span class="p">)</span>
                     <span class="n">reingest_origdatablock</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">if</span> <span class="n">todb</span> <span class="ow">and</span> <span class="n">todb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">reingest_origdatablock</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">pid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rdss</span> <span class="ow">and</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
