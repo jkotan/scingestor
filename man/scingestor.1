@@ -1,5 +1,8 @@
 .\" Man page generated from reStructuredText.
 .
+.TH "SCINGESTOR" "1" "Dec 12, 2023" "0.10" "SciCat Dataset Ingestor"
+.SH NAME
+scingestor \- SciCat Dataset Ingestor Documentation
 .
 .nr rst2man-indent-level 0
 .
@@ -27,9 +30,6 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "SCINGESTOR" "1" "Nov 24, 2023" "0.9" "SciCat Dataset Ingestor"
-.SH NAME
-scingestor \- SciCat Dataset Ingestor Documentation
 .sp
 \fI\%\fP
 \fI\%\fP
@@ -57,29 +57,29 @@ scicat_dataset_ingestor \-c ~/.scingestor.yaml
 The configuration written in YAML can contain the following variables
 .INDENT 0.0
 .IP \(bu 2
-\fBscicat_url\fP \fI(str)\fP , default: \fB\(dqhttp://localhost:3000/api/v3\(dq\fP
+\fBscicat_url\fP \fI(str)\fP , default: \fB"http://localhost:3000/api/v3"\fP
 .IP \(bu 2
 \fBingestor_credential_file\fP \fI(str)\fP , default: \fBNone\fP
 .IP \(bu 2
 \fBbeamtime_dirs\fP \fI(list<str>)\fP , default: \fB[]\fP
 .IP \(bu 2
-\fBbeamtime_base_dir\fP \fI(str)\fP , default: \fB\(dq\(dq\fP
+\fBbeamtime_base_dir\fP \fI(str)\fP , default: \fB""\fP
 .IP \(bu 2
-\fBingestor_var_dir\fP \fI(str)\fP , default: \fB\(dq\(dq\fP
+\fBingestor_var_dir\fP \fI(str)\fP , default: \fB""\fP
 .IP \(bu 2
-\fBingestor_username\fP \fI(str)\fP , default: \fB\(dqingestor\(dq\fP
+\fBingestor_username\fP \fI(str)\fP , default: \fB"ingestor"\fP
 .IP \(bu 2
-\fBdataset_pid_prefix\fP \fI(str)\fP , default: \fB\(dq\(dq\fP
+\fBdataset_pid_prefix\fP \fI(str)\fP , default: \fB""\fP
 .IP \(bu 2
-\fBdataset_update_strategy\fP (\fB\(dqno\(dq\fP, \fB\(dqpatch\(dq\fP, \fB\(dqcreate\(dq\fP, \fB\(dqmixed\(dq\fP) , default: \fB\(dqpatch\(dq\fP
+\fBdataset_update_strategy\fP (\fB"no"\fP, \fB"patch"\fP, \fB"create"\fP, \fB"mixed"\fP) , default: \fB"patch"\fP
 .IP \(bu 2
 \fBrelative_path_in_datablock\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
-\fBscandir_blacklist\fP \fI(list<str>)\fP , default: \fB[\(dq/gpfs/current/scratch_bl\(dq, \(dq/gpfs/current/processed\(dq, \(dq/gpfs/current/shared\(dq]\fP
+\fBscandir_blacklist\fP \fI(list<str>)\fP , default: \fB["/gpfs/current/scratch_bl", "/gpfs/current/processed", "/gpfs/current/shared"]\fP
 .IP \(bu 2
 \fBbeamtimeid_blacklist_file\fP \fI(str)\fP , default: \fBNone\fP
 .IP \(bu 2
-\fBbeamtime_type_blacklist\fP \fI(list<str>)\fP , default: \fB[\(dqP\(dq]\fP
+\fBbeamtime_type_blacklist\fP \fI(list<str>)\fP , default: \fB["P"]\fP
 .IP \(bu 2
 \fBchmod_json_files\fP \fI(str)\fP , default: \fBNone\fP
 .IP \(bu 2
@@ -89,39 +89,39 @@ The configuration written in YAML can contain the following variables
 .IP \(bu 2
 \fBmax_oned_size\fP \fI(int)\fP , default: \fBNone\fP
 .IP \(bu 2
-\fBscan_metadata_postfix\fP \fI(str)\fP , default: \fB\(dq.scan.json\(dq\fP
+\fBscan_metadata_postfix\fP \fI(str)\fP , default: \fB".scan.json"\fP
 .IP \(bu 2
-\fBdatablock_metadata_postfix\fP \fI(str)\fP , default: \fB\(dq.origdatablock.json\(dq\fP
+\fBdatablock_metadata_postfix\fP \fI(str)\fP , default: \fB".origdatablock.json"\fP
 .IP \(bu 2
-\fBattachment_metadata_postfix\fP \fI(str)\fP , default: \fB\(dq.attachment.json\(dq\fP
+\fBattachment_metadata_postfix\fP \fI(str)\fP , default: \fB".attachment.json"\fP
 .IP \(bu 2
 \fBmetadata_in_var_dir\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
 \fBuse_corepath_as_scandir\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
-\fBbeamtime_filename_postfix\fP \fI(str)\fP , default: \fB\(dqbeamtime\-metadata\-\(dq\fP
+\fBbeamtime_filename_postfix\fP \fI(str)\fP , default: \fB"beamtime\-metadata\-"\fP
 .IP \(bu 2
-\fBbeamtime_filename_prefix\fP \fI(str)\fP , default: \fB\(dq.json\(dq\fP
+\fBbeamtime_filename_prefix\fP \fI(str)\fP , default: \fB".json"\fP
 .IP \(bu 2
-\fBdatasets_filename_pattern\fP \fI(str)\fP , default: \fB\(dqscicat\-datasets\-{beamtimeid}.lst\(dq\fP
+\fBdatasets_filename_pattern\fP \fI(str)\fP , default: \fB"scicat\-datasets\-{beamtimeid}.lst"\fP
 .IP \(bu 2
-\fBingested_datasets_filename_pattern\fP \fI(str)\fP , default: \fB\(dqscicat\-ingested\-datasets\-{beamtimeid}.lst\(dq\fP
+\fBingested_datasets_filename_pattern\fP \fI(str)\fP , default: \fB"scicat\-ingested\-datasets\-{beamtimeid}.lst"\fP
 .IP \(bu 2
-\fBfile_dataset_metadata_generator\fP \fI(str)\fP , default: \fB\(dqnxsfileinfo metadata \-k4 \-o {metapath}/{scanname}{scanpostfix}  \-b {beamtimefile} \-p {beamtimeid}/{scanname}  \-w {ownergroup} \-c {accessgroups} {masterfile}\fP
+\fBfile_dataset_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo metadata \-k4 \-o {metapath}/{scanname}{scanpostfix}  \-b {beamtimefile} \-p {beamtimeid}/{scanname}  \-w {ownergroup} \-c {accessgroups} {masterfile}\fP
 .IP \(bu 2
-\fBdataset_metadata_generator\fP \fI(str)\fP , default: \fB\(dqnxsfileinfo metadata \-k4 \-o {metapath}/{scanname}{scanpostfix}  \-c {accessgroups} \-w {ownergroup} \-b {beamtimefile} \-p {beamtimeid}/{scanname}\(dq\fP
+\fBdataset_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo metadata \-k4 \-o {metapath}/{scanname}{scanpostfix}  \-c {accessgroups} \-w {ownergroup} \-b {beamtimefile} \-p {beamtimeid}/{scanname}"\fP
 .IP \(bu 2
-\fBdatablock_metadata_generator\fP \fI(str)\fP , default: \fB\(dqnxsfileinfo origdatablock  \-s *.pyc,*{datablockpostfix},*{scanpostfix},*~  \-p {doiprefix}/{beamtimeid}/{scanname}  \-w {ownergroup} \-c {accessgroups} \-o {metapath}/{scanname}{datablockpostfix} \(dq\fP
+\fBdatablock_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo origdatablock  \-s *.pyc,*{datablockpostfix},*{scanpostfix},*~  \-p {doiprefix}/{beamtimeid}/{scanname}  \-w {ownergroup} \-c {accessgroups} \-o {metapath}/{scanname}{datablockpostfix} "\fP
 .IP \(bu 2
-\fBdatablock_metadata_stream_generator\fP \fI(str)\fP , default: \fB\(dqnxsfileinfo origdatablock  \-s *.pyc,*{datablockpostfix},*{scanpostfix},*~  \-w {ownergroup} \-c {accessgroups} \-p {doiprefix}/{beamtimeid}/{scanname} \(dq\fP
+\fBdatablock_metadata_stream_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo origdatablock  \-s *.pyc,*{datablockpostfix},*{scanpostfix},*~  \-w {ownergroup} \-c {accessgroups} \-p {doiprefix}/{beamtimeid}/{scanname} "\fP
 .IP \(bu 2
-\fBdatablock_metadata_generator_scanpath_postfix\fP \fI(str)\fP , default: \fB\(dq {scanpath}/{scanname} \(dq\fP
+\fBdatablock_metadata_generator_scanpath_postfix\fP \fI(str)\fP , default: \fB" {scanpath}/{scanname} "\fP
 .IP \(bu 2
-\fBattachment_metadata_generator\fP \fI(str)\fP , default: \fB\(dqnxsfileinfo attachment  \-w {ownergroup} \-c {accessgroups} \-o {metapath}/{scanname}{attachmentpostfix} {plotfile} \(dq\fP
+\fBattachment_metadata_generator\fP \fI(str)\fP , default: \fB"nxsfileinfo attachment  \-w {ownergroup} \-c {accessgroups} \-o {metapath}/{scanname}{attachmentpostfix} {plotfile} "\fP
 .IP \(bu 2
-\fBmetadata_generated_callback\fP \fI(str)\fP , default: \fB\(dqnxsfileinfo groupmetadata  {lastmeasurement} \-m {metapath}/{scanname}{scanpostfix} \-d {metapath}/{scanname}{datablockpostfix} \-a {metapath}/{scanname}{attachmentpostfix} \-p {beamtimeid}/{lastmeasurement} \-f \-k4 \(dq\fP
+\fBmetadata_generated_callback\fP \fI(str)\fP , default: \fB"nxsfileinfo groupmetadata  {lastmeasurement} \-m {metapath}/{scanname}{scanpostfix} \-d {metapath}/{scanname}{datablockpostfix} \-a {metapath}/{scanname}{attachmentpostfix} \-p {beamtimeid}/{lastmeasurement} \-f \-k4 "\fP
 .IP \(bu 2
-\fBmetadata_group_map_file\fP \fI(str)\fP , default: \fB\(dq\(dq\fP
+\fBmetadata_group_map_file\fP \fI(str)\fP , default: \fB""\fP
 .IP \(bu 2
 \fBraw_metadata_callback\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
@@ -133,41 +133,41 @@ The configuration written in YAML can contain the following variables
 .IP \(bu 2
 \fBcall_metadata_generated_callback\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
-\fBmetadata_group_map_file_generator_switch\fP \fI(str)\fP , default: \fB\(dq \-\-group\-map\-file {groupmapfile} \(dq\fP
+\fBmetadata_group_map_file_generator_switch\fP \fI(str)\fP , default: \fB" \-\-group\-map\-file {groupmapfile} "\fP
 .IP \(bu 2
-\fBraw_metadata_callback_switch\fP \fI(str)\fP , default: \fB\(dq \-\-raw \(dq\fP
+\fBraw_metadata_callback_switch\fP \fI(str)\fP , default: \fB" \-\-raw "\fP
 .IP \(bu 2
 \fBexecute_commands\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
-\fBplot_file_extension_list\fP \fI(list<str>)\fP , default: \fB[\(dqpng\(dq, \(dqnxs\(dq, \(dqh5\(dq, \(dqndf\(dq, \(dqnx\(dq, \(dqfio\(dq]\fP
+\fBplot_file_extension_list\fP \fI(list<str>)\fP , default: \fB["png", "nxs", "h5", "ndf", "nx", "fio"]\fP
 .IP \(bu 2
-\fBmaster_file_extension_list\fP \fI(list<str>)\fP , default: \fB[\(dqnxs\(dq, \(dqh5\(dq, \(dqndf\(dq, \(dqnx\(dq, \(dqfio\(dq]\fP
+\fBmaster_file_extension_list\fP \fI(list<str>)\fP , default: \fB["nxs", "h5", "ndf", "nx", "fio"]\fP
 .IP \(bu 2
-\fBchmod_generator_switch\fP \fI(str)\fP , default: \fB\(dq \-x {chmod} \(dq\fP
+\fBchmod_generator_switch\fP \fI(str)\fP , default: \fB" \-x {chmod} "\fP
 .IP \(bu 2
-\fBrelative_path_generator_switch\fP \fI(str)\fP , default: \fB\(dq \-r {relpath} \(dq\fP
+\fBrelative_path_generator_switch\fP \fI(str)\fP , default: \fB" \-r {relpath} "\fP
 .IP \(bu 2
-\fBoned_dataset_generator_switch\fP \fI(str)\fP , default: \fB\(dq \-\-oned \(dq\fP
+\fBoned_dataset_generator_switch\fP \fI(str)\fP , default: \fB" \-\-oned "\fP
 .IP \(bu 2
-\fBmax_oned_dataset_generator_switch\fP \fI(str)\fP , default: \fB\(dq \-\-max\-oned\-size {maxonedsize} \(dq\fP
+\fBmax_oned_dataset_generator_switch\fP \fI(str)\fP , default: \fB" \-\-max\-oned\-size {maxonedsize} "\fP
 .IP \(bu 2
-\fBoverride_attachment_signals_generator_switch\fP \fI(bool)\fP , default: \fB\(dq \-\-override \(dq\fP
+\fBoverride_attachment_signals_generator_switch\fP \fI(bool)\fP , default: \fB" \-\-override "\fP
 .IP \(bu 2
-\fBhidden_attributes_generator_switch\fP \fI(str)\fP , default: \fB\(dq \-n {hiddenattributes} \(dq\fP
+\fBhidden_attributes_generator_switch\fP \fI(str)\fP , default: \fB" \-n {hiddenattributes} "\fP
 .IP \(bu 2
-\fBhidden_attributes\fP \fI(str)\fP , default: \fB\(dqnexdatas_source,nexdatas_strategy,units\(dq\fP
+\fBhidden_attributes\fP \fI(str)\fP , default: \fB"nexdatas_source,nexdatas_strategy,units"\fP
 .IP \(bu 2
-\fBattachment_signals_generator_switch\fP \fI(str)\fP , default: \fB\(dq \-s {signals} \(dq\fP
+\fBattachment_signals_generator_switch\fP \fI(str)\fP , default: \fB" \-s {signals} "\fP
 .IP \(bu 2
-\fBattachment_axes_generator_switch\fP \fI(str)\fP , default: \fB\(dq \-e {axes} \(dq\fP
+\fBattachment_axes_generator_switch\fP \fI(str)\fP , default: \fB" \-e {axes} "\fP
 .IP \(bu 2
-\fBattachment_frame_generator_switch\fP \fI(str)\fP , default: \fB\(dq \-m {frame} \(dq\fP
+\fBattachment_frame_generator_switch\fP \fI(str)\fP , default: \fB" \-m {frame} "\fP
 .IP \(bu 2
-\fBattachment_signal_names\fP \fI(str)\fP , default: \fB\(dq\(dq\fP
+\fBattachment_signal_names\fP \fI(str)\fP , default: \fB""\fP
 .IP \(bu 2
-\fBattachment_axes_names\fP \fI(str)\fP , default: \fB\(dq\(dq\fP
+\fBattachment_axes_names\fP \fI(str)\fP , default: \fB""\fP
 .IP \(bu 2
-\fBattachment_image_frame_number\fP \fI(str)\fP , default: \fB\(dq\(dq\fP
+\fBattachment_image_frame_number\fP \fI(str)\fP , default: \fB""\fP
 .IP \(bu 2
 \fBingest_dataset_attachment\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
@@ -179,13 +179,13 @@ The configuration written in YAML can contain the following variables
 .IP \(bu 2
 \fBlog_generator_commands\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
-\fBadd_empty_units_generator_switch\fP \fI(str)\fP , default: \fB\(dq \-\-add\-empty\-units \(dq\fP
+\fBadd_empty_units_generator_switch\fP \fI(str)\fP , default: \fB" \-\-add\-empty\-units "\fP
 .IP \(bu 2
 \fBadd_empty_units\fP \fI(bool)\fP , default: \fBTrue\fP
 .IP \(bu 2
 \fBmetadata_copy_map_file\fP \fI(str)\fP , default: \fBNone\fP
 .IP \(bu 2
-\fBmetadata_copy_map_file_generator_switch\fP \fI(str)\fP , default: \fB\(dq \-\-copy\-map\-file {copymapfile} \(dq\fP
+\fBmetadata_copy_map_file_generator_switch\fP \fI(str)\fP , default: \fB" \-\-copy\-map\-file {copymapfile} "\fP
 .IP \(bu 2
 \fBinotify_timeout\fP \fI(float)\fP , default: \fB0.1\fP
 .IP \(bu 2
@@ -199,21 +199,21 @@ The configuration written in YAML can contain the following variables
 .IP \(bu 2
 \fBrecheck_beamtime_file_interval\fP \fI(int)\fP , default: \fB1000\fP
 .IP \(bu 2
-\fBrequest_headers\fP \fI(dict<str,str>)\fP , default: \fB{\(dqContent\-Type\(dq: \(dqapplication/json\(dq, \(dqAccept\(dq: \(dqapplication/json\(dq}\fP
+\fBrequest_headers\fP \fI(dict<str,str>)\fP , default: \fB{"Content\-Type": "application/json", "Accept": "application/json"}\fP
 .IP \(bu 2
-\fBscicat_datasets_path\fP \fI(str)\fP , default: \fB\(dqDatasets\(dq\fP
+\fBscicat_datasets_path\fP \fI(str)\fP , default: \fB"Datasets"\fP
 .IP \(bu 2
-\fBscicat_proposals_path\fP \fI(str)\fP , default: \fB\(dqProposals\(dq\fP
+\fBscicat_proposals_path\fP \fI(str)\fP , default: \fB"Proposals"\fP
 .IP \(bu 2
-\fBscicat_datablocks_path\fP \fI(str)\fP, default: \fB\(dqOrigDatablocks\(dq\fP
+\fBscicat_datablocks_path\fP \fI(str)\fP, default: \fB"OrigDatablocks"\fP
 .IP \(bu 2
-\fBscicat_users_login_path\fP \fI(str)\fP, default: \fB\(dqUsers/login\(dq\fP
+\fBscicat_users_login_path\fP \fI(str)\fP, default: \fB"Users/login"\fP
 .IP \(bu 2
-\fBscicat_attachments_path\fP \fI(str)\fP, default: \fB\(dqDatasets/{pid}/Attachments\(dq\fP
+\fBscicat_attachments_path\fP \fI(str)\fP, default: \fB"Datasets/{pid}/Attachments"\fP
 .IP \(bu 2
 \fBowner_access_groups_from_proposal\fP \fI(bool)\fP, default: \fBFalse\fP
 .IP \(bu 2
-\fBmetadata_keywords_without_checks\fP \fI(list<str>)\fP, default: \fB[\(dqtechniques\(dq, \(dqclassification\(dq, \(dqcreatedBy\(dq, \(dqupdatedBy\(dq, \(dqdatasetlifecycle\(dq, \(dqnumberOfFiles\(dq, \(dqsize\(dq, \(dqcreatedAt\(dq, \(dqupdatedAt\(dq, \(dqhistory\(dq, \(dqcreationTime\(dq, \(dqversion\(dq, \(dqscientificMetadata\(dq, \(dqendTime\(dq]\fP
+\fBmetadata_keywords_without_checks\fP \fI(list<str>)\fP, default: \fB["techniques", "classification", "createdBy", "updatedBy", "datasetlifecycle", "numberOfFiles", "size", "createdAt", "updatedAt", "history", "creationTime", "version", "scientificMetadata", "endTime"]\fP
 .UNINDENT
 .sp
 e.g.
@@ -223,22 +223,22 @@ e.g.
 .nf
 .ft C
 beamtime_dirs:
-  \- \(dq{homepath}/gpfs/current\(dq
-  \- \(dq{homepath}/gpfs/commissioning\(dq
+  \- "{homepath}/gpfs/current"
+  \- "{homepath}/gpfs/commissioning"
 scicat_url: http://localhost:3000/api/v3
-ingestor_credential_file: \(dq{homepath}/gpfs/pwd\(dq
+ingestor_credential_file: "{homepath}/gpfs/pwd"
 .ft P
 .fi
 .UNINDENT
 .UNINDENT
 .SS Pattern keywords for configuration variables
 .sp
-The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_var_dir\fP can contain the \fI{beamtimeid}\fP and \fI{hostname}\fP keywords,  e.g. \fB\(dqscicat\-ingested\-datasets\-{beamtimeid}.lst\(dq\fP or \fB\(dqscicat\-ingested\-datasets\-{hostname}\-{beamtimeid}.lst\(dq\fP  which is instantiated during the ingestor execution.
+The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_var_dir\fP can contain the \fI{beamtimeid}\fP and \fI{hostname}\fP keywords,  e.g. \fB"scicat\-ingested\-datasets\-{beamtimeid}.lst"\fP or \fB"scicat\-ingested\-datasets\-{hostname}\-{beamtimeid}.lst"\fP  which is instantiated during the ingestor execution.
 .sp
-Similarly, \fBfile_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBattachment_metadata_generator\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP, \fI{hiddenattributes}\fP, \fI{ext}\fP, \(dq{masterfile}\(dq, \(dq{plotfile}\(dq
+Similarly, \fBfile_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBattachment_metadata_generator\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP, \fI{hiddenattributes}\fP, \fI{ext}\fP, "{masterfile}", "{plotfile}"
 .sp
-The \(dq{masterfile}\(dq is either equal to   \(dq{scanpath}/{scanname}.{ext}\(dq or \(dq{scanpath}/{scanname}/{scanname}.{ext}\(dq. Also
-the \(dq{plotfile}\(dq is either equal to  \(dq{scanpath}/{scanname}.{plotext}\(dq or \(dq{scanpath}/{scanname}/{scanname}.{plotext}\(dq.
+The "{masterfile}" is either equal to   "{scanpath}/{scanname}.{ext}" or "{scanpath}/{scanname}/{scanname}.{ext}". Also
+the "{plotfile}" is either equal to  "{scanpath}/{scanname}.{plotext}" or "{scanpath}/{scanname}/{scanname}.{plotext}".
 .SH SCICAT_DATASET_INGEST
 .sp
 Re\-ingestion script for SciCat Datasets and OrigDatablocks is usually
@@ -441,7 +441,7 @@ scicat_dataset_ingestor [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG] [\-f LOGFILE]
 .B Options:
 .INDENT 7.0
 .TP
-.B  \-h\fP,\fB  \-\-help
+.B \-h\fP,\fB  \-\-help
 show this help message and exit
 .TP
 .BI \-c \ CONFIG\fR,\fB \ \-\-configuration \ CONFIG
@@ -456,7 +456,7 @@ logging level, i.e. debug, info, warning, error, critical
 .BI \-f \ LOGFILE\fR,\fB \ \-\-log\-file \ LOGFILE
 log file name
 .TP
-.B  \-t\fP,\fB  \-\-timestamps
+.B \-t\fP,\fB  \-\-timestamps
 timestamps in logs
 .UNINDENT
 .UNINDENT
@@ -493,7 +493,7 @@ scicat_dataset_ingest [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG] [\-f LOGFILE] [
 .B Options:
 .INDENT 7.0
 .TP
-.B  \-h\fP,\fB  \-\-help
+.B \-h\fP,\fB  \-\-help
 show this help message and exit
 .TP
 .BI \-c \ CONFIG\fR,\fB \ \-\-configuration \ CONFIG
@@ -505,7 +505,7 @@ logging level, i.e. debug, info, warning, error, critical
 .BI \-f \ LOGFILE\fR,\fB \ \-\-log\-file \ LOGFILE
 log file name
 .TP
-.B  \-t\fP,\fB  \-\-timestamps
+.B \-t\fP,\fB  \-\-timestamps
 timestamps in logs
 .UNINDENT
 .UNINDENT
@@ -545,7 +545,7 @@ metadata_json_file    metadata json file(s)
 .B Options:
 .INDENT 7.0
 .TP
-.B  \-h\fP,\fB  \-\-help
+.B \-h\fP,\fB  \-\-help
 show this help message and exit
 .TP
 .BI \-c \ CONFIG\fR,\fB \ \-\-configuration \ CONFIG
@@ -557,7 +557,7 @@ logging level, i.e. debug, info, warning, error, critical
 .BI \-f \ LOGFILE\fR,\fB \ \-\-log\-file \ LOGFILE
 log file name
 .TP
-.B  \-t\fP,\fB  \-\-timestamps
+.B \-t\fP,\fB  \-\-timestamps
 timestamps in logs
 .TP
 .BI \-p \ TOKENFILE\fR,\fB \ \-\-token\-file \ TOKENFILE
@@ -582,7 +582,7 @@ scicat_ingest \-m Attachments \-c ~/.scingestor.yaml \-p ~/.mytoken.cfg ./metada
 .SS scingestor.beamtimeWatcher module
 .INDENT 0.0
 .TP
-.B class  scingestor.beamtimeWatcher.BeamtimeWatcher(options)
+.B class scingestor.beamtimeWatcher.BeamtimeWatcher(options)
 Bases: \fI\%object\fP
 .sp
 Beamtime Watcher
@@ -633,7 +633,7 @@ load config file
 .SS scingestor.datasetIngest module
 .INDENT 0.0
 .TP
-.B class  scingestor.datasetIngest.DatasetIngest(options)
+.B class scingestor.datasetIngest.DatasetIngest(options)
 Bases: \fI\%object\fP
 .sp
 Dataset Ingest command
@@ -658,7 +658,7 @@ the main program function
 .SS scingestor.datasetIngestor module
 .INDENT 0.0
 .TP
-.B class  scingestor.datasetIngestor.DatasetIngestor(configuration, path, dsfile, idsfile, meta, beamtimefile)
+.B class scingestor.datasetIngestor.DatasetIngestor(configuration, path, dsfile, idsfile, meta, beamtimefile)
 Bases: \fI\%object\fP
 .sp
 Dataset Ingestor
@@ -767,7 +767,7 @@ ingested datasets list
 .UNINDENT
 .INDENT 7.0
 .TP
-.B reingest(scan, token)
+.B reingest(scan, token, notmp=False)
 re\-ingest scan
 .INDENT 7.0
 .TP
@@ -776,7 +776,9 @@ re\-ingest scan
 .IP \(bu 2
 \fBscan\fP (\fI\%str\fP) \-\- scan name
 .IP \(bu 2
-\fBtoken\fP (\fI\%str\fP) \-\- access token
+\fBtoken\fP (\fBbook\fP) \-\- access token
+.IP \(bu 2
+\fBtoken\fP \-\- no tmp file flag
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -816,38 +818,38 @@ waitings datasets list
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class  scingestor.datasetIngestor.UpdateStrategy(value, names=None, *, module=None, qualname=None, type=None, start=1, boundary=None)
-Bases: \fI\%Enum\fP
+.B class scingestor.datasetIngestor.UpdateStrategy(value)
+Bases: \fI\%enum.Enum\fP
 .sp
 Update strategy
 .INDENT 7.0
 .TP
-.B CREATE  =  2
+.B CREATE = 2
 (\fI\%scingestor.datasetIngestor.UpdateStrategy\fP) recreate datasets
 .UNINDENT
 .INDENT 7.0
 .TP
-.B MIXED  =  3
+.B MIXED = 3
 (\fI\%scingestor.datasetIngestor.UpdateStrategy\fP) patch datasets only
 if scientificMetadata changed otherwise recreate datasets
 .UNINDENT
 .INDENT 7.0
 .TP
-.B NO  =  0
+.B NO = 0
 (\fI\%scingestor.datasetIngestor.UpdateStrategy\fP)
 leave datasets unchanged
 .UNINDENT
 .INDENT 7.0
 .TP
-.B PATCH  =  1
+.B PATCH = 1
 (\fI\%scingestor.datasetIngestor.UpdateStrategy\fP) patch datasets
 .UNINDENT
 .UNINDENT
 .SS scingestor.datasetWatcher module
 .INDENT 0.0
 .TP
-.B class  scingestor.datasetWatcher.DatasetWatcher(configuration, path, dsfile, idsfile, meta, beamtimefile)
-Bases: \fI\%Thread\fP
+.B class scingestor.datasetWatcher.DatasetWatcher(configuration, path, dsfile, idsfile, meta, beamtimefile)
+Bases: \fI\%threading.Thread\fP
 .sp
 Dataset  Watcher
 .sp
@@ -889,8 +891,8 @@ stop the watcher
 .SS scingestor.logger module
 .INDENT 0.0
 .TP
-.B class  scingestor.logger.AccSecFormatter(fmt=None, datefmt=None, style=\(aq%\(aq, validate=True, *, defaults=None)
-Bases: \fI\%Formatter\fP
+.B class scingestor.logger.AccSecFormatter(fmt=None, datefmt=None, style=\(aq%\(aq, validate=True)
+Bases: \fI\%logging.Formatter\fP
 .sp
 micro\-second formatter
 .sp
@@ -967,7 +969,7 @@ init logger
 .SS scingestor.modelIngest module
 .INDENT 0.0
 .TP
-.B class  scingestor.modelIngest.ModelIngest(options)
+.B class scingestor.modelIngest.ModelIngest(options)
 Bases: \fI\%object\fP
 .sp
 Dataset Ingest command
@@ -1005,7 +1007,7 @@ the main program function
 .SS scingestor.pathConverter module
 .INDENT 0.0
 .TP
-.B class  scingestor.pathConverter.PathConverter(corepath, blpath, usecorepath=False)
+.B class scingestor.pathConverter.PathConverter(corepath, blpath, usecorepath=False)
 Bases: \fI\%object\fP
 .sp
 Path Converter
@@ -1059,7 +1061,7 @@ core path
 .SS scingestor.safeINotifier module
 .INDENT 0.0
 .TP
-.B class  scingestor.safeINotifier.EventData(name, masks)
+.B class scingestor.safeINotifier.EventData(name, masks)
 Bases: \fI\%object\fP
 .sp
 event data
@@ -1088,8 +1090,8 @@ constructor
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class  scingestor.safeINotifier.SafeINotifier(*args, **kwargs)
-Bases: \fI\%Thread\fP
+.B class scingestor.safeINotifier.SafeINotifier(*args, **kwargs)
+Bases: \fI\%threading.Thread\fP
 .sp
 singleton wrapper for inotifyx
 .sp
@@ -1102,9 +1104,9 @@ class is implemented.
 method. Defaults to None, meaning nothing is called.
 .sp
 \fIname\fP is the thread name. By default, a unique name is constructed of
-the form \(dqThread\-N\(dq where N is a small decimal number.
+the form "Thread\-N" where N is a small decimal number.
 .sp
-\fIargs\fP is a list or tuple of arguments for the target invocation. Defaults to ().
+\fIargs\fP is the argument tuple for the target invocation. Defaults to ().
 .sp
 \fIkwargs\fP is a dictionary of keyword arguments for the target
 invocation. Defaults to {}.
@@ -1135,7 +1137,7 @@ queue providing events and its id
 .UNINDENT
 .INDENT 7.0
 .TP
-.B daemon  =  True
+.B daemon = True
 (\fI\%bool\fP) make notifier to be a daemon
 .UNINDENT
 .INDENT 7.0
@@ -1167,8 +1169,8 @@ stop the watcher
 .SS scingestor.scanDirWatcher module
 .INDENT 0.0
 .TP
-.B class  scingestor.scanDirWatcher.ScanDirWatcher(configuration, path, meta, beamtimefile, depth)
-Bases: \fI\%Thread\fP
+.B class scingestor.scanDirWatcher.ScanDirWatcher(configuration, path, meta, beamtimefile, depth)
+Bases: \fI\%threading.Thread\fP
 .sp
 ScanDir Watcher
 .sp
@@ -1208,11 +1210,11 @@ stop the watcher
 .SS Module contents
 .INDENT 0.0
 .IP \(bu 2
-\fI\%Index\fP
+genindex
 .IP \(bu 2
-\fI\%Module Index\fP
+modindex
 .IP \(bu 2
-\fI\%Search Page\fP
+search
 .UNINDENT
 .SH AUTHOR
 Jan Kotanski
