@@ -1,14 +1,22 @@
 beamtime_dirs:
   - "/gpfs/current"
 chmod_json_files: 0o666
-scicat_url: "http://scicat-p08-test2.desy.de/api/v3"
+scicat_url: "http://scicat-p08-test1.desy.de/api/v3"
 ingestor_credential_file: /var/lib/scingestor/.scingestor.cnf
 inotify_timeout: 1
 get_event_timeout: 0.1
 ingestor_var_dir: "/gpfs/current/scratch_bl/scingestor"
 metadata_in_var_dir: True
-dataset_update_strategy: create
+dataset_update_strategy: patch
+execute_commands: True
+# skip_multi_origdatablock_ingestion: True
+# skip_multi_attachment_ingestion: True
+# skip_scan_dataset_ingestion: True
+# call_metadata_generated_callback: True
+raw_metadata_callback: false
 owner_access_groups_from_proposal: True
+metadata_group_map_file: "{homepath}/.config/DESY/scingestor-metadata-group-map.lst"
+metadata_copy_map_file: "{homepath}/.config/DESY/scingestor-metadata-copy-map.lst"
 max_scandir_depth: 1
 dataset_pid_prefix: ""
 datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
@@ -17,8 +25,6 @@ oned_in_metadata: true
 hidden_attributes: "nexdatas_source,nexdatas_strategy,units,NX_class"
 ingest_dataset_attachment: true
 retry_failed_dataset_ingestion: true
-# attachment_signal_names: "p100k_roi1,p100k_roi2,p100k_roi3,exp_vfc02"
-# attachment_axes_names: "sl2hc,timestamp"
 # relative_path_in_datablock: False
 # scandir_blacklist:
 #   - /gpfs/current/scratch_bl
