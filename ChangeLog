@@ -1,3 +1,7 @@
+2023-12-12 Jan Kotanski <jan.kotanski@desy.de>
+	* fix grouping in the create mode (#265)
+	* tagged as 0.10.1
+
 2023-12-04 Jan Kotanski <jan.kotanski@desy.de>
 	* add support for measurement reingestion (#260)
 	* tagged as 0.10.0
