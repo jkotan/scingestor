@@ -183,6 +183,7 @@ class DatasetIngestor:
         self.__datasetcommandfile = "nxsfileinfo metadata -k4 " \
             " -o {metapath}/{scanname}{scanpostfix} " \
             " -z '{measurement}'" \
+            " -e '{entryname}'" \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
@@ -193,6 +194,7 @@ class DatasetIngestor:
             " -c {accessgroups}" \
             " -w {ownergroup}" \
             " -z '{measurement}'" \
+            " -e '{entryname}'" \
             " -b {beamtimefile} -p {beamtimeid}/{scanname}"
         #: (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
@@ -214,7 +216,8 @@ class DatasetIngestor:
         #: (:obj:`str`) attachment shell command
         self.__attachmentcommand = "nxsfileinfo attachment " \
             " -w {ownergroup} -c {accessgroups} " \
-            "-o {metapath}/{scanname}{attachmentpostfix} " \
+            " -n '{entryname}'" \
+            " -o {metapath}/{scanname}{attachmentpostfix} " \
             " {plotfile}"
         #: (:obj:`str`) last measurement
         self.__measurement = ""
@@ -682,7 +685,8 @@ class DatasetIngestor:
             "measurement": self.__measurement,
             "lastmeasurement": self.__measurement,
             "groupmapfile": self.__groupmapfile,
-
+            "groupname": "",
+            "entryname": ""
         }
         self.__dctfmt["masterfile"] = \
             "{scanpath}/{scanname}.{ext}".format(**self.__dctfmt)
@@ -1698,6 +1702,8 @@ class DatasetIngestor:
                 self.__dsfile, scan))
 
         sscan = scan.split(" ")
+        self.__dctfmt["groupname"] = ""
+        self.__dctfmt["entryname"] = ""
         self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
         rdss = glob.glob(
             "{metapath}/{scan}{postfix}".format(
@@ -1833,8 +1839,23 @@ class DatasetIngestor:
         pscan = scan
 
         self.__dctfmt["scanname"] = ""
+        self.__dctfmt["groupname"] = ""
+        self.__dctfmt["entryname"] = ""
         if len(sscan) > 0:
-            if ":" in sscan[0]:
+            if "::/" in sscan[0]:
+                if ";" in sscan[0]:
+                    pscan, scanname = sscan[0].split(";")[:2]
+                else:
+                    pscan = sscan[0]
+                    scanname = sscan[0]
+                if "::/" in pscan:
+                    gname, entryname = pscan.split("::/")[:2]
+                else:
+                    gname, entryname = sscan[0].split("::/")[:2]
+                self.__dctfmt["scanname"] = scanname
+                self.__dctfmt["groupname"] = gname
+                self.__dctfmt["entryname"] = entryname
+            elif ":" in sscan[0]:
                 self.__dctfmt["scanname"] = sscan[0].split(":")[0]
                 pscan = " ".join([self.__dctfmt["scanname"]] + sscan[1:])
             else:
