@@ -685,13 +685,13 @@ class DatasetIngestor:
             "measurement": self.__measurement,
             "lastmeasurement": self.__measurement,
             "groupmapfile": self.__groupmapfile,
-            "groupname": "",
+            "masterscanname": "",
             "entryname": ""
         }
         self.__dctfmt["masterfile"] = \
-            "{scanpath}/{scanname}.{ext}".format(**self.__dctfmt)
+            "{scanpath}/{masterscanname}.{ext}".format(**self.__dctfmt)
         self.__dctfmt["plotfile"] = \
-            "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)
+            "{scanpath}/{masterscanname}.{plotext}".format(**self.__dctfmt)
 
         get_logger().debug(
             'DatasetIngestor: Parameters: %s' % str(self.__dctfmt))
@@ -737,15 +737,17 @@ class DatasetIngestor:
         self.__ext = ""
 
         self.__dctfmt["masterfile"] = \
-            "{scanpath}/{scanname}/{scanname}.{ext}".format(**self.__dctfmt)
+            "{scanpath}/{masterscanname}.{ext}".format(**self.__dctfmt)
         for ext in self.__master_file_extension_list:
             self.__dctfmt["ext"] = ext
 
             if os.path.isfile(
-                    "{scanpath}/{scanname}.{ext}".format(**self.__dctfmt)):
+                    "{scanpath}/{masterscanname}.{ext}".format(
+                        **self.__dctfmt)):
                 self.__ext = ext
                 self.__dctfmt["masterfile"] = \
-                    "{scanpath}/{scanname}.{ext}".format(**self.__dctfmt)
+                    "{scanpath}/{masterscanname}.{ext}".format(
+                        **self.__dctfmt)
                 break
         else:
             for ext in self.__master_file_extension_list:
@@ -845,15 +847,17 @@ class DatasetIngestor:
         self.__plotext = ""
 
         self.__dctfmt["plotfile"] = \
-            "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)
+            "{scanpath}/{masterscanname}.{plotext}".format(**self.__dctfmt)
         for ext in self.__plot_file_extension_list:
             self.__dctfmt["plotext"] = ext
 
             if os.path.isfile(
-                    "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)):
+                    "{scanpath}/{masterscanname}.{plotext}".format(
+                        **self.__dctfmt)):
                 self.__plotext = ext
                 self.__dctfmt["plotfile"] = \
-                    "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)
+                    "{scanpath}/{masterscanname}.{plotext}".format(
+                        **self.__dctfmt)
                 break
         else:
             for ext in self.__plot_file_extension_list:
@@ -1702,9 +1706,9 @@ class DatasetIngestor:
                 self.__dsfile, scan))
 
         sscan = scan.split(" ")
-        self.__dctfmt["groupname"] = ""
         self.__dctfmt["entryname"] = ""
         self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
+        self.__dctfmt["masterscanname"] = self.__dctfmt["scanname"]
         rdss = glob.glob(
             "{metapath}/{scan}{postfix}".format(
                 scan=self.__dctfmt["scanname"],
@@ -1839,7 +1843,7 @@ class DatasetIngestor:
         pscan = scan
 
         self.__dctfmt["scanname"] = ""
-        self.__dctfmt["groupname"] = ""
+        self.__dctfmt["masterscanname"] = ""
         self.__dctfmt["entryname"] = ""
         if len(sscan) > 0:
             if "::/" in sscan[0]:
@@ -1853,13 +1857,15 @@ class DatasetIngestor:
                 else:
                     gname, entryname = sscan[0].split("::/")[:2]
                 self.__dctfmt["scanname"] = scanname
-                self.__dctfmt["groupname"] = gname
+                self.__dctfmt["masterscanname"] = gname
                 self.__dctfmt["entryname"] = entryname
             elif ":" in sscan[0]:
                 self.__dctfmt["scanname"] = sscan[0].split(":")[0]
                 pscan = " ".join([self.__dctfmt["scanname"]] + sscan[1:])
+                self.__dctfmt["masterscanname"] = self.__dctfmt["scanname"]
             else:
                 self.__dctfmt["scanname"] = sscan[0]
+                self.__dctfmt["masterscanname"] = self.__dctfmt["scanname"]
         rds = None
         rdss = glob.glob(
             "{metapath}/{scan}{postfix}".format(
