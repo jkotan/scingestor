@@ -1,3 +1,7 @@
+2023-12-19 Jan Kotanski <jan.kotanski@desy.de>
+	* add support for multi-scan NeXus files (#268)
+	* tagged as 0.11.0
+
 2023-12-12 Jan Kotanski <jan.kotanski@desy.de>
 	* fix grouping in the create mode (#265)
 	* tagged as 0.10.1

@@ -26,6 +26,7 @@ import time
 import enum
 import socket
 import pathlib
+import shutil
 
 from .logger import get_logger
 
@@ -183,6 +184,7 @@ class DatasetIngestor:
         self.__datasetcommandfile = "nxsfileinfo metadata -k4 " \
             " -o {metapath}/{scanname}{scanpostfix} " \
             " -z '{measurement}'" \
+            " -e '{entryname}'" \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
@@ -193,6 +195,7 @@ class DatasetIngestor:
             " -c {accessgroups}" \
             " -w {ownergroup}" \
             " -z '{measurement}'" \
+            " -e '{entryname}'" \
             " -b {beamtimefile} -p {beamtimeid}/{scanname}"
         #: (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
@@ -214,7 +217,8 @@ class DatasetIngestor:
         #: (:obj:`str`) attachment shell command
         self.__attachmentcommand = "nxsfileinfo attachment " \
             " -w {ownergroup} -c {accessgroups} " \
-            "-o {metapath}/{scanname}{attachmentpostfix} " \
+            " -n '{entryname}'" \
+            " -o {metapath}/{scanname}{attachmentpostfix} " \
             " {plotfile}"
         #: (:obj:`str`) last measurement
         self.__measurement = ""
@@ -682,12 +686,13 @@ class DatasetIngestor:
             "measurement": self.__measurement,
             "lastmeasurement": self.__measurement,
             "groupmapfile": self.__groupmapfile,
-
+            "masterscanname": "",
+            "entryname": ""
         }
         self.__dctfmt["masterfile"] = \
-            "{scanpath}/{scanname}.{ext}".format(**self.__dctfmt)
+            "{scanpath}/{masterscanname}.{ext}".format(**self.__dctfmt)
         self.__dctfmt["plotfile"] = \
-            "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)
+            "{scanpath}/{masterscanname}.{plotext}".format(**self.__dctfmt)
 
         get_logger().debug(
             'DatasetIngestor: Parameters: %s' % str(self.__dctfmt))
@@ -733,15 +738,17 @@ class DatasetIngestor:
         self.__ext = ""
 
         self.__dctfmt["masterfile"] = \
-            "{scanpath}/{scanname}/{scanname}.{ext}".format(**self.__dctfmt)
+            "{scanpath}/{masterscanname}.{ext}".format(**self.__dctfmt)
         for ext in self.__master_file_extension_list:
             self.__dctfmt["ext"] = ext
 
             if os.path.isfile(
-                    "{scanpath}/{scanname}.{ext}".format(**self.__dctfmt)):
+                    "{scanpath}/{masterscanname}.{ext}".format(
+                        **self.__dctfmt)):
                 self.__ext = ext
                 self.__dctfmt["masterfile"] = \
-                    "{scanpath}/{scanname}.{ext}".format(**self.__dctfmt)
+                    "{scanpath}/{masterscanname}.{ext}".format(
+                        **self.__dctfmt)
                 break
         else:
             for ext in self.__master_file_extension_list:
@@ -759,6 +766,15 @@ class DatasetIngestor:
         self.__dctfmt["ext"] = self.__ext
 
         if self.__ext:
+
+            if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
+                masterfile = self.__dctfmt["masterfile"]
+                mdir, mfile = os.path.split(masterfile)
+                self.__dctfmt["masterfile"] = os.path.join(
+                    mdir, "_tmp_" + mfile)
+
+                shutil.copy(masterfile, self.__dctfmt["masterfile"])
+
             get_logger().info(
                 'DatasetIngestor: Generating %s metadata: %s %s' % (
                     self.__ext, scan,
@@ -774,6 +790,12 @@ class DatasetIngestor:
                     'DatasetIngestor: Generating dataset command: %s ' % (
                         command))
             subprocess.run(command, shell=True, check=True)
+
+            if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
+                if os.path.isfile(self.__dctfmt["masterfile"]):
+                    os.remove(self.__dctfmt["masterfile"])
+                self.__dctfmt["masterfile"] = masterfile
+
         else:
             get_logger().info(
                 'DatasetIngestor: Generating metadata: %s %s' % (
@@ -841,15 +863,17 @@ class DatasetIngestor:
         self.__plotext = ""
 
         self.__dctfmt["plotfile"] = \
-            "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)
+            "{scanpath}/{masterscanname}.{plotext}".format(**self.__dctfmt)
         for ext in self.__plot_file_extension_list:
             self.__dctfmt["plotext"] = ext
 
             if os.path.isfile(
-                    "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)):
+                    "{scanpath}/{masterscanname}.{plotext}".format(
+                        **self.__dctfmt)):
                 self.__plotext = ext
                 self.__dctfmt["plotfile"] = \
-                    "{scanpath}/{scanname}.{plotext}".format(**self.__dctfmt)
+                    "{scanpath}/{masterscanname}.{plotext}".format(
+                        **self.__dctfmt)
                 break
         else:
             for ext in self.__plot_file_extension_list:
@@ -866,6 +890,13 @@ class DatasetIngestor:
         self.__dctfmt["plotext"] = self.__plotext
 
         if self.__dctfmt["plotext"]:
+
+            if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
+                plotfile = self.__dctfmt["plotfile"]
+                mdir, mfile = os.path.split(plotfile)
+                self.__dctfmt["plotfile"] = os.path.join(mdir, "_tmp_" + mfile)
+                shutil.copy(plotfile, self.__dctfmt["plotfile"])
+
             get_logger().info(
                 'DatasetIngestor: Generating attachment metadata: %s %s' % (
                     scan,
@@ -879,6 +910,12 @@ class DatasetIngestor:
                 get_logger().debug(
                     'DatasetIngestor: Generating attachment command: %s' % cmd)
             subprocess.run(cmd, shell=True, check=True)
+
+            if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
+                if os.path.isfile(self.__dctfmt["plotfile"]):
+                    os.remove(self.__dctfmt["plotfile"])
+                self.__dctfmt["plotfile"] = plotfile
+
             adss = glob.glob(
                 "{metapath}/{scanname}{attachmentpostfix}".format(
                     **self.__dctfmt))
@@ -1638,7 +1675,9 @@ class DatasetIngestor:
                 smt = json.dumps(mt)
                 with open(metafile, "w") as mf:
                     mf.write(smt)
-            status = self._ingest_origdatablock(smt, token)
+            status = time.time()
+            if "dataFileList" in mt and mt["dataFileList"]:
+                status = self._ingest_origdatablock(smt, token)
             if status:
                 return mt["datasetId"]
         except Exception as e:
@@ -1698,7 +1737,9 @@ class DatasetIngestor:
                 self.__dsfile, scan))
 
         sscan = scan.split(" ")
+        self.__dctfmt["entryname"] = ""
         self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
+        self.__dctfmt["masterscanname"] = self.__dctfmt["scanname"]
         rdss = glob.glob(
             "{metapath}/{scan}{postfix}".format(
                 scan=self.__dctfmt["scanname"],
@@ -1833,12 +1874,29 @@ class DatasetIngestor:
         pscan = scan
 
         self.__dctfmt["scanname"] = ""
+        self.__dctfmt["masterscanname"] = ""
+        self.__dctfmt["entryname"] = ""
         if len(sscan) > 0:
-            if ":" in sscan[0]:
+            if "::/" in sscan[0]:
+                if ";" in sscan[0]:
+                    pscan, scanname = sscan[0].split(";")[:2]
+                else:
+                    pscan = sscan[0]
+                    scanname = sscan[0]
+                if "::/" in pscan:
+                    gname, entryname = pscan.split("::/")[:2]
+                else:
+                    gname, entryname = sscan[0].split("::/")[:2]
+                self.__dctfmt["scanname"] = scanname
+                self.__dctfmt["masterscanname"] = gname
+                self.__dctfmt["entryname"] = entryname
+            elif ":" in sscan[0]:
                 self.__dctfmt["scanname"] = sscan[0].split(":")[0]
                 pscan = " ".join([self.__dctfmt["scanname"]] + sscan[1:])
+                self.__dctfmt["masterscanname"] = self.__dctfmt["scanname"]
             else:
                 self.__dctfmt["scanname"] = sscan[0]
+                self.__dctfmt["masterscanname"] = self.__dctfmt["scanname"]
         rds = None
         rdss = glob.glob(
             "{metapath}/{scan}{postfix}".format(
@@ -1921,6 +1979,14 @@ class DatasetIngestor:
         if odb:
             mtmdb = os.path.getmtime(odb)
 
+        if (self.__callcallback or self.__measurement_status) \
+           and self.__metadatageneratedcallback \
+           and rds and odb:
+            command = self.__metadatageneratedcallback.format(**self.__dctfmt)
+            get_logger().info(
+                'DatasetIngestor: Metadata generated callback: %s ' % (
+                    command))
+            subprocess.run(command, shell=True, check=True)
         dastatus = None
         dbstatus = None
         ads = None

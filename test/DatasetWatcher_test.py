@@ -314,6 +314,14 @@ class DatasetWatcherTest(unittest.TestCase):
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
                 os.mkdir(fsubdirname3)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
@@ -373,7 +381,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -401,7 +409,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -688,7 +696,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         # '-o {subdir2}/{sc1}.scan.json  '
                         # '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         # 'p00dmgt,p00staff -w 99001234-dmgt '
-                        # '-z \'\' -b {btmeta} '
+                        # '-z \'\' -e \'\' -b {btmeta} '
                         # '-p 99001234/myscan_00001'
                         # ' -r raw/special  --add-empty-units \n'
                         # 'INFO : DatasetIngestor: '
@@ -717,7 +725,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         # '-o {subdir2}/{sc2}.scan.json  '
                         # '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         # 'p00dmgt,p00staff -w 99001234-dmgt '
-                        # '-z \'\' -b {btmeta} '
+                        # '-z \'\' -e \'\' -b {btmeta} '
                         # '-p 99001234/myscan_00002'
                         # ' -r raw/special  --add-empty-units \n'
                         # 'INFO : DatasetIngestor: '
@@ -882,6 +890,14 @@ class DatasetWatcherTest(unittest.TestCase):
                 cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
                 shutil.copy(lsource, fsubdirname2)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 th = threading.Thread(target=tst_thread)
@@ -924,7 +940,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -952,7 +968,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -980,7 +996,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1008,7 +1024,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1218,6 +1234,14 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.stophttpserver()
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 # print(cmd)
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
@@ -1267,7 +1291,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1295,7 +1319,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1335,7 +1359,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1363,7 +1387,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1578,6 +1602,14 @@ class DatasetWatcherTest(unittest.TestCase):
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 # print(cmd)
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
@@ -1627,7 +1659,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1657,7 +1689,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1690,7 +1722,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1718,7 +1750,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -1951,6 +1983,14 @@ class DatasetWatcherTest(unittest.TestCase):
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 for i in range(3):
                     with open(fats[i], "w") as cf:
                         cf.write(json.dumps(ats[i]))
@@ -2003,7 +2043,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2033,7 +2073,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2066,7 +2106,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2094,7 +2134,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2347,6 +2387,14 @@ class DatasetWatcherTest(unittest.TestCase):
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 for i in range(4):
                     with open(fats[i], "w") as cf:
                         cf.write(json.dumps(ats[i]))
@@ -2399,7 +2447,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2429,7 +2477,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2469,7 +2517,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2497,7 +2545,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2725,6 +2773,14 @@ class DatasetWatcherTest(unittest.TestCase):
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 # print(cmd)
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
@@ -2774,7 +2830,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2804,7 +2860,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2837,7 +2893,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -2865,7 +2921,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3080,6 +3136,14 @@ class DatasetWatcherTest(unittest.TestCase):
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 # print(cmd)
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
@@ -3129,7 +3193,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3159,7 +3223,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3192,7 +3256,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3220,7 +3284,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3411,6 +3475,14 @@ class DatasetWatcherTest(unittest.TestCase):
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
                 os.mkdir(fsubdirname3)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
@@ -3470,7 +3542,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3498,7 +3570,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3742,6 +3814,14 @@ class DatasetWatcherTest(unittest.TestCase):
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 # print(cmd)
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
@@ -3789,7 +3869,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3817,7 +3897,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3845,7 +3925,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -3869,7 +3949,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo attachment  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff '
-                        '-o {subdir2}/{sc3}.attachment.json  '
+                        ' -n \'\' -o {subdir2}/{sc3}.attachment.json  '
                         '{subdir2}/{sc3}.png\n'
                         'INFO : DatasetIngestor: Check if dataset exists: '
                         '99001234/{sc3}\n'
@@ -3883,7 +3963,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' -r raw/special  --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -4160,6 +4240,14 @@ class DatasetWatcherTest(unittest.TestCase):
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
                 os.mkdir(fsubdirname3)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 with open(fds1, "w") as cf:
                     cf.write(json.dumps(ds1))
                 with open(fds2, "w") as cf:
@@ -4458,6 +4546,14 @@ class DatasetWatcherTest(unittest.TestCase):
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
                 os.mkdir(fsubdirname3)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 with open(fds1, "w") as cf:
                     cf.write(json.dumps(ds1))
                 with open(fds2, "w") as cf:
@@ -4793,6 +4889,14 @@ class DatasetWatcherTest(unittest.TestCase):
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
                 os.mkdir(fsubdirname3)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 with open(fds1, "w") as cf:
                     cf.write(json.dumps(ds1))
                 with open(fds2, "w") as cf:
@@ -5268,6 +5372,14 @@ class DatasetWatcherTest(unittest.TestCase):
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
                 os.mkdir(fsubdirname3)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 with open(fds1, "w") as cf:
                     cf.write(json.dumps(ds1))
                 with open(fds2, "w") as cf:
@@ -5839,6 +5951,14 @@ class DatasetWatcherTest(unittest.TestCase):
                 shutil.copy(source, fdirname)
                 shutil.copy(msource, fdirname)
                 shutil.copy(lsource, fsubdirname2)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
@@ -6473,6 +6593,14 @@ class DatasetWatcherTest(unittest.TestCase):
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
                 os.mkdir(fsubdirname3)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 with open(fds1, "w") as cf:
                     cf.write(json.dumps(ds1))
                 with open(fds2, "w") as cf:
@@ -7169,6 +7297,14 @@ class DatasetWatcherTest(unittest.TestCase):
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
                 os.mkdir(fsubdirname3)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 with open(fds1, "w") as cf:
                     cf.write(json.dumps(ds1))
                 with open(fds2, "w") as cf:
@@ -7770,6 +7906,14 @@ class DatasetWatcherTest(unittest.TestCase):
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 for i in range(4):
                     with open(fdss[i], "w") as cf:
                         cf.write(json.dumps(dss[i]))
@@ -8078,6 +8222,14 @@ class DatasetWatcherTest(unittest.TestCase):
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 for i in range(4):
                     with open(fdss[i], "w") as cf:
                         cf.write(json.dumps(dss[i]))
@@ -8512,6 +8664,14 @@ class DatasetWatcherTest(unittest.TestCase):
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
@@ -8555,7 +8715,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.dataset.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -8583,7 +8743,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.dataset.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -8807,6 +8967,14 @@ class DatasetWatcherTest(unittest.TestCase):
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 # print(cmd)
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
@@ -8854,7 +9022,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -8882,7 +9050,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -8910,7 +9078,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -8938,7 +9106,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                         'p00dmgt,p00staff -w 99001234-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -9157,6 +9325,14 @@ class DatasetWatcherTest(unittest.TestCase):
             for cmd in commands:
                 os.mkdir(fsubdirname)
                 os.mkdir(fsubdirname2)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00003.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00004.txt"))
                 # print(cmd)
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
@@ -9518,7 +9694,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001236/myscan_00001'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -9548,7 +9724,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001236/myscan_00002'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -9878,7 +10054,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc1}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001236/myscan_00001'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -9908,7 +10084,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc2}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001236/myscan_00002'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -9946,7 +10122,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc3}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001236/myscan_00003'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -9976,7 +10152,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         '-o {subdir2}/{sc4}.scan.json  '
                         '-c 99001236-dmgt,99001236-clbt,99001236-part,'
                         'sdd01dmgt,sdd01staff -w 99001236-dmgt '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001236/myscan_00004'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -10268,7 +10444,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc1}.scan.json  '
                         '-c group1,group2 -w mygroup '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001236/myscan_00001'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -10297,7 +10473,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc2}.scan.json  '
                         '-c group1,group2 -w mygroup '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001236/myscan_00002'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -10629,7 +10805,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc1}.scan.json  '
                         '-c group1,group2 -w mygroup '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001236/myscan_00001'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -10658,7 +10834,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc2}.scan.json  '
                         '-c group1,group2 -w mygroup '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001236/myscan_00002'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -10695,7 +10871,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc3}.scan.json  '
                         '-c group1,group2 -w mygroup '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001236/myscan_00003'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
@@ -10724,7 +10900,7 @@ class DatasetWatcherTest(unittest.TestCase):
                         'nxsfileinfo metadata -k4  '
                         '-o {vardir}{subdir2}/{sc4}.scan.json  '
                         '-c group1,group2 -w mygroup '
-                        '-z \'\' -b {btmeta} '
+                        '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001236/myscan_00004'
                         ' --add-empty-units \n'
                         'INFO : DatasetIngestor: '
