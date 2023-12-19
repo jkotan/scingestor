@@ -26,6 +26,7 @@ import time
 import enum
 import socket
 import pathlib
+import shutil
 
 from .logger import get_logger
 
@@ -765,6 +766,15 @@ class DatasetIngestor:
         self.__dctfmt["ext"] = self.__ext
 
         if self.__ext:
+
+            if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
+                masterfile = self.__dctfmt["masterfile"]
+                mdir, mfile = os.path.split(masterfile)
+                self.__dctfmt["masterfile"] = os.path.join(
+                    mdir, "_tmp_" + mfile)
+
+                shutil.copy(masterfile, self.__dctfmt["masterfile"])
+
             get_logger().info(
                 'DatasetIngestor: Generating %s metadata: %s %s' % (
                     self.__ext, scan,
@@ -780,6 +790,12 @@ class DatasetIngestor:
                     'DatasetIngestor: Generating dataset command: %s ' % (
                         command))
             subprocess.run(command, shell=True, check=True)
+
+            if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
+                if os.path.isfile(self.__dctfmt["masterfile"]):
+                    os.remove(self.__dctfmt["masterfile"])
+                self.__dctfmt["masterfile"] = masterfile
+
         else:
             get_logger().info(
                 'DatasetIngestor: Generating metadata: %s %s' % (
@@ -874,6 +890,13 @@ class DatasetIngestor:
         self.__dctfmt["plotext"] = self.__plotext
 
         if self.__dctfmt["plotext"]:
+
+            if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
+                plotfile = self.__dctfmt["plotfile"]
+                mdir, mfile = os.path.split(plotfile)
+                self.__dctfmt["plotfile"] = os.path.join(mdir, "_tmp_" + mfile)
+                shutil.copy(plotfile, self.__dctfmt["plotfile"])
+
             get_logger().info(
                 'DatasetIngestor: Generating attachment metadata: %s %s' % (
                     scan,
@@ -887,6 +910,12 @@ class DatasetIngestor:
                 get_logger().debug(
                     'DatasetIngestor: Generating attachment command: %s' % cmd)
             subprocess.run(cmd, shell=True, check=True)
+
+            if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
+                if os.path.isfile(self.__dctfmt["plotfile"]):
+                    os.remove(self.__dctfmt["plotfile"])
+                self.__dctfmt["plotfile"] = plotfile
+
             adss = glob.glob(
                 "{metapath}/{scanname}{attachmentpostfix}".format(
                     **self.__dctfmt))
@@ -1646,7 +1675,9 @@ class DatasetIngestor:
                 smt = json.dumps(mt)
                 with open(metafile, "w") as mf:
                     mf.write(smt)
-            status = self._ingest_origdatablock(smt, token)
+            status = time.time()
+            if "dataFileList" in mt and mt["dataFileList"]:
+                status = self._ingest_origdatablock(smt, token)
             if status:
                 return mt["datasetId"]
         except Exception as e:
@@ -1948,6 +1979,14 @@ class DatasetIngestor:
         if odb:
             mtmdb = os.path.getmtime(odb)
 
+        if (self.__callcallback or self.__measurement_status) \
+           and self.__metadatageneratedcallback \
+           and rds and odb:
+            command = self.__metadatageneratedcallback.format(**self.__dctfmt)
+            get_logger().info(
+                'DatasetIngestor: Metadata generated callback: %s ' % (
+                    command))
+            subprocess.run(command, shell=True, check=True)
         dastatus = None
         dbstatus = None
         ads = None

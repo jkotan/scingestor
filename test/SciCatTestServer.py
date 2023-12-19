@@ -60,6 +60,9 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         if self.server.counter in self.server.error_requests:
             message = json.dumps({"Error": "Internal Error"})
             # message = json.dumps(
+            #     {"Error":
+            #      "Internal Error %s" % self.server.counter})
+            # message = json.dumps(
             #     {"Error": "Internal Error for %s" % self.path})
             resp = 500
             self.set_json_header(resp)
@@ -111,6 +114,9 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         self.server.counter += 1
         if self.server.counter in self.server.error_requests:
             message = json.dumps({"Error": "Internal Error"})
+            # message = json.dumps(
+            #     {"Error":
+            #      "Internal Error %s" % self.server.counter})
             # message = json.dumps(
             #     {"Error": "Internal Error for %s" % self.path})
             resp = 500
@@ -231,6 +237,9 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
 
         self.server.counter += 1
         if self.server.counter in self.server.error_requests:
+            # message = json.dumps(
+            #     {"Error":
+            #      "Internal Error %s" % self.server.counter})
             message = json.dumps({"Error": "Internal Error"})
             # message = json.dumps(
             #     {"Error": "Internal Error for %s" % self.path})
@@ -314,6 +323,9 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
         """
         self.server.counter += 1
         if self.server.counter in self.server.error_requests:
+            # message = json.dumps(
+            #     {"Error":
+            #    "Internal Error %s" % self.server.counter})
             message = json.dumps({"Error": "Internal Error"})
             # message = json.dumps(
             #     {"Error": "Internal Error for %s" % self.path})

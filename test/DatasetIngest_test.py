@@ -404,9 +404,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 99001234/myscan_00001\n"
-                    "Datasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -468,37 +466,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=['creationTime'])
-                self.assertEqual(len(self.__server.origdatablocks), 2)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-dmgt',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'datasetId': '99001234/myscan_00001',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
         finally:
@@ -622,9 +590,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 99001234/myscan_00001\n"
-                    "Datasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -686,37 +652,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=['creationTime'])
-                self.assertEqual(len(self.__server.origdatablocks), 2)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-dmgt',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'datasetId': '99001234/myscan_00001',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
         finally:
@@ -886,9 +822,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 99001234/myscan_00001\n"
                     "Datasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 99001234/myscan_00002\n"
                     "Datasets Attachments: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
@@ -951,37 +885,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=['creationTime'])
-                self.assertEqual(len(self.__server.origdatablocks), 2)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-dmgt',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'datasetId': '99001234/myscan_00001',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 self.assertEqual(len(self.__server.attachments), 1)
                 self.assertEqual(
                     self.__server.attachments[0][0],
@@ -1091,7 +995,7 @@ optional arguments:
                 shutil.copy(asource, fsubdirname2)
 
                 self.__server.reset()
-                self.__server.error_requests = [7]
+                self.__server.error_requests = [6]
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
@@ -1185,8 +1089,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "Datasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 99001234/myscan_00001\n", vl)
+                    "Datasets: 99001234/myscan_00001\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1220,22 +1123,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=['creationTime'])
-                self.assertEqual(len(self.__server.origdatablocks), 1)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-dmgt',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'datasetId': '99001234/myscan_00001',
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 self.assertEqual(len(self.__server.attachments), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -1320,7 +1208,7 @@ optional arguments:
                 shutil.copy(asource, fsubdirname2)
 
                 self.__server.reset()
-                self.__server.error_requests = [11]
+                self.__server.error_requests = [9]
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
@@ -1409,9 +1297,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 99001234/myscan_00001\n"
-                    "Datasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -1473,37 +1359,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=['creationTime'])
-                self.assertEqual(len(self.__server.origdatablocks), 2)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-dmgt',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'datasetId': '99001234/myscan_00001',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 self.assertEqual(len(self.__server.attachments), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
@@ -1681,9 +1537,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 99001234/myscan_00001\n"
                     "Datasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 99001234/myscan_00002\n"
                     "Datasets Attachments: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
@@ -1746,37 +1600,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=['creationTime'])
-                self.assertEqual(len(self.__server.origdatablocks), 2)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-dmgt',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'datasetId': '99001234/myscan_00001',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 self.assertEqual(len(self.__server.attachments), 1)
                 self.assertEqual(
                     self.__server.attachments[0][0],
@@ -2135,6 +1959,10 @@ optional arguments:
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -2355,6 +2183,10 @@ optional arguments:
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -2616,6 +2448,10 @@ optional arguments:
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -2920,6 +2756,10 @@ optional arguments:
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 self.__server.error_requests = [13]
                 if os.path.exists(fidslist):
@@ -3195,6 +3035,10 @@ optional arguments:
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 self.__server.error_requests = [12, 14]
                 if os.path.exists(fidslist):
@@ -3500,6 +3344,10 @@ optional arguments:
                 shutil.copy(wlsource, fsubdirname)
                 shutil.copy(lsource, cfsubdirname2)
                 shutil.copy(wlsource, cfsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(cfsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(cfsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -3962,6 +3810,10 @@ optional arguments:
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -4226,6 +4078,10 @@ optional arguments:
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -4561,6 +4417,10 @@ optional arguments:
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 self.__server.error_requests = [13]
                 if os.path.exists(fidslist):
@@ -4834,6 +4694,10 @@ optional arguments:
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 self.__server.error_requests = [14]
                 if os.path.exists(fidslist):
@@ -5314,24 +5178,9 @@ optional arguments:
                          'raw/special',
                          'type': 'raw'},
                         skip=['creationTime'])
-                    self.assertEqual(len(self.__server.origdatablocks), 3)
+                    self.assertEqual(len(self.__server.origdatablocks), 2)
                     self.myAssertDict(
                         json.loads(self.__server.origdatablocks[0]),
-                        {'dataFileList': [
-                            {'gid': 'jkotan',
-                             'path': 'myscan_00001.scan.json',
-                             'perm': '-rw-r--r--',
-                             'size': 629,
-                             'time': '2022-07-05T19:07:16.683673+0200',
-                             'uid': 'jkotan'}],
-                         'datasetId': '99001234/myscan_00001',
-                         'accessGroups': [
-                             '99001234-dmgt', '99001234-clbt', '99001234-part',
-                             'p00dmgt', 'p00staff'],
-                         'ownerGroup': '99001234-dmgt',
-                         'size': 629}, skip=["dataFileList", "size"])
-                    self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -5346,7 +5195,7 @@ optional arguments:
                          'ownerGroup': '99001234-dmgt',
                          'size': 629}, skip=["dataFileList", "size"])
                     self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[2]),
+                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -5657,24 +5506,9 @@ optional arguments:
                          'raw/special',
                          'type': 'raw'},
                         skip=['creationTime'])
-                    self.assertEqual(len(self.__server.origdatablocks), 3)
+                    self.assertEqual(len(self.__server.origdatablocks), 2)
                     self.myAssertDict(
                         json.loads(self.__server.origdatablocks[0]),
-                        {'dataFileList': [
-                            {'gid': 'jkotan',
-                             'path': 'myscan_00001.scan.json',
-                             'perm': '-rw-r--r--',
-                             'size': 629,
-                             'time': '2022-07-05T19:07:16.683673+0200',
-                             'uid': 'jkotan'}],
-                         'datasetId': '99001234/myscan_00001',
-                         'accessGroups': [
-                             '99001234-dmgt', '99001234-clbt', '99001234-part',
-                             'p00dmgt', 'p00staff'],
-                         'ownerGroup': '99001234-dmgt',
-                         'size': 629}, skip=["dataFileList", "size"])
-                    self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -5689,7 +5523,7 @@ optional arguments:
                          'ownerGroup': '99001234-dmgt',
                          'size': 629}, skip=["dataFileList", "size"])
                     self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[2]),
+                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -6041,24 +5875,9 @@ optional arguments:
                          'raw/special',
                          'type': 'raw'},
                         skip=['creationTime'])
-                    self.assertEqual(len(self.__server.origdatablocks), 3)
+                    self.assertEqual(len(self.__server.origdatablocks), 2)
                     self.myAssertDict(
                         json.loads(self.__server.origdatablocks[0]),
-                        {'dataFileList': [
-                            {'gid': 'jkotan',
-                             'path': 'myscan_00001.scan.json',
-                             'perm': '-rw-r--r--',
-                             'size': 629,
-                             'time': '2022-07-05T19:07:16.683673+0200',
-                             'uid': 'jkotan'}],
-                         'datasetId': '99001234/myscan_00001',
-                         'accessGroups': [
-                             '99001234-dmgt', '99001234-clbt', '99001234-part',
-                             'p00dmgt', 'p00staff'],
-                         'ownerGroup': '99001234-dmgt',
-                         'size': 629}, skip=["dataFileList", "size"])
-                    self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -6073,7 +5892,7 @@ optional arguments:
                          'ownerGroup': '99001234-dmgt',
                          'size': 629}, skip=["dataFileList", "size"])
                     self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[2]),
+                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -6413,24 +6232,9 @@ optional arguments:
                          'raw/special',
                          'type': 'raw'},
                         skip=['creationTime'])
-                    self.assertEqual(len(self.__server.origdatablocks), 3)
+                    self.assertEqual(len(self.__server.origdatablocks), 2)
                     self.myAssertDict(
                         json.loads(self.__server.origdatablocks[0]),
-                        {'dataFileList': [
-                            {'gid': 'jkotan',
-                             'path': 'myscan_00001.scan.json',
-                             'perm': '-rw-r--r--',
-                             'size': 629,
-                             'time': '2022-07-05T19:07:16.683673+0200',
-                             'uid': 'jkotan'}],
-                         'datasetId': '99001234/myscan_00001',
-                         'accessGroups': [
-                             '99001234-dmgt', '99001234-clbt', '99001234-part',
-                             'p00dmgt', 'p00staff'],
-                         'ownerGroup': '99001234-dmgt',
-                         'size': 629}, skip=["dataFileList", "size"])
-                    self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -6445,7 +6249,7 @@ optional arguments:
                          'ownerGroup': '99001234-dmgt',
                          'size': 629}, skip=["dataFileList", "size"])
                     self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[2]),
+                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -6723,24 +6527,9 @@ optional arguments:
                          'raw/special',
                          'type': 'raw'},
                         skip=['creationTime'])
-                    self.assertEqual(len(self.__server.origdatablocks), 3)
+                    self.assertEqual(len(self.__server.origdatablocks), 2)
                     self.myAssertDict(
                         json.loads(self.__server.origdatablocks[0]),
-                        {'dataFileList': [
-                            {'gid': 'jkotan',
-                             'path': 'myscan_00001.scan.json',
-                             'perm': '-rw-r--r--',
-                             'size': 629,
-                             'time': '2022-07-05T19:07:16.683673+0200',
-                             'uid': 'jkotan'}],
-                         'datasetId': '99001234/myscan_00001',
-                         'accessGroups': [
-                             '99001234-dmgt', '99001234-clbt', '99001234-part',
-                             'p00dmgt', 'p00staff'],
-                         'ownerGroup': '99001234-dmgt',
-                         'size': 629}, skip=["dataFileList", "size"])
-                    self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -6755,7 +6544,7 @@ optional arguments:
                          'ownerGroup': '99001234-dmgt',
                          'size': 629}, skip=["dataFileList", "size"])
                     self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[2]),
+                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -7058,24 +6847,9 @@ optional arguments:
                          'raw/special',
                          'type': 'raw'},
                         skip=['creationTime'])
-                    self.assertEqual(len(self.__server.origdatablocks), 3)
+                    self.assertEqual(len(self.__server.origdatablocks), 2)
                     self.myAssertDict(
                         json.loads(self.__server.origdatablocks[0]),
-                        {'dataFileList': [
-                            {'gid': 'jkotan',
-                             'path': 'myscan_00001.scan.json',
-                             'perm': '-rw-r--r--',
-                             'size': 629,
-                             'time': '2022-07-05T19:07:16.683673+0200',
-                             'uid': 'jkotan'}],
-                         'datasetId': '99001234/myscan_00001',
-                         'accessGroups': [
-                             '99001234-dmgt', '99001234-clbt', '99001234-part',
-                             'p00dmgt', 'p00staff'],
-                         'ownerGroup': '99001234-dmgt',
-                         'size': 629}, skip=["dataFileList", "size"])
-                    self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -7090,7 +6864,7 @@ optional arguments:
                          'ownerGroup': '99001234-dmgt',
                          'size': 629}, skip=["dataFileList", "size"])
                     self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[2]),
+                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -7393,24 +7167,9 @@ optional arguments:
                          'raw/special',
                          'type': 'raw'},
                         skip=['creationTime'])
-                    self.assertEqual(len(self.__server.origdatablocks), 3)
+                    self.assertEqual(len(self.__server.origdatablocks), 2)
                     self.myAssertDict(
                         json.loads(self.__server.origdatablocks[0]),
-                        {'dataFileList': [
-                            {'gid': 'jkotan',
-                             'path': 'myscan_00001.scan.json',
-                             'perm': '-rw-r--r--',
-                             'size': 629,
-                             'time': '2022-07-05T19:07:16.683673+0200',
-                             'uid': 'jkotan'}],
-                         'datasetId': '99001234/myscan_00001',
-                         'accessGroups': [
-                             '99001234-dmgt', '99001234-clbt', '99001234-part',
-                             'p00dmgt', 'p00staff'],
-                         'ownerGroup': '99001234-dmgt',
-                         'size': 629}, skip=["dataFileList", "size"])
-                    self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -7425,7 +7184,7 @@ optional arguments:
                          'ownerGroup': '99001234-dmgt',
                          'size': 629}, skip=["dataFileList", "size"])
                     self.myAssertDict(
-                        json.loads(self.__server.origdatablocks[2]),
+                        json.loads(self.__server.origdatablocks[1]),
                         {'dataFileList': [
                             {'gid': 'jkotan',
                              'path': 'myscan_00001.scan.json',
@@ -7676,37 +7435,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=["creationTime"])
-                self.assertEqual(len(self.__server.origdatablocks), 2)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00001',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
         finally:
@@ -7900,37 +7629,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=['creationTime'])
-                self.assertEqual(len(self.__server.origdatablocks), 2)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00001',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
         finally:
@@ -8163,37 +7862,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=["creationTime"])
-                self.assertEqual(len(self.__server.origdatablocks), 2)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00001',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
         finally:
@@ -8343,8 +8012,7 @@ optional arguments:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "Datasets: 99001234/myscan_00001/2\n"
-                    "OrigDatablocks: 99001234/myscan_00001/2\n",
+                    "Datasets: 99001234/myscan_00001/2\n",
                     vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
@@ -8442,52 +8110,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=["creationTime"])
-                self.assertEqual(len(self.__server.origdatablocks), 3)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00001',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[2]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00001/2',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
         finally:
@@ -8639,9 +8262,7 @@ optional arguments:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 99001234/myscan_00001\n"
-                    "Datasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 1)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -8703,37 +8324,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=['creationTime'])
-                self.assertEqual(len(self.__server.origdatablocks), 2)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-dmgt',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'datasetId': '99001234/myscan_00001',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '99001234/myscan_00002',
-                     'accessGroups': [
-                         '99001234-dmgt', '99001234-clbt', '99001234-part',
-                         'p00dmgt', 'p00staff'],
-                     'ownerGroup': '99001234-dmgt',
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
         finally:
@@ -8803,7 +8394,7 @@ optional arguments:
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
                 self.__server.reset()
-                self.__server.error_requests = [3, 8]
+                self.__server.error_requests = [3, 7]
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
@@ -8883,8 +8474,8 @@ optional arguments:
                     '99001234/{sc2}\n'
                     'INFO : DatasetIngestor: Ingest dataset: '
                     '{subdir2}/{sc2}.scan.json\n'
-                    'ERROR : DatasetIngestor: '
-                    '{{"Error": "Internal Error"}}\n'
+                    # 'ERROR : DatasetIngestor: '
+                    # '{{"Error": "Internal Error"}}\n'
                     'INFO : DatasetIngestor: Ingest origdatablock: '
                     '{subdir2}/{sc2}.origdatablock.json\n'
                     .format(basedir=fdirname,
@@ -9163,6 +8754,10 @@ optional arguments:
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -9373,6 +8968,10 @@ optional arguments:
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -9734,9 +9333,7 @@ optional arguments:
                     "Login: ingestor\n"
                     "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "Datasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -9797,33 +9394,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=['creationTime'])
-                self.assertEqual(len(self.__server.origdatablocks), 2)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'ownerGroup': 'mygroup',
-                     'accessGroups': ['group1', 'group2'],
-                     'datasetId': '10.3204/99001234/myscan_00001',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
-                     'accessGroups': ['group1', 'group2'],
-                     'ownerGroup': 'mygroup',
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
                 if os.path.isdir("%s%s" % (lvardir, fsubdirname)):
@@ -9997,9 +9568,7 @@ optional arguments:
                     "Login: ingestor\n"
                     "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "Datasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -10064,37 +9633,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=['creationTime'])
-                self.assertEqual(len(self.__server.origdatablocks), 2)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-dmgt',
-                     'accessGroups': ['99001234-dmgt', '99001234-clbt',
-                                      '99001234-part', 'p00dmgt',
-                                      'p00staff'],
-                     'datasetId': '10.3204/99001234/myscan_00001',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
-                     'ownerGroup': '99001234-dmgt',
-                     'accessGroups': ['99001234-dmgt', '99001234-clbt',
-                                      '99001234-part', 'p00dmgt',
-                                      'p00staff'],
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
                 if os.path.isdir("%s%s" % (lvardir, fsubdirname)):
@@ -10268,9 +9807,7 @@ optional arguments:
                     "Login: ingestor\n"
                     "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "Datasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -10335,37 +9872,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=['creationTime'])
-                self.assertEqual(len(self.__server.origdatablocks), 2)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-dmgt',
-                     'accessGroups': ['99001234-dmgt', '99001234-clbt',
-                                      '99001234-part', 'p00dmgt',
-                                      'p00staff'],
-                     'datasetId': '10.3204/99001234/myscan_00001',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
-                     'ownerGroup': '99001234-dmgt',
-                     'accessGroups': ['99001234-dmgt', '99001234-clbt',
-                                      '99001234-part', 'p00dmgt',
-                                      'p00staff'],
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
                 if os.path.isdir("%s%s" % (lvardir, fsubdirname)):
@@ -10534,9 +10041,7 @@ optional arguments:
                     "Login: ingestor\n"
                     "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00001\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00001\n"
-                    "Datasets: 99001234/myscan_00002\n"
-                    "OrigDatablocks: 10.3204/99001234/myscan_00002\n", vl)
+                    "Datasets: 99001234/myscan_00002\n", vl)
                 self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
@@ -10601,37 +10106,7 @@ optional arguments:
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
                      'type': 'raw'},
                     skip=['creationTime'])
-                self.assertEqual(len(self.__server.origdatablocks), 2)
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[0]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'ownerGroup': '99001234-dmgt',
-                     'accessGroups': ['99001234-dmgt', '99001234-clbt',
-                                      '99001234-part', 'p00dmgt',
-                                      'p00staff'],
-                     'datasetId': '10.3204/99001234/myscan_00001',
-                     'size': 629}, skip=["dataFileList", "size"])
-                self.myAssertDict(
-                    json.loads(self.__server.origdatablocks[1]),
-                    {'dataFileList': [
-                        {'gid': 'jkotan',
-                         'path': 'myscan_00001.scan.json',
-                         'perm': '-rw-r--r--',
-                         'size': 629,
-                         'time': '2022-07-05T19:07:16.683673+0200',
-                         'uid': 'jkotan'}],
-                     'datasetId': '10.3204/99001234/myscan_00002',
-                     'ownerGroup': '99001234-dmgt',
-                     'accessGroups': ['99001234-dmgt', '99001234-clbt',
-                                      '99001234-part', 'p00dmgt',
-                                      'p00staff'],
-                     'size': 629}, skip=["dataFileList", "size"])
+                self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
                     shutil.rmtree(fsubdirname)
                 if os.path.isdir("%s%s" % (lvardir, fsubdirname)):
@@ -10865,6 +10340,10 @@ optional arguments:
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 self.__server.pid_proposal["99001234"] = json.dumps(prop)
                 if os.path.exists(fidslist):
@@ -11084,6 +10563,10 @@ optional arguments:
                 shutil.copy(source, fdirname)
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00001.txt"))
+                shutil.copy(lsource,
+                            os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
                 self.__server.pid_proposal["99001234"] = json.dumps(prop)
                 if os.path.exists(fidslist):
