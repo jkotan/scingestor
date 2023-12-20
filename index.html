@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 0.10.1 documentation</title>
+    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 0.11.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -139,9 +139,9 @@ is finished. It can be executed by</p>
 <div class="section" id="pattern-keywords-for-configuration-variables">
 <h3>Pattern keywords for configuration variables<a class="headerlink" href="#pattern-keywords-for-configuration-variables" title="Permalink to this headline">¶</a></h3>
 <p>The  <strong>datasets_filename_pattern</strong>, <strong>ingested_datasets_filename_pattern</strong>  and <strong>ingestor_var_dir</strong> can contain the <em>{beamtimeid}</em> and <em>{hostname}</em> keywords,  e.g. <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{beamtimeid}.lst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{hostname}-{beamtimeid}.lst&quot;</span></code>  which is instantiated during the ingestor execution.</p>
-<p>Similarly, <strong>file_dataset_metadata_generator</strong>, <strong>dataset_metadata_generator</strong>, <strong>datablock_metadata_generator</strong>,  <strong>datablock_metadata_stream_generator</strong>, <strong>datablock_metadata_generator_scanpath_postfix</strong>, <strong>attachment_metadata_generator</strong>, <strong>chmod_generator_switch</strong>, <strong>relative_path_generator_switch</strong>  can contain the following keywords: <em>{beamtimeid}</em> , <em>{scanname}</em>, <em>{chmod}</em>, <em>{scanpath}</em>, <em>{metapath}</em>, <em>{relpath}</em>, <em>{beamtimeid}</em>, <em>{beamline}</em>, <em>{doiprefix}</em>, <em>{beamtimefile}</em>, <em>{scanpostfix}</em>, <em>{datablockpostfix}</em>, <em>{ownergroup}</em>, <em>{accessgroups}</em>, <em>{hostname}</em>, <em>{hiddenattributes}</em>, <em>{ext}</em>, &quot;{masterfile}&quot;, &quot;{plotfile}&quot;</p>
-<p>The &quot;{masterfile}&quot; is either equal to   &quot;{scanpath}/{scanname}.{ext}&quot; or &quot;{scanpath}/{scanname}/{scanname}.{ext}&quot;. Also
-the &quot;{plotfile}&quot; is either equal to  &quot;{scanpath}/{scanname}.{plotext}&quot; or &quot;{scanpath}/{scanname}/{scanname}.{plotext}&quot;.</p>
+<p>Similarly, <strong>file_dataset_metadata_generator</strong>, <strong>dataset_metadata_generator</strong>, <strong>datablock_metadata_generator</strong>,  <strong>datablock_metadata_stream_generator</strong>, <strong>datablock_metadata_generator_scanpath_postfix</strong>, <strong>attachment_metadata_generator</strong>, <strong>chmod_generator_switch</strong>, <strong>relative_path_generator_switch</strong>  can contain the following keywords: <em>{beamtimeid}</em> , <em>{scanname}</em>, <em>{chmod}</em>, <em>{scanpath}</em>, <em>{metapath}</em>, <em>{relpath}</em>, <em>{beamtimeid}</em>, <em>{beamline}</em>, <em>{doiprefix}</em>, <em>{beamtimefile}</em>, <em>{scanpostfix}</em>, <em>{datablockpostfix}</em>, <em>{ownergroup}</em>, <em>{accessgroups}</em>, <em>{hostname}</em>, <em>{hiddenattributes}</em>, <em>{ext}</em>, “{masterfile}”, “{plotfile}”, “{masterscanname}”, “{entryname}”</p>
+<p>The “{masterfile}” is either equal to   “{scanpath}/{scanname}.{ext}” or “{scanpath}/{scanname}/{scanname}.{ext}”. Also
+the “{plotfile}” is either equal to  “{scanpath}/{scanname}.{plotext}” or “{scanpath}/{scanname}/{scanname}.{plotext}”.</p>
 </div>
 </div>
 <div class="section" id="scicat-dataset-ingest">
