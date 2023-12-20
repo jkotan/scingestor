@@ -924,23 +924,36 @@ class DatasetIngestor:
                 return adss[0]
         return ""
 
-    def _regenerate_origdatablock_metadata(self, scan, force=False):
+    def _regenerate_origdatablock_metadata(self, scan,
+                                           force=False, mfilename=""):
         """regenerate origdatablock metadata
 
         :param scan: scan name
         :type scan: :obj:`str`
         :param force: force flag
         :type force: :obj:`bool`
+        :param mfilename: metadata file name
+        :type mfilename: :obj:`str`
         :returns: a file name of generate file
         :rtype: :obj:`str`
         """
         mfilename = "{metapath}/{scanname}{datablockpostfix}".format(
             **self.__dctfmt)
+
         get_logger().info(
             'DatasetIngestor: Checking origdatablock metadata: %s %s' % (
                 scan, mfilename))
 
-        cmd = self.__datablockcommand.format(**self.__dctfmt)
+        # cmd = self.__datablockcommand.format(**self.__dctfmt)
+        dmeta = None
+        try:
+            with open(mfilename, "r") as mf:
+                meta = mf.read()
+                dmeta = json.loads(meta)
+        except Exception as e:
+            if not force:
+                get_logger().warning('%s: %s' % (scan, str(e)))
+        cmd = self.__datablockmemcommand.format(**self.__dctfmt)
         sscan = (scan or "").split(" ")
         if self.__datablockscanpath:
             dctfmt = dict(self.__dctfmt)
@@ -949,44 +962,22 @@ class DatasetIngestor:
                 cmd += self.__datablockscanpath.format(**dctfmt)
         get_logger().debug(
             'DatasetIngestor: Checking origdatablock command: %s ' % cmd)
-        dmeta = None
-        try:
-            with open(mfilename, "r") as mf:
-                meta = mf.read()
-                dmeta = json.loads(meta)
-        except Exception as e:
-            get_logger().warning('%s: %s' % (scan, str(e)))
-        if dmeta is None:
-            if self.__logcommands:
-                get_logger().info(
-                    'DatasetIngestor: Generating origdatablock command: %s'
-                    % cmd)
-            else:
-                get_logger().debug(
-                    'DatasetIngestor: Generating origdatablock command: %s'
-                    % cmd)
-            subprocess.run(cmd, shell=True, check=True)
+        if self.__logcommands:
+            get_logger().info(
+                'DatasetIngestor: Generating origdatablock command: %s'
+                % cmd)
         else:
-            cmd = self.__datablockmemcommand.format(**self.__dctfmt)
-            sscan = (scan or "").split(" ")
-            if self.__datablockscanpath:
-                dctfmt = dict(self.__dctfmt)
-                for sc in sscan:
-                    dctfmt["scanname"] = sc
-                    cmd += self.__datablockscanpath.format(**dctfmt)
-
-            if self.__logcommands:
-                get_logger().info(
-                    'DatasetIngestor: Generating origdatablock command: %s'
-                    % cmd)
-            else:
-                get_logger().debug(
-                    'DatasetIngestor: Generating origdatablock command: %s'
-                    % cmd)
-            result = subprocess.run(
-                cmd, shell=True,
-                text=True, capture_output=True, check=True)
-            nwmeta = str(result.stdout)
+            get_logger().debug(
+                'DatasetIngestor: Generating origdatablock command: %s'
+                % cmd)
+        result = subprocess.run(
+            cmd, shell=True,
+            text=True, capture_output=True, check=True)
+        nwmeta = str(result.stdout)
+        if dmeta is None:
+            with open(mfilename, "w") as mf:
+                mf.write(nwmeta)
+        else:
             try:
                 dnwmeta = json.loads(nwmeta)
             except Exception as e:
@@ -1003,9 +994,7 @@ class DatasetIngestor:
                     with open(mfilename, "w") as mf:
                         mf.write(nwmeta)
 
-        odbs = glob.glob(
-            "{metapath}/{scanname}{datablockpostfix}".format(
-                    **self.__dctfmt))
+        odbs = glob.glob(mfilename)
         if odbs and odbs[0]:
             return odbs[0]
         return ""
@@ -1960,6 +1949,7 @@ class DatasetIngestor:
             if not olst:
                 self._regenerate_origdatablock_metadata(
                     pscan, reingest_origdatablock)
+
             mtm = os.path.getmtime(odb)
 
             if scan in self.__sc_ingested_map.keys():
@@ -1976,6 +1966,17 @@ class DatasetIngestor:
             todb = [odb]
             get_logger().debug("DB No File: %s True" % (scan))
             reingest_origdatablock = True
+
+        mfilename = ""
+        odb2 = ""
+        if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
+            mfilename = "{metapath}/_{masterscanname}{datablockpostfix}". \
+                format(**self.__dctfmt)
+            odb2 = self._regenerate_origdatablock_metadata(
+                self.__dctfmt["masterscanname"], True, mfilename=mfilename)
+            if odb2 and os.path.isfile(odb2) and odb2 not in todb:
+                todb.insert(0, odb2)
+                reingest_origdatablock = True
         mtmdb = 0
         if odb:
             mtmdb = os.path.getmtime(odb)
