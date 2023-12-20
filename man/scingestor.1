@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "SCINGESTOR" "1" "Dec 12, 2023" "0.10" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "Dec 20, 2023" "0.11" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .
@@ -235,10 +235,10 @@ ingestor_credential_file: "{homepath}/gpfs/pwd"
 .sp
 The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_var_dir\fP can contain the \fI{beamtimeid}\fP and \fI{hostname}\fP keywords,  e.g. \fB"scicat\-ingested\-datasets\-{beamtimeid}.lst"\fP or \fB"scicat\-ingested\-datasets\-{hostname}\-{beamtimeid}.lst"\fP  which is instantiated during the ingestor execution.
 .sp
-Similarly, \fBfile_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBattachment_metadata_generator\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP, \fI{hiddenattributes}\fP, \fI{ext}\fP, "{masterfile}", "{plotfile}"
+Similarly, \fBfile_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBattachment_metadata_generator\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP, \fI{hiddenattributes}\fP, \fI{ext}\fP, “{masterfile}”, “{plotfile}”, “{masterscanname}”, “{entryname}”
 .sp
-The "{masterfile}" is either equal to   "{scanpath}/{scanname}.{ext}" or "{scanpath}/{scanname}/{scanname}.{ext}". Also
-the "{plotfile}" is either equal to  "{scanpath}/{scanname}.{plotext}" or "{scanpath}/{scanname}/{scanname}.{plotext}".
+The “{masterfile}” is either equal to   “{scanpath}/{scanname}.{ext}” or “{scanpath}/{scanname}/{scanname}.{ext}”. Also
+the “{plotfile}” is either equal to  “{scanpath}/{scanname}.{plotext}” or “{scanpath}/{scanname}/{scanname}.{plotext}”.
 .SH SCICAT_DATASET_INGEST
 .sp
 Re\-ingestion script for SciCat Datasets and OrigDatablocks is usually
@@ -591,7 +591,7 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBoptions\fP (\fI\%argparse.Namespace\fP) \-\- parser options
+\fBoptions\fP (\fI\%argparse.Namespace\fP) – parser options
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -616,7 +616,7 @@ the main program function
 .INDENT 7.0
 .TP
 .B Parameters
-\fBinterrupt\fP (\fI\%int\fP) \-\- test interrupt flag: 1:keyboard, 2:signal
+\fBinterrupt\fP (\fI\%int\fP) – test interrupt flag: 1:keyboard, 2:signal
 .UNINDENT
 .UNINDENT
 .SS scingestor.configuration module
@@ -627,7 +627,7 @@ load config file
 .INDENT 7.0
 .TP
 .B Parameters
-\fBconfigfile\fP (\fI\%str\fP) \-\- configuration file name
+\fBconfigfile\fP (\fI\%str\fP) – configuration file name
 .UNINDENT
 .UNINDENT
 .SS scingestor.datasetIngest module
@@ -642,7 +642,7 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBoptions\fP (\fI\%argparse.Namespace\fP) \-\- parser options
+\fBoptions\fP (\fI\%argparse.Namespace\fP) – parser options
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -669,23 +669,23 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- dictionary with the ingestor configuration
+\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – dictionary with the ingestor configuration
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) \-\- scan dir path
+\fBpath\fP (\fI\%str\fP) – scan dir path
 .IP \(bu 2
-\fBdsfile\fP (\fI\%str\fP) \-\- file with a dataset list
+\fBdsfile\fP (\fI\%str\fP) – file with a dataset list
 .IP \(bu 2
-\fBdsfile\fP \-\- file with a ingester dataset list
+\fBdsfile\fP – file with a ingester dataset list
 .IP \(bu 2
-\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- beamtime configuration
+\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – beamtime configuration
 .IP \(bu 2
-\fBbeamtimefile\fP (\fI\%str\fP) \-\- beamtime filename
+\fBbeamtimefile\fP (\fI\%str\fP) – beamtime filename
 .IP \(bu 2
-\fBpidprefix\fP (\fI\%str\fP) \-\- pidprefix
+\fBpidprefix\fP (\fI\%str\fP) – pidprefix
 .IP \(bu 2
-\fBingestorcred\fP (\fI\%str\fP) \-\- ingestor credential
+\fBingestorcred\fP (\fI\%str\fP) – ingestor credential
 .IP \(bu 2
-\fBscicat_url\fP (\fI\%str\fP) \-\- scicat_url
+\fBscicat_url\fP (\fI\%str\fP) – scicat_url
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -697,9 +697,9 @@ appends owner and access groups to beamtime
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- beamtime configuration
+\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – beamtime configuration
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) \-\- base file path
+\fBpath\fP (\fI\%str\fP) – base file path
 .UNINDENT
 .TP
 .B Returns
@@ -746,9 +746,9 @@ ingest scan
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBscan\fP (\fI\%str\fP) \-\- scan name
+\fBscan\fP (\fI\%str\fP) – scan name
 .IP \(bu 2
-\fBtoken\fP (\fI\%str\fP) \-\- access token
+\fBtoken\fP (\fI\%str\fP) – access token
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -774,11 +774,11 @@ re\-ingest scan
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBscan\fP (\fI\%str\fP) \-\- scan name
+\fBscan\fP (\fI\%str\fP) – scan name
 .IP \(bu 2
-\fBtoken\fP (\fBbook\fP) \-\- access token
+\fBtoken\fP (\fBbook\fP) – access token
 .IP \(bu 2
-\fBtoken\fP \-\- no tmp file flag
+\fBtoken\fP – no tmp file flag
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -789,7 +789,7 @@ start measurement
 .INDENT 7.0
 .TP
 .B Parameters
-\fBmeasurement\fP (\fI\%str\fP) \-\- measurement name
+\fBmeasurement\fP (\fI\%str\fP) – measurement name
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -859,17 +859,17 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- dictionary with the ingestor configuration
+\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – dictionary with the ingestor configuration
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) \-\- scan dir path
+\fBpath\fP (\fI\%str\fP) – scan dir path
 .IP \(bu 2
-\fBdsfile\fP (\fI\%str\fP) \-\- file with a dataset list
+\fBdsfile\fP (\fI\%str\fP) – file with a dataset list
 .IP \(bu 2
-\fBdsfile\fP \-\- file with a ingester dataset list
+\fBdsfile\fP – file with a ingester dataset list
 .IP \(bu 2
-\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- beamtime configuration
+\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – beamtime configuration
 .IP \(bu 2
-\fBbeamtimefile\fP (\fI\%str\fP) \-\- beamtime filename
+\fBbeamtimefile\fP (\fI\%str\fP) – beamtime filename
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -903,7 +903,7 @@ default as described above. Allow for specialized date formatting with
 the optional datefmt argument. If datefmt is omitted, you get an
 ISO8601\-like (or RFC 3339\-like) format.
 .sp
-Use a style parameter of \(aq%\(aq, \(aq{\(aq or \(aq$\(aq to specify that you want to
+Use a style parameter of ‘%’, ‘{‘ or ‘$’ to specify that you want to
 use one of %\-formatting, \fI\%str.format()\fP (\fB{}\fP) formatting or
 \fI\%string.Template\fP formatting in your format string.
 .sp
@@ -912,7 +912,7 @@ Changed in version 3.2: Added the \fBstyle\fP parameter.
 .INDENT 7.0
 .TP
 .B converter()
-timestamp[, tz] \-> tz\(aqs local time from POSIX timestamp.
+timestamp[, tz] \-> tz’s local time from POSIX timestamp.
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -928,10 +928,10 @@ record. Otherwise, an ISO8601\-like (or RFC 3339\-like) format is used.
 The resulting string is returned. This function uses a user\-configurable
 function to convert the creation time to a tuple. By default,
 time.localtime() is used; to change this for a particular formatter
-instance, set the \(aqconverter\(aq attribute to a function with the same
+instance, set the ‘converter’ attribute to a function with the same
 signature as time.localtime() or time.gmtime(). To change it for all
 formatters, for example if you want all logging times to be shown in GMT,
-set the \(aqconverter\(aq attribute in the Formatter class.
+set the ‘converter’ attribute in the Formatter class.
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -956,13 +956,13 @@ init logger
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBname\fP (\fI\%str\fP) \-\- logger name
+\fBname\fP (\fI\%str\fP) – logger name
 .IP \(bu 2
-\fBlevel\fP (\fI\%str\fP) \-\- logging level
+\fBlevel\fP (\fI\%str\fP) – logging level
 .IP \(bu 2
-\fBtimestamps\fP (\fI\%bool\fP) \-\- timestamps flag
+\fBtimestamps\fP (\fI\%bool\fP) – timestamps flag
 .IP \(bu 2
-\fBlogfile\fP (\fI\%str\fP) \-\- logger file name
+\fBlogfile\fP (\fI\%str\fP) – logger file name
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -978,7 +978,7 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBoptions\fP (\fI\%argparse.Namespace\fP) \-\- parser options
+\fBoptions\fP (\fI\%argparse.Namespace\fP) – parser options
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -1018,11 +1018,11 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBcorepath\fP (\fI\%str\fP) \-\- core path
+\fBcorepath\fP (\fI\%str\fP) – core path
 .IP \(bu 2
-\fBblpath\fP (\fI\%str\fP) \-\- beamline path
+\fBblpath\fP (\fI\%str\fP) – beamline path
 .IP \(bu 2
-\fBusecorepath\fP (\fI\%bool\fP) \-\- enabled flag
+\fBusecorepath\fP (\fI\%bool\fP) – enabled flag
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1032,7 +1032,7 @@ converts core path to notify path
 .INDENT 7.0
 .TP
 .B Parameters
-\fBpath\fP (\fI\%str\fP) \-\- core path
+\fBpath\fP (\fI\%str\fP) – core path
 .TP
 .B Returns
 notify path
@@ -1048,7 +1048,7 @@ converts notify path to core path
 .INDENT 7.0
 .TP
 .B Parameters
-\fBpath\fP (\fI\%str\fP) \-\- notify path
+\fBpath\fP (\fI\%str\fP) – notify path
 .TP
 .B Returns
 core path
@@ -1072,9 +1072,9 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBname\fP (\fI\%str\fP) \-\- name
+\fBname\fP (\fI\%str\fP) – name
 .IP \(bu 2
-\fBmasks\fP \-\- mask description
+\fBmasks\fP – mask description
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1104,7 +1104,7 @@ class is implemented.
 method. Defaults to None, meaning nothing is called.
 .sp
 \fIname\fP is the thread name. By default, a unique name is constructed of
-the form "Thread\-N" where N is a small decimal number.
+the form “Thread\-N” where N is a small decimal number.
 .sp
 \fIargs\fP is the argument tuple for the target invocation. Defaults to ().
 .sp
@@ -1123,9 +1123,9 @@ add watch to notifier
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) \-\- watch path
+\fBpath\fP (\fI\%str\fP) – watch path
 .IP \(bu 2
-\fBmask\fP (\fI\%int\fP) \-\- watch mask
+\fBmask\fP (\fI\%int\fP) – watch mask
 .UNINDENT
 .TP
 .B Returns
@@ -1152,7 +1152,7 @@ remove watch from notifier
 .INDENT 7.0
 .TP
 .B Parameters
-\fBqid\fP (\fI\%int\fP) \-\- queue id
+\fBqid\fP (\fI\%int\fP) – queue id
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1180,15 +1180,15 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- dictionary with the ingestor configuration
+\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – dictionary with the ingestor configuration
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) \-\- scan dir path
+\fBpath\fP (\fI\%str\fP) – scan dir path
 .IP \(bu 2
-\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- beamtime configuration
+\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – beamtime configuration
 .IP \(bu 2
-\fBbeamtimefile\fP (\fI\%str\fP) \-\- beamtime file
+\fBbeamtimefile\fP (\fI\%str\fP) – beamtime file
 .IP \(bu 2
-\fBdepth\fP (\fI\%int\fP) \-\- scandir depth level
+\fBdepth\fP (\fI\%int\fP) – scandir depth level
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
