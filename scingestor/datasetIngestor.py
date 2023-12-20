@@ -771,7 +771,7 @@ class DatasetIngestor:
                 masterfile = self.__dctfmt["masterfile"]
                 mdir, mfile = os.path.split(masterfile)
                 self.__dctfmt["masterfile"] = os.path.join(
-                    mdir, "_tmp_" + mfile)
+                    mdir, "_tmp_scingestor" + mfile)
 
                 shutil.copy(masterfile, self.__dctfmt["masterfile"])
 
@@ -894,7 +894,8 @@ class DatasetIngestor:
             if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
                 plotfile = self.__dctfmt["plotfile"]
                 mdir, mfile = os.path.split(plotfile)
-                self.__dctfmt["plotfile"] = os.path.join(mdir, "_tmp_" + mfile)
+                self.__dctfmt["plotfile"] = os.path.join(
+                    mdir, "_tmp_scingestor" + mfile)
                 shutil.copy(plotfile, self.__dctfmt["plotfile"])
 
             get_logger().info(
