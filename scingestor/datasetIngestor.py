@@ -1873,6 +1873,8 @@ class DatasetIngestor:
                 else:
                     pscan = sscan[0]
                     scanname = sscan[0]
+                if ":" in scanname:
+                    scanname = scanname.split(":")[0]
                 if "::/" in pscan:
                     gname, entryname = pscan.split("::/")[:2]
                 else:
