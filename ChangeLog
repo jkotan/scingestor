@@ -1,6 +1,7 @@
 2023-12-21 Jan Kotanski <jan.kotanski@desy.de>
-	* fix  support for multi-scan NeXus files reingestion (#273)
-	* tagged as 0.11.1
+	* add add_grouping_keyword configuration variable (#274)
+	* fix  support for multi-scan NeXus files reingestion (#272)
+	* tagged as 0.12.0
 
 2023-12-19 Jan Kotanski <jan.kotanski@desy.de>
 	* add support for multi-scan NeXus files (#268)
