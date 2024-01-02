@@ -163,6 +163,8 @@ class DatasetIngestor:
         self.__logcommands = False
         #: (:obj:`bool`) empty units flag
         self.__emptyunits = True
+        #: (:obj:`bool`) add grouping keyword flag
+        self.__addgroupingkeyword = True
         #: (:obj:`bool`) skip multiple datablock ingestion
         self.__skip_multi_datablock = False
         #: (:obj:`bool`) skip multiple attachment ingestion
@@ -426,6 +428,9 @@ class DatasetIngestor:
                 self.__config["retry_failed_attachment_ingestion"]
         if "add_empty_units" in self.__config.keys():
             self.__emptyunits = self.__config["add_empty_units"]
+
+        if "add_grouping_keyword" in self.__config.keys():
+            self.__addgroupingkeyword = self.__config["add_grouping_units"]
 
         if "skip_multi_datablock_ingestion" in self.__config.keys():
             self.__skip_multi_datablock = \
@@ -1305,11 +1310,23 @@ class DatasetIngestor:
                         dsmeta = json.loads(resds.content)
                         mdic = dict(mdct)
                         mdic["pid"] = pid
+                        if self.__addgroupingkeyword and \
+                           self.__dctfmt["measurement"] and \
+                           "keywords" in mdic and \
+                           isinstance(mdic["keywords"], list) and \
+                           self.__dctfmt["measurement"] \
+                           not in mdic["keywords"]:
+                            mdic["keywords"].append(
+                                self.__dctfmt["measurement"])
                         if not self._metadataEqual(
                                 dsmeta, mdic, skip=self.__withoutsm):
                             if self.__strategy in [
                                     UpdateStrategy.PATCH, UpdateStrategy.NO]:
                                 nmeta = json.dumps(mdic)
+                                # mm = dict(mdic)
+                                # mm["scientificMetadata"] = {}
+                                # get_logger().info(
+                                #     'DatasetIngestor: PATCH: %s' % str(mm))
                                 return self._patch_dataset(
                                     nmeta, pid, token, mdct)
                             else:
