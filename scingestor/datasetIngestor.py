@@ -1310,23 +1310,23 @@ class DatasetIngestor:
                         dsmeta = json.loads(resds.content)
                         mdic = dict(mdct)
                         mdic["pid"] = pid
+                        if self.__addgroupingkeyword and \
+                           self.__dctfmt["measurement"] and \
+                           "keywords" in mdic and \
+                           isinstance(mdic["keywords"], list) and \
+                           self.__dctfmt["measurement"] \
+                           not in mdic["keywords"]:
+                            mdic["keywords"].append(
+                                self.__dctfmt["measurement"])
                         if not self._metadataEqual(
                                 dsmeta, mdic, skip=self.__withoutsm):
                             if self.__strategy in [
                                     UpdateStrategy.PATCH, UpdateStrategy.NO]:
-                                if self.__addgroupingkeyword and \
-                                   self.__dctfmt["measurement"] and \
-                                   "keywords" in mdic and \
-                                   isinstance(mdic["keywords"], list) and \
-                                   self.__dctfmt["measurement"] \
-                                   not in mdic["keywords"]:
-                                    mdic["keywords"].append(
-                                        self.__dctfmt["measurement"])
                                 nmeta = json.dumps(mdic)
-                                mm = dict(mdic)
-                                mm["scientificMetadata"] = {}
-                                get_logger().info(
-                                    'DatasetIngestor: PATCH: %s' % str(mm))
+                                # mm = dict(mdic)
+                                # mm["scientificMetadata"] = {}
+                                # get_logger().info(
+                                #     'DatasetIngestor: PATCH: %s' % str(mm))
                                 return self._patch_dataset(
                                     nmeta, pid, token, mdct)
                             else:
