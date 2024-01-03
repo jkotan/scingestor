@@ -288,7 +288,8 @@ A separete line in the dataset list file may contain
 * command to start a measurement with a given name which groups related scans,  e.g. ``__command__ start mycalib6``
 * command to stop a measurement which groups related scans, e.g. ``__command__ stop``
 
-## Measurment Datasets which group scan metadata
+Measurment Datasets which group scan metadata
+---------------------------------------------
 
 The `__command__ start <measurement>` and `__command__ stop` allow to pass information to scicat ingestor which scan datasets should be grouped into the measurement dataset, i.e. by default of scan datasets between start and stop commands are grouped to the one measurement.
 
