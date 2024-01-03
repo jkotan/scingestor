@@ -61,7 +61,7 @@ The configuration written in YAML can contain the following variables
 * **chmod_json_files** *(str)* , default: ``None``
 * **max_scandir_depth** *(int)*, default: ``-1``
 * **oned_in_metadata** *(bool)* , default: ``False``
-* **add_grouping_keyword** *(bool)* , default: ``True``
+* **force_measurement_keyword** *(bool)* , default: ``True``
 * **max_oned_size** *(int)* , default: ``None``
 * **scan_metadata_postfix** *(str)* , default: ``".scan.json"``
 * **datablock_metadata_postfix** *(str)* , default: ``".origdatablock.json"``
