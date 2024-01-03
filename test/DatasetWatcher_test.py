@@ -4522,7 +4522,7 @@ class DatasetWatcherTest(unittest.TestCase):
             'dataset_update_strategy: haha\n' \
             'max_request_tries_number: ha\n' \
             'request_headers: true\n' \
-            'metadata_keywords_without_checks: true\n' \
+            'metadata_fields_without_checks: true\n' \
             'recheck_beamtime_file_interval: rbfi\n' \
             'recheck_dataset_list_interval: dsli\n' \
             'ingestion_delay_time: idt\n' \

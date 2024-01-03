@@ -163,8 +163,8 @@ class DatasetIngestor:
         self.__logcommands = False
         #: (:obj:`bool`) empty units flag
         self.__emptyunits = True
-        #: (:obj:`bool`) add grouping keyword flag
-        self.__addgroupingkeyword = True
+        #: (:obj:`bool`) force measurement keyword flag
+        self.__forcemeasurementkeyword = True
         #: (:obj:`bool`) skip multiple datablock ingestion
         self.__skip_multi_datablock = False
         #: (:obj:`bool`) skip multiple attachment ingestion
@@ -429,8 +429,9 @@ class DatasetIngestor:
         if "add_empty_units" in self.__config.keys():
             self.__emptyunits = self.__config["add_empty_units"]
 
-        if "add_grouping_keyword" in self.__config.keys():
-            self.__addgroupingkeyword = self.__config["add_grouping_units"]
+        if "force_measurement_keyword" in self.__config.keys():
+            self.__forcemeasurementkeyword = \
+                self.__config["force_measurement_keyword"]
 
         if "skip_multi_datablock_ingestion" in self.__config.keys():
             self.__skip_multi_datablock = \
@@ -653,10 +654,10 @@ class DatasetIngestor:
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
 
-        if "metadata_keywords_without_checks" in self.__config.keys():
+        if "metadata_fields_without_checks" in self.__config.keys():
             try:
                 self.__withoutsm = list(
-                    self.__config["metadata_keywords_without_checks"])
+                    self.__config["metadata_fields_without_checks"])
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
 
@@ -1310,7 +1311,7 @@ class DatasetIngestor:
                         dsmeta = json.loads(resds.content)
                         mdic = dict(mdct)
                         mdic["pid"] = pid
-                        if self.__addgroupingkeyword and \
+                        if self.__forcemeasurementkeyword and \
                            self.__dctfmt["measurement"] and \
                            "keywords" in mdic and \
                            isinstance(mdic["keywords"], list) and \
