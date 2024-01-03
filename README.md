@@ -224,3 +224,20 @@ Finally,
 apt-get update
 apt-get install python3-scingestor
 ```
+
+## Dataset list file content
+
+The scicat ingestor trigger its actions on appending a new line in the dataset list file.
+The dataset list file is located in the scan directory and its filename is defined
+by **datasets_filename_pattern** variable, i.e. by default "scicat-datasets-{beamtimeid}.lst".
+
+A separete line in the dataset list file may contain
+1. a scanname to ingest e.g.  `myscan_00012`
+2. a scanname to reingest with a unique identifier (timestamp) e.g. `myscan_00012:1702988846.0770347`
+3. a scanname and detector subdirectories to ingest e.g.  `myscan_00012 pilatus1 lambda`
+4. a scanname from multi-scan nexus file to ingest e.g.  `myscan::/scan12;myscan_00012`
+5. a command to start a measurement with a given name which groups related scans  e.g. `__command__ start mycalib6`
+6. a command to stop a measurement which groups related scans  e.g. `__command__ stop`
+
+
+
