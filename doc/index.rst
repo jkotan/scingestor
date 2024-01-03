@@ -277,7 +277,7 @@ The scicat ingestor triggers its actions on appending a new line in the dataset 
 The dataset list file is located in the scan directory and its filename is defined
 by **datasets_filename_pattern** variable, i.e. by default "scicat-datasets-{beamtimeid}.lst".
 
-By default the scan dataset metadata are fetch from the corresponding the master file with its filename given by <scanname>.<ext> where usually <ext> is `nxs` or `fio`. The detector file related to the particular scan are places in the <scanname> subdirectory and they are added to the scan origindatablock.
+By default the scan dataset metadata are fetched from the corresponding the master file with its filename given by <scanname>.<ext> where usually <ext> is `nxs` or `fio`. The detector files related to the particular scan are placed in the <scanname> subdirectory and they are added to the scan origindatablock.
 
 A separete line in the dataset list file may contain
 #. a scanname to ingest, e.g. ``myscan_00012``
@@ -289,14 +289,14 @@ A separete line in the dataset list file may contain
 
 ## Measurment Datasets which group scan metadata
 
-The `__command__ start <measurement>` and `__command__ stop` allows to pass information to scicat ingestor which scan datasets should be grouped into the measurement dataset, i.e. by default of scan datasets between start and stop commands are grouped to the one measurement.
+The `__command__ start <measurement>` and `__command__ stop` allow to pass information to scicat ingestor which scan datasets should be grouped into the measurement dataset, i.e. by default of scan datasets between start and stop commands are grouped to the one measurement.
 
 Sardana Measurement macros
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The config/scmacros.py module provides sardana macros which help to start/stop measurement
-* **start_measurement <measurement>** starts a new measurment with the given nam
-* **make_measurement <measurement>** starts a new measurment with the given name and add to the measurement the last scan
+The config/scmacros.py module provides sardana macros which help to start/stop the measurement
+* **start_measurement <measurement>** starts a new measurment with the given name
+* **make_measurement <measurement>** starts a new measurment with the given name and adds to the measurement the last scan
 * **update_measurement** updates the current measurement dataset in the SciCat database
 * **stop_measurement** updates the current measurement dataset in the SciCat database and stops the  measurement
 * **show_measurement** shows the current measurement name
@@ -304,7 +304,7 @@ The config/scmacros.py module provides sardana macros which help to start/stop m
 Sardana Measurement with SciCatAutoGrouping
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Setting the **SciCatAutoGrouping** sardana environment variable to ``False`` we can switch on the autogrouping mode. In the mode scan metadata is grouped automatically into the measurement dataset. The name of measurement is taken from the base scanname after removing ScanID, e.g. for <scanname> = "mycalib2_00012" <measurement_name> = "mycalib2"
+Setting the **SciCatAutoGrouping** sardana environment variable to ``False`` we can switch on the autogrouping mode. In this mode scan metadata is grouped automatically into the measurement dataset and the measurement dataset updated after each scan. The name of measurement is taken from the base scanname after removing ScanID, e.g. for <scanname> = "mycalib2_00012" <measurement_name> = "mycalib2"
 
 
 Contents
