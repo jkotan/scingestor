@@ -287,6 +287,25 @@ A separete line in the dataset list file may contain
 #. a command to start a measurement with a given name which groups related scans,  e.g. ``__command__ start mycalib6``
 #. a command to stop a measurement which groups related scans, e.g. ``__command__ stop``
 
+## Measurment Datasets which group scan metadata
+
+The `__command__ start <measurement>` and `__command__ stop` allows to pass information to scicat ingestor which scan datasets should be grouped into the measurement dataset, i.e. by default of scan datasets between start and stop commands are grouped to the one measurement.
+
+Sardana Measurement macros
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The config/scmacros.py module provides sardana macros which help to start/stop measurement
+* **start_measurement <measurement>** starts a new measurment with the given nam
+* **make_measurement <measurement>** starts a new measurment with the given name and add to the measurement the last scan
+* **update_measurement** updates the current measurement dataset in the SciCat database
+* **stop_measurement** updates the current measurement dataset in the SciCat database and stops the  measurement
+* **show_measurement** shows the current measurement name
+
+Sardana Measurement with SciCatAutoGrouping
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Setting the **SciCatAutoGrouping** sardana environment variable to ``False`` we can switch on the autogrouping mode. In the mode scan metadata is grouped automatically into the measurement dataset. The name of measurement is taken from the base scanname after removing ScanID, e.g. for <scanname> = "mycalib2_00012" <measurement_name> = "mycalib2"
+
 
 Contents
 ========
