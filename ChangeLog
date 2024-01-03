@@ -1,6 +1,8 @@
-2023-12-21 Jan Kotanski <jan.kotanski@desy.de>
+2024-01-03 Jan Kotanski <jan.kotanski@desy.de>
 	* add add_grouping_keyword configuration variable (#274)
 	* change metadata_keywords_without_checks into metadata_fields_without_checks (#276)
+	* change add_grouping_keyword to force_measurement_keyword (#276)
+	* update README (#276)
 	* fix  support for multi-scan NeXus files reingestion (#272)
 	* tagged as 0.12.0
 
