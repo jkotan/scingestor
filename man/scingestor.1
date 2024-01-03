@@ -432,12 +432,20 @@ by \fBdatasets_filename_pattern\fP variable, i.e. by default “scicat\-datasets
 By default the scan dataset metadata are fetched from the corresponding the master file with its filename given by <scanname>.<ext> where usually <ext> is \fInxs\fP or \fIfio\fP\&. The detector files related to the particular scan are placed in the <scanname> subdirectory and they are added to the scan origindatablock.
 .sp
 A separete line in the dataset list file may contain
-#. a scanname to ingest, e.g. \fBmyscan_00012\fP
-#. a scanname to re\-ingest with a unique identifier (timestamp), e.g. \fBmyscan_00012:1702988846.0770347\fP
-#. a scanname and detector subdirectories to ingest, e.g.  \fBmyscan_00012 pilatus1 lambda\fP
-#. a string with a  base master filename, a NXentry NeXus path and a scanname representing scan metadata from the multi\-scan nexus file to ingest, e.g. \fBmyscan::/scan12;myscan_00012\fP
-#. a command to start a measurement with a given name which groups related scans,  e.g. \fB__command__ start mycalib6\fP
-#. a command to stop a measurement which groups related scans, e.g. \fB__command__ stop\fP
+.INDENT 0.0
+.IP 1. 3
+a scanname to ingest, e.g. \fBmyscan_00012\fP
+.IP 2. 3
+a scanname to re\-ingest with a unique identifier (timestamp), e.g. \fBmyscan_00012:1702988846.0770347\fP
+.IP 3. 3
+a scanname and detector subdirectories to ingest, e.g.  \fBmyscan_00012 pilatus1 lambda\fP
+.IP 4. 3
+a string with a  base master filename, a NXentry NeXus path and a scanname representing scan metadata from the multi\-scan nexus file to ingest, e.g. \fBmyscan::/scan12;myscan_00012\fP
+.IP 5. 3
+a command to start a measurement with a given name which groups related scans,  e.g. \fB__command__ start mycalib6\fP
+.IP 6. 3
+a command to stop a measurement which groups related scans, e.g. \fB__command__ stop\fP
+.UNINDENT
 .sp
 ## Measurment Datasets which group scan metadata
 .sp
@@ -445,14 +453,21 @@ The \fI__command__ start <measurement>\fP and \fI__command__ stop\fP allow to pa
 .SS Sardana Measurement macros
 .sp
 The config/scmacros.py module provides sardana macros which help to start/stop the measurement
-* \fBstart_measurement <measurement>\fP starts a new measurment with the given name
-* \fBmake_measurement <measurement>\fP starts a new measurment with the given name and adds to the measurement the last scan
-* \fBupdate_measurement\fP updates the current measurement dataset in the SciCat database
-* \fBstop_measurement\fP updates the current measurement dataset in the SciCat database and stops the  measurement
-* \fBshow_measurement\fP shows the current measurement name
+.INDENT 0.0
+.IP \(bu 2
+\fBstart_measurement <measurement>\fP starts a new measurment with the given name
+.IP \(bu 2
+\fBmake_measurement <measurement>\fP starts a new measurment with the given name and adds to the measurement the last scan
+.IP \(bu 2
+\fBupdate_measurement\fP updates the current measurement dataset in the SciCat database
+.IP \(bu 2
+\fBstop_measurement\fP updates the current measurement dataset in the SciCat database and stops the  measurement
+.IP \(bu 2
+\fBshow_measurement\fP shows the current measurement name
+.UNINDENT
 .SS Sardana Measurement with SciCatAutoGrouping
 .sp
-Setting the \fBSciCatAutoGrouping\fP sardana environment variable to \fBFalse\fP we can switch on the autogrouping mode. In this mode scan metadata is grouped automatically into the measurement dataset and the measurement dataset updated after each scan. The name of measurement is taken from the base scanname after removing ScanID, e.g. for <scanname> = “mycalib2_00012” <measurement_name> = “mycalib2”
+Setting the \fBSciCatAutoGrouping\fP sardana environment variable to \fBFalse\fP we can switch on the autogrouping mode. In this mode scan metadata is grouped automatically into the measurement dataset and the measurement dataset updated after each scan. The name of measurement is taken from the base scanname after removing ScanID, e.g. for \fI<scanname>\fP = “mycalib2_00012” the measurement name is “mycalib2”
 .SH SCICAT_DATASET_INGESTOR
 .SS Description
 .sp
