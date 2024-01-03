@@ -237,10 +237,10 @@ ingestor_credential_file: \(dq{homepath}/gpfs/pwd\(dq
 .sp
 The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_var_dir\fP can contain the \fI{beamtimeid}\fP and \fI{hostname}\fP keywords,  e.g. \fB\(dqscicat\-ingested\-datasets\-{beamtimeid}.lst\(dq\fP or \fB\(dqscicat\-ingested\-datasets\-{hostname}\-{beamtimeid}.lst\(dq\fP  which is instantiated during the ingestor execution.
 .sp
-Similarly, \fBfile_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBattachment_metadata_generator\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP, \fI{hiddenattributes}\fP, \fI{ext}\fP, “{masterfile}”, “{plotfile}”, “{masterscanname}”, “{entryname}”
+Similarly, \fBfile_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBattachment_metadata_generator\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP, \fI{hiddenattributes}\fP, \fI{ext}\fP, \(dq{masterfile}\(dq, \(dq{plotfile}\(dq, \(dq{masterscanname}\(dq, \(dq{entryname}\(dq
 .sp
-The “{masterfile}” is either equal to   “{scanpath}/{scanname}.{ext}” or “{scanpath}/{scanname}/{scanname}.{ext}”. Also
-the “{plotfile}” is either equal to  “{scanpath}/{scanname}.{plotext}” or “{scanpath}/{scanname}/{scanname}.{plotext}”.
+The \(dq{masterfile}\(dq is either equal to   \(dq{scanpath}/{scanname}.{ext}\(dq or \(dq{scanpath}/{scanname}/{scanname}.{ext}\(dq. Also
+the \(dq{plotfile}\(dq is either equal to  \(dq{scanpath}/{scanname}.{plotext}\(dq or \(dq{scanpath}/{scanname}/{scanname}.{plotext}\(dq.
 .SH SCICAT_DATASET_INGEST
 .sp
 Re\-ingestion script for SciCat Datasets and OrigDatablocks is usually
@@ -427,24 +427,24 @@ apt\-get install python3\-scingestor
 .sp
 The scicat ingestor triggers its actions on appending a new line in the dataset list file.
 The dataset list file is located in the scan directory and its filename is defined
-by \fBdatasets_filename_pattern\fP variable, i.e. by default “scicat\-datasets\-{beamtimeid}.lst”.
+by \fBdatasets_filename_pattern\fP variable, i.e. by default \(dqscicat\-datasets\-{beamtimeid}.lst\(dq.
 .sp
 By default the scan dataset metadata are fetched from the corresponding the master file with its filename given by <scanname>.<ext> where usually <ext> is \fInxs\fP or \fIfio\fP\&. The detector files related to the particular scan are placed in the <scanname> subdirectory and they are added to the scan origindatablock.
 .sp
 A separete line in the dataset list file may contain
 .INDENT 0.0
-.IP 1. 3
-a scanname to ingest, e.g. \fBmyscan_00012\fP
-.IP 2. 3
-a scanname to re\-ingest with a unique identifier (timestamp), e.g. \fBmyscan_00012:1702988846.0770347\fP
-.IP 3. 3
-a scanname and detector subdirectories to ingest, e.g.  \fBmyscan_00012 pilatus1 lambda\fP
-.IP 4. 3
-a string with a  base master filename, a NXentry NeXus path and a scanname representing scan metadata from the multi\-scan nexus file to ingest, e.g. \fBmyscan::/scan12;myscan_00012\fP
-.IP 5. 3
-a command to start a measurement with a given name which groups related scans,  e.g. \fB__command__ start mycalib6\fP
-.IP 6. 3
-a command to stop a measurement which groups related scans, e.g. \fB__command__ stop\fP
+.IP \(bu 2
+scanname to ingest, e.g. \fBmyscan_00012\fP
+.IP \(bu 2
+scanname to re\-ingest with a unique identifier (timestamp), e.g. \fBmyscan_00012:1702988846.0770347\fP
+.IP \(bu 2
+scanname and detector subdirectories to ingest, e.g.  \fBmyscan_00012 pilatus1 lambda\fP
+.IP \(bu 2
+string with a  base master filename, a NXentry NeXus path and a scanname representing scan metadata from the multi\-scan nexus file to ingest, e.g. \fBmyscan::/scan12;myscan_00012\fP
+.IP \(bu 2
+command to start a measurement with a given name which groups related scans,  e.g. \fB__command__ start mycalib6\fP
+.IP \(bu 2
+command to stop a measurement which groups related scans, e.g. \fB__command__ stop\fP
 .UNINDENT
 .sp
 ## Measurment Datasets which group scan metadata
@@ -467,7 +467,7 @@ The config/scmacros.py module provides sardana macros which help to start/stop t
 .UNINDENT
 .SS Sardana Measurement with SciCatAutoGrouping
 .sp
-Setting the \fBSciCatAutoGrouping\fP sardana environment variable to \fBFalse\fP we can switch on the autogrouping mode. In this mode scan metadata is grouped automatically into the measurement dataset and the measurement dataset updated after each scan. The name of measurement is taken from the base scanname after removing ScanID, e.g. for \fI<scanname>\fP = “mycalib2_00012” the measurement name is “mycalib2”
+Setting the \fBSciCatAutoGrouping\fP sardana environment variable to \fBFalse\fP we can switch on the autogrouping mode. In this mode scan metadata is grouped automatically into the measurement dataset and the measurement dataset updated after each scan. The name of measurement is taken from the base scanname after removing ScanID, e.g. for \fI<scanname>\fP = \(dqmycalib2_00012\(dq the measurement name is \(dqmycalib2\(dq
 .SH SCICAT_DATASET_INGESTOR
 .SS Description
 .sp

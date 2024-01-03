@@ -234,12 +234,12 @@ by **datasets_filename_pattern** variable, i.e. by default "scicat-datasets-{bea
 By default the scan dataset metadata are fetched from the corresponding the master file with its filename given by \<scanname\>.\<ext\> where usually \<ext\> is `nxs` or `fio`. The detector files related to the particular scan are placed in the \<scanname\> subdirectory and they are added to the scan origindatablock.
 
 A separete line in the dataset list file may contain
-* a scanname to ingest e.g.  `myscan_00012`
-* a scanname to re-ingest with a unique identifier (timestamp), e.g. `myscan_00012:1702988846.0770347`
-* a scanname and additional detector subdirectories to ingest, e.g.  `myscan_00012 pilatus1 lambda`
-* a string with a  base master filename, a NXentry NeXus path and a scanname representing scan metadata from the multi-scan nexus file to ingest, e.g.  `myscan::/scan12;myscan_00012`
-* a command to start a measurement with a given name which groups related scans,  e.g. `__command__ start mycalib6`
-* a command to stop a measurement which groups related scans,  e.g. `__command__ stop`
+* scanname to ingest e.g.  `myscan_00012`
+* scanname to re-ingest with a unique identifier (timestamp), e.g. `myscan_00012:1702988846.0770347`
+* scanname and additional detector subdirectories to ingest, e.g.  `myscan_00012 pilatus1 lambda`
+* string with a  base master filename, a NXentry NeXus path and a scanname representing scan metadata from the multi-scan nexus file to ingest, e.g.  `myscan::/scan12;myscan_00012`
+* command to start a measurement with a given name which groups related scans,  e.g. `__command__ start mycalib6`
+* command to stop a measurement which groups related scans,  e.g. `__command__ stop`
 
 
 ## Measurment Datasets which group scan metadata
