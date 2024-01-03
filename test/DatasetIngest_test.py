@@ -2149,7 +2149,7 @@ optional arguments:
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'log_generator_commands: true\n' \
-            'metadata_keywords_without_checks:\n' \
+            'metadata_fields_without_checks:\n' \
             '  - "techniques"\n' \
             '  - "classification"\n' \
             '  - "createdBy"\n' \

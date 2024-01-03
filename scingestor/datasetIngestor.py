@@ -653,10 +653,10 @@ class DatasetIngestor:
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
 
-        if "metadata_keywords_without_checks" in self.__config.keys():
+        if "metadata_fields_without_checks" in self.__config.keys():
             try:
                 self.__withoutsm = list(
-                    self.__config["metadata_keywords_without_checks"])
+                    self.__config["metadata_fields_without_checks"])
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
 

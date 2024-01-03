@@ -91,7 +91,7 @@ The configuration written in YAML can contain the following variables
 * **scicat_attachments_path** *(str)*, default: `"Datasets/{pid}/Attachments"`
 * **scicat_users_login_path** *(str)*, default: `"Users/login"`
 * **owner_access_groups_from_proposal** *(bool)*, default: `False`
-* **metadata_keywords_without_checks** *(list\<str\>)*, default: `["techniques", "classification", "createdBy", "updatedBy", "datasetlifecycle", "numberOfFiles", "size", "createdAt", "updatedAt", "history", "creationTime", "version", "scientificMetadata", "endTime"]`
+* **metadata_fields_without_checks** *(list\<str\>)*, default: `["techniques", "classification", "createdBy", "updatedBy", "datasetlifecycle", "numberOfFiles", "size", "createdAt", "updatedAt", "history", "creationTime", "version", "scientificMetadata", "endTime"]`
 
 e.g.
 ```
@@ -227,17 +227,21 @@ apt-get install python3-scingestor
 
 ## Dataset list file content
 
-The scicat ingestor trigger its actions on appending a new line in the dataset list file.
+The scicat ingestor triggers its actions on append a new line in the dataset list file.
 The dataset list file is located in the scan directory and its filename is defined
 by **datasets_filename_pattern** variable, i.e. by default "scicat-datasets-{beamtimeid}.lst".
 
+By default the scan dataset metadata are fetch from the corresponding the master file with its filename given by <scanname>.<ext> where usually <ext> is `nxs` or `fio`. The detector file related to the particular scan are places in the <scanname> subdirectory and they are added to the scan origindatablock.
+
 A separete line in the dataset list file may contain
 1. a scanname to ingest e.g.  `myscan_00012`
-2. a scanname to reingest with a unique identifier (timestamp) e.g. `myscan_00012:1702988846.0770347`
-3. a scanname and detector subdirectories to ingest e.g.  `myscan_00012 pilatus1 lambda`
-4. a scanname from multi-scan nexus file to ingest e.g.  `myscan::/scan12;myscan_00012`
-5. a command to start a measurement with a given name which groups related scans  e.g. `__command__ start mycalib6`
-6. a command to stop a measurement which groups related scans  e.g. `__command__ stop`
+
+2. a scanname to re-ingest with a unique identifier (timestamp), e.g. `myscan_00012:1702988846.0770347`
+
+3. a scanname and additional detector subdirectories to ingest, e.g.  `myscan_00012 pilatus1 lambda`
+4. a string with a  base master filename, a NXentry NeXus path and a scanname representing scan metadata from the multi-scan nexus file to ingest, e.g.  `myscan::/scan12;myscan_00012`
+5. a command to start a measurement with a given name which groups related scans,  e.g. `__command__ start mycalib6`
+6. a command to stop a measurement which groups related scans,  e.g. `__command__ stop`
 
 
-
+## Measurment Datasets which group scan metadata
