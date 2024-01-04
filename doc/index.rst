@@ -307,7 +307,7 @@ The config/scmacros.py module provides sardana macros which help to start/stop t
 Sardana Measurement with SciCatAutoGrouping
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Setting the **SciCatAutoGrouping** sardana environment variable to ``False`` we can switch on the autogrouping mode. In this mode scan metadata is grouped automatically into the measurement dataset and the measurement dataset updated after each scan. The name of measurement is taken from the base scanname after removing ScanID, e.g. for `<scanname>` = "mycalib2_00012" the measurement name is "mycalib2"
+Setting the **SciCatAutoGrouping** sardana environment variable to ``True`` we can switch on the autogrouping mode. In this mode scan metadata is grouped automatically into the measurement dataset and the measurement dataset updated after each scan. The name of measurement is taken from the base scanname after removing ScanID, e.g. for `<scanname>` = "mycalib2_00012" the measurement name is "mycalib2"
 
 
 Contents
