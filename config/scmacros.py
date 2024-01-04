@@ -182,4 +182,5 @@ def _start_measurement(macro, name, scandir, conf, group_last_scan=False):
         macro.setEnv("SciCatMeasurements", scmeas)
         macro.output("Measurement '%s' in '%s' started"
                      % (name, scandir))
-    scdataset.append_scicat_dataset(macro, reingest=group_last_scan)
+    if group_last_scan:
+        scdataset.append_scicat_dataset(macro, reingest=group_last_scan)
