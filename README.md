@@ -253,7 +253,7 @@ The config/scmacros.py module provides sardana macros which help to start/stop t
 * **make_measurement \<measurement\>** starts a new measurment with the given name and adds to the measurement the last scan
 * **update_measurement** updates the current measurement dataset in the SciCat database
 * **stop_measurement** updates the current measurement dataset in the SciCat database and stops the  measurement
-* **show_measurement** shows the current measurement name
+* **show_current_measurement** shows the current measurement name
 
 ### Sardana Measurement with SciCatAutoGrouping
 
