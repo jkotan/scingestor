@@ -3748,11 +3748,11 @@ class DatasetWatcherH5Test(unittest.TestCase):
                                   'shape': [1, 30]
                               },
                               'lk_spectrum': {
-                                  'value': [spectrum[0], spectrum[-1]],
+                                  'value': [min(spectrum), max(spectrum)],
                                   'shape': [10]
                               },
                               'mot03': {
-                                  'value': [mot03[0], mot03[-1]],
+                                  'value': [min(mot03), max(mot03)],
                                   'shape': [10]
                               }
                           },
@@ -3766,7 +3766,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                                       'shape': [1, 30]
                                   },
                                   'spectrum': {
-                                      'value': [spectrum[0], spectrum[-1]],
+                                      'value': [min(spectrum), max(spectrum)],
                                       'shape': [10]
                                   }
                               },
