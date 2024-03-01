@@ -1,3 +1,7 @@
+2024-03-01 Jan Kotanski <jan.kotanski@desy.de>
+	* add add USER_CONFIG_DIR to the default_template file (#277)
+	* tagged as 0.12.1
+
 2024-01-03 Jan Kotanski <jan.kotanski@desy.de>
 	* add add_grouping_keyword configuration variable (#274)
 	* change metadata_keywords_without_checks into metadata_fields_without_checks (#276)

@@ -2,7 +2,7 @@
 
 # read parameters from the command-line
 if [[ -z $2 ]] ; then
-    echo "usage: format_default.sh  <INPUT_FILE>  <OUTPUT_FILE> [ <SCICAT_URL> <BEAMTIME_DIR> <INGESTOR_VAR_DIR>]"
+    echo "usage: format_default.sh  <INPUT_FILE>  <OUTPUT_FILE> [ <SCICAT_URL> <BEAMTIME_DIR> <INGESTOR_VAR_DIR> <USER_CONFIG_DIR>]"
     exit 1
 else
     # template_default.yaml
@@ -21,15 +21,23 @@ if [[ ! -z $5 ]]; then
     export INGESTOR_VAR_DIR="$5"
 fi
 
+if [[ ! -z $6 ]]; then
+    export USER_CONFIG_DIR="$6"
+fi
+
 # default parameters
 if [[ -z $SCICAT_URL ]]; then
-    export SCICAT_URL="http://scicat.desy.de/api/v3"
+    export SCICAT_URL="http://scicat-p00-test2.desy.de/api/v3"
 fi
 if [[ -z $BEAMTIME_DIR ]]; then
     export BEAMTIME_DIR="/gpfs/current"
 fi
 if [[ -z $INGESTOR_VAR_DIR ]]; then
     export INGESTOR_VAR_DIR="/gpfs/current/scratch_bl/scingestor"
+fi
+
+if [[ -z $USER_CONFIG_DIR ]]; then
+    export USER_CONFIG_DIR="/home/p00user/.config/DESY"
 fi
 
 rm -f ${OUTFILE} ${OUTFILE}.tmp
