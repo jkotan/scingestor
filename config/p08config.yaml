@@ -15,8 +15,8 @@ execute_commands: True
 # call_metadata_generated_callback: True
 raw_metadata_callback: false
 owner_access_groups_from_proposal: True
-metadata_group_map_file: "{homepath}/.config/DESY/scingestor-metadata-group-map.lst"
-metadata_copy_map_file: "{homepath}/.config/DESY/scingestor-metadata-copy-map.lst"
+metadata_group_map_file: "/home/p08user/.config/DESY/scingestor-metadata-group-map.lst"
+metadata_copy_map_file: "/home/p08user/.config/DESY/scingestor-metadata-copy-map.lst"
 max_scandir_depth: 1
 dataset_pid_prefix: ""
 datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
