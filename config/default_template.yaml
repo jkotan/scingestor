@@ -7,12 +7,21 @@ inotify_timeout: 1
 get_event_timeout: 0.1
 ingestor_var_dir: "${INGESTOR_VAR_DIR}"
 metadata_in_var_dir: True
-dataset_update_strategy: create
+dataset_update_strategy: patch
+execute_commands: True
+# skip_multi_origdatablock_ingestion: True
+# skip_multi_attachment_ingestion: True
+# skip_scan_dataset_ingestion: True
+# call_metadata_generated_callback: True
+raw_metadata_callback: false
 owner_access_groups_from_proposal: True
+metadata_group_map_file: "${USER_CONFIG_DIR}/scingestor-metadata-group-map.lst"
+metadata_copy_map_file: "${USER_CONFIG_DIR}/scingestor-metadata-copy-map.lst"
 max_scandir_depth: 1
 dataset_pid_prefix: ""
 datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
 ingested_datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
 oned_in_metadata: true
+hidden_attributes: "nexdatas_source,nexdatas_strategy,units,NX_class"
 ingest_dataset_attachment: true
-# hidden_attributes: "nexdatas_source,nexdatas_strategy,units,NX_class"
+retry_failed_dataset_ingestion: true
