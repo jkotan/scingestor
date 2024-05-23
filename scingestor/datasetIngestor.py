@@ -224,6 +224,8 @@ class DatasetIngestor:
             " {plotfile}"
         #: (:obj:`str`) last measurement
         self.__measurement = ""
+        #: (:obj:`set`<:obj:`str`>) current  measurements
+        self.__measurements = set()
         #: (:obj:`bool`) measurement status
         self.__measurement_status = False
         #: (:obj:`bool`) call callback after each step
@@ -1755,7 +1757,7 @@ class DatasetIngestor:
                 metapath=self.__dctfmt["metapath"]))
         if rdss and rdss[0]:
             rds = rdss[0]
-        else:
+        elif self.__dctfmt["scanname"] not in self.__measurements:
             rds = self._generate_rawdataset_metadata(self.__dctfmt["scanname"])
         mtmds = 0
         ads = None
@@ -1928,7 +1930,7 @@ class DatasetIngestor:
                or mtm > self.__sc_ingested_map[scan][-3]:
                 if self.__strategy != UpdateStrategy.NO:
                     reingest_dataset = True
-        else:
+        elif self.__dctfmt["scanname"] not in self.__measurements:
             rds = self._generate_rawdataset_metadata(
                 self.__dctfmt["scanname"])
             get_logger().debug("DS No File: %s True" % (scan))
@@ -2208,6 +2210,7 @@ class DatasetIngestor:
         """ clear waitings datasets
         """
         self.__sc_waiting = []
+        self.__measurements = set()
 
     def clear_tmpfile(self):
         """ clear waitings datasets
@@ -2246,5 +2249,6 @@ class DatasetIngestor:
         self.__measurement = measurement
         self.__dctfmt["measurement"] = self.__measurement
         self.__dctfmt["lastmeasurement"] = self.__measurement
+        self.__measurements.add(self.__measurement)
         self.__measurement_status = True
         get_logger().debug("Start Measurement: %s" % self.__measurement)

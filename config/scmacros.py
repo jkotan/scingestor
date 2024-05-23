@@ -171,7 +171,8 @@ def _start_measurement(macro, name, scandir, conf, group_last_scan=False):
 
     if oldname:
         scdataset.append_scicat_record(macro, "__command__ stop")
-        scdataset.append_scicat_record(macro, oldname)
+        oname = "%s:%s" % (oldname, time.time())
+        scdataset.append_scicat_record(macro, oname)
         macro.setEnv("SciCatMeasurements", "")
         macro.output("Measurement '%s' in '%s' stopped"
                      % (oldname, scandir))
