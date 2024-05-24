@@ -1764,7 +1764,7 @@ class DatasetIngestor:
         if rdss and rdss[0]:
             rds = rdss[0]
         elif self.__forcegeneratemeasurement or \
-             self.__dctfmt["scanname"] not in self.__measurements:
+                self.__dctfmt["scanname"] not in self.__measurements:
             rds = self._generate_rawdataset_metadata(self.__dctfmt["scanname"])
         else:
             rds = []
@@ -1940,7 +1940,7 @@ class DatasetIngestor:
                 if self.__strategy != UpdateStrategy.NO:
                     reingest_dataset = True
         elif self.__forcegeneratemeasurement or \
-             self.__dctfmt["scanname"] not in self.__measurements:
+                self.__dctfmt["scanname"] not in self.__measurements:
             rds = self._generate_rawdataset_metadata(
                 self.__dctfmt["scanname"])
             get_logger().debug("DS No File: %s True" % (scan))
