@@ -5,17 +5,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>scingestor.scanDirWatcher &#8212; SciCat Dataset Ingestor 0.11.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <title>scingestor.scanDirWatcher &#8212; SciCat Dataset Ingestor 0.13.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -25,6 +28,8 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <h1>Source code for scingestor.scanDirWatcher</h1><div class="highlight"><pre>
@@ -61,12 +66,12 @@
 
 
 <div class="viewcode-block" id="ScanDirWatcher"><a class="viewcode-back" href="../../scingestor.html#scingestor.scanDirWatcher.ScanDirWatcher">[docs]</a><span class="k">class</span> <span class="nc">ScanDirWatcher</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; ScanDir Watcher</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; ScanDir Watcher</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">configuration</span><span class="p">,</span>
                  <span class="n">path</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">beamtimefile</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param configuration: dictionary with the ingestor configuration</span>
 <span class="sd">        :type configuration: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
@@ -196,7 +201,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__var_dir</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_start_notifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; start notifier</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; start notifier</span>
 
 <span class="sd">        :param path: beamtime file subdirectory</span>
 <span class="sd">        :type path: :obj:`str`</span>
@@ -205,7 +210,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_add_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_add_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; add path to notifier</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; add path to notifier</span>
 
 <span class="sd">        :param path: beamtime file path</span>
 <span class="sd">        :type path: :obj:`str`</span>
@@ -228,7 +233,7 @@
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
 
     <span class="k">def</span> <span class="nf">_stop_notifier</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; stop notifier</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stop notifier</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">wd</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_path</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__wd_to_path</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">wd</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -238,7 +243,7 @@
                 <span class="s1">&#39;Removing watch </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">wd</span><span class="p">),</span> <span class="n">path</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_launch_scandir_watcher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paths</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; launch scandir watcher</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; launch scandir watcher</span>
 
 <span class="sd">        :param path: list of subdirectories</span>
 <span class="sd">        :type path: :obj:`list`&lt;:obj:`str`&gt;</span>
@@ -272,7 +277,7 @@
                         <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> cannot be watched: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
 
 <div class="viewcode-block" id="ScanDirWatcher.run"><a class="viewcode-back" href="../../scingestor.html#scingestor.scanDirWatcher.ScanDirWatcher.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; scandir watcher thread</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; scandir watcher thread</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_start_notifier</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">)</span>
@@ -406,7 +411,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ScanDirWatcher.stop"><a class="viewcode-back" href="../../scingestor.html#scingestor.scanDirWatcher.ScanDirWatcher.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; stop the watcher</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stop the watcher</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Stop ScanDirWatcher&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">False</span>
@@ -431,6 +436,7 @@
 </pre></div>
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -445,7 +451,7 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../scicat_dataset_ingestor.html">scicat_dataset_ingestor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../scicat_dataset_ingest.html">scicat_dataset_ingest</a></li>
@@ -466,12 +472,20 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -480,8 +494,8 @@
       &copy;2022, DESY, Jan Kotanski.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
 

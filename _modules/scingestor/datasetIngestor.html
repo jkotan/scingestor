@@ -5,17 +5,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>scingestor.datasetIngestor &#8212; SciCat Dataset Ingestor 0.11.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <title>scingestor.datasetIngestor &#8212; SciCat Dataset Ingestor 0.13.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -25,6 +28,8 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <h1>Source code for scingestor.datasetIngestor</h1><div class="highlight"><pre>
@@ -63,7 +68,7 @@
 
 <div class="viewcode-block" id="UpdateStrategy"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.UpdateStrategy">[docs]</a><span class="k">class</span> <span class="nc">UpdateStrategy</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot; Update strategy</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Update strategy</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1">#: (:class:`scingestor.datasetIngestor.UpdateStrategy`)</span>
     <span class="c1">#:       leave datasets unchanged</span>
@@ -79,12 +84,12 @@
 
 <div class="viewcode-block" id="DatasetIngestor"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor">[docs]</a><span class="k">class</span> <span class="nc">DatasetIngestor</span><span class="p">:</span>
 
-    <span class="sd">&quot;&quot;&quot; Dataset Ingestor</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Dataset Ingestor</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span>
                  <span class="n">path</span><span class="p">,</span> <span class="n">dsfile</span><span class="p">,</span> <span class="n">idsfile</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">beamtimefile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param configuration: dictionary with the ingestor configuration</span>
 <span class="sd">        :type configuration: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
@@ -193,6 +198,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__logcommands</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) empty units flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__emptyunits</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`bool`) force measurement keyword flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__forcemeasurementkeyword</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`bool`) force generate measurement flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__forcegeneratemeasurement</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) skip multiple datablock ingestion</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__skip_multi_datablock</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) skip multiple attachment ingestion</span>
@@ -252,6 +261,8 @@
             <span class="s2">&quot; </span><span class="si">{plotfile}</span><span class="s2">&quot;</span>
         <span class="c1">#: (:obj:`str`) last measurement</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1">#: (:obj:`set`&lt;:obj:`str`&gt;) current  measurements</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__measurements</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="c1">#: (:obj:`bool`) measurement status</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__measurement_status</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1">#: (:obj:`bool`) call callback after each step</span>
@@ -456,6 +467,14 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;retry_failed_attachment_ingestion&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="s2">&quot;add_empty_units&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__emptyunits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;add_empty_units&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;force_measurement_keyword&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__forcemeasurementkeyword</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;force_measurement_keyword&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;force_generate_measurement&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__forcegeneratemeasurement</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;force_generate_measurement&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="s2">&quot;skip_multi_datablock_ingestion&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__skip_multi_datablock</span> <span class="o">=</span> \
@@ -678,10 +697,10 @@
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
 
-        <span class="k">if</span> <span class="s2">&quot;metadata_keywords_without_checks&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s2">&quot;metadata_fields_without_checks&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__withoutsm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;metadata_keywords_without_checks&quot;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;metadata_fields_without_checks&quot;</span><span class="p">])</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
 
@@ -758,7 +777,7 @@
         <span class="c1">#: (:obj:`str`) origdatablock url</span>
 
     <span class="k">def</span> <span class="nf">_generate_rawdataset_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; generate raw dataset metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; generate raw dataset metadata</span>
 
 <span class="sd">        :param scan: scan name</span>
 <span class="sd">        :type scan: :obj:`str`</span>
@@ -851,7 +870,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_generate_origdatablock_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; generate origdatablock metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; generate origdatablock metadata</span>
 
 <span class="sd">        :param scan: scan name</span>
 <span class="sd">        :type scan: :obj:`str`</span>
@@ -883,7 +902,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_generate_attachment_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; generate origdatablock metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; generate origdatablock metadata</span>
 
 <span class="sd">        :param scan: scan name</span>
 <span class="sd">        :type scan: :obj:`str`</span>
@@ -956,7 +975,7 @@
 
     <span class="k">def</span> <span class="nf">_regenerate_origdatablock_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">,</span>
                                            <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mfilename</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;regenerate origdatablock metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;regenerate origdatablock metadata</span>
 
 <span class="sd">        :param scan: scan name</span>
 <span class="sd">        :type scan: :obj:`str`</span>
@@ -1030,7 +1049,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_metadataEqual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dct</span><span class="p">,</span> <span class="n">dct2</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; compare two dictionaries if metdatdata is equal</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; compare two dictionaries if metdatdata is equal</span>
 
 <span class="sd">        :param dct: first metadata dictionary</span>
 <span class="sd">        :type dct: :obj:`dct` &lt;:obj:`str`, `any`&gt;</span>
@@ -1087,7 +1106,7 @@
         <span class="k">return</span> <span class="n">status</span>
 
 <div class="viewcode-block" id="DatasetIngestor.get_token"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.get_token">[docs]</a>    <span class="k">def</span> <span class="nf">get_token</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides ingestor token</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides ingestor token</span>
 
 <span class="sd">        :returns: ingestor token</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -1106,7 +1125,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="DatasetIngestor.append_proposal_groups"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.append_proposal_groups">[docs]</a>    <span class="k">def</span> <span class="nf">append_proposal_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; appends owner and access groups to beamtime</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; appends owner and access groups to beamtime</span>
 
 <span class="sd">        :param meta: beamtime configuration</span>
 <span class="sd">        :type meta: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
@@ -1162,7 +1181,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__meta</span></div>
 
     <span class="k">def</span> <span class="nf">_post_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdic</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mdct</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; post dataset</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; post dataset</span>
 
 <span class="sd">        :param mdic: metadata in dct</span>
 <span class="sd">        :type mdic: :obj:`dct` &lt;:obj:`str`, `any`&gt;</span>
@@ -1228,7 +1247,7 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_patch_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nmeta</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mdct</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; post dataset</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; post dataset</span>
 
 <span class="sd">        :param nmeta: metadata in json string</span>
 <span class="sd">        :type nmeta: :obj:`str`</span>
@@ -1260,7 +1279,7 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_ingest_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mdct</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ingests dataset</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ingests dataset</span>
 
 <span class="sd">        :param metadata: metadata in json string</span>
 <span class="sd">        :type metadata: :obj:`str`</span>
@@ -1335,11 +1354,23 @@
                         <span class="n">dsmeta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resds</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
                         <span class="n">mdic</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mdct</span><span class="p">)</span>
                         <span class="n">mdic</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pid</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__forcemeasurementkeyword</span> <span class="ow">and</span> \
+                           <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;measurement&quot;</span><span class="p">]</span> <span class="ow">and</span> \
+                           <span class="s2">&quot;keywords&quot;</span> <span class="ow">in</span> <span class="n">mdic</span> <span class="ow">and</span> \
+                           <span class="nb">isinstance</span><span class="p">(</span><span class="n">mdic</span><span class="p">[</span><span class="s2">&quot;keywords&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> \
+                           <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;measurement&quot;</span><span class="p">]</span> \
+                           <span class="ow">not</span> <span class="ow">in</span> <span class="n">mdic</span><span class="p">[</span><span class="s2">&quot;keywords&quot;</span><span class="p">]:</span>
+                            <span class="n">mdic</span><span class="p">[</span><span class="s2">&quot;keywords&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;measurement&quot;</span><span class="p">])</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadataEqual</span><span class="p">(</span>
                                 <span class="n">dsmeta</span><span class="p">,</span> <span class="n">mdic</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__withoutsm</span><span class="p">):</span>
                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__strategy</span> <span class="ow">in</span> <span class="p">[</span>
                                     <span class="n">UpdateStrategy</span><span class="o">.</span><span class="n">PATCH</span><span class="p">,</span> <span class="n">UpdateStrategy</span><span class="o">.</span><span class="n">NO</span><span class="p">]:</span>
                                 <span class="n">nmeta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">mdic</span><span class="p">)</span>
+                                <span class="c1"># mm = dict(mdic)</span>
+                                <span class="c1"># mm[&quot;scientificMetadata&quot;] = {}</span>
+                                <span class="c1"># get_logger().info(</span>
+                                <span class="c1">#     &#39;DatasetIngestor: PATCH: %s&#39; % str(mm))</span>
                                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch_dataset</span><span class="p">(</span>
                                     <span class="n">nmeta</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">mdct</span><span class="p">)</span>
                             <span class="k">else</span><span class="p">:</span>
@@ -1370,7 +1401,7 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_ingest_origdatablock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ingets origdatablock</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ingets origdatablock</span>
 
 <span class="sd">        :param metadata: metadata in json string</span>
 <span class="sd">        :type metadata: :obj:`str`</span>
@@ -1396,7 +1427,7 @@
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">_ingest_attachment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">datasetid</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ingets origdatablock</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ingets origdatablock</span>
 
 <span class="sd">        :param metadata: metadata in json string</span>
 <span class="sd">        :type metadata: :obj:`str`</span>
@@ -1429,7 +1460,7 @@
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">_get_origdatablocks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasetid</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get origdatablocks with datasetid</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; get origdatablocks with datasetid</span>
 
 <span class="sd">        :param datasetid: dataset id</span>
 <span class="sd">        :type datasetid: :obj:`str`</span>
@@ -1454,7 +1485,7 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_get_delete_origdatablock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">did</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ingets origdatablock</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ingets origdatablock</span>
 
 <span class="sd">        :param did: origdatablock id</span>
 <span class="sd">        :type did: :obj:`str`</span>
@@ -1481,7 +1512,7 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_get_attachments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasetid</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get attachments with datasetid</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; get attachments with datasetid</span>
 
 <span class="sd">        :param datasetid: dataset id</span>
 <span class="sd">        :type datasetid: :obj:`str`</span>
@@ -1506,7 +1537,7 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_get_delete_attachment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasetid</span><span class="p">,</span> <span class="n">aid</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ingets attachment</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ingets attachment</span>
 
 <span class="sd">        :param datasetid: dataset id</span>
 <span class="sd">        :type datasetid: :obj:`str`</span>
@@ -1533,7 +1564,7 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_get_pid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metafile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get pid from raw dataset metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; get pid from raw dataset metadata</span>
 
 <span class="sd">        :param metafile: metadata file name</span>
 <span class="sd">        :type metafile: :obj:`str`</span>
@@ -1553,7 +1584,7 @@
         <span class="k">return</span> <span class="n">pid</span>
 
     <span class="k">def</span> <span class="nf">_ingest_rawdataset_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metafile</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ingest raw dataset metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ingest raw dataset metadata</span>
 
 <span class="sd">        :param metafile: metadata file name</span>
 <span class="sd">        :type metafile: :obj:`str`</span>
@@ -1584,7 +1615,7 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_delete_origdatablocks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; delete origdatablock with given dataset pid</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; delete origdatablock with given dataset pid</span>
 
 <span class="sd">        :param pid: dataset id</span>
 <span class="sd">        :type pid: :obj:`str`</span>
@@ -1605,7 +1636,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_delete_attachments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; delete attachment with given dataset pid</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; delete attachment with given dataset pid</span>
 
 <span class="sd">        :param pid: dataset id</span>
 <span class="sd">        :type pid: :obj:`str`</span>
@@ -1629,7 +1660,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_update_attachments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tads</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; delete attachment with given dataset pid</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; delete attachment with given dataset pid</span>
 
 <span class="sd">        :param pid: dataset id</span>
 <span class="sd">        :type pid: :obj:`str`</span>
@@ -1672,7 +1703,7 @@
         <span class="k">return</span> <span class="n">dastatus</span>
 
     <span class="k">def</span> <span class="nf">_ingest_origdatablock_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metafile</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ingest origdatablock metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ingest origdatablock metadata</span>
 
 <span class="sd">        :param metafile: metadata file name</span>
 <span class="sd">        :type metafile: :obj:`str`</span>
@@ -1706,7 +1737,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_ingest_attachment_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metafile</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ingest attachment metadata</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ingest attachment metadata</span>
 
 <span class="sd">        :param metafile: metadata file name</span>
 <span class="sd">        :type metafile: :obj:`str`</span>
@@ -1745,7 +1776,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
 <div class="viewcode-block" id="DatasetIngestor.ingest"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.ingest">[docs]</a>    <span class="k">def</span> <span class="nf">ingest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ingest scan</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; ingest scan</span>
 
 <span class="sd">        :param scan: scan name</span>
 <span class="sd">        :type scan: :obj:`str`</span>
@@ -1767,8 +1798,11 @@
                 <span class="n">metapath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;metapath&quot;</span><span class="p">]))</span>
         <span class="k">if</span> <span class="n">rdss</span> <span class="ow">and</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="n">rds</span> <span class="o">=</span> <span class="n">rdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__forcegeneratemeasurement</span> <span class="ow">or</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurements</span><span class="p">:</span>
             <span class="n">rds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_rawdataset_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rds</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">mtmds</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">ads</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">rds</span><span class="p">:</span>
@@ -1874,7 +1908,7 @@
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">mtmds</span><span class="p">,</span> <span class="n">mtmdb</span><span class="p">,</span> <span class="n">mtmda</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="DatasetIngestor.reingest"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.reingest">[docs]</a>    <span class="k">def</span> <span class="nf">reingest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">notmp</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; re-ingest scan</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; re-ingest scan</span>
 
 <span class="sd">        :param scan: scan name</span>
 <span class="sd">        :type scan: :obj:`str`</span>
@@ -1903,6 +1937,8 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">pscan</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="n">scanname</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">scanname</span><span class="p">:</span>
+                    <span class="n">scanname</span> <span class="o">=</span> <span class="n">scanname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">if</span> <span class="s2">&quot;::/&quot;</span> <span class="ow">in</span> <span class="n">pscan</span><span class="p">:</span>
                     <span class="n">gname</span><span class="p">,</span> <span class="n">entryname</span> <span class="o">=</span> <span class="n">pscan</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;::/&quot;</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -1938,11 +1974,14 @@
                <span class="ow">or</span> <span class="n">mtm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested_map</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="o">-</span><span class="mi">3</span><span class="p">]:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__strategy</span> <span class="o">!=</span> <span class="n">UpdateStrategy</span><span class="o">.</span><span class="n">NO</span><span class="p">:</span>
                     <span class="n">reingest_dataset</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__forcegeneratemeasurement</span> <span class="ow">or</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurements</span><span class="p">:</span>
             <span class="n">rds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_rawdataset_metadata</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">])</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;DS No File: </span><span class="si">%s</span><span class="s2"> True&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scan</span><span class="p">))</span>
             <span class="n">reingest_dataset</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rds</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">mtmds</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">rds</span><span class="p">:</span>
             <span class="n">mtmds</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">rds</span><span class="p">)</span>
@@ -2139,7 +2178,7 @@
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scan</span><span class="p">,</span> <span class="n">mtmds</span><span class="p">,</span> <span class="n">mtmdb</span><span class="p">,</span> <span class="n">mtmda</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="DatasetIngestor.check_list"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.check_list">[docs]</a>    <span class="k">def</span> <span class="nf">check_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reingest</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update waiting and ingested datasets</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; update waiting and ingested datasets</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dsfile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">dsf</span><span class="p">:</span>
             <span class="n">scans</span> <span class="o">=</span> <span class="p">[</span><span class="n">sc</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -2207,7 +2246,7 @@
                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="DatasetIngestor.waiting_datasets"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.waiting_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">waiting_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides waitings datasets</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides waitings datasets</span>
 
 <span class="sd">        :returns: waitings datasets list</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
@@ -2215,23 +2254,24 @@
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sc_waiting</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DatasetIngestor.clear_waiting_datasets"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.clear_waiting_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">clear_waiting_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; clear waitings datasets</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; clear waitings datasets</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_waiting</span> <span class="o">=</span> <span class="p">[]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sc_waiting</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__measurements</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="DatasetIngestor.clear_tmpfile"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.clear_tmpfile">[docs]</a>    <span class="k">def</span> <span class="nf">clear_tmpfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; clear waitings datasets</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; clear waitings datasets</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__idsfiletmp</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__idsfiletmp</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DatasetIngestor.update_from_tmpfile"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.update_from_tmpfile">[docs]</a>    <span class="k">def</span> <span class="nf">update_from_tmpfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; clear waitings datasets</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; clear waitings datasets</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__idsfiletmp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__idsfile</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DatasetIngestor.ingested_datasets"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.ingested_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">ingested_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; provides ingested datasets</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; provides ingested datasets</span>
 
 <span class="sd">        :returns:  ingested datasets list</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
@@ -2239,7 +2279,7 @@
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sc_ingested</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DatasetIngestor.stop_measurement"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.stop_measurement">[docs]</a>    <span class="k">def</span> <span class="nf">stop_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; stop measurement</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; stop measurement</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__measurement_status</span> <span class="o">=</span> <span class="kc">False</span>
@@ -2247,7 +2287,7 @@
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Stop Measurement: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DatasetIngestor.start_measurement"><a class="viewcode-back" href="../../scingestor.html#scingestor.datasetIngestor.DatasetIngestor.start_measurement">[docs]</a>    <span class="k">def</span> <span class="nf">start_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; start measurement</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; start measurement</span>
 
 <span class="sd">        :param measurement:  measurement name</span>
 <span class="sd">        :type measurement: :obj:`str`</span>
@@ -2256,11 +2296,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span> <span class="o">=</span> <span class="n">measurement</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;measurement&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;lastmeasurement&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__measurements</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__measurement_status</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start Measurement: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -2275,7 +2317,7 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../scicat_dataset_ingestor.html">scicat_dataset_ingestor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../scicat_dataset_ingest.html">scicat_dataset_ingest</a></li>
@@ -2296,12 +2338,20 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -2310,8 +2360,8 @@
       &copy;2022, DESY, Jan Kotanski.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
 
