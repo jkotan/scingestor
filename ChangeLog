@@ -1,3 +1,7 @@
+2024-05-24 Jan Kotanski <jan.kotanski@desy.de>
+	* add force_generate_measurement = False variable (#285)
+	* tagged as 0.13.0
+
 2024-03-01 Jan Kotanski <jan.kotanski@desy.de>
 	* add add USER_CONFIG_DIR to the default_template file (#277)
 	* tagged as 0.12.1

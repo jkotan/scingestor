@@ -165,6 +165,8 @@ class DatasetIngestor:
         self.__emptyunits = True
         #: (:obj:`bool`) force measurement keyword flag
         self.__forcemeasurementkeyword = True
+        #: (:obj:`bool`) force generate measurement flag
+        self.__forcegeneratemeasurement = False
         #: (:obj:`bool`) skip multiple datablock ingestion
         self.__skip_multi_datablock = False
         #: (:obj:`bool`) skip multiple attachment ingestion
@@ -434,6 +436,10 @@ class DatasetIngestor:
         if "force_measurement_keyword" in self.__config.keys():
             self.__forcemeasurementkeyword = \
                 self.__config["force_measurement_keyword"]
+
+        if "force_generate_measurement" in self.__config.keys():
+            self.__forcegeneratemeasurement = \
+                self.__config["force_generate_measurement"]
 
         if "skip_multi_datablock_ingestion" in self.__config.keys():
             self.__skip_multi_datablock = \
@@ -1757,8 +1763,11 @@ class DatasetIngestor:
                 metapath=self.__dctfmt["metapath"]))
         if rdss and rdss[0]:
             rds = rdss[0]
-        elif self.__dctfmt["scanname"] not in self.__measurements:
+        elif self.__forcegeneratemeasurement or \
+             self.__dctfmt["scanname"] not in self.__measurements:
             rds = self._generate_rawdataset_metadata(self.__dctfmt["scanname"])
+        else:
+            rds = []
         mtmds = 0
         ads = None
         if rds:
@@ -1930,11 +1939,14 @@ class DatasetIngestor:
                or mtm > self.__sc_ingested_map[scan][-3]:
                 if self.__strategy != UpdateStrategy.NO:
                     reingest_dataset = True
-        elif self.__dctfmt["scanname"] not in self.__measurements:
+        elif self.__forcegeneratemeasurement or \
+             self.__dctfmt["scanname"] not in self.__measurements:
             rds = self._generate_rawdataset_metadata(
                 self.__dctfmt["scanname"])
             get_logger().debug("DS No File: %s True" % (scan))
             reingest_dataset = True
+        else:
+            rds = []
         mtmds = 0
         if rds:
             mtmds = os.path.getmtime(rds)
