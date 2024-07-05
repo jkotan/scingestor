@@ -294,6 +294,7 @@ optional arguments:
             '"sc-ids-{{beamtimeid}}.lst"\n' \
             'log_generator_commands: true\n' \
             'inotify_timeout: 0.2\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'get_event_timeout: 0.02\n' \
             'ingestion_delay_time: 2\n' \
             'max_request_tries_number: 10\n' \
@@ -338,6 +339,7 @@ optional arguments:
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -369,6 +371,7 @@ optional arguments:
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -706,6 +709,7 @@ optional arguments:
             'ingest_dataset_attachment: true\n' \
             'ingested_datasets_filename_pattern: ' \
             '"sc-ids-{{beamtimeid}}.lst"\n' \
+            'scicat_proposal_id_pattern: "{{proposalid}}.{{beamtimeid}}"\n' \
             'log_generator_commands: true\n' \
             'inotify_timeout: 0.2\n' \
             'get_event_timeout: 0.02\n' \
@@ -754,6 +758,7 @@ optional arguments:
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
+                    '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -785,6 +790,7 @@ optional arguments:
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
+                    '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -849,7 +855,7 @@ optional arguments:
                      'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -877,7 +883,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -1014,6 +1020,7 @@ optional arguments:
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -1045,6 +1052,7 @@ optional arguments:
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -1227,6 +1235,7 @@ optional arguments:
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -1258,6 +1267,7 @@ optional arguments:
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -1469,6 +1479,7 @@ optional arguments:
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -1500,6 +1511,7 @@ optional arguments:
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -7249,6 +7261,7 @@ optional arguments:
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'log_generator_commands: true\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
@@ -7273,7 +7286,6 @@ optional arguments:
                     os.remove(fidslist)
 
                 vl, er = self.runtest(cmd)
-
                 scfname = "%s/%s.scan.json" % (fsubdirname2, 'myscan_00001')
 
                 scdict = {}
@@ -7908,6 +7920,7 @@ optional arguments:
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'log_generator_commands: true\n' \
+            'scicat_proposal_id_pattern: "{{proposalid}}.{{beamtimeid}}"\n' \
             'dataset_update_strategy: "create"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -8045,7 +8058,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -8073,7 +8086,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -8101,7 +8114,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'energy': 123123,
@@ -8196,6 +8209,7 @@ optional arguments:
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -8227,6 +8241,7 @@ optional arguments:
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -8413,6 +8428,7 @@ optional arguments:
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -8450,6 +8466,7 @@ optional arguments:
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -8612,6 +8629,7 @@ optional arguments:
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -8647,6 +8665,7 @@ optional arguments:
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -9268,6 +9287,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c group1,group2 -w mygroup '
                     '-z \'\' -e \'\' -b {btmeta} '
                     '-p 99001234/myscan_00001'
@@ -9298,6 +9318,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c group1,group2 -w mygroup '
                     '-z \'\' -e \'\' -b {btmeta} '
                     '-p 99001234/myscan_00002'
@@ -9499,6 +9520,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -9531,6 +9553,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,p00dmgt,'
                     'p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -9738,6 +9761,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -9770,6 +9794,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,p00dmgt,'
                     'p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -9972,6 +9997,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -10004,6 +10030,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
+                    '--id-format \'{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,p00dmgt,'
                     'p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
