@@ -317,7 +317,7 @@ class DatasetIngestor:
             self.__idpattern = \
                 self.__config["scicat_proposal_id_pattern"].replace(
                     "{proposalid}", "{proposalId}").replace(
-                    "{beamtimeid}", "{beamtimeId}")
+                        "{beamtimeid}", "{beamtimeId}")
 
         if "master_file_extension_list" in self.__config.keys() \
            and isinstance(self.__config["master_file_extension_list"], list):
