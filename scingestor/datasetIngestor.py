@@ -95,6 +95,8 @@ class DatasetIngestor:
         self.__metapath = path
         #: (:obj:`str`) beamtime id
         self.__bid = meta["beamtimeId"]
+        #: (:obj:`str`) desy proposal id
+        self.__dpid = meta["proposalId"]
         #: (:obj:`str`) beamline name
         self.__bl = meta["beamline"]
         #: (:obj:`str`) beamtime id
@@ -187,6 +189,7 @@ class DatasetIngestor:
         #: (:obj:`str`) nexus dataset shell command
         self.__datasetcommandfile = "nxsfileinfo metadata -k4 " \
             " -o {metapath}/{scanname}{scanpostfix} " \
+            " --id-format '{idpattern}'" \
             " -z '{measurement}'" \
             " -e '{entryname}'" \
             " -b {beamtimefile} -p {beamtimeid}/{scanname} " \
@@ -196,6 +199,7 @@ class DatasetIngestor:
         #: (:obj:`str`) datablock shell command
         self.__datasetcommand = "nxsfileinfo metadata -k4 " \
             " -o {metapath}/{scanname}{scanpostfix} " \
+            " --id-format '{idpattern}'" \
             " -c {accessgroups}" \
             " -w {ownergroup}" \
             " -z '{measurement}'" \
@@ -305,6 +309,15 @@ class DatasetIngestor:
         #: (:obj:`list` <:obj:`str`>) plot file extension list
         self.__plot_file_extension_list = \
             ["png", "nxs", "h5", "ndf", "nx", "fio"]
+
+        #: (:obj:`str`) proposalId pattern
+        # self.__idpattern = "{proposalId}.{beamtimeId}"
+        self.__idpattern = "{beamtimeId}"
+        if "scicat_proposal_id_pattern" in self.__config.keys():
+            self.__idpattern = \
+                self.__config["scicat_proposal_id_pattern"].replace(
+                "{proposalid}", "{proposalId}").replace(
+                "{beamtimeid}", "{beamtimeId}")
 
         if "master_file_extension_list" in self.__config.keys() \
            and isinstance(self.__config["master_file_extension_list"], list):
@@ -701,7 +714,8 @@ class DatasetIngestor:
             "lastmeasurement": self.__measurement,
             "groupmapfile": self.__groupmapfile,
             "masterscanname": "",
-            "entryname": ""
+            "entryname": "",
+            "idpattern": self.__idpattern,
         }
         self.__dctfmt["masterfile"] = \
             "{scanpath}/{masterscanname}.{ext}".format(**self.__dctfmt)
@@ -1562,7 +1576,9 @@ class DatasetIngestor:
             with open(metafile) as fl:
                 smt = fl.read()
                 mt = json.loads(smt)
-            if mt["type"] == "raw" and mt["proposalId"] != self.__bid:
+            spid = self.__idpattern.format(
+                beamtimeId=self.__bid, proposalId=self.__dpid)
+            if mt["type"] == "raw" and mt["proposalId"] != spid:
                 raise Exception(
                     "Wrong SC proposalId %s for DESY beamtimeId %s in %s"
                     % (mt["proposalId"], self.__bid, metafile))

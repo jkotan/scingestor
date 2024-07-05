@@ -71,10 +71,11 @@ The configuration written in YAML can contain the following variables
 * **use_corepath_as_scandir** *(bool)* , default: ``False``
 * **beamtime_filename_postfix** *(str)* , default: ``"beamtime-metadata-"``
 * **beamtime_filename_prefix** *(str)* , default: ``".json"``
+* **scicat_proposal_id_pattern** *(str)* , default: ``"{beamtimeid}"``
 * **datasets_filename_pattern** *(str)* , default: ``"scicat-datasets-{beamtimeid}.lst"``
 * **ingested_datasets_filename_pattern** *(str)* , default: ``"scicat-ingested-datasets-{beamtimeid}.lst"``
-* **file_dataset_metadata_generator** *(str)* , default: ``"nxsfileinfo metadata -k4 -o {metapath}/{scanname}{scanpostfix}  -b {beamtimefile} -p {beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} {masterfile}``
-* **dataset_metadata_generator** *(str)* , default: ``"nxsfileinfo metadata -k4 -o {metapath}/{scanname}{scanpostfix}  -c {accessgroups} -w {ownergroup} -b {beamtimefile} -p {beamtimeid}/{scanname}"``
+* **file_dataset_metadata_generator** *(str)* , default: ``"nxsfileinfo metadata -k4 -o {metapath}/{scanname}{scanpostfix} --id-format {idpattern} -b {beamtimefile} -p {beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} {masterfile}``
+* **dataset_metadata_generator** *(str)* , default: ``"nxsfileinfo metadata -k4 -o {metapath}/{scanname}{scanpostfix} --id-format {idpattern} -c {accessgroups} -w {ownergroup} -b {beamtimefile} -p {beamtimeid}/{scanname}"``
 * **datablock_metadata_generator** *(str)* , default: ``"nxsfileinfo origdatablock  -s *.pyc,*{datablockpostfix},*{scanpostfix},*~  -p {doiprefix}/{beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} -o {metapath}/{scanname}{datablockpostfix} "``
 * **datablock_metadata_stream_generator** *(str)* , default: ``"nxsfileinfo origdatablock  -s *.pyc,*{datablockpostfix},*{scanpostfix},*~  -w {ownergroup} -c {accessgroups} -p {doiprefix}/{beamtimeid}/{scanname} "``
 * **datablock_metadata_generator_scanpath_postfix** *(str)* , default: ``" {scanpath}/{scanname} "``
