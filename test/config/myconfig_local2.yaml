@@ -1,0 +1,33 @@
+beamtime_dirs:
+  - "{homepath}/gpfs/current"
+  - "{homepath}/gpfs/commissioning"
+chmod_json_files: 0o666
+scicat_url: http://localhost:3000/api/v3
+ingestor_credential_file: "{homepath}/gpfs/pwd"
+inotify_timeout: 1
+get_event_timeout: 0.1
+ingestor_var_dir: "{homepath}/gpfs/current/scratch_bl/scingestor"
+scandir_blacklist:
+  - "{homepath}/gpfs/current/scratch_bl"
+  - "{homepath}/gpfs/current/processed"
+  - "{homepath}/gpfs/current/shared"
+metadata_in_var_dir: True
+scicat_proposal_id_pattern: "{proposalid}.{beamtimeid}"
+dataset_update_strategy: patch
+execute_commands: True
+# owner_access_groups_from_proposal: True
+max_scandir_depth: 1
+dataset_pid_prefix: ""
+datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
+ingested_datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
+master_file_extension_list:
+  - "nxs"
+  - "fio"
+# metadata_copy_map_file: "{homepath}/scicat/scingestor/test/config/metadata-copy-map.lst"
+# metadata_group_map_file: "/home/p08user/.config/DESY/scingestor-metadata-group-map.lst"
+# metadata_copy_map_file: "/home/p08user/.config/DESY/scingestor-metadata-copy-map.lst"
+oned_in_metadata: true
+hidden_attributes: "nexdatas_source,nexdatas_strategy,units,NX_class"
+ingest_dataset_attachment: true
+scicat_proposal_id_pattern: "{beamtimeid}"
+retry_failed_dataset_ingestion: true
