@@ -71,7 +71,7 @@ class ScanDirWatcher(threading.Thread):
         if "use_corepath_as_scandir" in self.__config.keys():
             self.__usecorepath = bool(
                 self.__config["use_corepath_as_scandir"])
-            
+
         #: (:obj:`bool`) watch scandir subdirectories
         self.__watchscandirsubdir = False
         if "watch_scandir_subdir" in self.__config.keys():
@@ -353,13 +353,14 @@ class ScanDirWatcher(threading.Thread):
                             dds = []
                             if not self.__watchscandirsubdir:
                                 with self.__dataset_lock:
-                                    for path, fn in \
-                                            list(self.__scandir_watchers.keys()):
+                                    for path, fn in list(
+                                            self.__scandir_watchers.keys()):
                                         ds = self.__scandir_watchers.pop(
                                             (path, fn))
                                         get_logger().info(
                                             'ScanDirWatcher: '
-                                            'Stopping ScanDirWatcher %s' % (fn))
+                                            'Stopping ScanDirWatcher %s'
+                                            % (fn))
                                         ds.running = False
                                         dds.append(ds)
                                 while len(dds):
