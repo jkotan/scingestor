@@ -279,7 +279,7 @@ class ScanDirWatcher(threading.Thread):
                     # get_logger().info(str(btmd))
 
             if os.path.isdir(self.__path) and (
-                    self.__watch_scandir_subdir or not
+                    self.__watchscandirsubdir or not
                     os.path.isfile(self.__dslist_fullname)):
                 subdirs = [it.path for it in os.scandir(self.__path)
                            if it.is_dir()]
