@@ -72,6 +72,12 @@ class ScanDirWatcher(threading.Thread):
             self.__usecorepath = bool(
                 self.__config["use_corepath_as_scandir"])
 
+        #: (:obj:`bool`) watch scandir subdirectories
+        self.__watchscandirsubdir = False
+        if "watch_scandir_subdir" in self.__config.keys():
+            self.__watchscandirsubdir = bool(
+                self.__config["watch_scandir_subdir"])
+
         #: (:class:`scingestor.datasetWatcher.DatasetWatcher`) use core path
         self.__conv = PathConverter(
             self.__corepath, self.__bpath,
@@ -272,7 +278,9 @@ class ScanDirWatcher(threading.Thread):
                     dw.start()
                     # get_logger().info(str(btmd))
 
-            elif os.path.isdir(self.__path):
+            if os.path.isdir(self.__path) and (
+                    self.__watchscandirsubdir or not
+                    os.path.isfile(self.__dslist_fullname)):
                 subdirs = [it.path for it in os.scandir(self.__path)
                            if it.is_dir()]
                 self._launch_scandir_watcher(subdirs)
@@ -345,19 +353,21 @@ class ScanDirWatcher(threading.Thread):
                                     'ScanDirWatcher: Creating '
                                     'DatasetWatcher %s' % fn)
                             dds = []
-                            with self.__dataset_lock:
-                                for path, fn in \
-                                        list(self.__scandir_watchers.keys()):
-                                    ds = self.__scandir_watchers.pop(
-                                        (path, fn))
-                                    get_logger().info(
-                                        'ScanDirWatcher: '
-                                        'Stopping ScanDirWatcher %s' % (fn))
-                                    ds.running = False
-                                    dds.append(ds)
-                            while len(dds):
-                                ds = dds.pop()
-                                ds.join()
+                            if not self.__watchscandirsubdir:
+                                with self.__dataset_lock:
+                                    for path, fn in list(
+                                            self.__scandir_watchers.keys()):
+                                        ds = self.__scandir_watchers.pop(
+                                            (path, fn))
+                                        get_logger().info(
+                                            'ScanDirWatcher: '
+                                            'Stopping ScanDirWatcher %s'
+                                            % (fn))
+                                        ds.running = False
+                                        dds.append(ds)
+                                while len(dds):
+                                    ds = dds.pop()
+                                    ds.join()
 
                         elif "IN_ISDIR" in masks and (
                                 "IN_CREATE" in masks

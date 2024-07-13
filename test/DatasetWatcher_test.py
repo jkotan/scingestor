@@ -3480,6 +3480,7 @@ class DatasetWatcherTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'watch_scandir_subdir: True\n' \
             'scicat_users_login_path: "Users/login"\n' \
             'scicat_datasets_path: "Datasets"\n' \
             'scicat_datablocks_path: "OrigDatablocks"\n' \
@@ -3531,7 +3532,13 @@ class DatasetWatcherTest(unittest.TestCase):
                 if lastlog:
                     with open(logfname1) as lfl:
                         er2 = lfl.read()
-                    self.assertEqual(er2, lastlog)
+                    self.assertEqual(
+                        self.sortmarkedlines(
+                            er2.split("\n"),
+                            [(5, 20)], {'watch [0-9]:': 'watch:'}),
+                        self.sortmarkedlines(
+                            lastlog.split("\n"),
+                            [(5, 20)], {'watch [0-9]:': 'watch:'}))
                 lastlog = er
 
                 ser = er.split("\n")
@@ -3545,7 +3552,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 #                          (not ee.startswith("127.0.0.1")))])
                 # sero = [ln for ln in ser if ln.startswith("127.0.0.1")]
                 try:
-                    self.assertEqual(
+                    pattern = self.sortmarkedlines(
                         'INFO : BeamtimeWatcher: Adding watch {cnt1}: '
                         '{basedir}\n'
                         'INFO : BeamtimeWatcher: Create ScanDirWatcher '
@@ -3567,6 +3574,10 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : DatasetWatcher: Waiting datasets: '
                         '[\'{sc1}\', \'{sc2}\']\n'
                         'INFO : DatasetWatcher: Ingested datasets: []\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir3} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt6}: '
+                        '{subdir3}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} {sc1}\n'
                         'INFO : DatasetIngestor: Generating metadata: '
                         '{sc1} {subdir2}/{sc1}.scan.json\n'
@@ -3643,13 +3654,21 @@ class DatasetWatcherTest(unittest.TestCase):
                         '{dslist}\n'
                         'INFO : ScanDirWatcher: Removing watch {cnt5}: '
                         '{dslist}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt6}: '
+                        '{subdir3}\n'
                         .format(basedir=fdirname, btmeta=fullbtmeta,
                                 subdir=fsubdirname, subdir2=fsubdirname2,
+                                subdir3=fsubdirname3,
                                 dslist=fdslist, idslist=fidslist,
                                 cnt1=cnt, cnt2=(cnt + 1), cnt3=(cnt + 2),
-                                cnt4=(cnt + 3), cnt5=(cnt + 4),
+                                cnt4=(cnt + 3), cnt5=(cnt + 4), cnt6=(cnt + 5),
                                 sc1='myscan_00001', sc2='myscan_00002'),
-                        '\n'.join(dseri))
+                        [(5, 20)], {'watch [0-9]:': 'watch:'})
+                    self.assertEqual(
+                        pattern, self.sortmarkedlines(
+                            dseri, [(5, 20)], {'watch [0-9]:': 'watch:'}))
                 except Exception:
                     print(er)
                     raise

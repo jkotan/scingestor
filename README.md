@@ -35,6 +35,7 @@ The configuration written in YAML can contain the following variables
 * **attachment_metadata_postfix** *(str)* , default: `".attachment.json"`
 * **metadata_in_var_dir** *(bool)* , default: `False`
 * **use_corepath_as_scandir** *(bool)* , default: `False`
+* **watch_scandir_subdir** *(bool)* , default: `False`
 * **beamtime_filename_postfix** *(str)* , default: `"beamtime-metadata-"`
 * **beamtime_filename_prefix** *(str)* , default: `".json"`
 * **scicat_proposal_id_pattern** *(str)* , default: `"{beamtimeid}"`
