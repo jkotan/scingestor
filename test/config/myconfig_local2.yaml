@@ -16,8 +16,9 @@ scicat_proposal_id_pattern: "{proposalid}.{beamtimeid}"
 dataset_update_strategy: patch
 execute_commands: True
 # owner_access_groups_from_proposal: True
-max_scandir_depth: 1
+max_scandir_depth: 2
 dataset_pid_prefix: ""
+watch_scandir_subdir: True
 datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
 ingested_datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
 master_file_extension_list:
