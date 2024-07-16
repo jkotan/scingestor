@@ -302,10 +302,17 @@ class ScanDirWatcher(threading.Thread):
                                                  event.masks,
                                                  self.__wd_to_path[qid]))
                         masks = event.masks.split("|")
-                        if "IN_IGNORED" in masks or \
-                           "IN_MOVE_FROM" in masks or \
-                           "IN_DELETE" in masks or \
-                           "IN_MOVE_SELF" in masks:
+                        if self.__watchscandirsubdir and \
+                                "IN_ISDIR" in masks and (
+                                "IN_CREATE" in masks
+                                or "IN_MOVE_TO" in masks):
+                            npath = os.path.join(
+                                self.__wd_to_path[qid], event.name)
+                            self._launch_scandir_watcher([npath])
+                        elif "IN_IGNORED" in masks or \
+                                "IN_MOVE_FROM" in masks or \
+                                "IN_DELETE" in masks or \
+                                "IN_MOVE_SELF" in masks:
                             # path/file does not exist anymore
                             #     (moved/deleted)
                             if event.name is not None:
