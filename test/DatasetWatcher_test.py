@@ -10777,6 +10777,7 @@ class DatasetWatcherTest(unittest.TestCase):
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
+            'watch_scandir_subdir: True\n' \
             'relative_path_generator_switch: " -r {{relpath}} "\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'relative_path_in_datablock: true\n' \
@@ -10873,6 +10874,10 @@ class DatasetWatcherTest(unittest.TestCase):
                         '{dslist}\n'
                         'INFO : DatasetWatcher: Adding watch {cnt7}: '
                         '{dslist} {idslist}\n'
+                        'INFO : ScanDirWatcher: Create ScanDirWatcher '
+                        '{subdir3} {btmeta}\n'
+                        'INFO : ScanDirWatcher: Adding watch {cnt8}: '
+                        '{subdir3}\n'
                         'INFO : DatasetWatcher: Waiting datasets: '
                         '[\'{sc1} {det1}\', \'{sc2} {det2}\']\n'
                         'INFO : DatasetWatcher: Ingested datasets: []\n'
@@ -10938,11 +10943,11 @@ class DatasetWatcherTest(unittest.TestCase):
                         '99001236/{sc2}\n'
                         'INFO : ScanDirWatcher: Create ScanDirWatcher '
                         '{detdir3} {btmeta}\n'
-                        'INFO : ScanDirWatcher: Adding watch {cnt8}: '
+                        'INFO : ScanDirWatcher: Adding watch {cnt9}: '
                         '{detdir3}\n'
                         'INFO : ScanDirWatcher: Create ScanDirWatcher '
                         '{detdir4} {btmeta}\n'
-                        'INFO : ScanDirWatcher: Adding watch {cnt9}: '
+                        'INFO : ScanDirWatcher: Adding watch {cnt10}: '
                         '{detdir4}\n'
                         'INFO : DatasetIngestor: Ingesting: {dslist} '
                         '{sc3} {det3}\n'
@@ -11033,13 +11038,18 @@ class DatasetWatcherTest(unittest.TestCase):
                         'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
                         '{btmeta}\n'
                         'INFO : ScanDirWatcher: Removing watch {cnt8}: '
-                        '{detdir3}\n'
+                        '{subdir3}\n'
                         'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
                         '{btmeta}\n'
                         'INFO : ScanDirWatcher: Removing watch {cnt9}: '
+                        '{detdir3}\n'
+                        'INFO : ScanDirWatcher: Stopping ScanDirWatcher '
+                        '{btmeta}\n'
+                        'INFO : ScanDirWatcher: Removing watch {cnt10}: '
                         '{detdir4}\n'
                         .format(basedir=fdirname, btmeta=fullbtmeta,
                                 subdir=fsubdirname, subdir2=fsubdirname2,
+                                subdir3=fsubdirname3,
                                 vardir=vardir,
                                 detdir1=fsubdirnamedet1,
                                 detdir2=fsubdirnamedet2,
@@ -11050,14 +11060,17 @@ class DatasetWatcherTest(unittest.TestCase):
                                 cnt4=(cnt + 3), cnt5=(cnt + 4),
                                 cnt6=(cnt + 5), cnt7=(cnt + 6),
                                 cnt8=(cnt + 7), cnt9=(cnt + 8),
+                                cnt10=(cnt + 9),
                                 det1="../lambda1/", det2="../lambda2/",
                                 det3="../lambda3", det4="../lambda4",
                                 sc1='myscan_00001', sc2='myscan_00002',
                                 sc3='myscan_00003', sc4='myscan_00004'),
-                        [(5, 55)], {'watch [0-9]:': 'watch:'})
+                        [(5, 59)], {'watch [0-9]:': 'watch:',
+                                    'watch 10:': 'watch:'})
                     self.assertEqual(
                         pattern, self.sortmarkedlines(
-                            dseri, [(5, 55)], {'watch [0-9]:': 'watch:'}))
+                            dseri, [(5, 59)], {'watch [0-9]:': 'watch:',
+                                               'watch 10:': 'watch:'}))
                 except Exception:
                     print(er)
                     raise

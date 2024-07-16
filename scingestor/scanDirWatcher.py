@@ -302,7 +302,8 @@ class ScanDirWatcher(threading.Thread):
                                                  event.masks,
                                                  self.__wd_to_path[qid]))
                         masks = event.masks.split("|")
-                        if "IN_ISDIR" in masks and (
+                        if self.__watchscandirsubdir and \
+                                "IN_ISDIR" in masks and (
                                 "IN_CREATE" in masks
                                 or "IN_MOVE_TO" in masks):
                             npath = os.path.join(
