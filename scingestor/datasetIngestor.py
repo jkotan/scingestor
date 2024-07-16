@@ -241,6 +241,9 @@ class DatasetIngestor:
             " {lastmeasurement} -m {metapath}/{scanname}{scanpostfix}" \
             " -d {metapath}/{scanname}{datablockpostfix}" \
             " -a {metapath}/{scanname}{attachmentpostfix}" \
+            " -o {metapath}/{lastmeasurement}{scanpostfix}" \
+            " -l {metapath}/{lastmeasurement}{datablockpostfix}" \
+            " -t {metapath}/{lastmeasurement}{attachmentpostfix}" \
             " -p {beamtimeid}/{lastmeasurement} -f -k4 "
 
         #: (:obj:`str`) oned generator switch
@@ -693,6 +696,7 @@ class DatasetIngestor:
             "scanpath": self.__path,
             "metapath": self.__metapath,
             "relpath": self.__relpath,
+            "masterrelpath": self.__relpath,
             "beamtimeid": self.__bid,
             "beamline": self.__bl,
             "pidprefix": self.__pidprefix,
@@ -1772,6 +1776,11 @@ class DatasetIngestor:
         self.__dctfmt["entryname"] = ""
         self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
         self.__dctfmt["masterscanname"] = self.__dctfmt["scanname"]
+        self.__dctfmt["relpath"] = self.__dctfmt["masterrelpath"]
+        sndir, snname = os.path.split(str(self.__dctfmt["scanname"]))
+        if sndir:
+            self.__dctfmt["relpath"] = "%s/%s" % (
+                self.__dctfmt["relpath"], sndir)
         rdss = glob.glob(
             "{metapath}/{scan}{postfix}".format(
                 scan=self.__dctfmt["scanname"],
@@ -1934,6 +1943,11 @@ class DatasetIngestor:
             else:
                 self.__dctfmt["scanname"] = sscan[0]
                 self.__dctfmt["masterscanname"] = self.__dctfmt["scanname"]
+        self.__dctfmt["relpath"] = self.__dctfmt["masterrelpath"]
+        sndir, snname = os.path.split(str(self.__dctfmt["scanname"]))
+        if sndir:
+            self.__dctfmt["relpath"] = "%s/%s" % (
+                self.__dctfmt["relpath"], sndir)
         rds = None
         rdss = glob.glob(
             "{metapath}/{scan}{postfix}".format(
