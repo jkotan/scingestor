@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>scingestor.datasetIngestor &#8212; SciCat Dataset Ingestor 0.13.0 documentation</title>
+    <title>scingestor.datasetIngestor &#8212; SciCat Dataset Ingestor 0.15.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -130,6 +130,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__metapath</span> <span class="o">=</span> <span class="n">path</span>
         <span class="c1">#: (:obj:`str`) beamtime id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;beamtimeId&quot;</span><span class="p">]</span>
+        <span class="c1">#: (:obj:`str`) desy proposal id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dpid</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;proposalId&quot;</span><span class="p">]</span>
         <span class="c1">#: (:obj:`str`) beamline name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__bl</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;beamline&quot;</span><span class="p">]</span>
         <span class="c1">#: (:obj:`str`) beamtime id</span>
@@ -222,6 +224,7 @@
         <span class="c1">#: (:obj:`str`) nexus dataset shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommandfile</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata -k4 &quot;</span> \
             <span class="s2">&quot; -o </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scanpostfix}</span><span class="s2"> &quot;</span> \
+            <span class="s2">&quot; --id-format &#39;</span><span class="si">{idpattern}</span><span class="s2">&#39;&quot;</span> \
             <span class="s2">&quot; -z &#39;</span><span class="si">{measurement}</span><span class="s2">&#39;&quot;</span> \
             <span class="s2">&quot; -e &#39;</span><span class="si">{entryname}</span><span class="s2">&#39;&quot;</span> \
             <span class="s2">&quot; -b </span><span class="si">{beamtimefile}</span><span class="s2"> -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{scanname}</span><span class="s2"> &quot;</span> \
@@ -231,6 +234,7 @@
         <span class="c1">#: (:obj:`str`) datablock shell command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__datasetcommand</span> <span class="o">=</span> <span class="s2">&quot;nxsfileinfo metadata -k4 &quot;</span> \
             <span class="s2">&quot; -o </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scanpostfix}</span><span class="s2"> &quot;</span> \
+            <span class="s2">&quot; --id-format &#39;</span><span class="si">{idpattern}</span><span class="s2">&#39;&quot;</span> \
             <span class="s2">&quot; -c </span><span class="si">{accessgroups}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -w </span><span class="si">{ownergroup}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -z &#39;</span><span class="si">{measurement}</span><span class="s2">&#39;&quot;</span> \
@@ -272,6 +276,9 @@
             <span class="s2">&quot; </span><span class="si">{lastmeasurement}</span><span class="s2"> -m </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{scanpostfix}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -d </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{datablockpostfix}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -a </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scanname}{attachmentpostfix}</span><span class="s2">&quot;</span> \
+            <span class="s2">&quot; -o </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{lastmeasurement}{scanpostfix}</span><span class="s2">&quot;</span> \
+            <span class="s2">&quot; -l </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{lastmeasurement}{datablockpostfix}</span><span class="s2">&quot;</span> \
+            <span class="s2">&quot; -t </span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{lastmeasurement}{attachmentpostfix}</span><span class="s2">&quot;</span> \
             <span class="s2">&quot; -p </span><span class="si">{beamtimeid}</span><span class="s2">/</span><span class="si">{lastmeasurement}</span><span class="s2"> -f -k4 &quot;</span>
 
         <span class="c1">#: (:obj:`str`) oned generator switch</span>
@@ -340,6 +347,15 @@
         <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) plot file extension list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__plot_file_extension_list</span> <span class="o">=</span> \
             <span class="p">[</span><span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="s2">&quot;nxs&quot;</span><span class="p">,</span> <span class="s2">&quot;h5&quot;</span><span class="p">,</span> <span class="s2">&quot;ndf&quot;</span><span class="p">,</span> <span class="s2">&quot;nx&quot;</span><span class="p">,</span> <span class="s2">&quot;fio&quot;</span><span class="p">]</span>
+
+        <span class="c1">#: (:obj:`str`) proposalId pattern</span>
+        <span class="c1"># self.__idpattern = &quot;{proposalId}.{beamtimeId}&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__idpattern</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{beamtimeId}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;scicat_proposal_id_pattern&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__idpattern</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;scicat_proposal_id_pattern&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">{proposalid}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{proposalId}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="si">{beamtimeid}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{beamtimeId}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="s2">&quot;master_file_extension_list&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> \
            <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__config</span><span class="p">[</span><span class="s2">&quot;master_file_extension_list&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
@@ -715,6 +731,7 @@
             <span class="s2">&quot;scanpath&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">,</span>
             <span class="s2">&quot;metapath&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metapath</span><span class="p">,</span>
             <span class="s2">&quot;relpath&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__relpath</span><span class="p">,</span>
+            <span class="s2">&quot;masterrelpath&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__relpath</span><span class="p">,</span>
             <span class="s2">&quot;beamtimeid&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">,</span>
             <span class="s2">&quot;beamline&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bl</span><span class="p">,</span>
             <span class="s2">&quot;pidprefix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pidprefix</span><span class="p">,</span>
@@ -736,7 +753,8 @@
             <span class="s2">&quot;lastmeasurement&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurement</span><span class="p">,</span>
             <span class="s2">&quot;groupmapfile&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__groupmapfile</span><span class="p">,</span>
             <span class="s2">&quot;masterscanname&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;entryname&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+            <span class="s2">&quot;entryname&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;idpattern&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__idpattern</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;masterfile&quot;</span><span class="p">]</span> <span class="o">=</span> \
             <span class="s2">&quot;</span><span class="si">{scanpath}</span><span class="s2">/</span><span class="si">{masterscanname}</span><span class="s2">.</span><span class="si">{ext}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">)</span>
@@ -1597,7 +1615,9 @@
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metafile</span><span class="p">)</span> <span class="k">as</span> <span class="n">fl</span><span class="p">:</span>
                 <span class="n">smt</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
                 <span class="n">mt</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">smt</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;raw&quot;</span> <span class="ow">and</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;proposalId&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">:</span>
+            <span class="n">spid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__idpattern</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">beamtimeId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">,</span> <span class="n">proposalId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dpid</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;raw&quot;</span> <span class="ow">and</span> <span class="n">mt</span><span class="p">[</span><span class="s2">&quot;proposalId&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">spid</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                     <span class="s2">&quot;Wrong SC proposalId </span><span class="si">%s</span><span class="s2"> for DESY beamtimeId </span><span class="si">%s</span><span class="s2"> in </span><span class="si">%s</span><span class="s2">&quot;</span>
                     <span class="o">%</span> <span class="p">(</span><span class="n">mt</span><span class="p">[</span><span class="s2">&quot;proposalId&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__bid</span><span class="p">,</span> <span class="n">metafile</span><span class="p">))</span>
@@ -1791,6 +1811,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;entryname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sscan</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;masterscanname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;relpath&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;masterrelpath&quot;</span><span class="p">]</span>
+        <span class="n">sndir</span><span class="p">,</span> <span class="n">snname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">sndir</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;relpath&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;relpath&quot;</span><span class="p">],</span> <span class="n">sndir</span><span class="p">)</span>
         <span class="n">rdss</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
             <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">scan</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">],</span>
@@ -1953,6 +1978,11 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sscan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;masterscanname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;relpath&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;masterrelpath&quot;</span><span class="p">]</span>
+        <span class="n">sndir</span><span class="p">,</span> <span class="n">snname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;scanname&quot;</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">sndir</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;relpath&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dctfmt</span><span class="p">[</span><span class="s2">&quot;relpath&quot;</span><span class="p">],</span> <span class="n">sndir</span><span class="p">)</span>
         <span class="n">rds</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">rdss</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
             <span class="s2">&quot;</span><span class="si">{metapath}</span><span class="s2">/</span><span class="si">{scan}{postfix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
