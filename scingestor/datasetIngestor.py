@@ -1130,7 +1130,9 @@ class DatasetIngestor:
                 "{url}/{pid}"
                 .format(
                     url=self.__proposalurl,
-                    pid=bid.replace("/", "%2F")),
+                    pid=self.__idpattern.format(
+                        beamtimeId=self.__bid.replace("/", "%2F"),
+                        proposalId=self.__dpid.replace("/", "%2F"))),
                 headers=self.__headers,
                 params={"access_token": token}
             )
