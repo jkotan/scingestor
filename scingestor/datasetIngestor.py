@@ -171,6 +171,8 @@ class DatasetIngestor:
         self.__forcegeneratemeasurement = False
         #: (:obj:`bool`) skip multiple datablock ingestion
         self.__skip_multi_datablock = False
+        #: (:obj:`bool`) single datablock ingestion
+        self.__single_datablock = False
         #: (:obj:`bool`) skip multiple attachment ingestion
         self.__skip_multi_attachment = False
         #: (:obj:`bool`) skip scan dataset ingestion
@@ -241,10 +243,10 @@ class DatasetIngestor:
             " {lastmeasurement} -m {metapath}/{scanname}{scanpostfix}" \
             " -d {metapath}/{scanname}{datablockpostfix}" \
             " -a {metapath}/{scanname}{attachmentpostfix}" \
-            " -o {metapath}/{lastmeasurement}{scanpostfix}" \
-            " -l {metapath}/{lastmeasurement}{datablockpostfix}" \
-            " -t {metapath}/{lastmeasurement}{attachmentpostfix}" \
             " -p {beamtimeid}/{lastmeasurement} -f -k4 "
+            # " -o {metapath}/{lastmeasurement}{scanpostfix}" \
+            # " -l {metapath}/{lastmeasurement}{datablockpostfix}" \
+            # " -t {metapath}/{lastmeasurement}{attachmentpostfix}" \
 
         #: (:obj:`str`) oned generator switch
         self.__oned_switch = " --oned "
@@ -460,6 +462,9 @@ class DatasetIngestor:
         if "skip_multi_datablock_ingestion" in self.__config.keys():
             self.__skip_multi_datablock = \
                 self.__config["skip_multi_datablock_ingestion"]
+        if "single_datablock_ingestion" in self.__config.keys():
+            self.__single_datablock = \
+                self.__config["single_datablock_ingestion"]
         if "skip_multi_attachment_ingestion" in self.__config.keys():
             self.__skip_multi_attachment = \
                 self.__config["skip_multi_attachment_ingestion"]
@@ -1803,7 +1808,7 @@ class DatasetIngestor:
                 scan=self.__dctfmt["scanname"],
                 postfix=self.__datablockpostfix,
                 metapath=self.__dctfmt["metapath"]))
-        if odbs and odbs[0]:
+        if odbs and odbs[0] and not self.__single_datablock:
             odb = odbs[0]
             todb = [odb]
             with open(odb) as fl:
@@ -1986,7 +1991,7 @@ class DatasetIngestor:
                 scan=self.__dctfmt["scanname"],
                 postfix=self.__datablockpostfix,
                 metapath=self.__dctfmt["metapath"]))
-        if odbs and odbs[0]:
+        if odbs and odbs[0] and not self.__single_datablock:
             odb = odbs[0]
             todb = [odb]
             olst = False
