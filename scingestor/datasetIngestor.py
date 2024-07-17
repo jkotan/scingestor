@@ -1121,13 +1121,14 @@ class DatasetIngestor:
         bid = self.__meta["beamtimeId"]
         try:
             self.__headers["Authorization"] = "Bearer {}".format(token)
+            propid = self.__idpattern.format(
+                beamtimeId=self.__bid.replace("/", "%2F"),
+                proposalId=self.__dpid.replace("/", "%2F"))
             resexists = requests.get(
                 "{url}/{pid}"
                 .format(
                     url=self.__proposalurl,
-                    pid=self.__idpattern.format(
-                        beamtimeId=self.__bid.replace("/", "%2F"),
-                        proposalId=self.__dpid.replace("/", "%2F"))),
+                    pid=propid),
                 headers=self.__headers,
                 params={"access_token": token}
             )
@@ -1137,7 +1138,7 @@ class DatasetIngestor:
             else:
                 raise Exception(
                     "Proposal %s: %s"
-                    % (bid, resexists.text or '{\"exists\": false}'))
+                    % (propid, resexists.text or '{\"exists\": false}'))
             if pexists:
                 resget = resexists
                 if resget.ok:
