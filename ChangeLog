@@ -1,7 +1,7 @@
 2024-07-17 Jan Kotanski <jan.kotanski@desy.de>
 	* add watch_scandir_subdir  variable with False default (#291)
 	* add scicat_proposal_id_pattern variable with "{beamtimeId}" default (#289)
-	* tagged as 0.14.0
+	* tagged as 0.15.0
 
 2024-05-24 Jan Kotanski <jan.kotanski@desy.de>
 	* add force_generate_measurement = False variable (#285)
