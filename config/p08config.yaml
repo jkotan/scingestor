@@ -24,7 +24,7 @@ ingested_datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst
 oned_in_metadata: true
 hidden_attributes: "nexdatas_source,nexdatas_strategy,units,NX_class"
 ingest_dataset_attachment: true
-scicat_proposal_id_pattern: "{beamtimeid}"
+scicat_proposal_id_pattern: "{proposalid}.{beamtimeid}"
 retry_failed_dataset_ingestion: true
 # relative_path_in_datablock: False
 # scandir_blacklist:
