@@ -50,6 +50,7 @@ The configuration written in YAML can contain the following variables
 * **metadata_generated_callback** *(str)* , default: `"nxsfileinfo groupmetadata  {lastmeasurement} -m {metapath}/{scanname}{scanpostfix} -d {metapath}/{scanname}{datablockpostfix} -a {metapath}/{scanname}{attachmentpostfix} -p {beamtimeid}/{lastmeasurement} -f -k4 "`
 * **metadata_group_map_file** *(str)* , default: `""`
 * **raw_metadata_callback** *(bool)* , default: `False`
+* **single_datablock_ingestion** *(bool)* , default: `False`
 * **skip_multi_datablock_ingestion** *(bool)* , default: `False`
 * **skip_multi_attachment_ingestion** *(bool)* , default: `False`
 * **skip_scan_dataset_ingestion** *(bool)* , default: `False`

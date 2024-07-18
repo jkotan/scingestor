@@ -1,6 +1,7 @@
-2024-07-17 Jan Kotanski <jan.kotanski@desy.de>
+2024-07-19 Jan Kotanski <jan.kotanski@desy.de>
+	* add single_datablock_ingestion variable with False default (#298)
 	* use scicat_proposal_id_pattern to get proposal groups (#297)
-	* tagged as 0.15.1
+	* tagged as 0.16.0
 
 2024-07-17 Jan Kotanski <jan.kotanski@desy.de>
 	* add watch_scandir_subdir  variable with False default (#291)
