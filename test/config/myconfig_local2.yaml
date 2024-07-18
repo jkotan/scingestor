@@ -15,6 +15,7 @@ metadata_in_var_dir: True
 scicat_proposal_id_pattern: "{proposalid}.{beamtimeid}"
 dataset_update_strategy: patch
 execute_commands: True
+single_datablock_ingestion: True
 # owner_access_groups_from_proposal: True
 max_scandir_depth: 2
 dataset_pid_prefix: ""

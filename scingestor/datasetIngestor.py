@@ -171,6 +171,8 @@ class DatasetIngestor:
         self.__forcegeneratemeasurement = False
         #: (:obj:`bool`) skip multiple datablock ingestion
         self.__skip_multi_datablock = False
+        #: (:obj:`bool`) single datablock ingestion
+        self.__single_datablock = False
         #: (:obj:`bool`) skip multiple attachment ingestion
         self.__skip_multi_attachment = False
         #: (:obj:`bool`) skip scan dataset ingestion
@@ -208,7 +210,8 @@ class DatasetIngestor:
         #: (:obj:`str`) datablock shell command
         self.__datablockcommand = "nxsfileinfo origdatablock " \
             " -s *.pyc,*{datablockpostfix},*{scanpostfix}," \
-            "*{attachmentpostfix},*~ " \
+            "*{attachmentpostfix},*~  " \
+            " -r '{dbrelpath}' " \
             " -p {pidprefix}{beamtimeid}/{scanname} " \
             " -w {ownergroup}" \
             " -c {accessgroups}" \
@@ -218,7 +221,8 @@ class DatasetIngestor:
             " -s *.pyc,*{datablockpostfix},*{scanpostfix}," \
             "*{attachmentpostfix},*~ " \
             " -w {ownergroup}" \
-            " -c {accessgroups}" \
+            " -c {accessgroups} " \
+            " -r '{dbrelpath}' " \
             " -p {pidprefix}{beamtimeid}/{scanname} "
         #: (:obj:`str`) datablock path postfix
         self.__datablockscanpath = " {scanpath}/{scanname} "
@@ -460,6 +464,9 @@ class DatasetIngestor:
         if "skip_multi_datablock_ingestion" in self.__config.keys():
             self.__skip_multi_datablock = \
                 self.__config["skip_multi_datablock_ingestion"]
+        if "single_datablock_ingestion" in self.__config.keys():
+            self.__single_datablock = \
+                self.__config["single_datablock_ingestion"]
         if "skip_multi_attachment_ingestion" in self.__config.keys():
             self.__skip_multi_attachment = \
                 self.__config["skip_multi_attachment_ingestion"]
@@ -557,15 +564,7 @@ class DatasetIngestor:
             self.__emptyunits_switch = \
                 self.__config["add_empty_units_generator_switch"]
 
-        if self.__relpath_in_datablock:
-            if "datablock_metadata_generator" not in self.__config.keys():
-                self.__datablockcommand = \
-                    self.__datablockcommand + self.__relpath_switch
-            if "datablock_metadata_stream_generator" \
-               not in self.__config.keys():
-                self.__datablockmemcommand = \
-                    self.__datablockmemcommand + self.__relpath_switch
-        else:
+        if not self.__relpath_in_datablock:
             if "dataset_metadata_generator" not in self.__config.keys():
                 self.__datasetcommand = \
                     self.__datasetcommand + self.__relpath_switch
@@ -696,7 +695,7 @@ class DatasetIngestor:
             "scanpath": self.__path,
             "metapath": self.__metapath,
             "relpath": self.__relpath,
-            "masterrelpath": self.__relpath,
+            "dbrelpath": "",
             "beamtimeid": self.__bid,
             "beamline": self.__bl,
             "pidprefix": self.__pidprefix,
@@ -1779,11 +1778,15 @@ class DatasetIngestor:
         self.__dctfmt["entryname"] = ""
         self.__dctfmt["scanname"] = sscan[0] if len(sscan) > 0 else ""
         self.__dctfmt["masterscanname"] = self.__dctfmt["scanname"]
-        self.__dctfmt["relpath"] = self.__dctfmt["masterrelpath"]
         sndir, snname = os.path.split(str(self.__dctfmt["scanname"]))
+        plist = []
+        self.__dctfmt["dbrelpath"] = ""
+        if self.__relpath_in_datablock:
+            plist.append(self.__dctfmt["relpath"])
         if sndir:
-            self.__dctfmt["relpath"] = "%s/%s" % (
-                self.__dctfmt["relpath"], sndir)
+            plist.append(sndir)
+        if plist:
+            self.__dctfmt["dbrelpath"] = os.path.join(*plist)
         rdss = glob.glob(
             "{metapath}/{scan}{postfix}".format(
                 scan=self.__dctfmt["scanname"],
@@ -1806,7 +1809,7 @@ class DatasetIngestor:
                 scan=self.__dctfmt["scanname"],
                 postfix=self.__datablockpostfix,
                 metapath=self.__dctfmt["metapath"]))
-        if odbs and odbs[0]:
+        if odbs and odbs[0] and not self.__single_datablock:
             odb = odbs[0]
             todb = [odb]
             with open(odb) as fl:
@@ -1946,11 +1949,16 @@ class DatasetIngestor:
             else:
                 self.__dctfmt["scanname"] = sscan[0]
                 self.__dctfmt["masterscanname"] = self.__dctfmt["scanname"]
-        self.__dctfmt["relpath"] = self.__dctfmt["masterrelpath"]
         sndir, snname = os.path.split(str(self.__dctfmt["scanname"]))
+        plist = []
+        self.__dctfmt["dbrelpath"] = ""
+        if self.__relpath_in_datablock:
+            plist.append(self.__dctfmt["relpath"])
         if sndir:
-            self.__dctfmt["relpath"] = "%s/%s" % (
-                self.__dctfmt["relpath"], sndir)
+            plist.append(sndir)
+        if plist:
+            self.__dctfmt["dbrelpath"] = os.path.join(*plist)
+
         rds = None
         rdss = glob.glob(
             "{metapath}/{scan}{postfix}".format(
@@ -1989,7 +1997,7 @@ class DatasetIngestor:
                 scan=self.__dctfmt["scanname"],
                 postfix=self.__datablockpostfix,
                 metapath=self.__dctfmt["metapath"]))
-        if odbs and odbs[0]:
+        if odbs and odbs[0] and not self.__single_datablock:
             odb = odbs[0]
             todb = [odb]
             olst = False
