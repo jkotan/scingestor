@@ -38,7 +38,7 @@ The configuration written in YAML can contain the following variables
 * **watch_scandir_subdir** *(bool)* , default: `False`
 * **beamtime_filename_postfix** *(str)* , default: `"beamtime-metadata-"`
 * **beamtime_filename_prefix** *(str)* , default: `".json"`
-* **scicat_proposal_id_pattern** *(str)* , default: `"{beamtimeid}"`
+* **scicat_proposal_id_pattern** *(str)* , default: `"{proposalid}.{beamtimeid}"`
 * **datasets_filename_pattern** *(str)* , default: `"scicat-datasets-{beamtimeid}.lst"`
 * **ingested_datasets_filename_pattern** *(str)* , default: `"scicat-ingested-datasets-{beamtimeid}.lst"`
 * **file_dataset_metadata_generator** *(str)* , default: `"nxsfileinfo metadata -k4  -o {metapath}/{scanname}{scanpostfix} --id-format {idpattern} -b {beamtimefile} -p {beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} {mastefile}"`

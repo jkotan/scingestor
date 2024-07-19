@@ -942,7 +942,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -985,7 +985,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1084,7 +1084,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'p00dmgt', 'p00staff'],
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata':
                      {
                       'name': 'entry12345',
@@ -1138,7 +1138,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'p00dmgt', 'p00staff'],
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata':
                      {
                       'name': 'entry12345',
@@ -1466,7 +1466,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1509,7 +1509,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1610,7 +1610,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'p00dmgt', 'p00staff'],
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata':
                      {
                       'name': 'entry12345',
@@ -1664,7 +1664,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                          'p00dmgt', 'p00staff'],
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata':
                      {
                       'name': 'entry12345',
@@ -1836,6 +1836,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'attachment_axes_generator_switch: " -e {{axes}} "\n' \
             'attachment_frame_generator_switch: " -m {{frame}} "\n' \
             'log_generator_commands: true\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'add_empty_units: False\n' \
             'hidden_attributes: "{hattr}"\n' \
             'hidden_attributes_generator_switch: ' \
@@ -2819,6 +2820,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'plot_file_extension_list:\n' \
             '  - "nxs"\n' \
             'oned_dataset_generator_switch: " --oned "\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'log_generator_commands: true\n' \
             'add_empty_units: False\n' \
             'attachment_metadata_generator: '\
@@ -3543,7 +3545,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -3585,7 +3587,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -3627,7 +3629,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc3}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -3669,7 +3671,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc4}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -3778,7 +3780,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
                          'ownerGroup': '99001234-dmgt',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata':
                          {'name': 'entry12345',
                           'experiment_description': {
@@ -3923,6 +3925,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'log_generator_commands: true\n' \
             'add_empty_units: False\n' \
             'attachment_signal_names: "nonexist,lk_spectrum"\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'attachment_axes_names: "nonexist,mot03"\n' \
             'ingest_dataset_attachment: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
@@ -4760,7 +4763,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
                          'ownerGroup': '99001234-dmgt',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata':
                          {'name': 'entry12345',
                           'experiment_description': {
@@ -4998,6 +5001,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'scandir_blacklist:\n' \
                         '  - "{scratchdir}"\n' \
                         'scicat_url: "{url}"\n' \
+                        'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
                         'chmod_json_files: "{chmod}"\n' \
                         'log_generator_commands: true\n' \
                         'use_corepath_as_scandir: true\n' \
@@ -5502,6 +5506,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     'scandir_blacklist:\n' \
                     '  - "{scratchdir}"\n' \
                     'scicat_url: "{url}"\n' \
+                    'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
                     'oned_in_metadata: true\n' \
                     'log_generator_commands: true\n' \
                     'use_corepath_as_scandir: true\n' \
@@ -5925,6 +5930,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
@@ -6933,6 +6939,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
@@ -7370,6 +7377,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'oned_in_metadata: true\n' \
             'file_dataset_metadata_generator: "nxsfileinfo metadata ' \
             ' -o {{scanpath}}/{{scanname}}{{scanpostfix}} ' \

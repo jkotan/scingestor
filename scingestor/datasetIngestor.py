@@ -318,8 +318,8 @@ class DatasetIngestor:
             ["png", "nxs", "h5", "ndf", "nx", "fio"]
 
         #: (:obj:`str`) proposalId pattern
-        # self.__idpattern = "{proposalId}.{beamtimeId}"
-        self.__idpattern = "{beamtimeId}"
+        self.__idpattern = "{proposalId}.{beamtimeId}"
+        # self.__idpattern = "{beamtimeId}"
         if "scicat_proposal_id_pattern" in self.__config.keys():
             self.__idpattern = \
                 self.__config["scicat_proposal_id_pattern"].replace(

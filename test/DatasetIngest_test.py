@@ -621,7 +621,7 @@ optional arguments:
                      'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -649,7 +649,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -973,6 +973,7 @@ optional arguments:
             'beamtime_filename_postfix: ".jsn"\n' \
             'datasets_filename_pattern: "sc-ds-{{beamtimeid}}.lst"\n' \
             'ingest_dataset_attachment: true\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'ingested_datasets_filename_pattern: ' \
             '"sc-ids-{{beamtimeid}}.lst"\n' \
             'log_generator_commands: true\n' \
@@ -1241,7 +1242,7 @@ optional arguments:
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
-                    '--id-format \'{{beamtimeId}}\' '
+                    '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -1274,7 +1275,7 @@ optional arguments:
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
-                    '--id-format \'{{beamtimeId}}\' '
+                    '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -1341,7 +1342,7 @@ optional arguments:
                      'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -1369,7 +1370,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -1432,6 +1433,7 @@ optional arguments:
             'ingest_dataset_attachment: true\n' \
             'ingested_datasets_filename_pattern: ' \
             '"sc-ids-{{beamtimeid}}.lst"\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'log_generator_commands: true\n' \
             'inotify_timeout: 0.2\n' \
             'get_event_timeout: 0.02\n' \
@@ -2061,7 +2063,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -2089,7 +2091,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -2328,7 +2330,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -2356,7 +2358,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -2607,7 +2609,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -2635,7 +2637,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -2666,7 +2668,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -2919,7 +2921,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -2947,7 +2949,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -3198,7 +3200,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -3226,7 +3228,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -3511,7 +3513,7 @@ optional arguments:
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001284',
+                     'proposalId': '99991173.99001284',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001284'},
@@ -3539,7 +3541,7 @@ optional arguments:
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001284',
+                     'proposalId': '99991173.99001284',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001284'},
@@ -3570,7 +3572,7 @@ optional arguments:
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001284',
+                     'proposalId': '99991173.99001284',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001284'},
@@ -3967,7 +3969,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -3995,7 +3997,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -4263,7 +4265,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -4291,7 +4293,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -4322,7 +4324,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -4588,7 +4590,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -4616,7 +4618,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -4869,7 +4871,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -4897,7 +4899,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -5156,7 +5158,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -5185,7 +5187,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -5214,7 +5216,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -5314,6 +5316,7 @@ optional arguments:
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'ingest_dataset_attachment: true\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -5857,7 +5860,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -5886,7 +5889,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -5915,7 +5918,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -6216,7 +6219,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -6245,7 +6248,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -6274,7 +6277,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -6542,7 +6545,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -6571,7 +6574,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -6836,7 +6839,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -6865,7 +6868,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -6894,7 +6897,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -7159,7 +7162,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -7188,7 +7191,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -7217,7 +7220,7 @@ optional arguments:
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
                              'p00dmgt', 'p00staff'],
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'beamtimeId': '99001234'},
@@ -7656,7 +7659,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -7684,7 +7687,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -7862,7 +7865,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -7890,7 +7893,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -7918,7 +7921,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'energy': 123123,
@@ -8265,7 +8268,7 @@ optional arguments:
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
-                    '--id-format \'{{beamtimeId}}\' '
+                    '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -8298,7 +8301,7 @@ optional arguments:
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
-                    '--id-format \'{{beamtimeId}}\' '
+                    '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -8361,7 +8364,7 @@ optional arguments:
                      'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -8389,7 +8392,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -8447,6 +8450,7 @@ optional arguments:
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'log_generator_commands: true\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
@@ -8689,7 +8693,7 @@ optional arguments:
                     '{sc1} {subdir2}/{sc1}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc1}.scan.json  '
-                    '--id-format \'{{beamtimeId}}\' '
+                    '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -8726,7 +8730,7 @@ optional arguments:
                     '{sc2} {subdir2}/{sc2}.scan.json\n'
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  -o {subdir2}/{sc2}.scan.json  '
-                    '--id-format \'{{beamtimeId}}\' '
+                    '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -8915,7 +8919,7 @@ optional arguments:
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -8943,7 +8947,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -9173,7 +9177,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -9201,7 +9205,7 @@ optional arguments:
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
                          'p00dmgt', 'p00staff'],
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -9310,6 +9314,7 @@ optional arguments:
             'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -9540,6 +9545,7 @@ optional arguments:
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'dataset_pid_prefix: "10.3204/"\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
@@ -9782,6 +9788,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
@@ -10069,7 +10076,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc1}.scan.json  '
-                    '--id-format \'{{beamtimeId}}\' '
+                    '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,'
                     'p00dmgt,p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -10103,7 +10110,7 @@ optional arguments:
                     'INFO : DatasetIngestor: Generating dataset command: '
                     'nxsfileinfo metadata -k4  '
                     '-o {vardir}{subdir2}/{sc2}.scan.json  '
-                    '--id-format \'{{beamtimeId}}\' '
+                    '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                     '-c 99001234-dmgt,99001234-clbt,99001234-part,p00dmgt,'
                     'p00staff -w 99001234-dmgt '
                     '-z \'\' -e \'\' -b {btmeta} '
@@ -10171,7 +10178,7 @@ optional arguments:
                      'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -10199,7 +10206,7 @@ optional arguments:
                      'pid': '99001234/myscan_00002',
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -10263,6 +10270,7 @@ optional arguments:
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'ingestor_username: ""\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'ingest_dataset_attachment: true\n' \
             'dataset_pid_prefix: "10.3204/"\n' \
             'metadata_in_var_dir: true\n' \
@@ -10446,7 +10454,8 @@ optional arguments:
                 shutil.copy(lsource,
                             os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
-                self.__server.pid_proposal["99001234"] = json.dumps(prop)
+                self.__server.pid_proposal[
+                    "99991173.99001234"] = json.dumps(prop)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
@@ -10523,7 +10532,7 @@ optional arguments:
                      'datasetName': 'myscan_00001',
                      'accessGroups': ['group1', 'group2'],
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -10549,7 +10558,7 @@ optional arguments:
                      'datasetName': 'myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
                      'accessGroups': ['group1', 'group2'],
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'beamtimeId': '99001234'},
@@ -10638,6 +10647,7 @@ optional arguments:
             'scicat_url: "{url}"\n' \
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'dataset_pid_prefix: "10.3204/"\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \

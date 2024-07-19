@@ -268,6 +268,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
             'chmod_json_files: "{chmod}"\n' \
             'chmod_generator_switch: " -x {{chmod}} "\n' \
             'log_generator_commands: true\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'add_empty_units: False\n' \
             'hidden_attributes: "{hattr}"\n' \
             'hidden_attributes_generator_switch: ' \
@@ -826,7 +827,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -869,7 +870,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -971,7 +972,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00001',
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'ScanCommand': 'ascan exp_mot04 0.0 4.0 4 0.5',
@@ -1049,7 +1050,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                      'ownerGroup': '99001234-dmgt',
                      'pid': '99001234/myscan_00002',
                      'principalInvestigator': 'appuser@fake.com',
-                     'proposalId': '99001234',
+                     'proposalId': '99991173.99001234',
                      'scientificMetadata': {
                          'DOOR_proposalId': '99991173',
                          'ScanCommand': 'ascan exp_mot04 0.0 4.0 4 0.5',
@@ -1227,6 +1228,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'oned_in_metadata: true\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'oned_dataset_generator_switch: " --oned "\n' \
             'master_file_extension_list:\n' \
             '  - "fio"\n' \
@@ -1755,7 +1757,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc1}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00001  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1797,7 +1799,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc2}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00002  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1839,7 +1841,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc3}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00003  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1881,7 +1883,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                         'INFO : DatasetIngestor: Generating dataset command: '
                         'nxsfileinfo metadata -k4  '
                         '-o {subdir2}/{sc4}.scan.json  '
-                        '--id-format \'{{beamtimeId}}\' '
+                        '--id-format \'{{proposalId}}.{{beamtimeId}}\' '
                         '-z \'\' -e \'\' -b {btmeta} '
                         '-p 99001234/myscan_00004  -w 99001234-dmgt '
                         '-c 99001234-dmgt,99001234-clbt,99001234-part,'
@@ -1994,7 +1996,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
                          'ownerEmail': 'peter.smithson@fake.de',
                          'ownerGroup': '99001234-dmgt',
                          'principalInvestigator': 'appuser@fake.com',
-                         'proposalId': '99001234',
+                         'proposalId': '99991173.99001234',
                          'scientificMetadata': {
                              'DOOR_proposalId': '99991173',
                              'ScanCommand': 'ascan exp_mot04 0.0 4.0 4 0.5',
