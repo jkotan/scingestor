@@ -10454,7 +10454,8 @@ optional arguments:
                 shutil.copy(lsource,
                             os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
-                self.__server.pid_proposal["99991173.99001234"] = json.dumps(prop)
+                self.__server.pid_proposal[
+                    "99991173.99001234"] = json.dumps(prop)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
