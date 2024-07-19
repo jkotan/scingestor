@@ -5810,7 +5810,7 @@ class DatasetWatcherTest(unittest.TestCase):
                    'p00dmgt', 'p00staff'],
                'datasetName': 'myscan_00001',
                'principalInvestigator': 'appuser@fake.com',
-               'proposalId': '99991173.99011234',
+               'proposalId': '99011234',
                'scientificMetadata': {
                    'DOOR_proposalId': '99991173',
                    'ScanCommand': 'ascan mot02 3 5 4 0.1',
@@ -5871,7 +5871,7 @@ class DatasetWatcherTest(unittest.TestCase):
                    'p00dmgt', 'p00staff'],
                'datasetName': 'myscan_00002',
                'principalInvestigator': 'appuser@fake.com',
-               'proposalId': '99991173.99011234',
+               'proposalId': '99011234',
                'scientificMetadata': {
                    'DOOR_proposalId': '99991173',
                    "point_nb": 6,
@@ -5973,7 +5973,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     "unit": "W",
                     "value": 0.81
                 },
-                'proposalId': '99991173.99011234'},
+                'proposalId': '99011234'},
             'sourceFolder':
             '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
             'techniques': [
@@ -8330,7 +8330,7 @@ class DatasetWatcherTest(unittest.TestCase):
                      'p00dmgt', 'p00staff'],
                  'principalInvestigator': 'appuser@fake.com',
                  'ownerGroup': '99001234-dmgt',
-                 'proposalId': '99001234',
+                 'proposalId': '99991173.99001234',
                  'scientificMetadata': {
                      'DOOR_proposalId': '99991173',
                      'beamtimeId': '99001234'},
@@ -10881,6 +10881,7 @@ class DatasetWatcherTest(unittest.TestCase):
             'log_generator_commands: true\n' \
             'metadata_in_var_dir: true\n' \
             'owner_access_groups_from_proposal: true\n' \
+            'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'watch_scandir_subdir: True\n' \
             'relative_path_generator_switch: " -r {{relpath}} "\n' \
             'ingestor_var_dir: "{vardir}"\n' \
