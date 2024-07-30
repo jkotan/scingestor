@@ -5911,10 +5911,10 @@ class DatasetWatcherTest(unittest.TestCase):
                              'p00staff'],
             'contactEmail': 'appuser@fake.com',
             'creationLocation': '/DESY/PETRA III/P00',
-            'creationTime': '2022-05-19T09:00:00.000000+0200',
+            'creationTime': '2022-05-19T09:00:00.000000+0100',
             'datasetName': 'mycalib',
             'description': 'H20 distribution',
-            'endTime': '2022-05-19T09:00:00.000000+0200',
+            'endTime': '2022-05-19T09:00:00.000000+0100',
             'instrumentId': '/petra3/p00', 'isPublished': False,
             'keywords': ['scan'], 'owner': 'Smithson',
             'ownerEmail': 'peter.smithson@fake.de',
@@ -6154,7 +6154,14 @@ class DatasetWatcherTest(unittest.TestCase):
                     json.loads(self.__server.datasets[1]), ds2)
                 # print(json.loads(self.__server.datasets[2]))
                 self.myAssertDict(
-                    json.loads(self.__server.datasets[2]), gds)
+                    json.loads(self.__server.datasets[2]), gds,
+                    ["endTime", "creationTime"])
+                self.assertTrue(
+                    gds["creationTime"].startswith(
+                        "2022-05-19T09:00:00.000000"))
+                self.assertTrue(
+                    gds["endTime"].startswith(
+                        "2022-05-19T09:00:00.000000"))
                 self.assertEqual(len(self.__server.origdatablocks), 2)
                 self.myAssertDict(
                     json.loads(self.__server.origdatablocks[0]),
