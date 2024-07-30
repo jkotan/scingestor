@@ -75,7 +75,7 @@ class DatasetWatcher(threading.Thread):
                 self.__config["use_corepath_as_scandir"])
 
         #: (:obj:`bool`) execute command
-        self.__executecommands = False
+        self.__executecommands = True
         if "execute_commands" in self.__config.keys():
             self.__executecommands = bool(
                 self.__config["execute_commands"])
