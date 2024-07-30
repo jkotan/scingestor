@@ -91,7 +91,7 @@ The configuration written in YAML can contain the following variables
 * **call_metadata_generated_callback** *(bool)* , default: ``False``
 * **metadata_group_map_file_generator_switch** *(str)* , default: ``" --group-map-file {groupmapfile} "``
 * **raw_metadata_callback_switch** *(str)* , default: ``" --raw "``
-* **execute_commands** *(bool)* , default: ``False``
+* **execute_commands** *(bool)* , default: ``True``
 * **plot_file_extension_list** *(list\<str\>)* , default: ``["png", "nxs", "h5", "ndf", "nx", "fio"]``
 * **master_file_extension_list** *(list\<str\>)* , default: ``["nxs", "h5", "ndf", "nx", "fio"]``
 * **chmod_generator_switch** *(str)* , default: ``" -x {chmod} "``
