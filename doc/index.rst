@@ -107,17 +107,17 @@ The configuration written in YAML can contain the following variables
 * **attachment_signal_names** *(str)* , default: ``""``
 * **attachment_axes_names** *(str)* , default: ``""``
 * **attachment_image_frame_number** *(str)* , default: ``""``
-* **ingest_dataset_attachment** *(bool)* , default: ``False``
+* **ingest_dataset_attachment** *(bool)* , default: ``True``
 * **override_attachment_signals** *(bool)* , default: ``False``
-* **retry_failed_dataset_ingestion** *(bool)* , default:``False``
+* **retry_failed_dataset_ingestion** *(bool)* , default:``True``
 * **retry_failed_attachment_ingestion** *(bool)* , default:``False``
 * **log_generator_commands** *(bool)* , default: ``False``
 * **add_empty_units_generator_switch** *(str)* , default: ``" --add-empty-units "``
 * **add_empty_units** *(bool)* , default: ``True``
 * **metadata_copy_map_file** *(str)* , default: ``None``
 * **metadata_copy_map_file_generator_switch** *(str)* , default: ``" --copy-map-file {copymapfile} "``
-* **inotify_timeout** *(float)* , default: ``0.1``
-* **get_event_timeout** *(float)* , default: ``0.01``
+* **inotify_timeout** *(float)* , default: ``1.0``
+* **get_event_timeout** *(float)* , default: ``0.1``
 * **ingestion_delay_time** *(float)* , default: ``5.0``
 * **max_request_tries_number** *(int)* , default: ``100``
 * **recheck_dataset_list_interval** *(int)* , default: ``1000``

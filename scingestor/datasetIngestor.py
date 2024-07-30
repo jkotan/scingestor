@@ -144,9 +144,9 @@ class DatasetIngestor:
         #: (:obj:`str`) attachment frame
         self.__attachmentframe = None
         #: (:obj:`bool`) ingest attachment flag
-        self.__ingest_attachment = False
+        self.__ingest_attachment = True
         #: (:obj:`bool`) retry failed dataset ingestion on next event
-        self.__retry_failed_dataset_ingestion = False
+        self.__retry_failed_dataset_ingestion = True
         #: (:obj:`bool`) retry failed attachment ingestion on next event
         self.__retry_failed_attachment_ingestion = False
         #: (:obj:`str`) metadata copy map file
