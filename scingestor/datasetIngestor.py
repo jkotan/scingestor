@@ -360,7 +360,7 @@ class DatasetIngestor:
             self.__ownergroup = self.__meta["ownerGroup"]
 
         #: (:obj:`bool`) metadata in log dir flag
-        self.__meta_in_var_dir = False
+        self.__meta_in_var_dir = True
         if "metadata_in_var_dir" in self.__config.keys():
             self.__meta_in_var_dir = self.__config["metadata_in_var_dir"]
 

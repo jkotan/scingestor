@@ -10239,6 +10239,7 @@ class DatasetWatcherTest(unittest.TestCase):
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'metadata_in_var_dir: false\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'relative_path_in_datablock: true\n' \
@@ -10580,6 +10581,7 @@ class DatasetWatcherTest(unittest.TestCase):
             '  - "{basedir}"\n' \
             'log_generator_commands: true\n' \
             'scicat_url: "{url}"\n' \
+            'metadata_in_var_dir: false\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'relative_path_in_datablock: true\n' \
@@ -11000,7 +11002,6 @@ class DatasetWatcherTest(unittest.TestCase):
             'relative_path_generator_switch: " -r {{relpath}} "\n' \
             'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'owner_access_groups_from_proposal: true\n' \
-            'metadata_in_var_dir: true\n' \
             'relative_path_in_datablock: true\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir, credfile=credfile)

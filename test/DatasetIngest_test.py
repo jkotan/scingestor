@@ -8229,6 +8229,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'metadata_in_var_dir: false\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -8449,6 +8450,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'metadata_in_var_dir: false\n' \
             'log_generator_commands: true\n' \
             'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
@@ -8650,6 +8652,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'metadata_in_var_dir: false\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -8819,6 +8822,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'metadata_in_var_dir: false\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -9035,6 +9039,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'metadata_in_var_dir: false\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -9313,7 +9318,6 @@ optional arguments:
             'scicat_url: "{url}"\n' \
             'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
-            'metadata_in_var_dir: true\n' \
             'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'owner_access_groups_from_proposal: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
