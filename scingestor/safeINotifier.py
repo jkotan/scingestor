@@ -77,7 +77,7 @@ class SafeINotifier(threading.Thread):
         #: (:obj:`int`) watch description queue counter
         self.id_queue_counter = 0
         #: (:obj:`float`) timeout value for inotifyx get events
-        self.inotify_timeout = 1.0
+        self.inotify_timeout = 0.1
 
         #: (:obj:`int`) notifier ID
         self.__notifier = None
