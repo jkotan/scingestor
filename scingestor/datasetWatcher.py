@@ -102,7 +102,7 @@ class DatasetWatcher(threading.Thread):
         self.__wd_to_queue = {}
 
         #: (:obj:`float`) timeout value for inotifyx get events in s
-        self.__timeout = 0.1
+        self.__timeout = 0.01
         #: (:obj:`float`) max count of recheck the dataset list
         self.__recheck_dslist_interval = 1000
 

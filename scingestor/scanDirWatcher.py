@@ -115,7 +115,7 @@ class ScanDirWatcher(threading.Thread):
         #: (:class:`threading.Lock`) dataset watcher dictionary lock
         self.__dataset_lock = threading.Lock()
         #: (:obj:`float`) timeout value for inotifyx get events
-        self.__timeout = 0.1
+        self.__timeout = 0.01
 
         #: (:obj:`dict` <(:obj:`str`, :obj:`str`),
         #:               :class:`scanDirWatcher.ScanDirWatcher`>)
