@@ -4,6 +4,7 @@
 	* set default retry_failed_dataset_ingestion to True (#306)
 	* set default inotify_timeout to 1.0 (#306)
 	* set default get_event_timeout to 0.1 (#306)
+	* set default metadata_in_var_dir to True (#309)
 	* tagged as 0.17.0
 
 2024-07-19 Jan Kotanski <jan.kotanski@desy.de>

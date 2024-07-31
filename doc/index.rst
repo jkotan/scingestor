@@ -67,7 +67,7 @@ The configuration written in YAML can contain the following variables
 * **scan_metadata_postfix** *(str)* , default: ``".scan.json"``
 * **datablock_metadata_postfix** *(str)* , default: ``".origdatablock.json"``
 * **attachment_metadata_postfix** *(str)* , default: ``".attachment.json"``
-* **metadata_in_var_dir** *(bool)* , default: ``False``
+* **metadata_in_var_dir** *(bool)* , default: ``True``
 * **use_corepath_as_scandir** *(bool)* , default: ``False``
 * **watch_scandir_subdir** *(bool)* , default: ``False``
 * **beamtime_filename_postfix** *(str)* , default: ``"beamtime-metadata-"``
