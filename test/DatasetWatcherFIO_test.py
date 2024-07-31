@@ -271,6 +271,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
             'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'add_empty_units: False\n' \
             'hidden_attributes: "{hattr}"\n' \
+            'ingest_dataset_attachment: false\n' \
             'hidden_attributes_generator_switch: ' \
             '" -n {{hiddenattributes}} "\n' \
             'metadata_copy_map_file: "{cpmapfile}"\n' \
@@ -731,7 +732,6 @@ class DatasetWatcherFIOTest(unittest.TestCase):
             'metadata_copy_map_file: "{cpmapfile}"\n' \
             'metadata_copy_map_file_generator_switch: ' \
             '" --copy-map-file {{copymapfile}} "\n' \
-            'ingest_dataset_attachment: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir,
@@ -1230,6 +1230,7 @@ class DatasetWatcherFIOTest(unittest.TestCase):
             'oned_in_metadata: true\n' \
             'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'oned_dataset_generator_switch: " --oned "\n' \
+            'ingest_dataset_attachment: false\n' \
             'master_file_extension_list:\n' \
             '  - "fio"\n' \
             'add_empty_units: False\n' \
