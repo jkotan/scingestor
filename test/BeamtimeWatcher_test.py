@@ -1214,18 +1214,18 @@ optional arguments:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r4 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r12 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r4 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r12 -l debug'
                      % cfgfname).split()]
 
         def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
-            time.sleep(1)
+            time.sleep(3)
             shutil.copy(source, fdirname)
-            time.sleep(1)
+            time.sleep(3)
             os.remove(fullbtmeta)
-            time.sleep(1)
+            time.sleep(3)
             shutil.copy(source, fdirname)
 
         try:

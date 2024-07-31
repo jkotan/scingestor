@@ -264,6 +264,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'chmod_generator_switch: " -x {{chmod}} "\n' \
             'add_empty_units: False\n' \
             'log_generator_commands: true\n' \
+            'ingest_dataset_attachment: false\n' \
             'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'hidden_attributes: "{hattr}"\n' \
             'hidden_attributes_generator_switch: ' \
@@ -756,7 +757,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'metadata_copy_map_file: "{cpmapfile}"\n' \
             'metadata_copy_map_file_generator_switch: ' \
             '" --copy-map-file {{copymapfile}} "\n' \
-            'ingest_dataset_attachment: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'master_file_extension_list:\n' \
             '  - "nxs"\n' \
@@ -1279,7 +1279,6 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'metadata_copy_map_file: "{cpmapfile}"\n' \
             'metadata_copy_map_file_generator_switch: ' \
             '" --copy-map-file {{copymapfile}} "\n' \
-            'ingest_dataset_attachment: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'master_file_extension_list:\n' \
             '  - "nxs"\n' \
@@ -2386,6 +2385,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'oned_in_metadata: true\n' \
             'oned_dataset_generator_switch: " --oned "\n' \
             'log_generator_commands: true\n' \
+            'ingest_dataset_attachment: false\n' \
             'scicat_proposal_id_pattern: "{{proposalid}}.{{beamtimeid}}"\n' \
             'add_empty_units: False\n' \
             'ingestor_var_dir: "{vardir}"\n' \
@@ -5008,6 +5008,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                         'add_empty_units: true\n' \
                         'add_empty_units_generator_switch: ' \
                         '" --add-empty-units "\n' \
+                        'ingest_dataset_attachment: false\n' \
                         'chmod_generator_switch: " -x {{chmod}} "\n' \
                         'ingestor_var_dir: "{vardir}"\n' \
                         'ingestor_credential_file: "{credfile}"\n'.format(
@@ -5508,6 +5509,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     'scicat_url: "{url}"\n' \
                     'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
                     'oned_in_metadata: true\n' \
+                    'ingest_dataset_attachment: false\n' \
                     'log_generator_commands: true\n' \
                     'use_corepath_as_scandir: true\n' \
                     'oned_dataset_generator_switch: " --oned "\n' \
@@ -5933,6 +5935,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
+            'ingest_dataset_attachment: false\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'file_dataset_metadata_generator: "nxsfileinfo metadata ' \
             ' -o {{scanpath}}/{{scanname}}{{scanpostfix}} ' \
@@ -7377,6 +7380,7 @@ class DatasetWatcherH5Test(unittest.TestCase):
             'scicat_url: "{url}"\n' \
             'dataset_pid_prefix: "10.3204/"\n' \
             'log_generator_commands: true\n' \
+            'ingest_dataset_attachment: false\n' \
             'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'oned_in_metadata: true\n' \
             'file_dataset_metadata_generator: "nxsfileinfo metadata ' \

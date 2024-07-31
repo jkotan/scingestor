@@ -173,7 +173,7 @@ class BeamtimeWatcher:
         #: (:class:`threading.Lock`) scandir watcher dictionary lock
         self.__scandir_lock = threading.Lock()
         #: (:obj:`float`) timeout value for inotifyx get events
-        self.__timeout = 0.01
+        self.__timeout = 0.1
 
         if "get_event_timeout" in self.__config.keys():
             try:
