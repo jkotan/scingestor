@@ -1221,11 +1221,11 @@ optional arguments:
 
         def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
-            time.sleep(3)
+            time.sleep(1)
             shutil.copy(source, fdirname)
-            time.sleep(3)
+            time.sleep(1)
             os.remove(fullbtmeta)
-            time.sleep(3)
+            time.sleep(1)
             shutil.copy(source, fdirname)
 
         try:
