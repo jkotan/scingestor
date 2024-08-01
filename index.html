@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 0.15.0 documentation</title>
+    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 0.17.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -74,12 +74,12 @@ is finished. It can be executed by</p>
 <li><p><strong>scan_metadata_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.scan.json&quot;</span></code></p></li>
 <li><p><strong>datablock_metadata_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.origdatablock.json&quot;</span></code></p></li>
 <li><p><strong>attachment_metadata_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.attachment.json&quot;</span></code></p></li>
-<li><p><strong>metadata_in_var_dir</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>metadata_in_var_dir</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
 <li><p><strong>use_corepath_as_scandir</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>watch_scandir_subdir</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>beamtime_filename_postfix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;beamtime-metadata-&quot;</span></code></p></li>
 <li><p><strong>beamtime_filename_prefix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;.json&quot;</span></code></p></li>
-<li><p><strong>scicat_proposal_id_pattern</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;{beamtimeid}&quot;</span></code></p></li>
+<li><p><strong>scicat_proposal_id_pattern</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;{proposalid}.{beamtimeid}&quot;</span></code></p></li>
 <li><p><strong>datasets_filename_pattern</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;scicat-datasets-{beamtimeid}.lst&quot;</span></code></p></li>
 <li><p><strong>ingested_datasets_filename_pattern</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{beamtimeid}.lst&quot;</span></code></p></li>
 <li><p><strong>file_dataset_metadata_generator</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">metadata</span> <span class="pre">-k4</span> <span class="pre">-o</span> <span class="pre">{metapath}/{scanname}{scanpostfix}</span> <span class="pre">--id-format</span> <span class="pre">{idpattern}</span> <span class="pre">-b</span> <span class="pre">{beamtimefile}</span> <span class="pre">-p</span> <span class="pre">{beamtimeid}/{scanname}</span>&#160; <span class="pre">-w</span> <span class="pre">{ownergroup}</span> <span class="pre">-c</span> <span class="pre">{accessgroups}</span> <span class="pre">{masterfile}</span></code></p></li>
@@ -91,13 +91,14 @@ is finished. It can be executed by</p>
 <li><p><strong>metadata_generated_callback</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;nxsfileinfo</span> <span class="pre">groupmetadata</span>&#160; <span class="pre">{lastmeasurement}</span> <span class="pre">-m</span> <span class="pre">{metapath}/{scanname}{scanpostfix}</span> <span class="pre">-d</span> <span class="pre">{metapath}/{scanname}{datablockpostfix}</span> <span class="pre">-a</span> <span class="pre">{metapath}/{scanname}{attachmentpostfix}</span> <span class="pre">-p</span> <span class="pre">{beamtimeid}/{lastmeasurement}</span> <span class="pre">-f</span> <span class="pre">-k4</span> <span class="pre">&quot;</span></code></p></li>
 <li><p><strong>metadata_group_map_file</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></li>
 <li><p><strong>raw_metadata_callback</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>single_datablock_ingestion</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>skip_multi_datablock_ingestion</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>skip_multi_attachment_ingestion</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>skip_scan_dataset_ingestion</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>call_metadata_generated_callback</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>metadata_group_map_file_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">--group-map-file</span> <span class="pre">{groupmapfile}</span> <span class="pre">&quot;</span></code></p></li>
 <li><p><strong>raw_metadata_callback_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">--raw</span> <span class="pre">&quot;</span></code></p></li>
-<li><p><strong>execute_commands</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>execute_commands</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
 <li><p><strong>plot_file_extension_list</strong> <em>(list&lt;str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">[&quot;png&quot;,</span> <span class="pre">&quot;nxs&quot;,</span> <span class="pre">&quot;h5&quot;,</span> <span class="pre">&quot;ndf&quot;,</span> <span class="pre">&quot;nx&quot;,</span> <span class="pre">&quot;fio&quot;]</span></code></p></li>
 <li><p><strong>master_file_extension_list</strong> <em>(list&lt;str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">[&quot;nxs&quot;,</span> <span class="pre">&quot;h5&quot;,</span> <span class="pre">&quot;ndf&quot;,</span> <span class="pre">&quot;nx&quot;,</span> <span class="pre">&quot;fio&quot;]</span></code></p></li>
 <li><p><strong>chmod_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">-x</span> <span class="pre">{chmod}</span> <span class="pre">&quot;</span></code></p></li>
@@ -113,17 +114,17 @@ is finished. It can be executed by</p>
 <li><p><strong>attachment_signal_names</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></li>
 <li><p><strong>attachment_axes_names</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></li>
 <li><p><strong>attachment_image_frame_number</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></li>
-<li><p><strong>ingest_dataset_attachment</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>ingest_dataset_attachment</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
 <li><p><strong>override_attachment_signals</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
-<li><p><strong>retry_failed_dataset_ingestion</strong> <em>(bool)</em> , default:<code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>retry_failed_dataset_ingestion</strong> <em>(bool)</em> , default:<code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
 <li><p><strong>retry_failed_attachment_ingestion</strong> <em>(bool)</em> , default:<code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>log_generator_commands</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>add_empty_units_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">--add-empty-units</span> <span class="pre">&quot;</span></code></p></li>
 <li><p><strong>add_empty_units</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
 <li><p><strong>metadata_copy_map_file</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>metadata_copy_map_file_generator_switch</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">--copy-map-file</span> <span class="pre">{copymapfile}</span> <span class="pre">&quot;</span></code></p></li>
-<li><p><strong>inotify_timeout</strong> <em>(float)</em> , default: <code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></li>
-<li><p><strong>get_event_timeout</strong> <em>(float)</em> , default: <code class="docutils literal notranslate"><span class="pre">0.01</span></code></p></li>
+<li><p><strong>inotify_timeout</strong> <em>(float)</em> , default: <code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></li>
+<li><p><strong>get_event_timeout</strong> <em>(float)</em> , default: <code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></li>
 <li><p><strong>ingestion_delay_time</strong> <em>(float)</em> , default: <code class="docutils literal notranslate"><span class="pre">5.0</span></code></p></li>
 <li><p><strong>max_request_tries_number</strong> <em>(int)</em> , default: <code class="docutils literal notranslate"><span class="pre">100</span></code></p></li>
 <li><p><strong>recheck_dataset_list_interval</strong> <em>(int)</em> , default: <code class="docutils literal notranslate"><span class="pre">1000</span></code></p></li>
@@ -149,9 +150,9 @@ is finished. It can be executed by</p>
 <section id="pattern-keywords-for-configuration-variables">
 <h3>Pattern keywords for configuration variables<a class="headerlink" href="#pattern-keywords-for-configuration-variables" title="Permalink to this heading">¶</a></h3>
 <p>The  <strong>datasets_filename_pattern</strong>, <strong>ingested_datasets_filename_pattern</strong>  and <strong>ingestor_var_dir</strong> can contain the <em>{beamtimeid}</em> and <em>{hostname}</em> keywords,  e.g. <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{beamtimeid}.lst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{hostname}-{beamtimeid}.lst&quot;</span></code>  which is instantiated during the ingestor execution.</p>
-<p>Similarly, <strong>file_dataset_metadata_generator</strong>, <strong>dataset_metadata_generator</strong>, <strong>datablock_metadata_generator</strong>,  <strong>datablock_metadata_stream_generator</strong>, <strong>datablock_metadata_generator_scanpath_postfix</strong>, <strong>attachment_metadata_generator</strong>, <strong>chmod_generator_switch</strong>, <strong>relative_path_generator_switch</strong>  can contain the following keywords: <em>{beamtimeid}</em> , <em>{scanname}</em>, <em>{chmod}</em>, <em>{scanpath}</em>, <em>{metapath}</em>, <em>{relpath}</em>, <em>{beamtimeid}</em>, <em>{beamline}</em>, <em>{doiprefix}</em>, <em>{beamtimefile}</em>, <em>{scanpostfix}</em>, <em>{datablockpostfix}</em>, <em>{ownergroup}</em>, <em>{accessgroups}</em>, <em>{hostname}</em>, <em>{hiddenattributes}</em>, <em>{ext}</em>, &quot;{masterfile}&quot;, &quot;{plotfile}&quot;, &quot;{masterscanname}&quot;, &quot;{entryname}&quot;</p>
-<p>The &quot;{masterfile}&quot; is either equal to   &quot;{scanpath}/{scanname}.{ext}&quot; or &quot;{scanpath}/{scanname}/{scanname}.{ext}&quot;. Also
-the &quot;{plotfile}&quot; is either equal to  &quot;{scanpath}/{scanname}.{plotext}&quot; or &quot;{scanpath}/{scanname}/{scanname}.{plotext}&quot;.</p>
+<p>Similarly, <strong>file_dataset_metadata_generator</strong>, <strong>dataset_metadata_generator</strong>, <strong>datablock_metadata_generator</strong>,  <strong>datablock_metadata_stream_generator</strong>, <strong>datablock_metadata_generator_scanpath_postfix</strong>, <strong>attachment_metadata_generator</strong>, <strong>chmod_generator_switch</strong>, <strong>relative_path_generator_switch</strong>  can contain the following keywords: <em>{beamtimeid}</em> , <em>{scanname}</em>, <em>{chmod}</em>, <em>{scanpath}</em>, <em>{metapath}</em>, <em>{relpath}</em>, <em>{beamtimeid}</em>, <em>{beamline}</em>, <em>{doiprefix}</em>, <em>{beamtimefile}</em>, <em>{scanpostfix}</em>, <em>{datablockpostfix}</em>, <em>{ownergroup}</em>, <em>{accessgroups}</em>, <em>{hostname}</em>, <em>{hiddenattributes}</em>, <em>{ext}</em>, “{masterfile}”, “{plotfile}”, “{masterscanname}”, “{entryname}”</p>
+<p>The “{masterfile}” is either equal to   “{scanpath}/{scanname}.{ext}” or “{scanpath}/{scanname}/{scanname}.{ext}”. Also
+the “{plotfile}” is either equal to  “{scanpath}/{scanname}.{plotext}” or “{scanpath}/{scanname}/{scanname}.{plotext}”.</p>
 </section>
 </section>
 <section id="scicat-dataset-ingest">
@@ -251,7 +252,7 @@ can be found in the HDRI repository.</p>
 <h2>Dataset list file content<a class="headerlink" href="#dataset-list-file-content" title="Permalink to this heading">¶</a></h2>
 <p>The scicat ingestor triggers its actions on appending a new line in the dataset list file.
 The dataset list file is located in the scan directory and its filename is defined
-by <strong>datasets_filename_pattern</strong> variable, i.e. by default &quot;scicat-datasets-{beamtimeid}.lst&quot;.</p>
+by <strong>datasets_filename_pattern</strong> variable, i.e. by default “scicat-datasets-{beamtimeid}.lst”.</p>
 <p>By default the scan dataset metadata are fetched from the corresponding the master file with its filename given by &lt;scanname&gt;.&lt;ext&gt; where usually &lt;ext&gt; is <cite>nxs</cite> or <cite>fio</cite>. The detector files related to the particular scan are placed in the &lt;scanname&gt; subdirectory and they are added to the scan origindatablock.</p>
 <p>A separete line in the dataset list file may contain</p>
 <ul class="simple">
@@ -279,7 +280,7 @@ by <strong>datasets_filename_pattern</strong> variable, i.e. by default &quot;sc
 </section>
 <section id="sardana-measurement-with-scicatautogrouping">
 <h3>Sardana Measurement with SciCatAutoGrouping<a class="headerlink" href="#sardana-measurement-with-scicatautogrouping" title="Permalink to this heading">¶</a></h3>
-<p>Setting the <strong>SciCatAutoGrouping</strong> sardana environment variable to <code class="docutils literal notranslate"><span class="pre">True</span></code> we can switch on the autogrouping mode. In this mode scan metadata is grouped automatically into the measurement dataset and the measurement dataset updated after each scan. The name of measurement is taken from the base scanname after removing ScanID, e.g. for <cite>&lt;scanname&gt;</cite> = &quot;mycalib2_00012&quot; the measurement name is &quot;mycalib2&quot;</p>
+<p>Setting the <strong>SciCatAutoGrouping</strong> sardana environment variable to <code class="docutils literal notranslate"><span class="pre">True</span></code> we can switch on the autogrouping mode. In this mode scan metadata is grouped automatically into the measurement dataset and the measurement dataset updated after each scan. The name of measurement is taken from the base scanname after removing ScanID, e.g. for <cite>&lt;scanname&gt;</cite> = “mycalib2_00012” the measurement name is “mycalib2”</p>
 </section>
 </section>
 </section>

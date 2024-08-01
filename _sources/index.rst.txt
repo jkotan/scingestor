@@ -67,12 +67,12 @@ The configuration written in YAML can contain the following variables
 * **scan_metadata_postfix** *(str)* , default: ``".scan.json"``
 * **datablock_metadata_postfix** *(str)* , default: ``".origdatablock.json"``
 * **attachment_metadata_postfix** *(str)* , default: ``".attachment.json"``
-* **metadata_in_var_dir** *(bool)* , default: ``False``
+* **metadata_in_var_dir** *(bool)* , default: ``True``
 * **use_corepath_as_scandir** *(bool)* , default: ``False``
 * **watch_scandir_subdir** *(bool)* , default: ``False``
 * **beamtime_filename_postfix** *(str)* , default: ``"beamtime-metadata-"``
 * **beamtime_filename_prefix** *(str)* , default: ``".json"``
-* **scicat_proposal_id_pattern** *(str)* , default: ``"{beamtimeid}"``
+* **scicat_proposal_id_pattern** *(str)* , default: ``"{proposalid}.{beamtimeid}"``
 * **datasets_filename_pattern** *(str)* , default: ``"scicat-datasets-{beamtimeid}.lst"``
 * **ingested_datasets_filename_pattern** *(str)* , default: ``"scicat-ingested-datasets-{beamtimeid}.lst"``
 * **file_dataset_metadata_generator** *(str)* , default: ``"nxsfileinfo metadata -k4 -o {metapath}/{scanname}{scanpostfix} --id-format {idpattern} -b {beamtimefile} -p {beamtimeid}/{scanname}  -w {ownergroup} -c {accessgroups} {masterfile}``
@@ -84,13 +84,14 @@ The configuration written in YAML can contain the following variables
 * **metadata_generated_callback** *(str)* , default: ``"nxsfileinfo groupmetadata  {lastmeasurement} -m {metapath}/{scanname}{scanpostfix} -d {metapath}/{scanname}{datablockpostfix} -a {metapath}/{scanname}{attachmentpostfix} -p {beamtimeid}/{lastmeasurement} -f -k4 "``
 * **metadata_group_map_file** *(str)* , default: ``""``
 * **raw_metadata_callback** *(bool)* , default: ``False``
+* **single_datablock_ingestion** *(bool)* , default: ``False``
 * **skip_multi_datablock_ingestion** *(bool)* , default: ``False``
 * **skip_multi_attachment_ingestion** *(bool)* , default: ``False``
 * **skip_scan_dataset_ingestion** *(bool)* , default: ``False``
 * **call_metadata_generated_callback** *(bool)* , default: ``False``
 * **metadata_group_map_file_generator_switch** *(str)* , default: ``" --group-map-file {groupmapfile} "``
 * **raw_metadata_callback_switch** *(str)* , default: ``" --raw "``
-* **execute_commands** *(bool)* , default: ``False``
+* **execute_commands** *(bool)* , default: ``True``
 * **plot_file_extension_list** *(list\<str\>)* , default: ``["png", "nxs", "h5", "ndf", "nx", "fio"]``
 * **master_file_extension_list** *(list\<str\>)* , default: ``["nxs", "h5", "ndf", "nx", "fio"]``
 * **chmod_generator_switch** *(str)* , default: ``" -x {chmod} "``
@@ -106,17 +107,17 @@ The configuration written in YAML can contain the following variables
 * **attachment_signal_names** *(str)* , default: ``""``
 * **attachment_axes_names** *(str)* , default: ``""``
 * **attachment_image_frame_number** *(str)* , default: ``""``
-* **ingest_dataset_attachment** *(bool)* , default: ``False``
+* **ingest_dataset_attachment** *(bool)* , default: ``True``
 * **override_attachment_signals** *(bool)* , default: ``False``
-* **retry_failed_dataset_ingestion** *(bool)* , default:``False``
+* **retry_failed_dataset_ingestion** *(bool)* , default:``True``
 * **retry_failed_attachment_ingestion** *(bool)* , default:``False``
 * **log_generator_commands** *(bool)* , default: ``False``
 * **add_empty_units_generator_switch** *(str)* , default: ``" --add-empty-units "``
 * **add_empty_units** *(bool)* , default: ``True``
 * **metadata_copy_map_file** *(str)* , default: ``None``
 * **metadata_copy_map_file_generator_switch** *(str)* , default: ``" --copy-map-file {copymapfile} "``
-* **inotify_timeout** *(float)* , default: ``0.1``
-* **get_event_timeout** *(float)* , default: ``0.01``
+* **inotify_timeout** *(float)* , default: ``1.0``
+* **get_event_timeout** *(float)* , default: ``0.1``
 * **ingestion_delay_time** *(float)* , default: ``5.0``
 * **max_request_tries_number** *(int)* , default: ``100``
 * **recheck_dataset_list_interval** *(int)* , default: ``1000``
