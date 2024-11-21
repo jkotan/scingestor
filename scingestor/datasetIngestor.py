@@ -801,8 +801,18 @@ class DatasetIngestor:
             if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
                 masterfile = self.__dctfmt["masterfile"]
                 mdir, mfile = os.path.split(masterfile)
-                self.__dctfmt["masterfile"] = os.path.join(
-                    mdir, "_tmp_scingestor" + mfile)
+                if self.__meta_in_var_dir and self.__var_dir:
+                    mdir = "%s%s" % (self.__var_dir, mdir)
+                    if not os.path.isdir(mdir):
+                        os.makedirs(mdir, exist_ok=True)
+                fcnt = 1
+                ffname = os.path.join(
+                    mdir, "_tmp_scingestor_%s_%s" % (fcnt, mfile))
+                while os.path.isfile(ffname):
+                    fcnt += 1
+                    ffname = os.path.join(
+                        mdir, "_tmp_scingestor_%s_%s" % (fcnt, mfile))
+                self.__dctfmt["masterfile"] = ffname
 
                 shutil.copy(masterfile, self.__dctfmt["masterfile"])
 
@@ -925,8 +935,18 @@ class DatasetIngestor:
             if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
                 plotfile = self.__dctfmt["plotfile"]
                 mdir, mfile = os.path.split(plotfile)
-                self.__dctfmt["plotfile"] = os.path.join(
-                    mdir, "_tmp_scingestor" + mfile)
+                if self.__meta_in_var_dir and self.__var_dir:
+                    mdir = "%s%s" % (self.__var_dir, mdir)
+                    if not os.path.isdir(mdir):
+                        os.makedirs(mdir, exist_ok=True)
+                fcnt = 1
+                ffname = os.path.join(
+                    mdir, "_tmp_scingestor_%s_%s" % (fcnt, mfile))
+                while os.path.isfile(ffname):
+                    fcnt += 1
+                    ffname = os.path.join(
+                        mdir, "_tmp_scingestor_%s_%s" % (fcnt, mfile))
+                self.__dctfmt["plotfile"] = ffname
                 shutil.copy(plotfile, self.__dctfmt["plotfile"])
 
             get_logger().info(
