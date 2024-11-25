@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "SCINGESTOR" "1" "Jul 31, 2024" "0.17" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "Nov 25, 2024" "0.18" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .sp
@@ -66,6 +66,8 @@ The configuration written in YAML can contain the following variables
 \fBbeamtime_base_dir\fP \fI(str)\fP , default: \fB\(dq\(dq\fP
 .IP \(bu 2
 \fBingestor_var_dir\fP \fI(str)\fP , default: \fB\(dq\(dq\fP
+.IP \(bu 2
+\fBingestor_tmp_dir\fP \fI(str)\fP , default: \fB\(dq/tmp\(dq\fP
 .IP \(bu 2
 \fBingestor_username\fP \fI(str)\fP , default: \fB\(dqingestor\(dq\fP
 .IP \(bu 2
@@ -243,7 +245,7 @@ ingestor_credential_file: \(dq{homepath}/gpfs/pwd\(dq
 .UNINDENT
 .SS Pattern keywords for configuration variables
 .sp
-The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_var_dir\fP can contain the \fI{beamtimeid}\fP and \fI{hostname}\fP keywords,  e.g. \fB\(dqscicat\-ingested\-datasets\-{beamtimeid}.lst\(dq\fP or \fB\(dqscicat\-ingested\-datasets\-{hostname}\-{beamtimeid}.lst\(dq\fP  which is instantiated during the ingestor execution.
+The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP , \fBingestor_var_dir\fP and \fBingestor_tmp_dir\fP can contain the \fI{beamtimeid}\fP and \fI{hostname}\fP keywords,  e.g. \fB\(dqscicat\-ingested\-datasets\-{beamtimeid}.lst\(dq\fP or \fB\(dqscicat\-ingested\-datasets\-{hostname}\-{beamtimeid}.lst\(dq\fP  which is instantiated during the ingestor execution.
 .sp
 Similarly, \fBfile_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBattachment_metadata_generator\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP, \fI{hiddenattributes}\fP, \fI{ext}\fP, \(dq{masterfile}\(dq, \(dq{plotfile}\(dq, \(dq{masterscanname}\(dq, \(dq{entryname}\(dq
 .sp
@@ -634,45 +636,6 @@ scicat_ingest \-m Attachments \-c ~/.scingestor.yaml \-p ~/.mytoken.cfg ./metada
 .SH SCINGESTOR PACKAGE
 .SS Submodules
 .SS scingestor.beamtimeWatcher module
-.INDENT 0.0
-.TP
-.B class  scingestor.beamtimeWatcher.BeamtimeWatcher(options)
-Bases: \fI\%object\fP
-.sp
-Beamtime Watcher
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-\fBoptions\fP (\fI\%argparse.Namespace\fP) \-\- parser options
-.UNINDENT
-.INDENT 7.0
-.TP
-.B running
-(\fI\%bool\fP) running loop flag
-.UNINDENT
-.INDENT 7.0
-.TP
-.B start()
-start beamtime watcher
-.UNINDENT
-.INDENT 7.0
-.TP
-.B stop()
-stop beamtime watcher
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B scingestor.beamtimeWatcher.main(interrupt=0)
-the main program function
-.INDENT 7.0
-.TP
-.B Parameters
-\fBinterrupt\fP (\fI\%int\fP) \-\- test interrupt flag: 1:keyboard, 2:signal
-.UNINDENT
-.UNINDENT
 .SS scingestor.configuration module
 .INDENT 0.0
 .TP
@@ -900,48 +863,6 @@ leave datasets unchanged
 .UNINDENT
 .UNINDENT
 .SS scingestor.datasetWatcher module
-.INDENT 0.0
-.TP
-.B class  scingestor.datasetWatcher.DatasetWatcher(configuration, path, dsfile, idsfile, meta, beamtimefile)
-Bases: \fI\%Thread\fP
-.sp
-Dataset  Watcher
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- dictionary with the ingestor configuration
-.IP \(bu 2
-\fBpath\fP (\fI\%str\fP) \-\- scan dir path
-.IP \(bu 2
-\fBdsfile\fP (\fI\%str\fP) \-\- file with a dataset list
-.IP \(bu 2
-\fBdsfile\fP \-\- file with a ingester dataset list
-.IP \(bu 2
-\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- beamtime configuration
-.IP \(bu 2
-\fBbeamtimefile\fP (\fI\%str\fP) \-\- beamtime filename
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B run()
-scandir watcher thread
-.UNINDENT
-.INDENT 7.0
-.TP
-.B running
-(\fI\%bool\fP) running loop flag
-.UNINDENT
-.INDENT 7.0
-.TP
-.B stop()
-stop the watcher
-.UNINDENT
-.UNINDENT
 .SS scingestor.logger module
 .INDENT 0.0
 .TP
@@ -1113,154 +1034,7 @@ core path
 .UNINDENT
 .UNINDENT
 .SS scingestor.safeINotifier module
-.INDENT 0.0
-.TP
-.B class  scingestor.safeINotifier.EventData(name, masks)
-Bases: \fI\%object\fP
-.sp
-event data
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBname\fP (\fI\%str\fP) \-\- name
-.IP \(bu 2
-\fBmasks\fP \-\- mask description
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B masks
-(\fI\%str\fP) mask
-.UNINDENT
-.INDENT 7.0
-.TP
-.B name
-(\fI\%str\fP) name
-.UNINDENT
-.UNINDENT
-.INDENT 0.0
-.TP
-.B class  scingestor.safeINotifier.SafeINotifier(*args, **kwargs)
-Bases: \fI\%Thread\fP
-.sp
-singleton wrapper for inotifyx
-.sp
-This constructor should always be called with keyword arguments. Arguments are:
-.sp
-\fIgroup\fP should be None; reserved for future extension when a ThreadGroup
-class is implemented.
-.sp
-\fItarget\fP is the callable object to be invoked by the run()
-method. Defaults to None, meaning nothing is called.
-.sp
-\fIname\fP is the thread name. By default, a unique name is constructed of
-the form \(dqThread\-N\(dq where N is a small decimal number.
-.sp
-\fIargs\fP is a list or tuple of arguments for the target invocation. Defaults to ().
-.sp
-\fIkwargs\fP is a dictionary of keyword arguments for the target
-invocation. Defaults to {}.
-.sp
-If a subclass overrides the constructor, it must make sure to invoke
-the base class constructor (Thread.__init__()) before doing anything
-else to the thread.
-.INDENT 7.0
-.TP
-.B add_watch(path, masks)
-add watch to notifier
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBpath\fP (\fI\%str\fP) \-\- watch path
-.IP \(bu 2
-\fBmask\fP (\fI\%int\fP) \-\- watch mask
-.UNINDENT
-.TP
-.B Returns
-queue providing events and its id
-.TP
-.B Return type
-[\fI\%queue.Queue\fP, \fI\%int\fP]
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B daemon  =  True
-(\fI\%bool\fP) make notifier to be a daemon
-.UNINDENT
-.INDENT 7.0
-.TP
-.B init()
-constructor
-.UNINDENT
-.INDENT 7.0
-.TP
-.B rm_watch(qid)
-remove watch from notifier
-.INDENT 7.0
-.TP
-.B Parameters
-\fBqid\fP (\fI\%int\fP) \-\- queue id
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B run()
-scandir watcher thread
-.UNINDENT
-.INDENT 7.0
-.TP
-.B stop()
-stop the watcher
-.UNINDENT
-.UNINDENT
 .SS scingestor.scanDirWatcher module
-.INDENT 0.0
-.TP
-.B class  scingestor.scanDirWatcher.ScanDirWatcher(configuration, path, meta, beamtimefile, depth)
-Bases: \fI\%Thread\fP
-.sp
-ScanDir Watcher
-.sp
-constructor
-.INDENT 7.0
-.TP
-.B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- dictionary with the ingestor configuration
-.IP \(bu 2
-\fBpath\fP (\fI\%str\fP) \-\- scan dir path
-.IP \(bu 2
-\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- beamtime configuration
-.IP \(bu 2
-\fBbeamtimefile\fP (\fI\%str\fP) \-\- beamtime file
-.IP \(bu 2
-\fBdepth\fP (\fI\%int\fP) \-\- scandir depth level
-.UNINDENT
-.UNINDENT
-.INDENT 7.0
-.TP
-.B run()
-scandir watcher thread
-.UNINDENT
-.INDENT 7.0
-.TP
-.B running
-(\fI\%bool\fP) running loop flag
-.UNINDENT
-.INDENT 7.0
-.TP
-.B stop()
-stop the watcher
-.UNINDENT
-.UNINDENT
 .SS Module contents
 .INDENT 0.0
 .IP \(bu 2

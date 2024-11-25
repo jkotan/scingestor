@@ -378,6 +378,16 @@ class DatasetIngestor:
             if not os.path.isdir(self.__metapath):
                 os.makedirs(self.__metapath, exist_ok=True)
 
+        #: (:obj:`str`) ingestor tmp directory
+        self.__tmp_dir = ""
+        if "ingestor_tmp_dir" in self.__config.keys():
+            self.__tmp_dir = str(
+                self.__config["ingestor_tmp_dir"]).format(
+                    beamtimeid=self.__bid,
+                    homepath=self.__homepath)
+        if self.__tmp_dir == "/":
+            self.__tmp_dir = ""
+
         if "dataset_pid_prefix" in self.__config.keys():
             self.__pidprefix = self.__config["dataset_pid_prefix"]
         if "ingestor_credential_file" in self.__config.keys():
@@ -801,8 +811,8 @@ class DatasetIngestor:
             if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
                 masterfile = self.__dctfmt["masterfile"]
                 mdir, mfile = os.path.split(masterfile)
-                if self.__meta_in_var_dir and self.__var_dir:
-                    mdir = "%s%s" % (self.__var_dir, mdir)
+                if self.__tmp_dir:
+                    mdir = "%s%s" % (self.__tmp_dir, mdir)
                     if not os.path.isdir(mdir):
                         os.makedirs(mdir, exist_ok=True)
                 fcnt = 1
@@ -939,8 +949,8 @@ class DatasetIngestor:
             if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
                 plotfile = self.__dctfmt["plotfile"]
                 mdir, mfile = os.path.split(plotfile)
-                if self.__meta_in_var_dir and self.__var_dir:
-                    mdir = "%s%s" % (self.__var_dir, mdir)
+                if self.__tmp_dir:
+                    mdir = "%s%s" % (self.__tmp_dir, mdir)
                     if not os.path.isdir(mdir):
                         os.makedirs(mdir, exist_ok=True)
                 fcnt = 1
