@@ -796,8 +796,8 @@ class DatasetIngestor:
 
         self.__dctfmt["ext"] = self.__ext
 
+        ffname = ""
         if self.__ext:
-
             if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
                 masterfile = self.__dctfmt["masterfile"]
                 mdir, mfile = os.path.split(masterfile)
@@ -853,7 +853,12 @@ class DatasetIngestor:
                     'DatasetIngestor: Generating dataset command: %s'
                     % (command))
             subprocess.run(command, shell=True, check=True)
-
+        if ffname and os.path.isfile(ffname):
+            try:
+                os.remove(ffname)
+            except Exception as e:
+                get_logger().warning(
+                    "File %s cannot be removed: %s" % (ffname, str(e)))
         rdss = glob.glob(
             "{metapath}/{scanname}{scanpostfix}".format(**self.__dctfmt))
         if rdss and rdss[0]:
@@ -929,9 +934,8 @@ class DatasetIngestor:
                             **self.__dctfmt)
                     break
         self.__dctfmt["plotext"] = self.__plotext
-
+        ffname = ""
         if self.__dctfmt["plotext"]:
-
             if self.__dctfmt["masterscanname"] != self.__dctfmt["scanname"]:
                 plotfile = self.__dctfmt["plotfile"]
                 mdir, mfile = os.path.split(plotfile)
@@ -968,6 +972,12 @@ class DatasetIngestor:
                     os.remove(self.__dctfmt["plotfile"])
                 self.__dctfmt["plotfile"] = plotfile
 
+            if ffname and os.path.isfile(ffname):
+                try:
+                    os.remove(ffname)
+                except Exception as e:
+                    get_logger().warning(
+                        "File %s cannot be removed: %s" % (ffname, str(e)))
             adss = glob.glob(
                 "{metapath}/{scanname}{attachmentpostfix}".format(
                     **self.__dctfmt))
