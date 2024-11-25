@@ -51,6 +51,7 @@ The configuration written in YAML can contain the following variables
 * **beamtime_dirs** *(list\<str\>)* , default: ``[]``
 * **beamtime_base_dir** *(str)* , default: ``""``
 * **ingestor_var_dir** *(str)* , default: ``""``
+* **ingestor_tmp_dir** *(str)* , default: ``"/tmp"``
 * **ingestor_username** *(str)* , default: ``"ingestor"``
 * **dataset_pid_prefix** *(str)* , default: ``""``
 * **dataset_update_strategy** (``"no"``, ``"patch"``, ``"create"``, ``"mixed"``) , default: ``"patch"``
@@ -144,7 +145,7 @@ e.g.
 Pattern keywords for configuration variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The  **datasets_filename_pattern**, **ingested_datasets_filename_pattern**  and **ingestor_var_dir** can contain the *{beamtimeid}* and *{hostname}* keywords,  e.g. ``"scicat-ingested-datasets-{beamtimeid}.lst"`` or ``"scicat-ingested-datasets-{hostname}-{beamtimeid}.lst"``  which is instantiated during the ingestor execution.
+The  **datasets_filename_pattern**, **ingested_datasets_filename_pattern** , **ingestor_var_dir** and **ingestor_tmp_dir** can contain the *{beamtimeid}* and *{hostname}* keywords,  e.g. ``"scicat-ingested-datasets-{beamtimeid}.lst"`` or ``"scicat-ingested-datasets-{hostname}-{beamtimeid}.lst"``  which is instantiated during the ingestor execution.
 
 Similarly, **file_dataset_metadata_generator**, **dataset_metadata_generator**, **datablock_metadata_generator**,  **datablock_metadata_stream_generator**, **datablock_metadata_generator_scanpath_postfix**, **attachment_metadata_generator**, **chmod_generator_switch**, **relative_path_generator_switch**  can contain the following keywords: *{beamtimeid}* , *{scanname}*, *{chmod}*, *{scanpath}*, *{metapath}*, *{relpath}*, *{beamtimeid}*, *{beamline}*, *{doiprefix}*, *{beamtimefile}*, *{scanpostfix}*, *{datablockpostfix}*, *{ownergroup}*, *{accessgroups}*, *{hostname}*, *{hiddenattributes}*, *{ext}*, "{masterfile}", "{plotfile}", "{masterscanname}", "{entryname}"
 
