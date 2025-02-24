@@ -239,7 +239,7 @@ or in your pip environment by
 Debian and Ubuntu packages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Debian ``bookworm``, ``bullseye``, ``buster`` or Ubuntu ``lunar``, ``jammy``, ``focal`` packages
+Debian ``bookworm``, ``bullseye``, ``buster`` or Ubuntu ``oracular``, ``noble``, ``jammy`` packages
 can be found in the HDRI repository.
 
 To install the debian packages, add the PGP repository key
