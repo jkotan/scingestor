@@ -91,5 +91,4 @@ def get_logger():
     :rtype: :class:`logging.logger`
     :returns: logger object
     """
-    global _logger
     return _logger

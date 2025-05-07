@@ -1129,6 +1129,32 @@ class DatasetIngestor:
         :returns: ingestor token
         :rtype: :obj:`str`
         """
+        try:
+            if self.__incdfl_mtime != os.stat(self.__incdfl)[8]:
+                with open(self.__incdfl) as fl:
+                    self.__incd = fl.read().strip()
+                self.__incdfl_mtime = os.stat(self.__incdfl)[8]
+            try:
+                jincd = json.loads(self.__incd)
+            except Exception:
+                jincd = {}
+            if "jwt" in jincd.keys():
+                return jincd["jwt"]
+            if "id" in jincd.keys():
+                return jincd["id"]
+            password = self.__incd
+            username = self.__username
+            if "password" in jincd.keys():
+                password = jincd["password"]
+            if "username" in jincd.keys():
+                username = jincd["username"]
+            response = requests.post(
+                self.__tokenurl, headers=self.__headers,
+                json={"username": username, "password": password})
+            if response.ok:
+                return json.loads(response.content)["id"]
+            else:
+                raise Exception("%s" % response.text)
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
