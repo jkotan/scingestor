@@ -1136,6 +1136,8 @@ class DatasetIngestor:
                 self.__incdfl_mtime = os.stat(self.__incdfl)[8]
             try:
                 jincd = json.loads(self.__incd)
+                if not isinstance(jincd, dict):
+                    jincd = {}
             except Exception:
                 jincd = {}
             if "jwt" in jincd.keys():
