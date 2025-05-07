@@ -2,7 +2,7 @@ beamtime_dirs:
   - "${BEAMTIME_DIR}"
 chmod_json_files: 0o666
 scicat_url: "${SCICAT_URL}"
-ingestor_credential_file: /var/lib/scingestor/.scingestor.cnf
+ingestor_credential_file: /var/lib/scingestor/.scingestor.json
 inotify_timeout: 1
 get_event_timeout: 0.1
 ingestor_var_dir: "${INGESTOR_VAR_DIR}"
