@@ -69,16 +69,22 @@ class ModelIngest:
         #: (:obj:`str`) username
         self.__username = 'ingestor'
 
-        #: (:obj:`str`) beamtime id
+        #: (:obj:`str`) credential
         self.__incd = None
+        #: (:obj:`str`) credential file
+        self.__incdfl = None
+        #: (:obj:`str`) credential file mtime
+        self.__incdfl_mtime = None
 
         if "ingestor_username" in self.__config.keys():
             self.__username = self.__config["ingestor_username"]
 
         if "ingestor_credential_file" in self.__config.keys():
-            with open(self.__config["ingestor_credential_file"].format(
-                    homepath=self.__homepath)) as fl:
+            self.__incdfl = self.__config["ingestor_credential_file"].format(
+                homepath=self.__homepath)
+            with open(self.__incdfl) as fl:
                 self.__incd = fl.read().strip()
+            self.__incdfl_mtime = os.stat(self.__incdfl)[8]
 
         if "max_request_tries_number" in self.__config.keys():
             try:
@@ -173,9 +179,27 @@ class ModelIngest:
         :rtype: :obj:`str`
         """
         try:
+            if self.__incdfl_mtime != os.stat(self.__incdfl)[8]:
+                with open(self.__incdfl) as fl:
+                    self.__incd = fl.read().strip()
+                self.__incdfl_mtime = os.stat(self.__incdfl)[8]
+            try:
+                jincd = json.loads(self.__incd)
+            except Exception:
+                jincd = {}
+            if "jwt" in jincd.keys():
+                return jincd["jwt"]
+            if "id" in jincd.keys():
+                return jincd["id"]
+            password = self.__incd
+            username = self.__username
+            if "password" in jincd.keys():
+                password = jincd["password"]
+            if "username" in jincd.keys():
+                username = jincd["username"]
             response = requests.post(
                 self.__tokenurl, headers=self.__headers,
-                json={"username": self.__username, "password": self.__incd})
+                json={"username": username, "password": password})
             if response.ok:
                 return json.loads(response.content)["id"]
             else:

@@ -117,8 +117,12 @@ class DatasetIngestor:
         self.__username = 'ingestor'
         #: (:obj:`str`) update strategy
         self.__strategy = UpdateStrategy.PATCH
-        #: (:obj:`str`) beamtime id
+        #: (:obj:`str`) credential
         self.__incd = None
+        #: (:obj:`str`) credential file
+        self.__incdfl = None
+        #: (:obj:`str`) credential file mtime
+        self.__incdfl_mtime = None
         #: (:obj:`bool`) relative path in datablock flag
         self.__relpath_in_datablock = False
         #: (:obj:`str`) scicat url
@@ -381,9 +385,11 @@ class DatasetIngestor:
         if "dataset_pid_prefix" in self.__config.keys():
             self.__pidprefix = self.__config["dataset_pid_prefix"]
         if "ingestor_credential_file" in self.__config.keys():
-            with open(self.__config["ingestor_credential_file"].format(
-                    homepath=self.__homepath)) as fl:
+            self.__incdfl = self.__config["ingestor_credential_file"].format(
+                homepath=self.__homepath)
+            with open(self.__incdfl) as fl:
                 self.__incd = fl.read().strip()
+            self.__incdfl_mtime = os.stat(self.__incdfl)[8]
         if "ingestor_username" in self.__config.keys():
             self.__username = self.__config["ingestor_username"]
         if "dataset_update_strategy" in self.__config.keys():
@@ -1123,14 +1129,6 @@ class DatasetIngestor:
         :returns: ingestor token
         :rtype: :obj:`str`
         """
-        try:
-            response = requests.post(
-                self.__tokenurl, headers=self.__headers,
-                json={"username": self.__username, "password": self.__incd})
-            if response.ok:
-                return json.loads(response.content)["id"]
-            else:
-                raise Exception("%s" % response.text)
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
