@@ -252,7 +252,7 @@ optional arguments:
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
         vardir = "/"
-        cred = "12342345"
+        cred = '{"jwt":"12342345"}'
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
             cf.write(cred)

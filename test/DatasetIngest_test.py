@@ -280,7 +280,7 @@ optional arguments:
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
         vardir = "/"
-        cred = "12342345"
+        cred = '{"jwt":"12342345"}'
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
             cf.write(cred)
@@ -407,13 +407,13 @@ optional arguments:
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
                 self.assertEqual(
-                    "Login: ingestor\n"
+                    # "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00001\n"
                     "Datasets: 99001234/myscan_00002\n", vl)
-                self.assertEqual(len(self.__server.userslogin), 1)
-                self.assertEqual(
-                    self.__server.userslogin[0],
-                    b'{"username": "ingestor", "password": "12342345"}')
+                self.assertEqual(len(self.__server.userslogin), 0)
+                # self.assertEqual(
+                #     self.__server.userslogin[0],
+                #     b'{"username": "ingestor", "password": "12342345"}')
                 self.assertEqual(len(self.__server.datasets), 2)
                 self.myAssertDict(
                     json.loads(self.__server.datasets[0]),
@@ -507,7 +507,7 @@ optional arguments:
         credfile = os.path.join(fdirname, 'pwd')
         url = 'http://localhost:8881'
         vardir = "/"
-        cred = "12342345"
+        cred = '{"password":"12342345"}'
         os.mkdir(fdirname)
         with open(credfile, "w") as cf:
             cf.write(cred)

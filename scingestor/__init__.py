@@ -20,4 +20,4 @@
 #
 
 #: (:obj:`str`) the scingestor version
-__version__ = "0.17.2"
+__version__ = "0.18.0"

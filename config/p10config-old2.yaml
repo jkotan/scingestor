@@ -2,8 +2,8 @@ beamtime_dirs:
   - "/gpfs/current"
 max_scandir_depth: 1
 chmod_json_files: 0o666
-scicat_url: "http://scicat.desy.de/api/v3"
-ingestor_credential_file: /var/lib/scingestor/.scingestor.json
+scicat_url: "http://scicat-petra-test.desy.de/api/v3"
+ingestor_credential_file: /var/lib/scingestor/.scingestor.cnf
 metadata_group_map_file: "/home/p10user/.config/DESY/scingestor-metadata-group-map.lst"
 metadata_copy_map_file: "/home/p10user/.config/DESY/scingestor-metadata-copy-map.lst"
 ingestor_var_dir: "/gpfs/current/scratch_bl/scingestor"

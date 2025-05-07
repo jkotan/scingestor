@@ -1,4 +1,8 @@
 2024-11-25 Jan Kotanski <jan.kotanski@desy.de>
+	* add support for token in credential files (#321)
+	* tagged as 0.18.0
+
+2024-11-25 Jan Kotanski <jan.kotanski@desy.de>
 	* remove tmp files from the scratch dir (#317)
 	* tagged as 0.17.2
 

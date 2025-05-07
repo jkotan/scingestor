@@ -2,10 +2,10 @@ beamtime_dirs:
   - "/gpfs/current"
 max_scandir_depth: 1
 chmod_json_files: 0o666
-scicat_url: "http://scicat.desy.de/api/v3"
-ingestor_credential_file: /var/lib/scingestor/.scingestor.json
-metadata_group_map_file: "/home/p10user/.config/DESY/scingestor-metadata-group-map.lst"
-metadata_copy_map_file: "/home/p10user/.config/DESY/scingestor-metadata-copy-map.lst"
+scicat_url: "http://scicat-p08-test2.desy.de/api/v3"
+ingestor_credential_file: /var/lib/scingestor/.scingestor.cnf
+metadata_group_map_file: "/home/p08user/.config/DESY/scingestor-metadata-group-map.lst"
+metadata_copy_map_file: "/home/p08user/.config/DESY/scingestor-metadata-copy-map.lst"
 ingestor_var_dir: "/gpfs/current/scratch_bl/scingestor"
 datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
 ingested_datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
