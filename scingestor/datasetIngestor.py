@@ -1192,17 +1192,18 @@ class DatasetIngestor:
                 pexists = bool(resexists.content)
             else:
                 try:
-                   cont = json.loads(resexists.content)
-                   if "error" in cont and "statusCode" in cont and \
-                      "message" in cont and cont["error"] == "Not Found" and \
-                      "statusCode" == 404 and \
-                      cont["message"].startswith("proposal:") and \
-                      cont["message"].endswith("not found"):
-                       pexists = False
-                   else:
-                       raise Exception(
-                           "Proposal %s: %s"
-                           % (propid, resexists.text or '{\"exists\": false}'))
+                    cont = json.loads(resexists.content)
+                    if "error" in cont and "statusCode" in cont and \
+                       "message" in cont and cont["error"] == "Not Found" and \
+                       "statusCode" == 404 and \
+                       cont["message"].startswith("proposal:") and \
+                       cont["message"].endswith("not found"):
+                        pexists = False
+                    else:
+                        raise Exception(
+                            "Proposal %s: %s"
+                            % (propid,
+                               resexists.text or '{\"exists\": false}'))
                 except Exception:
                     raise Exception(
                         "Proposal %s: %s"
@@ -1281,15 +1282,15 @@ class DatasetIngestor:
                 pexist = bool(resexists.content)
             else:
                 try:
-                   cont = json.loads(resexists.content)
-                   if "error" in cont and "statusCode" in cont and \
-                      "message" in cont and cont["error"] == "Not Found" and \
-                      "statusCode" == 404 and \
-                      cont["message"].startswith("dataset:") and \
-                      cont["message"].endswith("not found"):
-                       pexist = False
-                   else:
-                       raise Exception("%s" % resexists.text)
+                    cont = json.loads(resexists.content)
+                    if "error" in cont and "statusCode" in cont and \
+                       "message" in cont and cont["error"] == "Not Found" and \
+                       "statusCode" == 404 and \
+                       cont["message"].startswith("dataset:") and \
+                       cont["message"].endswith("not found"):
+                        pexist = False
+                    else:
+                        raise Exception("%s" % resexists.text)
                 except Exception:
                     raise Exception("%s" % resexists.text)
 
@@ -1382,10 +1383,12 @@ class DatasetIngestor:
                            not bool(resexists.content):
                             checking = False
                             exists = bool(resexists.content)
-                        elif not resexists.ok and hasattr(resexists, "content"):
+                        elif not resexists.ok and \
+                                hasattr(resexists, "content"):
                             cont = json.loads(resexists.content)
                             if "error" in cont and "statusCode" in cont and \
-                               "message" in cont and cont["error"] == "Not Found" and \
+                               "message" in cont and \
+                               cont["error"] == "Not Found" and \
                                "statusCode" == 404 and \
                                cont["message"].startswith("proposal:") and \
                                cont["message"].endswith("not found"):
@@ -1398,7 +1401,7 @@ class DatasetIngestor:
                 if counter == self.__maxcounter:
                     checking = False
                 counter += 1
-            if  resexists.ok and hasattr(resexists, "content"):
+            if resexists.ok and hasattr(resexists, "content"):
                 try:
                     exists = bool(resexists.content)
                 except Exception:
