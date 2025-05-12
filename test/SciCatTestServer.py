@@ -258,6 +258,7 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
             spath = [path]
         dspath = spath[0].split("/")
         try:
+            resp = 200
             if not spath[-1]:
                 raise Exception("Empty access_token")
 
@@ -267,7 +268,8 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     if pid in self.server.pid_dataset:
                         message = self.server.pid_dataset[pid]
                     else:
-                        message = ""
+                        message = "dataset: %s not found" % pid
+                        resp = 404
                 elif (len(dspath) == 4 and
                       dspath[3].lower() == "origdatablocks"):
                     odbs = []
@@ -293,7 +295,8 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     if pid in self.server.pid_proposal:
                         message = self.server.pid_proposal[pid]
                     else:
-                        message = ''
+                        message = "proposal: %s not found" % pid
+                        resp = 404
             elif len(dspath) > 2 and dspath[1].lower() == "origdatablocks":
                 pid = requests.utils.unquote(dspath[2])
                 if len(dspath) == 3:
@@ -301,7 +304,8 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     if pid in self.server.id_origdatablock:
                         message = self.server.id_origdatablock[pid]
                     else:
-                        message = ""
+                        message = "origdatablock: %s not found" % pid
+                        resp = 404
             elif len(dspath) > 2 and dspath[1].lower() == "attachments":
                 pid = requests.utils.unquote(dspath[2])
                 if len(dspath) == 3:
@@ -311,7 +315,6 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                         message = self.server.id_attachament[pid]
                     else:
                         message = ""
-            resp = 200
         except Exception as e:
             message = json.dumps({"Error": str(e)})
             resp = 400
