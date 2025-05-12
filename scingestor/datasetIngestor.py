@@ -1195,7 +1195,7 @@ class DatasetIngestor:
                     cont = json.loads(resexists.content)
                     if "error" in cont and "statusCode" in cont and \
                        "message" in cont and cont["error"] == "Not Found" and \
-                       "statusCode" == 404 and \
+                       cont["statusCode"] == 404 and \
                        cont["message"].startswith("proposal:") and \
                        cont["message"].endswith("not found"):
                         pexists = False
@@ -1285,7 +1285,7 @@ class DatasetIngestor:
                     cont = json.loads(resexists.content)
                     if "error" in cont and "statusCode" in cont and \
                        "message" in cont and cont["error"] == "Not Found" and \
-                       "statusCode" == 404 and \
+                       cont["statusCode"] == 404 and \
                        cont["message"].startswith("dataset:") and \
                        cont["message"].endswith("not found"):
                         pexist = False
@@ -1375,6 +1375,7 @@ class DatasetIngestor:
                 )
                 if hasattr(resexists, "content"):
                     try:
+                        # print(resexists.content)
                         json.loads(resexists.content)
                         checking = False
                     except Exception:
@@ -1389,8 +1390,8 @@ class DatasetIngestor:
                             if "error" in cont and "statusCode" in cont and \
                                "message" in cont and \
                                cont["error"] == "Not Found" and \
-                               "statusCode" == 404 and \
-                               cont["message"].startswith("proposal:") and \
+                               cont["statusCode"] == 404 and \
+                               cont["message"].startswith("dataset:") and \
                                cont["message"].endswith("not found"):
                                 exists = False
                                 checking = False
@@ -1406,6 +1407,16 @@ class DatasetIngestor:
                     exists = bool(resexists.content)
                 except Exception:
                     pass
+            elif not resexists.ok and hasattr(resexists, "content"):
+                cont = json.loads(resexists.content)
+                if "error" in cont and "statusCode" in cont and \
+                   "message" in cont and \
+                   cont["error"] == "Not Found" and \
+                   cont["statusCode"] == 404 and \
+                   cont["message"].startswith("dataset:") and \
+                   cont["message"].endswith("not found"):
+                    exists = False
+
             if exists is not None:
                 if not exists:
                     # post the new dataset since it does not exist

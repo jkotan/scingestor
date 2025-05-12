@@ -268,8 +268,13 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     if pid in self.server.pid_dataset:
                         message = self.server.pid_dataset[pid]
                     else:
-                        message = "dataset: %s not found" % pid
+                        message = json.dumps(
+                            {"message": "dataset: %s not found" % pid,
+                             "error": "Not Found",
+                             "statusCode": 404
+                             })
                         resp = 404
+                        # message = ""
                 elif (len(dspath) == 4 and
                       dspath[3].lower() == "origdatablocks"):
                     odbs = []
@@ -295,8 +300,13 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     if pid in self.server.pid_proposal:
                         message = self.server.pid_proposal[pid]
                     else:
-                        message = "proposal: %s not found" % pid
+                        message = json.dumps(
+                            {"message": "proposal: %s not found" % pid,
+                             "error": "Not Found",
+                             "statusCode": 404
+                             })
                         resp = 404
+                        # message = ""
             elif len(dspath) > 2 and dspath[1].lower() == "origdatablocks":
                 pid = requests.utils.unquote(dspath[2])
                 if len(dspath) == 3:
@@ -304,8 +314,13 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     if pid in self.server.id_origdatablock:
                         message = self.server.id_origdatablock[pid]
                     else:
-                        message = "origdatablock: %s not found" % pid
+                        message = json.dumps(
+                            {"message": "origdatablock: %s not found" % pid,
+                             "error": "Not Found",
+                             "statusCode": 404
+                             })
                         resp = 404
+                        # message = ""
             elif len(dspath) > 2 and dspath[1].lower() == "attachments":
                 pid = requests.utils.unquote(dspath[2])
                 if len(dspath) == 3:
@@ -314,7 +329,13 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     if pid in self.server.id_attachament:
                         message = self.server.id_attachament[pid]
                     else:
-                        message = ""
+                        message = json.dumps(
+                            {"message": "attachment: %s not found" % pid,
+                             "error": "Not Found",
+                             "statusCode": 404
+                             })
+                        resp = 404
+                        #  message = ""
         except Exception as e:
             message = json.dumps({"Error": str(e)})
             resp = 400
