@@ -1191,9 +1191,22 @@ class DatasetIngestor:
             if resexists.ok:
                 pexists = bool(resexists.content)
             else:
-                raise Exception(
-                    "Proposal %s: %s"
-                    % (propid, resexists.text or '{\"exists\": false}'))
+                try:
+                   cont = json.loads(resexists.content)
+                   if "error" in cont and "statusCode" in cont and \
+                      "message" in cont and cont["error"] == "Not Found" and \
+                      "statusCode" == 404 and \
+                      cont["message"].startswith("proposal:") and \
+                      cont["message"].endswith("not found"):
+                       pexists = False
+                   else:
+                       raise Exception(
+                           "Proposal %s: %s"
+                           % (propid, resexists.text or '{\"exists\": false}'))
+                except Exception:
+                    raise Exception(
+                        "Proposal %s: %s"
+                        % (propid, resexists.text or '{\"exists\": false}'))
             if pexists:
                 resget = resexists
                 if resget.ok:
@@ -1267,7 +1280,18 @@ class DatasetIngestor:
             if resexists.ok:
                 pexist = bool(resexists.content)
             else:
-                raise Exception("%s" % resexists.text)
+                try:
+                   cont = json.loads(resexists.content)
+                   if "error" in cont and "statusCode" in cont and \
+                      "message" in cont and cont["error"] == "Not Found" and \
+                      "statusCode" == 404 and \
+                      cont["message"].startswith("dataset:") and \
+                      cont["message"].endswith("not found"):
+                       pexist = False
+                   else:
+                       raise Exception("%s" % resexists.text)
+                except Exception:
+                    raise Exception("%s" % resexists.text)
 
         mdic["pid"] = ipid
         nmeta = json.dumps(mdic)
@@ -1339,6 +1363,7 @@ class DatasetIngestor:
             checking = True
             counter = 0
             self.__headers["Authorization"] = "Bearer {}".format(token)
+            exists = None
             while checking:
                 resexists = requests.get(
                     "{url}/{pid}".format(
@@ -1356,16 +1381,29 @@ class DatasetIngestor:
                         if resexists.ok and hasattr(resexists, "content") and \
                            not bool(resexists.content):
                             checking = False
+                            exists = bool(resexists.content)
+                        elif not resexists.ok and hasattr(resexists, "content"):
+                            cont = json.loads(resexists.content)
+                            if "error" in cont and "statusCode" in cont and \
+                               "message" in cont and cont["error"] == "Not Found" and \
+                               "statusCode" == 404 and \
+                               cont["message"].startswith("proposal:") and \
+                               cont["message"].endswith("not found"):
+                                exists = False
+                                checking = False
+                            else:
+                                time.sleep(0.1)
                         else:
                             time.sleep(0.1)
                 if counter == self.__maxcounter:
                     checking = False
                 counter += 1
-            if resexists.ok and hasattr(resexists, "content"):
+            if  resexists.ok and hasattr(resexists, "content"):
                 try:
                     exists = bool(resexists.content)
                 except Exception:
-                    exists = False
+                    pass
+            if exists is not None:
                 if not exists:
                     # post the new dataset since it does not exist
                     get_logger().info(
