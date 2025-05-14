@@ -106,6 +106,9 @@ class ModelIngest:
 
         #: (:obj:`str`) scicat users login
         self.__scicat_users_login = "Users/login"
+        if "scicat_users_login_path" in self.__config.keys():
+            self.__scicat_users_login = \
+                self.__config["scicat_users_login_path"]
 
         # self.__tokenurl = "http://www-science3d.desy.de:3000/api/v3/" \
         #       "Users/login"

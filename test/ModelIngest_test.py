@@ -880,7 +880,9 @@ optional arguments:
         with open(tokenfile, "w") as cf:
             cf.write(token)
 
-        cfg = 'scicat_url: "{url}"\n'.format(url=url)
+        cfg = 'scicat_url: "{url}"\n' \
+            'scicat_users_login_path: "auth/login"\n' \
+            ''.format(url=url)
 
         jsns = [
             {'contactEmail': 'appuser@fake.com',
