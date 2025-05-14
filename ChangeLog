@@ -1,5 +1,6 @@
 2025-05-12 Jan Kotanski <jan.kotanski@desy.de>
 	* adapt code to new REST API /exists endpoint (#324)
+	* add support for scicat_users_login_path in modelIngest (#326)
 	* tagged as 0.19.0
 
 2025-05-07 Jan Kotanski <jan.kotanski@desy.de>
