@@ -118,6 +118,33 @@ optional arguments:
       scicat_ingest -m Attachments -c ~/.scingestor.yaml -p ~/.mytoken.cfg
 """
 
+        self.helpinfo2 = """usage: scicat_ingest [-h] [-m MODEL] """ \
+            """[-c CONFIG] [-l LOG] [-f LOGFILE] [-t] [-p TOKENFILE] """ \
+            """metadata_json_file [metadata_json_file ...]
+
+Ingest script for SciCat Models.
+
+positional arguments:
+  metadata_json_file    metadata json file(s)
+
+options:
+  -h, --help            show this help message and exit
+  -m, --model MODEL     SciCat model name in plural
+  -c, --configuration CONFIG
+                        configuration file name
+  -l, --log LOG         logging level, i.e. debug, info, """\
+      """warning, error, critical
+  -f, --log-file LOGFILE
+                        log file name
+  -t, --timestamps      timestamps in logs
+  -p, --token-file TOKENFILE
+                        file with a user token
+
+ examples:
+      scicat_ingest -m Samples -c ~/.scingestor.yaml
+      scicat_ingest -m Attachments -c ~/.scingestor.yaml -p ~/.mytoken.cfg
+"""
+
     def myAssertDict(self, dct, dct2, skip=None, parent=None):
         parent = parent or ""
         self.assertTrue(isinstance(dct, dict))
@@ -238,10 +265,18 @@ optional arguments:
         for hl in helps:
             vl, er, et = self.runtestexcept(
                 ['scicat_ingest', hl], SystemExit)
-            self.assertEqual(
-                "".join(self.helpinfo.split()).replace(
-                    "optionalarguments:", "options:"),
-                "".join(vl.split()).replace("optionalarguments:", "options:"))
+            if sys.version_info >= (3, 13):
+                self.assertEqual(
+                    "".join(self.helpinfo2.split()).replace(
+                        "optionalarguments:", "options:"),
+                    "".join(vl.split()).replace(
+                        "optionalarguments:", "options:"))
+            else:
+                self.assertEqual(
+                    "".join(self.helpinfo.split()).replace(
+                        "optionalarguments:", "options:"),
+                    "".join(vl.split()).replace(
+                        "optionalarguments:", "options:"))
             self.assertEqual('', er)
 
     def test_wrong_args(self):
