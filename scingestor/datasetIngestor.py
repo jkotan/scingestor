@@ -302,7 +302,11 @@ class DatasetIngestor:
             "scientificMetadata",
             "endTime"
         ]
-
+        #: (:obj:`list`<:obj:`str`>) metadata keywords cannot be patched
+        self.__fieldsnotpatched = [
+            # "pid",
+            # "type"
+        ]
         #: (:obj:`list`<:obj:`str`>) ingested scan names
         self.__sc_ingested = []
         #: (:obj:`list`<:obj:`str`>) waiting scan names
@@ -687,6 +691,13 @@ class DatasetIngestor:
             try:
                 self.__withoutsm = list(
                     self.__config["metadata_fields_without_checks"])
+            except Exception as e:
+                get_logger().warning('%s' % (str(e)))
+
+        if "metadata_fields_cannot_be_patched" in self.__config.keys():
+            try:
+                self.__fieldsnotpatched = list(
+                    self.__config["metadata_fields_cannot_be_patched"])
             except Exception as e:
                 get_logger().warning('%s' % (str(e)))
 
@@ -1459,6 +1470,9 @@ class DatasetIngestor:
                                 dsmeta, mdic, skip=self.__withoutsm):
                             if self.__strategy in [
                                     UpdateStrategy.PATCH, UpdateStrategy.NO]:
+                                for npf in self.__fieldsnotpatched:
+                                    if npf in mdic:
+                                        mdic.pop(npf)
                                 nmeta = json.dumps(mdic)
                                 # mm = dict(mdic)
                                 # mm["scientificMetadata"] = {}
@@ -1473,13 +1487,17 @@ class DatasetIngestor:
                                "scientificMetadata" in mdic.keys():
                                 smmeta = dsmeta["scientificMetadata"]
                                 smnmeta = mdic["scientificMetadata"]
-                                nmeta = json.dumps(mdic)
                                 if not self._metadataEqual(smmeta, smnmeta):
                                     if self.__strategy == \
                                        UpdateStrategy.CREATE:
+                                        nmeta = json.dumps(mdic)
                                         return self._post_dataset(
                                             mdic, token, mdct)
                                     else:
+                                        for npf in self.__fieldsnotpatched:
+                                            if npf in mdic:
+                                                mdic.pop(npf)
+                                        nmeta = json.dumps(mdic)
                                         return self._patch_dataset(
                                             nmeta, pid, token, mdct)
                     else:

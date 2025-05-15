@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "SCINGESTOR" "1" "Jul 31, 2024" "0.17" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "May 15, 2025" "0.20" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .sp
@@ -72,6 +72,8 @@ The configuration written in YAML can contain the following variables
 \fBdataset_pid_prefix\fP \fI(str)\fP , default: \fB\(dq\(dq\fP
 .IP \(bu 2
 \fBdataset_update_strategy\fP (\fB\(dqno\(dq\fP, \fB\(dqpatch\(dq\fP, \fB\(dqcreate\(dq\fP, \fB\(dqmixed\(dq\fP) , default: \fB\(dqpatch\(dq\fP
+.IP \(bu 2
+\fBpatch_dataset_fields_to_skip\fP \fI(list<str>)\fP , default: \fB[\(dqpid\(dq, \(dqtype\(dq]\fP
 .IP \(bu 2
 \fBrelative_path_in_datablock\fP \fI(bool)\fP , default: \fBFalse\fP
 .IP \(bu 2
@@ -224,6 +226,8 @@ The configuration written in YAML can contain the following variables
 \fBowner_access_groups_from_proposal\fP \fI(bool)\fP, default: \fBFalse\fP
 .IP \(bu 2
 \fBmetadata_fields_without_checks\fP \fI(list<str>)\fP, default: \fB[\(dqtechniques\(dq, \(dqclassification\(dq, \(dqcreatedBy\(dq, \(dqupdatedBy\(dq, \(dqdatasetlifecycle\(dq, \(dqnumberOfFiles\(dq, \(dqsize\(dq, \(dqcreatedAt\(dq, \(dqupdatedAt\(dq, \(dqhistory\(dq, \(dqcreationTime\(dq, \(dqversion\(dq, \(dqscientificMetadata\(dq, \(dqendTime\(dq]\fP
+.IP \(bu 2
+\fBmetadata_fields_cannot_be_patched\fP \fI(list<str>)\fP , default: \fB[]\fP
 .UNINDENT
 .sp
 e.g.
@@ -374,7 +378,7 @@ pip install scingestor
 .UNINDENT
 .SS Debian and Ubuntu packages
 .sp
-Debian \fBbookworm\fP, \fBbullseye\fP, \fBbuster\fP or Ubuntu \fBlunar\fP, \fBjammy\fP, \fBfocal\fP packages
+Debian \fBbookworm\fP, \fBbullseye\fP, \fBbuster\fP or Ubuntu \fBoracular\fP, \fBnoble\fP, \fBjammy\fP packages
 can be found in the HDRI repository.
 .sp
 To install the debian packages, add the PGP repository key

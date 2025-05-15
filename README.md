@@ -96,6 +96,11 @@ The configuration written in YAML can contain the following variables
 * **scicat_users_login_path** *(str)*, default: `"Users/login"`
 * **owner_access_groups_from_proposal** *(bool)*, default: `False`
 * **metadata_fields_without_checks** *(list\<str\>)*, default: `["techniques", "classification", "createdBy", "updatedBy", "datasetlifecycle", "numberOfFiles", "size", "createdAt", "updatedAt", "history", "creationTime", "version", "scientificMetadata", "endTime"]`
+* **metadata_fields_cannot_be_patched** *(list\<str\>)* , default: `[]`
+
+<!--
+* **metadata_fields_cannot_be_patched** *(list\<str\>)* , default: `["pid", "type"]`
+-->
 
 e.g.
 ```
