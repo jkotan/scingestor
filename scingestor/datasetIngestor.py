@@ -1340,7 +1340,7 @@ class DatasetIngestor:
         get_logger().info(
             'DatasetIngestor: '
             'Patch scientificMetadata of dataset:'
-            ' %s %s' % (pid, json.loads(nmeta).keys()))
+            ' %s' % (pid))
         self.__headers["Authorization"] = "Bearer {}".format(token)
         response = requests.patch(
             "{url}/{pid}"

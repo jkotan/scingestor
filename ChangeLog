@@ -1,5 +1,5 @@
 2025-05-15 Jan Kotanski <jan.kotanski@desy.de>
-	* add metadata_fields_cannot_be_patched (#324)
+	* add metadata_fields_cannot_be_patched configuration variable (#328)
 	* tagged as 0.20.0
 
 2025-05-12 Jan Kotanski <jan.kotanski@desy.de>

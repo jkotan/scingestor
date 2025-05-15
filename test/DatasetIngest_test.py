@@ -3354,6 +3354,9 @@ optional arguments:
                     'log_generator_commands: true\n' \
                     'scandir_blacklist:\n' \
                     '  - "{scratchdir}"\n' \
+                    'metadata_fields_cannot_be_patched:\n' \
+                    '  - "pid"\n' \
+                    '  - "type"\n' \
                     'use_corepath_as_scandir: true\n' \
                     'ingestor_var_dir: "{vardir}"\n' \
                     'ingestor_credential_file: "{credfile}"\n'.format(
@@ -3547,7 +3550,8 @@ optional arguments:
                          'beamtimeId': '99001284'},
                      'sourceFolder':
                      '%s/raw/special' % coredir,
-                     'type': 'raw'},
+                     'type': 'raw'
+                     },
                     skip=['creationTime'])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
@@ -3566,7 +3570,7 @@ optional arguments:
                      'keywords': ['scan'],
                      'ownerGroup': '99001284-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '99001284/myscan_00001',
+                     # 'pid': '99001284/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001284-dmgt', '99001284-clbt', '99001284-part',
@@ -3578,7 +3582,8 @@ optional arguments:
                          'beamtimeId': '99001284'},
                      'sourceFolder':
                      '%s/raw/special' % coredir,
-                     'type': 'raw'},
+                     # 'type': 'raw'
+                     },
                     skip=['creationTime'])
                 self.assertEqual(len(self.__server.origdatablocks), 3)
                 self.myAssertDict(
@@ -5315,6 +5320,9 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'metadata_fields_cannot_be_patched:\n' \
+            '  - "pid"\n' \
+            '  - "type"\n' \
             'ingest_dataset_attachment: true\n' \
             'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'log_generator_commands: true\n' \
@@ -5541,7 +5549,7 @@ optional arguments:
                          'owner': 'NewOwner',
                          'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
-                         'pid': '99001234/myscan_00002',
+                         # 'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -5554,7 +5562,8 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw'},
+                         # 'type': 'raw'
+                         },
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 2)
                     self.myAssertDict(
@@ -6038,6 +6047,9 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'metadata_fields_cannot_be_patched:\n' \
+            '  - "pid"\n' \
+            '  - "type"\n' \
             'ingest_dataset_attachment: true\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
@@ -6271,7 +6283,7 @@ optional arguments:
                          'owner': 'NewOwner',
                          'keywords': ['scan'],
                          'ownerEmail': 'peter.smithson@fake.de',
-                         'pid': '99001234/myscan_00002',
+                         # 'pid': '99001234/myscan_00002',
                          'datasetName': 'myscan_00002',
                          'accessGroups': [
                              '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -6284,7 +6296,8 @@ optional arguments:
                          'sourceFolder':
                          '/asap3/petra3/gpfs/p00/2022/data/9901234/'
                          'raw/special',
-                         'type': 'raw'},
+                         # 'type': 'raw'
+                         },
                         skip=['creationTime'])
                     self.assertEqual(len(self.__server.origdatablocks), 2)
                     self.myAssertDict(
@@ -7310,6 +7323,9 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'metadata_fields_cannot_be_patched:\n' \
+            '  - "pid"\n' \
+            '  - "type"\n' \
             'log_generator_commands: true\n' \
             'scicat_proposal_id_pattern: "{{beamtimeid}}"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
@@ -7468,7 +7484,8 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw'},
+                     'type': 'raw'
+                     },
                     skip=["creationTime"])
                 self.myAssertDict(
                     json.loads(self.__server.datasets[2]),
@@ -7484,7 +7501,7 @@ optional arguments:
                      'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '99001234/myscan_00001',
+                     # 'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -7497,7 +7514,8 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw'},
+                     # 'type': 'raw'
+                     },
                     skip=["creationTime"])
                 self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
@@ -7741,6 +7759,9 @@ optional arguments:
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
             'log_generator_commands: true\n' \
+            'metadata_fields_cannot_be_patched:\n' \
+            '  - "pid"\n' \
+            '  - "type"\n' \
             'dataset_update_strategy: "mixed"\n' \
             'ingestor_var_dir: "{vardir}"\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
@@ -7915,7 +7936,7 @@ optional arguments:
                      'keywords': ['scan'],
                      'ownerGroup': '99001234-dmgt',
                      'ownerEmail': 'peter.smithson@fake.de',
-                     'pid': '99001234/myscan_00001',
+                     # 'pid': '99001234/myscan_00001',
                      'datasetName': 'myscan_00001',
                      'accessGroups': [
                          '99001234-dmgt', '99001234-clbt', '99001234-part',
@@ -7928,7 +7949,8 @@ optional arguments:
                          'beamtimeId': '99001234'},
                      'sourceFolder':
                      '/asap3/petra3/gpfs/p00/2022/data/9901234/raw/special',
-                     'type': 'raw'},
+                     # 'type': 'raw'
+                     },
                     skip=["creationTime"])
                 self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):

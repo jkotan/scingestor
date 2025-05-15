@@ -89,8 +89,13 @@ class SciCatMockHandler(BaseHTTPRequestHandler):
                     raise Exception("Empty access_token")
                 dt = json.loads(in_data)
                 # print("Datasets: %s" % dt)
-                print("Datasets: %s" % dt["pid"])
-                npid = dt["pid"]
+                if len(spath) == 2:
+                    lpath = spath[0].split("/")
+                    if len(lpath) == 3:
+                        npid = lpath[2].replace("%2F", "/").replace("%2f", "/")
+                if "pid" in dt:
+                    npid = dt["pid"]
+                print("Datasets: %s" % npid)
                 dt["pid"] = npid
                 self.server.pid_dataset[npid] = json.dumps(dt)
                 message = "{}"
