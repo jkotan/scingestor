@@ -98,7 +98,9 @@ The configuration written in YAML can contain the following variables
 * **metadata_fields_without_checks** *(list\<str\>)*, default: `["techniques", "classification", "createdBy", "updatedBy", "datasetlifecycle", "numberOfFiles", "size", "createdAt", "updatedAt", "history", "creationTime", "version", "scientificMetadata", "endTime"]`
 * **metadata_fields_cannot_be_patched** *(list\<str\>)* , default: `[]`
 
-[comment]: # (* **metadata_fields_cannot_be_patched** *(list\<str\>)* , default: `["pid", "type"]`)
+<!--
+* **metadata_fields_cannot_be_patched** *(list\<str\>)* , default: `["pid", "type"]`
+-->
 
 e.g.
 ```
