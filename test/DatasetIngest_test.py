@@ -5005,6 +5005,7 @@ optional arguments:
             'scicat_url: "{url}"\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \
+            'metadata_fields_cannot_be_patched: []\n' \
             'ingestor_credential_file: "{credfile}"\n'.format(
                 basedir=fdirname, url=url, vardir=vardir, credfile=credfile)
 
@@ -5701,6 +5702,7 @@ optional arguments:
         cfg = 'beamtime_dirs:\n' \
             '  - "{basedir}"\n' \
             'scicat_url: "{url}"\n' \
+            'metadata_fields_cannot_be_patched: []\n' \
             'ingest_dataset_attachment: true\n' \
             'log_generator_commands: true\n' \
             'ingestor_var_dir: "{vardir}"\n' \

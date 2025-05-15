@@ -304,8 +304,8 @@ class DatasetIngestor:
         ]
         #: (:obj:`list`<:obj:`str`>) metadata keywords cannot be patched
         self.__fieldsnotpatched = [
-            "pid",
-            "type"
+            # "pid",
+            # "type"
         ]
         #: (:obj:`list`<:obj:`str`>) ingested scan names
         self.__sc_ingested = []

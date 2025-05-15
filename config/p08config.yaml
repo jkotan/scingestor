@@ -12,6 +12,9 @@ datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
 ingested_datasets_filename_pattern: "scicat-datasets-{hostname}-{beamtimeid}.lst"
 oned_in_metadata: true
 hidden_attributes: "nexdatas_source,nexdatas_strategy,units,NX_class"
+metadata_fields_cannot_be_patched:
+  - "pid"
+  - "type"
 # owner_access_groups_from_proposal: True
 # skip_multi_origdatablock_ingestion: True
 # skip_multi_attachment_ingestion: True
