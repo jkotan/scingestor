@@ -98,6 +98,28 @@ optional arguments:
        scicat_dataset_ingestor -c ~/.scingestor.yaml -l debug
 """
 
+        self.helpinfo2 = """usage: scicat_dataset_ingestor [-h]""" \
+            """ [-c CONFIG] [-r RUNTIME] [-l LOG] [-f LOGFILE] [-t]
+
+BeamtimeWatcher service SciCat Dataset ingestior
+
+options:
+  -h, --help            show this help message and exit
+  -c, --configuration CONFIG
+                        configuration file name
+  -r, --runtime RUNTIME
+                        stop program after runtime in seconds
+  -l, --log LOG         logging level, i.e. debug, info, warning, """ \
+      """error, critical
+  -f, --log-file LOGFILE
+                        log file name
+  -t, --timestamps      timestamps in logs
+
+ examples:
+      scicat_dataset_ingestor -c ~/.scingestor.yaml
+      scicat_dataset_ingestor -c ~/.scingestor.yaml -l debug
+"""
+
         self.maxDiff = None
         self.notifier = safeINotifier.SafeINotifier()
 
@@ -178,11 +200,20 @@ optional arguments:
         for hl in helps:
             vl, er, et = self.runtestexcept(
                 ['scicat_dataset_ingestor', hl], SystemExit)
-            self.assertEqual(
-                "".join(self.helpinfo.split()).replace(
-                    "optionalarguments:", "options:"),
-                "".join(vl.split()).replace("optionalarguments:", "options:"))
-            self.assertEqual('', er)
+            if sys.version_info >= (3, 13):
+                self.assertEqual(
+                    "".join(self.helpinfo2.split()).replace(
+                        "optionalarguments:", "options:"),
+                    "".join(vl.split()).replace(
+                        "optionalarguments:", "options:"))
+                self.assertEqual('', er)
+            else:
+                self.assertEqual(
+                    "".join(self.helpinfo.split()).replace(
+                        "optionalarguments:", "options:"),
+                    "".join(vl.split()).replace(
+                        "optionalarguments:", "options:"))
+                self.assertEqual('', er)
 
     def test_wrong_args(self):
         # fun = sys._getframe().f_code.co_name
