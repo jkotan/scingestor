@@ -54,6 +54,7 @@ The configuration written in YAML can contain the following variables
 * **ingestor_username** *(str)* , default: ``"ingestor"``
 * **dataset_pid_prefix** *(str)* , default: ``""``
 * **dataset_update_strategy** (``"no"``, ``"patch"``, ``"create"``, ``"mixed"``) , default: ``"patch"``
+* **patch_dataset_fields_to_skip** *(list\<str\>)* , default: ``["pid", "type"]``
 * **relative_path_in_datablock** *(bool)* , default: ``False``
 * **scandir_blacklist** *(list\<str\>)* , default: ``["/gpfs/current/scratch_bl", "/gpfs/current/processed", "/gpfs/current/shared"]``
 * **beamtimeid_blacklist_file** *(str)* , default: ``None``
@@ -130,6 +131,7 @@ The configuration written in YAML can contain the following variables
 * **scicat_attachments_path** *(str)*, default: ``"Datasets/{pid}/Attachments"``
 * **owner_access_groups_from_proposal** *(bool)*, default: ``False``
 * **metadata_fields_without_checks** *(list\<str\>)*, default: ``["techniques", "classification", "createdBy", "updatedBy", "datasetlifecycle", "numberOfFiles", "size", "createdAt", "updatedAt", "history", "creationTime", "version", "scientificMetadata", "endTime"]``
+* **metadata_fields_cannot_be_patched** *(list\<str\>)* , default: ``["pid", "type"]``
 
 e.g.
 

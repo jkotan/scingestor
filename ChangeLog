@@ -1,3 +1,7 @@
+2025-05-15 Jan Kotanski <jan.kotanski@desy.de>
+	* add metadata_fields_cannot_be_patched (#324)
+	* tagged as 0.20.0
+
 2025-05-12 Jan Kotanski <jan.kotanski@desy.de>
 	* adapt code to new REST API /exists endpoint (#324)
 	* add support for scicat_users_login_path in modelIngest (#324)
