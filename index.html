@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 0.19.0 documentation</title>
+    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 0.20.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -61,6 +61,7 @@ is finished. It can be executed by</p>
 <li><p><strong>ingestor_username</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;ingestor&quot;</span></code></p></li>
 <li><p><strong>dataset_pid_prefix</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></li>
 <li><p><strong>dataset_update_strategy</strong> (<code class="docutils literal notranslate"><span class="pre">&quot;no&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;patch&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;create&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mixed&quot;</span></code>) , default: <code class="docutils literal notranslate"><span class="pre">&quot;patch&quot;</span></code></p></li>
+<li><p><strong>patch_dataset_fields_to_skip</strong> <em>(list&lt;str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">[&quot;pid&quot;,</span> <span class="pre">&quot;type&quot;]</span></code></p></li>
 <li><p><strong>relative_path_in_datablock</strong> <em>(bool)</em> , default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>scandir_blacklist</strong> <em>(list&lt;str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">[&quot;/gpfs/current/scratch_bl&quot;,</span> <span class="pre">&quot;/gpfs/current/processed&quot;,</span> <span class="pre">&quot;/gpfs/current/shared&quot;]</span></code></p></li>
 <li><p><strong>beamtimeid_blacklist_file</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
@@ -137,6 +138,7 @@ is finished. It can be executed by</p>
 <li><p><strong>scicat_attachments_path</strong> <em>(str)</em>, default: <code class="docutils literal notranslate"><span class="pre">&quot;Datasets/{pid}/Attachments&quot;</span></code></p></li>
 <li><p><strong>owner_access_groups_from_proposal</strong> <em>(bool)</em>, default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>metadata_fields_without_checks</strong> <em>(list&lt;str&gt;)</em>, default: <code class="docutils literal notranslate"><span class="pre">[&quot;techniques&quot;,</span> <span class="pre">&quot;classification&quot;,</span> <span class="pre">&quot;createdBy&quot;,</span> <span class="pre">&quot;updatedBy&quot;,</span> <span class="pre">&quot;datasetlifecycle&quot;,</span> <span class="pre">&quot;numberOfFiles&quot;,</span> <span class="pre">&quot;size&quot;,</span> <span class="pre">&quot;createdAt&quot;,</span> <span class="pre">&quot;updatedAt&quot;,</span> <span class="pre">&quot;history&quot;,</span> <span class="pre">&quot;creationTime&quot;,</span> <span class="pre">&quot;version&quot;,</span> <span class="pre">&quot;scientificMetadata&quot;,</span> <span class="pre">&quot;endTime&quot;]</span></code></p></li>
+<li><p><strong>metadata_fields_cannot_be_patched</strong> <em>(list&lt;str&gt;)</em> , default: <code class="docutils literal notranslate"><span class="pre">[]</span></code></p></li>
 </ul>
 <p>e.g.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">beamtime_dirs</span><span class="p">:</span>
