@@ -1,6 +1,6 @@
 FROM debian:trixie
 
-MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
+# MAINTAINER DESY, Jan Kotanski <jankotan@gmail.com>
 
 
 RUN apt-get update
@@ -10,7 +10,7 @@ RUN apt-get -qq update && apt-get -qq install -y libterm-readline-gnu-perl coreu
 RUN curl -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
 # RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian trixie main" -y
-RUN cd /etc/apt/sources.list.d && wget http://repos.pni-hdri.de/trixie-pni-hdri.list
+RUN cd /etc/apt/sources.list.d && wget http://repos.pni-hdri.de/trixie-pni-hdri.sources
 
 RUN apt-get -qq update && apt-get -qq -y dist-upgrade
 RUN apt-get -qq update && apt-get -qq install -y  apt-utils net-tools git python3-inotifyx python3-setuptools python3-pytest python3-yaml nxstools python3-requests python3-pytest-cov
