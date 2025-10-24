@@ -244,7 +244,7 @@ or in your pip environment by
 Debian and Ubuntu packages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Debian ``trixie``, ``bookworm``, ``bullseye`` or Ubuntu ``plucky``, ``noble``, ``jammy`` packages
+Debian ``trixie``, ``bookworm``, ``bullseye`` or Ubuntu ``questing``, ``noble``, ``jammy`` packages
 can be found in the HDRI repository.
 
 To install the debian packages, add the PGP repository key
@@ -260,7 +260,7 @@ and then download the corresponding source list, e.g. for ``trixie``
 ::
 
    cd /etc/apt/sources.list.d
-   wget http://repos.pni-hdri.de/trixie-pni-hdri.list
+   wget http://repos.pni-hdri.de/trixie-pni-hdri.sources
 
 or ``noble``
 
