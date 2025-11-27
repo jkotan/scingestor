@@ -234,6 +234,25 @@ apt-get update
 apt-get install python3-scingestor
 ```
 
+and
+
+```
+apt-get install scingestor-server
+```
+for systemd configuration files.
+
+
+### Launching scicat_dataset_ingestor as systemd service
+
+During installation of the `scingestor-server` debian package
+* the default configuration file is
+created, namely `/etc/scingestor/default.yaml`. The system administrator can edit the default configuration
+or create a new one e.g. `/etc/scingestor/p99config.yaml`
+* a new systemd service  `/usr/lib/systemd/system/scingestor.service`, is created  if the old one does not exist. The system administrator needs to edit the service file if the configuration file name is changed
+* After installing `scingestor-server` the system administrator starts the scingestor service via `systemctl start scingestor.service` and enables it via `systemctl enable scingestor.service`
+* the scigestor user is allowed to create and modify  `metadata_copy_map_file` and `metadata_group_map_file` by default located at
+`/home/p00user/.config/DESY/scingestor-metadata-copy-map.lst` and `/home/$USER/.config/DESY/scingestor-metadata-group-map.lst`,respectively
+
 ## Dataset list file content
 
 The scicat ingestor triggers its actions on append a new line in the dataset list file.
