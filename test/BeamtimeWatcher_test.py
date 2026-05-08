@@ -205,7 +205,9 @@ options:
                     "".join(self.helpinfo2.split()).replace(
                         "optionalarguments:", "options:"),
                     "".join(vl.split()).replace(
-                        "optionalarguments:", "options:"))
+                        "optionalarguments:", "options:").replace(
+                            "python3-mpytest",
+                            'scicat_dataset_ingestor'))
                 self.assertEqual('', er)
             else:
                 self.assertEqual(
@@ -226,7 +228,9 @@ options:
             self.assertEqual('', vl)
             self.assertEqual(
                 "".join(self.helpshort.split() + [hl]),
-                "".join(er.split()))
+                "".join(er.replace(
+                            "python3-mpytest",
+                            'scicat_dataset_ingestor').split()))
 
     def test_noconfig(self):
         # fun = sys._getframe().f_code.co_name
