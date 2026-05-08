@@ -280,9 +280,9 @@ options:
             self.assertEqual('', vl)
             self.assertEqual(
                 "".join(self.helpshort.split() + [hl]),
-                "".join(er.replace(
+                "".join(er.split()).replace(
                     "python3-mpytest",
-                    'scicat_dataset_ingest').split()))
+                    'scicat_dataset_ingest'))
 
     def test_datasetfile_exist(self):
         fun = sys._getframe().f_code.co_name
