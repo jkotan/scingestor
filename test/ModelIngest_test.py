@@ -270,7 +270,8 @@ options:
                     "".join(self.helpinfo2.split()).replace(
                         "optionalarguments:", "options:"),
                     "".join(vl.split()).replace(
-                        "optionalarguments:", "options:"))
+                        "optionalarguments:", "options:").replace(
+                            "python3-mpytest", 'scicat_ingest'))
             else:
                 self.assertEqual(
                     "".join(self.helpinfo.split()).replace(
@@ -290,7 +291,8 @@ options:
             self.assertEqual('', vl.strip())
             self.assertEqual(
                 "".join(self.helpshort.split() + [hl]),
-                "".join(er.split()))
+                "".join(er.split()).replace(
+                    "python3-mpytest", 'scicat_ingest'))
 
     def test_wrong_args2(self):
         # fun = sys._getframe().f_code.co_name
@@ -303,7 +305,8 @@ options:
             self.assertEqual('', vl.strip())
             self.assertEqual(
                 "".join(self.helpshort2.split()),
-                "".join(er.split()))
+                "".join(er.split()).replace(
+                    "python3-mpytest", 'scicat_ingest'))
 
     def test_wrong_args3(self):
         # fun = sys._getframe().f_code.co_name
@@ -314,7 +317,8 @@ options:
         self.assertEqual('', vl.strip())
         self.assertEqual(
             "".join(self.helpshort3.split()),
-            "".join(er.split()))
+            "".join(er.split()).replace(
+                "python3-mpytest", 'scicat_ingest'))
 
     def test_modelfile(self):
         fun = sys._getframe().f_code.co_name

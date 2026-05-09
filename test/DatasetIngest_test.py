@@ -258,7 +258,11 @@ options:
                     "".join(self.helpinfo2.split()).replace(
                         "optionalarguments:", "options:"),
                     "".join(vl.split()).replace(
-                        "optionalarguments:", "options:"))
+                        "optionalarguments:", "options:").replace(
+                            "python3-mpytest",
+                            'scicat_dataset_ingest').replace(
+                                "python3-munittest",
+                                'scicat_dataset_ingest'))
             else:
                 self.assertEqual(
                     "".join(self.helpinfo.split()).replace(
@@ -278,7 +282,11 @@ options:
             self.assertEqual('', vl)
             self.assertEqual(
                 "".join(self.helpshort.split() + [hl]),
-                "".join(er.split()))
+                "".join(er.split()).replace(
+                    "python3-mpytest",
+                    'scicat_dataset_ingest').replace(
+                        "python3-munittest",
+                        'scicat_dataset_ingest'))
 
     def test_datasetfile_exist(self):
         fun = sys._getframe().f_code.co_name

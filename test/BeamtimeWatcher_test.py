@@ -205,7 +205,11 @@ options:
                     "".join(self.helpinfo2.split()).replace(
                         "optionalarguments:", "options:"),
                     "".join(vl.split()).replace(
-                        "optionalarguments:", "options:"))
+                        "optionalarguments:", "options:").replace(
+                            "python3-mpytest",
+                            'scicat_dataset_ingestor').replace(
+                            "python3-munittest",
+                            'scicat_dataset_ingestor'))
                 self.assertEqual('', er)
             else:
                 self.assertEqual(
@@ -226,7 +230,11 @@ options:
             self.assertEqual('', vl)
             self.assertEqual(
                 "".join(self.helpshort.split() + [hl]),
-                "".join(er.split()))
+                "".join(er.split()).replace(
+                            "python3-mpytest",
+                            'scicat_dataset_ingestor').replace(
+                            "python3-munittest",
+                            'scicat_dataset_ingestor'))
 
     def test_noconfig(self):
         # fun = sys._getframe().f_code.co_name
@@ -824,18 +832,18 @@ options:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r4 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r8 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r4 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r8 -l debug'
                      % cfgfname).split()]
 
         def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
-            time.sleep(1)
+            time.sleep(2)
             shutil.copy(source, fdirname)
-            time.sleep(1)
+            time.sleep(2)
             os.remove(fullbtmeta)
-            time.sleep(1)
+            time.sleep(2)
             shutil.copy(source, fdirname)
 
         try:
@@ -1336,20 +1344,20 @@ options:
         cfgfname = "%s_%s.yaml" % (self.__class__.__name__, fun)
         with open(cfgfname, "w+") as cf:
             cf.write(cfg)
-        commands = [('scicat_dataset_ingestor -c %s -r5 --log debug'
+        commands = [('scicat_dataset_ingestor -c %s -r17 --log debug'
                      % cfgfname).split(),
-                    ('scicat_dataset_ingestor --config %s -r5 -l debug'
+                    ('scicat_dataset_ingestor --config %s -r17 -l debug'
                      % cfgfname).split()]
 
         def tst_thread():
             """ test thread which adds and removes beamtime metadata file """
-            time.sleep(1)
+            time.sleep(2)
             os.mkdir(fdirname)
-            time.sleep(1)
+            time.sleep(2)
             shutil.copy(source, fdirname)
-            time.sleep(1)
+            time.sleep(2)
             os.remove(fullbtmeta)
-            time.sleep(1)
+            time.sleep(2)
             shutil.copy(source, fdirname)
 
         try:
