@@ -238,14 +238,14 @@ class DatasetWatcher(threading.Thread):
                     if qid in self.__wd_to_path.keys():
                         # get_logger().info(
                         #     'Ds: %s %s %s' % (event.name,
-                        #                       event.masks,
+                        #                       event.mask,
                         #                       self._w_maid_to_path[qid]))
                         get_logger().debug(
                             'Ds: %s %s %s' % (event.name,
-                                              event.masks,
+                                              event.mask,
                                               self.__wd_to_path[qid]))
-                        masks = event.masks.split("|")
-                        if "IN_CLOSE_WRITE" in masks:
+                        masks = flags.from_mask(event.mask)
+                        if flags.CLOSE_WRITE in masks:
                             if event.name:
                                 fdir, fname = os.path.split(
                                     self.__wd_to_path[qid])
@@ -261,7 +261,7 @@ class DatasetWatcher(threading.Thread):
                                 except Exception as e:
                                     get_logger().warning(str(e))
                                     continue
-                        elif "IN_MODIFY" in masks or "IN_OPEN" in masks:
+                        elif flags.MODIFY in masks or flags.OPEN in masks:
                             if event.name:
                                 fdir, fname = os.path.split(
                                     self.__wd_to_path[qid])

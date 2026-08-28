@@ -299,20 +299,20 @@ class ScanDirWatcher(threading.Thread):
                         get_logger().debug(
                             'Sd: %s %s %s %s' % (qid,
                                                  event.name,
-                                                 event.masks,
+                                                 event.mask,
                                                  self.__wd_to_path[qid]))
-                        masks = event.masks.split("|")
+                        masks = flags.from_mask(event.mask)
                         if self.__watchscandirsubdir and \
-                                "IN_ISDIR" in masks and (
-                                "IN_CREATE" in masks
-                                or "IN_MOVE_TO" in masks):
+                                flags.ISDIR in masks and (
+                                flags.CREATE in masks
+                                or flags.MOVE_TO in masks):
                             npath = os.path.join(
                                 self.__wd_to_path[qid], event.name)
                             self._launch_scandir_watcher([npath])
-                        elif "IN_IGNORED" in masks or \
-                                "IN_MOVE_FROM" in masks or \
-                                "IN_DELETE" in masks or \
-                                "IN_MOVE_SELF" in masks:
+                        elif flags.IGNORED in masks or \
+                                flags.MOVE_FROM in masks or \
+                                flags.DELETE in masks or \
+                                flags.MOVE_SELF in masks:
                             # path/file does not exist anymore
                             #     (moved/deleted)
                             if event.name is not None:
@@ -333,8 +333,9 @@ class ScanDirWatcher(threading.Thread):
                                     get_logger().debug(
                                         "watcher for subdirectories launched")
 
-                        elif "IN_ISDIR" not in masks and (
-                                "IN_CREATE" in masks or "IN_MOVE_TO" in masks):
+                        elif flags.ISDIR not in masks and (
+                                flags.CREATE in masks or
+                                flags.MOVE_TO in masks):
                             fn = os.path.join(
                                 self.__wd_to_path[qid], event.name)
                             dw = None
@@ -376,14 +377,14 @@ class ScanDirWatcher(threading.Thread):
                                     ds = dds.pop()
                                     ds.join()
 
-                        elif "IN_ISDIR" in masks and (
-                                "IN_CREATE" in masks
-                                or "IN_MOVE_TO" in masks):
+                        elif flags.ISDIR in masks and (
+                                flags.CREATE in masks
+                                or flags.MOVE_TO in masks):
                             if not os.path.isfile(self.__dslist_fullname):
                                 npath = os.path.join(
                                     self.__wd_to_path[qid], event.name)
                                 self._launch_scandir_watcher([npath])
-                        # elif "IN_DELETE_SELF" in masks:
+                        # elif flags.DELETE_SELF in masks:
                         #     "remove scandir watcher"
                         #     # self.__wd_to_path[qid]
 
