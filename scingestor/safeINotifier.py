@@ -147,7 +147,7 @@ class SafeINotifier(threading.Thread):
     def run(self):
         """ scandir watcher thread
         """
-        self.__notifier = inotify_simple.INotify()
+        self.__notifier = inotify_simple.INotify(closefd=False)
         self.__notifierid = self.__notifier.fileno()
 
         try:
