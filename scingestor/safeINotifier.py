@@ -178,7 +178,7 @@ class SafeINotifier(threading.Thread):
                             # get_logger().info(
                             #     'SN: %s %s %s %s' % (
                             #         event.name,
-                            #         event.get_mask_description(),
+                            #         event.mask,
                             #         event.wd,
                             #         self.__qid_wd
                             #     ))
@@ -204,10 +204,10 @@ class SafeINotifier(threading.Thread):
                 except Exception as e:
                     get_logger().debug(
                         'SafeINotifier: finally %s' % str(e))
-            if self.__notifier:
+            if self.__notifierid:
                 try:
                     os.close(self.__notifierid)
-                    self.__notifier = None
+                    self.__notifierid = None
                 except OSError:
                     pass
 

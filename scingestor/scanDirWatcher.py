@@ -30,7 +30,6 @@ from .pathConverter import PathConverter
 from .logger import get_logger
 
 
-
 class ScanDirWatcher(threading.Thread):
     """ ScanDir Watcher
     """
