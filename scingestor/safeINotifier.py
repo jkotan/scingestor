@@ -148,7 +148,7 @@ class SafeINotifier(threading.Thread):
         """ scandir watcher thread
         """
         self.__notifier = inotify_simple.INotify()
-        self.__notifierid = self.__notifier.fileno
+        self.__notifierid = self.__notifier.fileno()
 
         try:
             while self.running:
@@ -171,7 +171,7 @@ class SafeINotifier(threading.Thread):
                             get_logger().debug(
                                 'SN: %s %s %s %s' % (
                                     event.name,
-                                    event.get_mask_description(),
+                                    event.masks,
                                     event.wd,
                                     self.__qid_wd
                                 ))
