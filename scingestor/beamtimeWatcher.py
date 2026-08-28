@@ -23,8 +23,9 @@ import json
 import threading
 import argparse
 import queue
-import inotifyx
 import pathlib
+
+from inotify_simple import flags, masks
 
 from .scanDirWatcher import ScanDirWatcher
 from .safeINotifier import SafeINotifier
@@ -172,7 +173,7 @@ class BeamtimeWatcher:
         self.__scandir_watchers = {}
         #: (:class:`threading.Lock`) scandir watcher dictionary lock
         self.__scandir_lock = threading.Lock()
-        #: (:obj:`float`) timeout value for inotifyx get events
+        #: (:obj:`float`) timeout value for inotify get events
         self.__timeout = 0.1
 
         if "get_event_timeout" in self.__config.keys():
@@ -252,10 +253,10 @@ class BeamtimeWatcher:
         try:
             wqueue, watch_descriptor = self.__notifier.add_watch(
                 path,
-                inotifyx.IN_CLOSE_WRITE | inotifyx.IN_DELETE |
-                inotifyx.IN_MOVE_SELF |
-                inotifyx.IN_ALL_EVENTS |
-                inotifyx.IN_MOVED_TO | inotifyx.IN_MOVED_FROM)
+                flags.CLOSE_WRITE | flags.DELETE |
+                flags.MOVE_SELF |
+                masks.ALL_EVENTS |
+                flags.MOVED_TO | flags.MOVED_FROM)
             self.__wd_to_path[watch_descriptor] = path
             self.__wd_to_queue[watch_descriptor] = wqueue
             get_logger().info('BeamtimeWatcher: Adding watch %s: %s'
@@ -283,11 +284,11 @@ class BeamtimeWatcher:
                     bpath = os.path.abspath()
                 bqueue, watch_descriptor = self.__notifier.add_watch(
                     bpath,
-                    inotifyx.IN_CREATE | inotifyx.IN_CLOSE_WRITE
-                    | inotifyx.IN_MOVED_TO
-                    | inotifyx.IN_MOVE_SELF
-                    | inotifyx.IN_DELETE
-                    | inotifyx.IN_ALL_EVENTS
+                    flags.CREATE | flags.CLOSE_WRITE
+                    | flags.MOVED_TO
+                    | flags.MOVE_SELF
+                    | flags.DELETE
+                    | masks.ALL_EVENTS
                 )
                 failing = False
                 self.__wd_to_bpath[watch_descriptor] = bpath

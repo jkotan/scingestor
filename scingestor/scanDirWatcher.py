@@ -22,12 +22,13 @@ import queue
 import socket
 import pathlib
 
+from inotify_simple import flags, masks
+
 from .datasetWatcher import DatasetWatcher
 from .safeINotifier import SafeINotifier
 from .pathConverter import PathConverter
 from .logger import get_logger
 
-import inotifyx
 
 
 class ScanDirWatcher(threading.Thread):
@@ -114,7 +115,7 @@ class ScanDirWatcher(threading.Thread):
         self.__dataset_watchers = {}
         #: (:class:`threading.Lock`) dataset watcher dictionary lock
         self.__dataset_lock = threading.Lock()
-        #: (:obj:`float`) timeout value for inotifyx get events
+        #: (:obj:`float`) timeout value for inotify get events
         self.__timeout = 0.1
 
         #: (:obj:`dict` <(:obj:`str`, :obj:`str`),
@@ -189,11 +190,11 @@ class ScanDirWatcher(threading.Thread):
         try:
             wqueue, watch_descriptor = self.__notifier.add_watch(
                 self.__conv.from_core(path),
-                inotifyx.IN_ALL_EVENTS |
-                inotifyx.IN_CLOSE_WRITE | inotifyx.IN_DELETE |
-                inotifyx.IN_MOVE_SELF |
-                inotifyx.IN_ALL_EVENTS |
-                inotifyx.IN_MOVED_TO | inotifyx.IN_MOVED_FROM)
+                flags.ALL_EVENTS |
+                flags.CLOSE_WRITE | flags.DELETE |
+                flags.MOVE_SELF |
+                masks.ALL_EVENTS |
+                flags.MOVED_TO | flags.MOVED_FROM)
             self.__wd_to_path[watch_descriptor] = path
             self.__wd_to_queue[watch_descriptor] = wqueue
             get_logger().info('ScanDirWatcher: Adding watch %s: %s'

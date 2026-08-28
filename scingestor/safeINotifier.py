@@ -19,7 +19,7 @@
 #
 import time
 import threading
-import inotifyx
+import inotify_simple
 import queue
 import os
 # import glob
@@ -27,25 +27,8 @@ import os
 from .logger import get_logger
 
 
-class EventData:
-    """ event data """
-
-    def __init__(self, name, masks):
-        """ constructor
-
-        :param name: name
-        :type name: :obj:`str`
-        :param masks: mask description
-        :type maks: :obj:`str`
-        """
-        #: (:obj:`str`) name
-        self.name = name
-        #: (:obj:`str`) mask
-        self.masks = masks
-
-
 class SafeINotifier(threading.Thread):
-    """ singleton wrapper for inotifyx
+    """ singleton wrapper for inotify
     """
 
     #: (:class:`SafeINotifier`) singleton notifier instance
@@ -76,11 +59,13 @@ class SafeINotifier(threading.Thread):
 
         #: (:obj:`int`) watch description queue counter
         self.id_queue_counter = 0
-        #: (:obj:`float`) timeout value for inotifyx get events
+        #: (:obj:`float`) timeout value for inotify get events
         self.inotify_timeout = 1.0
 
-        #: (:obj:`int`) notifier ID
+        #: (:class:`inotify_simple.INotify`) notifier object
         self.__notifier = None
+        #: (:obj:`int`) notifier id
+        self.__notifierid = None
         #: (:obj:`dict` <:obj:`int`, :obj:`queue.Queue`>)
         #: watch description queues
         self.__id_queue = {}
@@ -137,7 +122,7 @@ class SafeINotifier(threading.Thread):
         """
         for qid, path, masks in self.__wd_to_add:
             try:
-                wd = inotifyx.add_watch(self.__notifier, path, masks)
+                wd = self.__notifier.add_watch(path, masks)
                 self.__qid_wd[qid] = wd
 
             except Exception as e:
@@ -153,7 +138,7 @@ class SafeINotifier(threading.Thread):
                 wd = self.__qid_wd.pop(qid)
                 if wd not in self.__qid_wd.values():
                     try:
-                        inotifyx.rm_watch(self.__notifier, wd)
+                        self.__notifier.rm_watch(wd)
                     except Exception as e:
                         get_logger().debug(
                             'SafeINotifier: remove %s' % str(e))
@@ -162,7 +147,8 @@ class SafeINotifier(threading.Thread):
     def run(self):
         """ scandir watcher thread
         """
-        self.__notifier = inotifyx.init()
+        self.__notifier = inotify_simple.INotify()
+        self.__notifierid = self.__notifier.fileno
 
         try:
             while self.running:
@@ -174,8 +160,7 @@ class SafeINotifier(threading.Thread):
                 if not qlen:
                     time.sleep(self.inotify_timeout)
                 else:
-                    events = inotifyx.get_events(
-                        self.__notifier, self.inotify_timeout)
+                    events = self.__notifier.read(self.inotify_timeout)
                     with self.__id_queue_lock:
                         self._remove()
                         self._append()
@@ -202,14 +187,11 @@ class SafeINotifier(threading.Thread):
                                 if event.wd == wd and \
                                    qid in self.__id_queue.keys():
                                     wqueue = self.__id_queue[qid]
-                                    wqueue.put(
-                                        EventData(
-                                            event.name,
-                                            event.get_mask_description()))
+                                    wqueue.put(event)
                                     get_logger().debug(
                                         'PUT EVENT: %s %s %s %s' % (
                                             event.name,
-                                            event.get_mask_description(),
+                                            event.mask,
                                             event.wd, qid
                                         ))
 
@@ -218,13 +200,13 @@ class SafeINotifier(threading.Thread):
         finally:
             for wd in self.__qid_wd.values():
                 try:
-                    inotifyx.rm_watch(self.__notifier, wd)
+                    self.__notifier.rm_watch(wd)
                 except Exception as e:
                     get_logger().debug(
                         'SafeINotifier: finally %s' % str(e))
             if self.__notifier:
                 try:
-                    os.close(self.__notifier)
+                    os.close(self.__notifierid)
                     self.__notifier = None
                 except OSError:
                     pass

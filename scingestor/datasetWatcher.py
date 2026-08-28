@@ -21,7 +21,8 @@ import os
 import time
 import threading
 import queue
-import inotifyx
+
+from inotify_simple import flags, masks
 
 from .safeINotifier import SafeINotifier
 from .datasetIngestor import DatasetIngestor
@@ -101,7 +102,7 @@ class DatasetWatcher(threading.Thread):
         #:                              beamtime watch description paths
         self.__wd_to_queue = {}
 
-        #: (:obj:`float`) timeout value for inotifyx get events in s
+        #: (:obj:`float`) timeout value for inotify get events in s
         self.__timeout = 0.1
         #: (:obj:`float`) max count of recheck the dataset list
         self.__recheck_dslist_interval = 1000
@@ -149,13 +150,13 @@ class DatasetWatcher(threading.Thread):
         try:
             wqueue, watch_descriptor = self.__notifier.add_watch(
                 self.__conv.from_core(path),
-                inotifyx.IN_ALL_EVENTS |
-                inotifyx.IN_MODIFY |
-                inotifyx.IN_OPEN |
-                inotifyx.IN_CLOSE_WRITE | inotifyx.IN_DELETE |
-                inotifyx.IN_MOVE_SELF |
-                inotifyx.IN_ALL_EVENTS |
-                inotifyx.IN_MOVED_TO | inotifyx.IN_MOVED_FROM)
+                flags.ALL_EVENTS |
+                flags.MODIFY |
+                flags.OPEN |
+                flags.CLOSE_WRITE | flags.DELETE |
+                flags.MOVE_SELF |
+                masks.ALL_EVENTS |
+                flags.MOVED_TO | flags.MOVED_FROM)
             self.__wd_to_path[watch_descriptor] = path
             self.__wd_to_queue[watch_descriptor] = wqueue
             get_logger().info('DatasetWatcher: Adding watch %s: %s %s' % (
