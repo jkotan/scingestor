@@ -459,7 +459,7 @@ options:
                     self.assertEqual(
                         'INFO : BeamtimeWatcher: Adding watch {cnt1}: \0\n'
                         'WARNING : SafeINotifier: append  '
-                        '\0:\x00embedded null character\n'
+                        '\0:\x00[Errno 2] No such file or directory\n'
                         'INFO : BeamtimeWatcher: Removing watch 1: \0\n'
                         .format(cnt1=cnt).replace("\0", " "),
                         '\n'.join(dseri).replace("\0", " ").replace(
