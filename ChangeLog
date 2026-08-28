@@ -1,3 +1,7 @@
+2026-08-28 Jan Kotanski <jan.kotanski@desy.de>
+	* use inotify_simple instead of inotifyx (#342)
+	* tagged as 1.0.0
+
 2026-02-23 Jan Kotanski <jan.kotanski@desy.de>
 	* change http:// to https:// in scicat url (#337)
 	* tagged as 0.21.0
