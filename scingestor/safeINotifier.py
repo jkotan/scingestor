@@ -171,7 +171,7 @@ class SafeINotifier(threading.Thread):
                             get_logger().debug(
                                 'SN: %s %s %s %s' % (
                                     event.name,
-                                    event.masks,
+                                    event.mask,
                                     event.wd,
                                     self.__qid_wd
                                 ))
