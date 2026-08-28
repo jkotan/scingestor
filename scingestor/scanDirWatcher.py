@@ -189,7 +189,7 @@ class ScanDirWatcher(threading.Thread):
         try:
             wqueue, watch_descriptor = self.__notifier.add_watch(
                 self.__conv.from_core(path),
-                flags.ALL_EVENTS |
+                masks.ALL_EVENTS |
                 flags.CLOSE_WRITE | flags.DELETE |
                 flags.MOVE_SELF |
                 masks.ALL_EVENTS |
