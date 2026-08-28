@@ -374,7 +374,7 @@ class BeamtimeWatcher:
                         #                       self.__wd_to_path[qid]))
                         masks = flags.from_mask(event.mask)
                         if flags.IGNORED in masks or \
-                           flags.MOVE_FROM in masks or \
+                           flags.MOVED_FROM in masks or \
                            flags.DELETE in masks or \
                            flags.MOVE_SELF in masks:
                             # path/file does not exist anymore
@@ -416,7 +416,7 @@ class BeamtimeWatcher:
                             self._add_path(path)
 
                         elif flags.CREATE in masks or \
-                                flags.MOVE_TO in masks or \
+                                flags.MOVED_TO in masks or \
                                 flags.CLOSE_WRITE in masks:
 
                             files = [fl for fl in [event.name]
@@ -477,7 +477,7 @@ class BeamtimeWatcher:
                             self._add_path(path)
                         elif flags.ISDIR in masks and (
                                 flags.CREATE in masks or
-                                flags.MOVE_TO in masks):
+                                flags.MOVED_TO in masks):
                             if event.name:
                                 dr = os.path.abspath(os.path.join(
                                     self.__wd_to_bpath[qid], event.name))

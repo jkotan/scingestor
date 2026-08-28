@@ -305,12 +305,12 @@ class ScanDirWatcher(threading.Thread):
                         if self.__watchscandirsubdir and \
                                 flags.ISDIR in masks and (
                                 flags.CREATE in masks
-                                or flags.MOVE_TO in masks):
+                                or flags.MOVED_TO in masks):
                             npath = os.path.join(
                                 self.__wd_to_path[qid], event.name)
                             self._launch_scandir_watcher([npath])
                         elif flags.IGNORED in masks or \
-                                flags.MOVE_FROM in masks or \
+                                flags.MOVED_FROM in masks or \
                                 flags.DELETE in masks or \
                                 flags.MOVE_SELF in masks:
                             # path/file does not exist anymore
@@ -335,7 +335,7 @@ class ScanDirWatcher(threading.Thread):
 
                         elif flags.ISDIR not in masks and (
                                 flags.CREATE in masks or
-                                flags.MOVE_TO in masks):
+                                flags.MOVED_TO in masks):
                             fn = os.path.join(
                                 self.__wd_to_path[qid], event.name)
                             dw = None
@@ -379,7 +379,7 @@ class ScanDirWatcher(threading.Thread):
 
                         elif flags.ISDIR in masks and (
                                 flags.CREATE in masks
-                                or flags.MOVE_TO in masks):
+                                or flags.MOVED_TO in masks):
                             if not os.path.isfile(self.__dslist_fullname):
                                 npath = os.path.join(
                                     self.__wd_to_path[qid], event.name)
