@@ -23,8 +23,9 @@ import json
 import threading
 import argparse
 import queue
-import inotifyx
 import pathlib
+
+from inotify_simple import flags, masks
 
 from .scanDirWatcher import ScanDirWatcher
 from .safeINotifier import SafeINotifier
@@ -172,7 +173,7 @@ class BeamtimeWatcher:
         self.__scandir_watchers = {}
         #: (:class:`threading.Lock`) scandir watcher dictionary lock
         self.__scandir_lock = threading.Lock()
-        #: (:obj:`float`) timeout value for inotifyx get events
+        #: (:obj:`float`) timeout value for inotify get events
         self.__timeout = 0.1
 
         if "get_event_timeout" in self.__config.keys():
@@ -252,10 +253,10 @@ class BeamtimeWatcher:
         try:
             wqueue, watch_descriptor = self.__notifier.add_watch(
                 path,
-                inotifyx.IN_CLOSE_WRITE | inotifyx.IN_DELETE |
-                inotifyx.IN_MOVE_SELF |
-                inotifyx.IN_ALL_EVENTS |
-                inotifyx.IN_MOVED_TO | inotifyx.IN_MOVED_FROM)
+                flags.CLOSE_WRITE | flags.DELETE |
+                flags.MOVE_SELF |
+                masks.ALL_EVENTS |
+                flags.MOVED_TO | flags.MOVED_FROM)
             self.__wd_to_path[watch_descriptor] = path
             self.__wd_to_queue[watch_descriptor] = wqueue
             get_logger().info('BeamtimeWatcher: Adding watch %s: %s'
@@ -283,11 +284,11 @@ class BeamtimeWatcher:
                     bpath = os.path.abspath()
                 bqueue, watch_descriptor = self.__notifier.add_watch(
                     bpath,
-                    inotifyx.IN_CREATE | inotifyx.IN_CLOSE_WRITE
-                    | inotifyx.IN_MOVED_TO
-                    | inotifyx.IN_MOVE_SELF
-                    | inotifyx.IN_DELETE
-                    | inotifyx.IN_ALL_EVENTS
+                    flags.CREATE | flags.CLOSE_WRITE
+                    | flags.MOVED_TO
+                    | flags.MOVE_SELF
+                    | flags.DELETE
+                    | masks.ALL_EVENTS
                 )
                 failing = False
                 self.__wd_to_bpath[watch_descriptor] = bpath
@@ -365,17 +366,17 @@ class BeamtimeWatcher:
                     if qid in self.__wd_to_path.keys():
                         get_logger().debug(
                             'Bt: %s %s %s' % (event.name,
-                                              event.masks,
+                                              event.mask,
                                               self.__wd_to_path[qid]))
                         # get_logger().info(
                         #     'Bt: %s %s %s' % (event.name,
-                        #                       event.masks,
+                        #                       event.mask,
                         #                       self.__wd_to_path[qid]))
-                        masks = event.masks.split("|")
-                        if "IN_IGNORED" in masks or \
-                           "IN_MOVE_FROM" in masks or \
-                           "IN_DELETE" in masks or \
-                           "IN_MOVE_SELF" in masks:
+                        masks = flags.from_mask(event.mask)
+                        if flags.IGNORED in masks or \
+                           flags.MOVED_FROM in masks or \
+                           flags.DELETE in masks or \
+                           flags.MOVE_SELF in masks:
                             # path/file does not exist anymore
                             #     (moved/deleted)
                             path = self.__wd_to_path.pop(qid)
@@ -414,9 +415,9 @@ class BeamtimeWatcher:
                             get_logger().debug('add paths')
                             self._add_path(path)
 
-                        elif "IN_CREATE" in masks or \
-                             "IN_MOVE_TO" in masks or \
-                             "IN_CLOSE_WRITE" in masks:
+                        elif flags.CREATE in masks or \
+                                flags.MOVED_TO in masks or \
+                                flags.CLOSE_WRITE in masks:
 
                             files = [fl for fl in [event.name]
                                      if (fl.startswith(self.__bt_prefix) and
@@ -440,8 +441,8 @@ class BeamtimeWatcher:
 
                             get_logger().debug(
                                 'Start beamtime %s' % event.name)
-                        # elif "IN_DELETE" in masks or \
-                        #      "IN_MOVE_MOVE" in masks:
+                        # elif flags.DELETE in masks or \
+                        #      flags.MOVE_MOVE in masks:
                         #     " remove scandir_watcher "
 
                 for qid in list(self.__wd_to_bqueue.keys()):
@@ -458,24 +459,25 @@ class BeamtimeWatcher:
                     if qid in self.__wd_to_bpath.keys():
                         get_logger().debug(
                             'BB: %s %s %s' % (event.name,
-                                              event.masks,
+                                              event.mask,
                                               self.__wd_to_bpath[qid]))
                         # get_logger().info(
                         #     'BB: %s %s %s' % (event.name,
                         #                       event.masks,
                         #                       self.__wd_to_bpath[qid]))
-                        masks = event.masks.split("|")
+                        masks = flags.from_mask(event.mask)
                         if not self.__beamtime_base_dir:
                             # if event.name is not None:
                             bpath = self.__wd_to_bpath.pop(qid)
                             # npath = os.path.join(bpath, event.name)
-                            if "IN_IGNORED" not in \
-                               event.masks.split():
+                            if flags.IGNORED not in \
+                               event.mask.split():
                                 self.__notifier.rm_watch(qid)
                             path = self.__wait_for_dirs.pop(bpath)
                             self._add_path(path)
-                        elif "IN_ISDIR" in masks and (
-                                "IN_CREATE" in masks or "IN_MOVE_TO" in masks):
+                        elif flags.ISDIR in masks and (
+                                flags.CREATE in masks or
+                                flags.MOVED_TO in masks):
                             if event.name:
                                 dr = os.path.abspath(os.path.join(
                                     self.__wd_to_bpath[qid], event.name))

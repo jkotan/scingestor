@@ -43,7 +43,7 @@ install_requires = [
     'requests',
     'pyyaml',
     'h5py',
-    # 'inotify-py3',
+    # 'inotify_simple'
     # 'pytest',
     # 'sphinx',
 ]
