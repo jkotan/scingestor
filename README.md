@@ -146,7 +146,7 @@ Its configuration written YAML like for `scicat_dataset_ingestor`
 
 * python3 >= 3.7
 * nxstools >= 3.38.0
-* inotifyx (python3 version)
+* inotify_simple >= 2.0.1
 * requests
 * setuptools
 * pyyaml
