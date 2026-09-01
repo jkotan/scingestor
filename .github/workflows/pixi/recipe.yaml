@@ -51,7 +51,6 @@ tests:
         - scingestor.safeINotifier
         - scingestor.scanDirWatcher
       python_version:
-        - ${{ python_min }}.*
         - "*"
   - script:
       - if: unix or osx
@@ -64,7 +63,7 @@ tests:
           - scicat_ingest --help
     requirements:
       run:
-        - python ${{ python_min }}.*
+        - python
 
 
 about:
