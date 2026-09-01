@@ -58,7 +58,7 @@ jobs:
           manifest-path: .github/workflows/pixi/pixi.toml
           pixi-version: v0.66.0
           cache: false
-      - name: build pninexus
+      - name: run tests
         shell: bash
         run: |
           pixi add  --manifest-path .github/workflows/pixi/pixi.toml rattler-build compilers sphinx
