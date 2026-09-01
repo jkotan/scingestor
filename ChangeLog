@@ -1,3 +1,7 @@
+2026-09-01 Jan Kotanski <jan.kotanski@desy.de>
+	* remove h5py from requirements (#342)
+	* tagged as 1.0.1
+
 2026-08-28 Jan Kotanski <jan.kotanski@desy.de>
 	* use inotify_simple instead of inotifyx (#342)
 	* tagged as 1.0.0

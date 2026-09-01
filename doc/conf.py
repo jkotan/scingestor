@@ -114,7 +114,7 @@ intersphinx_mapping = {
     'https://numpy.org/doc/stable/': None,
     # 'http://pytango.readthedocs.io/en/stable': None,
     # 'https://pni-libraries.github.io/python-pninexus/stable': None,
-    'https://docs.h5py.org/en/stable': None,
+    # 'https://docs.h5py.org/en/stable': None,
     # 'https://pyqtgraph.readthedocs.io/en/latest': None,
     'https://pyzmq.readthedocs.io/en/stable': None,
     # 'https://docs.python-requests.org/en/master': None,
