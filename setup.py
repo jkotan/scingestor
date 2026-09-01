@@ -42,8 +42,8 @@ install_requires = [
     'nxstools>=3.56.0',
     'requests',
     'pyyaml',
-    'h5py',
-    # 'inotify_simple'
+    'inotify_simple>=2.0.1',
+    # 'h5py',
     # 'pytest',
     # 'sphinx',
 ]
