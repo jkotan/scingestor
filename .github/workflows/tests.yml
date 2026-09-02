@@ -20,7 +20,7 @@ jobs:
       - name: Run flake8
         run: flake8 .
 
-  python3_tests:
+  dpkg_tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -46,7 +46,7 @@ jobs:
       - name: Stop the docker
         run: docker container stop ndts
 
-  linux_pixi_tests:
+  pixi_ubuntu_tests:
     runs-on: ubuntu-latest
     container:
       image: debian:trixie
