@@ -45,3 +45,21 @@ jobs:
 
       - name: Stop the docker
         run: docker container stop ndts
+
+  linux_pixi_tests:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:trixie
+    steps:
+      - uses: actions/checkout@v4
+      - name: install pixi
+        uses: prefix-dev/setup-pixi@v0.10.2
+        with:
+          manifest-path: .github/workflows/pixi/pixi.toml
+          pixi-version: v0.66.0
+          cache: false
+      - name: run tests
+        shell: bash
+        run: |
+          pixi add  --manifest-path .github/workflows/pixi/pixi.toml rattler-build compilers sphinx
+          pixi run --manifest-path .github/workflows/pixi/pixi.toml rattler-build build  --recipe .github/workflows/pixi/recipe.yaml
