@@ -1831,6 +1831,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     'Login: myingestor\n'
+                    'Login: myingestor\n'
                     "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n"
                     'Login: myingestor\n'
@@ -1841,7 +1842,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     "OrigDatablocks: 99001234/myscan_00003\n"
                     "Datasets: 99001234/myscan_00004\n"
                     "OrigDatablocks: 99001234/myscan_00004\n", vl)
-                self.assertEqual(len(self.__server.userslogin), 3)
+                self.assertEqual(len(self.__server.userslogin), 4)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "myingestor", "password": "12342345"}')
@@ -2229,6 +2230,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     'Login: myingestor\n'
+                    'Login: myingestor\n'
                     "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n"
                     "Datasets Attachments: 99001234/myscan_00002\n"
@@ -2243,7 +2245,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     "Datasets: 99001234/myscan_00004\n"
                     "OrigDatablocks: 99001234/myscan_00004\n"
                     'Login: myingestor\n', vl)
-                self.assertEqual(len(self.__server.userslogin), 4)
+                self.assertEqual(len(self.__server.userslogin), 5)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "myingestor", "password": "12342345"}')
@@ -2441,7 +2443,7 @@ class DatasetWatcherTest(unittest.TestCase):
                 self.notifier = safeINotifier.SafeINotifier()
                 cnt = self.notifier.id_queue_counter + 1
                 self.__server.reset()
-                self.__server.error_requests = [3, 7]
+                self.__server.error_requests = [3, 8]
                 shutil.copy(lsource, fsubdirname2)
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
@@ -2643,8 +2645,10 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     'Login: myingestor\n'
+                    'Login: myingestor\n'
                     "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n"
+                    'Login: myingestor\n'
                     'Login: myingestor\n'
                     "Datasets: 99001234/myscan_00001\n"
                     "OrigDatablocks: 99001234/myscan_00001\n"
@@ -2657,7 +2661,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     "Datasets: 99001234/myscan_00004\n"
                     "OrigDatablocks: 99001234/myscan_00004\n"
                     "Datasets Attachments: 99001234/myscan_00004\n", vl)
-                self.assertEqual(len(self.__server.userslogin), 3)
+                self.assertEqual(len(self.__server.userslogin), 5)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "myingestor", "password": "12342345"}')
@@ -3028,6 +3032,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     'Login: myingestor\n'
+                    'Login: myingestor\n'
                     "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n"
                     'Login: myingestor\n'
@@ -3038,7 +3043,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     "OrigDatablocks: 99001234/myscan_00003\n"
                     "Datasets: 99001234/myscan_00004\n"
                     "OrigDatablocks: 99001234/myscan_00004\n", vl)
-                self.assertEqual(len(self.__server.userslogin), 3)
+                self.assertEqual(len(self.__server.userslogin), 4)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "myingestor", "password": "12342345"}')
@@ -3400,6 +3405,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     raise
                 self.assertEqual(
                     'Login: myingestor\n'
+                    'Login: myingestor\n'
                     "Datasets: 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n"
                     # 'Login: myingestor\n'
@@ -3410,7 +3416,7 @@ class DatasetWatcherTest(unittest.TestCase):
                     "OrigDatablocks: 99001234/myscan_00003\n"
                     "Datasets: 99001234/myscan_00004\n"
                     "OrigDatablocks: 99001234/myscan_00004\n", vl)
-                self.assertEqual(len(self.__server.userslogin), 2)
+                self.assertEqual(len(self.__server.userslogin), 3)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "myingestor", "password": "12342345"}')

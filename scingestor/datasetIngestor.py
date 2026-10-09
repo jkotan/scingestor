@@ -1134,7 +1134,7 @@ class DatasetIngestor:
                         break
         return status
 
-    def get_token(self):
+    def get_token(self, silent=False):
         """ provides ingestor token
 
         :returns: ingestor token
@@ -1169,13 +1169,11 @@ class DatasetIngestor:
             else:
                 raise Exception("%s" % response.text)
         except Exception as e:
-            get_logger().error(
-                'DatasetIngestor: %s' % (str(e)))
-            try:
-                token = self.get_token()
-                self.__headers["Authorization"] = "Bearer {}".format(token)
-            except Exception as e:
+            if not silent:
                 get_logger().error(
+                    'DatasetIngestor: %s' % (str(e)))
+            else:
+                get_logger().debug(
                     'DatasetIngestor: %s' % (str(e)))
         return ""
 
@@ -1516,10 +1514,10 @@ class DatasetIngestor:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
             try:
-                token = self.get_token()
+                token = self.get_token(silent=True)
                 self.__headers["Authorization"] = "Bearer {}".format(token)
             except Exception as e:
-                get_logger().error(
+                get_logger().debug(
                     'DatasetIngestor: %s' % (str(e)))
         return None
 
@@ -1548,10 +1546,10 @@ class DatasetIngestor:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
             try:
-                token = self.get_token()
+                token = self.get_token(silent=True)
                 self.__headers["Authorization"] = "Bearer {}".format(token)
             except Exception as e:
-                get_logger().error(
+                get_logger().debug(
                     'DatasetIngestor: %s' % (str(e)))
         return False
 
@@ -1587,10 +1585,10 @@ class DatasetIngestor:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
             try:
-                token = self.get_token()
+                token = self.get_token(silent=True)
                 self.__headers["Authorization"] = "Bearer {}".format(token)
             except Exception as e:
-                get_logger().error(
+                get_logger().debug(
                     'DatasetIngestor: %s' % (str(e)))
         return False
 
@@ -1618,10 +1616,10 @@ class DatasetIngestor:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
             try:
-                token = self.get_token()
+                token = self.get_token(silent=True)
                 self.__headers["Authorization"] = "Bearer {}".format(token)
             except Exception as e:
-                get_logger().error(
+                get_logger().debug(
                     'DatasetIngestor: %s' % (str(e)))
         return None
 
@@ -1651,10 +1649,10 @@ class DatasetIngestor:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
             try:
-                token = self.get_token()
+                token = self.get_token(silent=True)
                 self.__headers["Authorization"] = "Bearer {}".format(token)
             except Exception as e:
-                get_logger().error(
+                get_logger().debug(
                     'DatasetIngestor: %s' % (str(e)))
         return None
 
@@ -1682,10 +1680,10 @@ class DatasetIngestor:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
             try:
-                token = self.get_token()
+                token = self.get_token(silent=True)
                 self.__headers["Authorization"] = "Bearer {}".format(token)
             except Exception as e:
-                get_logger().error(
+                get_logger().debug(
                     'DatasetIngestor: %s' % (str(e)))
         return None
 
@@ -1715,10 +1713,10 @@ class DatasetIngestor:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
             try:
-                token = self.get_token()
+                token = self.get_token(silent=True)
                 self.__headers["Authorization"] = "Bearer {}".format(token)
             except Exception as e:
-                get_logger().error(
+                get_logger().debug(
                     'DatasetIngestor: %s' % (str(e)))
         return None
 
@@ -1739,7 +1737,12 @@ class DatasetIngestor:
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
-
+            try:
+                token = self.get_token(silent=True)
+                self.__headers["Authorization"] = "Bearer {}".format(token)
+            except Exception as e:
+                get_logger().debug(
+                    'DatasetIngestor: %s' % (str(e)))
         return pid
 
     def _ingest_rawdataset_metadata(self, metafile, token):
@@ -1773,6 +1776,12 @@ class DatasetIngestor:
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
+            try:
+                token = self.get_token(silent=True)
+                self.__headers["Authorization"] = "Bearer {}".format(token)
+            except Exception as e:
+                get_logger().debug(
+                    'DatasetIngestor: %s' % (str(e)))
         return None
 
     def _delete_origdatablocks(self, pid, token):
@@ -1794,6 +1803,12 @@ class DatasetIngestor:
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
+            try:
+                token = self.get_token(silent=True)
+                self.__headers["Authorization"] = "Bearer {}".format(token)
+            except Exception as e:
+                get_logger().debug(
+                    'DatasetIngestor: %s' % (str(e)))
         return ""
 
     def _delete_attachments(self, pid, token):
@@ -1818,6 +1833,12 @@ class DatasetIngestor:
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
+            try:
+                token = self.get_token(silent=True)
+                self.__headers["Authorization"] = "Bearer {}".format(token)
+            except Exception as e:
+                get_logger().debug(
+                    'DatasetIngestor: %s' % (str(e)))
         return ""
 
     def _update_attachments(self, tads, pid, token):
@@ -1861,6 +1882,12 @@ class DatasetIngestor:
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
+            try:
+                token = self.get_token(silent=True)
+                self.__headers["Authorization"] = "Bearer {}".format(token)
+            except Exception as e:
+                get_logger().debug(
+                    'DatasetIngestor: %s' % (str(e)))
         return dastatus
 
     def _ingest_origdatablock_metadata(self, metafile, pid, token):
@@ -1895,6 +1922,12 @@ class DatasetIngestor:
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
+            try:
+                token = self.get_token(silent=True)
+                self.__headers["Authorization"] = "Bearer {}".format(token)
+            except Exception as e:
+                get_logger().debug(
+                    'DatasetIngestor: %s' % (str(e)))
         return ""
 
     def _ingest_attachment_metadata(self, metafile, pid, token):
@@ -1934,6 +1967,12 @@ class DatasetIngestor:
         except Exception as e:
             get_logger().error(
                 'DatasetIngestor: %s' % (str(e)))
+            try:
+                token = self.get_token(silent=True)
+                self.__headers["Authorization"] = "Bearer {}".format(token)
+            except Exception as e:
+                get_logger().debug(
+                    'DatasetIngestor: %s' % (str(e)))
         return ""
 
     def ingest(self, scan, token):
