@@ -1140,8 +1140,10 @@ options:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
-                    "Datasets: 99001234/myscan_00001\n", vl)
-                self.assertEqual(len(self.__server.userslogin), 1)
+                    "Datasets: 99001234/myscan_00001\n"
+                    "Login: ingestor\n"
+                    "Login: ingestor\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 3)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
@@ -1352,8 +1354,9 @@ options:
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00001\n"
-                    "Datasets: 99001234/myscan_00002\n", vl)
-                self.assertEqual(len(self.__server.userslogin), 1)
+                    "Datasets: 99001234/myscan_00002\n"
+                    "Login: ingestor\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 2)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
@@ -2923,10 +2926,11 @@ options:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
+                    "Login: ingestor\n"
                     "OrigDatablocks: delete 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
-                self.assertEqual(len(self.__server.userslogin), 2)
+                self.assertEqual(len(self.__server.userslogin), 3)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
@@ -3108,7 +3112,7 @@ options:
                 shutil.copy(lsource,
                             os.path.join(fsubdirname2, "myscan_00002.txt"))
                 self.__server.reset()
-                self.__server.error_requests = [12, 14]
+                self.__server.error_requests = [12, 15]
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
 
@@ -3203,9 +3207,11 @@ options:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
+                    "Login: ingestor\n"
+                    "Login: ingestor\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
-                self.assertEqual(len(self.__server.userslogin), 2)
+                self.assertEqual(len(self.__server.userslogin), 4)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
@@ -4597,10 +4603,11 @@ options:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
+                    "Login: ingestor\n"
                     "OrigDatablocks: delete 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
-                self.assertEqual(len(self.__server.userslogin), 2)
+                self.assertEqual(len(self.__server.userslogin), 3)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
@@ -4878,10 +4885,11 @@ options:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
+                    "Login: ingestor\n"
                     "OrigDatablocks: delete 99001234/myscan_00002\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
-                self.assertEqual(len(self.__server.userslogin), 2)
+                self.assertEqual(len(self.__server.userslogin), 3)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
@@ -8533,7 +8541,7 @@ options:
                 shutil.copy(lsource, fsubdirname2)
                 shutil.copy(wlsource, fsubdirname)
                 self.__server.reset()
-                self.__server.error_requests = [3, 7]
+                self.__server.error_requests = [3, 9]
                 if os.path.exists(fidslist):
                     os.remove(fidslist)
                 vl, er = self.runtest(cmd)
@@ -8629,8 +8637,10 @@ options:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: ingestor\n"
+                    "Login: ingestor\n"
+                    "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00002\n", vl)
-                self.assertEqual(len(self.__server.userslogin), 1)
+                self.assertEqual(len(self.__server.userslogin), 3)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
@@ -8831,8 +8841,11 @@ options:
                             dslist=fdslist,
                             sc1='myscan_00001', sc2='myscan_00002'),
                     "\n".join(seri))
-                self.assertEqual("", vl)
-                self.assertEqual(len(self.__server.userslogin), 0)
+                self.assertEqual("Login: ingestor\n"
+                                 "Login: ingestor\n"
+                                 "Login: ingestor\n"
+                                 "Login: ingestor\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 4)
                 self.assertEqual(len(self.__server.datasets), 0)
                 self.assertEqual(len(self.__server.origdatablocks), 0)
                 if os.path.isdir(fsubdirname):
@@ -10424,8 +10437,12 @@ options:
                     "\n".join(seri))
                 self.assertEqual(
                     "Login: \n"
+                    "Login: \n"
+                    "Login: \n"
+                    "Login: \n"
+                    "Login: \n"
                     "Login: \n", vl)
-                self.assertEqual(len(self.__server.userslogin), 2)
+                self.assertEqual(len(self.__server.userslogin), 6)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "", "password": "12342345"}')

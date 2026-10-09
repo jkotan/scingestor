@@ -109,17 +109,17 @@ autoclass_content = 'both'
 # ]
 
 intersphinx_mapping = {
-    'https://docs.python.org/3/': None,
-    'https://scipy.github.io/devdocs': None,
-    'https://numpy.org/doc/stable/': None,
+    'python': ('https://docs.python.org/3/',  None),
+    'scipy': ('https://scipy.github.io/devdocs',  None),
+    'numpy': ('https://numpy.org/doc/stable/',  None),
     # 'http://pytango.readthedocs.io/en/stable': None,
     # 'https://pni-libraries.github.io/python-pninexus/stable': None,
     # 'https://docs.h5py.org/en/stable': None,
     # 'https://pyqtgraph.readthedocs.io/en/latest': None,
-    'https://pyzmq.readthedocs.io/en/stable': None,
+    'pyzmq': ('https://pyzmq.readthedocs.io/en/stable',  None),
     # 'https://docs.python-requests.org/en/master': None,
     # 'https://requests.readthedocs.io/en/master': None,
-    'https://requests.readthedocs.io/en/latest': None,
+    'requests': ('https://requests.readthedocs.io/en/latest',  None),
     # 'https://doc.qt.io/qtforpython/': None,
     # 'https://www.silx.org/doc/fabio/latest/': None,
     # 'https://pillow.readthedocs.io/en/stable/': None,
