@@ -3211,7 +3211,7 @@ options:
                     "Login: ingestor\n"
                     "OrigDatablocks: 99001234/myscan_00002\n",
                     vl)
-                self.assertEqual(len(self.__server.userslogin), )
+                self.assertEqual(len(self.__server.userslogin), 4)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
