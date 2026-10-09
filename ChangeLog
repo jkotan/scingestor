@@ -1,3 +1,7 @@
+2026-10-09 Jan Kotanski <jan.kotanski@desy.de>
+	* renew token on error (#353)
+	* tagged as 1.0.2
+
 2026-09-01 Jan Kotanski <jan.kotanski@desy.de>
 	* remove h5py from requirements (#342)
 	* tagged as 1.0.1
