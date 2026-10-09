@@ -6882,8 +6882,10 @@ class DatasetWatcherH5Test(unittest.TestCase):
                     print(er)
                     raise
                 self.assertEqual(
+                    "Login: ingestor\n"
+                    "Login: ingestor\n"
                     "Login: ingestor\n", vl)
-                self.assertEqual(len(self.__server.userslogin), 1)
+                self.assertEqual(len(self.__server.userslogin), 3)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
@@ -7216,8 +7218,12 @@ class DatasetWatcherH5Test(unittest.TestCase):
                 self.assertEqual(
                     "Login: ingestor\n"
                     "Datasets: 99001234/myscan_00001\n"
-                    "Datasets: 99001234/myscan_00002\n", vl)
-                self.assertEqual(len(self.__server.userslogin), 1)
+                    "Login: ingestor\n"
+                    "Login: ingestor\n"
+                    "Datasets: 99001234/myscan_00002\n"
+                    "Login: ingestor\n"
+                    "Login: ingestor\n", vl)
+                self.assertEqual(len(self.__server.userslogin), 5)
                 self.assertEqual(
                     self.__server.userslogin[0],
                     b'{"username": "ingestor", "password": "12342345"}')
