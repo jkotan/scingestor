@@ -27,14 +27,14 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "SCINGESTOR" "1" "Oct 09, 2026" "1.1" "SciCat Dataset Ingestor"
+.TH "SCINGESTOR" "1" "Oct 15, 2026" "1.2" "SciCat Dataset Ingestor"
 .SH NAME
 scingestor \- SciCat Dataset Ingestor Documentation
 .sp
-\fI\%\fP
-\fI\%\fP
-\fI\%\fP
-\fI\%\fP
+\X'tty: link https://github.com/jkotan/scingestor/actions'\fI\%\fP\X'tty: link'
+\X'tty: link https://jkotan.github.io/scingestor/index.html'\fI\%\fP\X'tty: link'
+\X'tty: link https://pypi.python.org/pypi/scingestor'\fI\%\fP\X'tty: link'
+\X'tty: link https://pypi.python.org/pypi/scingestor/'\fI\%\fP\X'tty: link'
 .sp
 The \fBscingestor\fP python package provides a support for scripts which
 ingest Datasets and OrigDatablocks into the SciCat metadata server.
@@ -45,11 +45,9 @@ is finished. It can be executed by
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 scicat_dataset_ingestor \-c ~/.scingestor.yaml
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .SS Configuration variables
@@ -234,25 +232,23 @@ e.g.
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 beamtime_dirs:
   \- \(dq{homepath}/gpfs/current\(dq
   \- \(dq{homepath}/gpfs/commissioning\(dq
 scicat_url: http://localhost:3000/api/v3
 ingestor_credential_file: \(dq{homepath}/gpfs/pwd\(dq
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .SS Pattern keywords for configuration variables
 .sp
 The  \fBdatasets_filename_pattern\fP, \fBingested_datasets_filename_pattern\fP  and \fBingestor_var_dir\fP can contain the \fI{beamtimeid}\fP and \fI{hostname}\fP keywords,  e.g. \fB\(dqscicat\-ingested\-datasets\-{beamtimeid}.lst\(dq\fP or \fB\(dqscicat\-ingested\-datasets\-{hostname}\-{beamtimeid}.lst\(dq\fP  which is instantiated during the ingestor execution.
 .sp
-Similarly, \fBfile_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBattachment_metadata_generator\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP, \fI{hiddenattributes}\fP, \fI{ext}\fP, “{masterfile}”, “{plotfile}”, “{masterscanname}”, “{entryname}”
+Similarly, \fBfile_dataset_metadata_generator\fP, \fBdataset_metadata_generator\fP, \fBdatablock_metadata_generator\fP,  \fBdatablock_metadata_stream_generator\fP, \fBdatablock_metadata_generator_scanpath_postfix\fP, \fBattachment_metadata_generator\fP, \fBchmod_generator_switch\fP, \fBrelative_path_generator_switch\fP  can contain the following keywords: \fI{beamtimeid}\fP , \fI{scanname}\fP, \fI{chmod}\fP, \fI{scanpath}\fP, \fI{metapath}\fP, \fI{relpath}\fP, \fI{beamtimeid}\fP, \fI{beamline}\fP, \fI{doiprefix}\fP, \fI{beamtimefile}\fP, \fI{scanpostfix}\fP, \fI{datablockpostfix}\fP, \fI{ownergroup}\fP, \fI{accessgroups}\fP, \fI{hostname}\fP, \fI{hiddenattributes}\fP, \fI{ext}\fP, \(dq{masterfile}\(dq, \(dq{plotfile}\(dq, \(dq{masterscanname}\(dq, \(dq{entryname}\(dq
 .sp
-The “{masterfile}” is either equal to   “{scanpath}/{scanname}.{ext}” or “{scanpath}/{scanname}/{scanname}.{ext}”. Also
-the “{plotfile}” is either equal to  “{scanpath}/{scanname}.{plotext}” or “{scanpath}/{scanname}/{scanname}.{plotext}”.
+The \(dq{masterfile}\(dq is either equal to   \(dq{scanpath}/{scanname}.{ext}\(dq or \(dq{scanpath}/{scanname}/{scanname}.{ext}\(dq. Also
+the \(dq{plotfile}\(dq is either equal to  \(dq{scanpath}/{scanname}.{plotext}\(dq or \(dq{scanpath}/{scanname}/{scanname}.{plotext}\(dq.
 .SH SCICAT_DATASET_INGEST
 .sp
 Re\-ingestion script for SciCat Datasets and OrigDatablocks is usually
@@ -260,11 +256,9 @@ launched at the end of the beamtime.
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 scicat_dataset_ingest \-c ~/.scingestor.yaml
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .sp
@@ -275,11 +269,9 @@ General ingestion script for SciCat Models could be used for manual scicat model
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 scicat_ingest  \-m Samples  \-c ~/.scingestor.yaml  ./metadata.json
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .sp
@@ -305,15 +297,13 @@ sphinx (to build the documentation)
 .UNINDENT
 .SS Install from sources
 .sp
-The code from \fI\%https://github.com/jkotan/scingestor\fP can be built with
+The code from \X'tty: link https://github.com/jkotan/scingestor'\fI\%https://github.com/jkotan/scingestor\fP\X'tty: link' can be built with
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
-python3 setup.py install
-.ft P
-.fi
+.EX
+python3 \-m pip install . \-vv \-\-no\-deps \-\-no\-build\-isolation
+.EE
 .UNINDENT
 .UNINDENT
 .sp
@@ -321,11 +311,9 @@ To build the documentation use
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
-python3 setup.py build_sphinx
-.ft P
-.fi
+.EX
+sphinx\-build doc build/sphinx/html
+.EE
 .UNINDENT
 .UNINDENT
 .sp
@@ -336,11 +324,9 @@ Finally, the package can be tested using
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 python3 \-m pytest test
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .SS Install in conda or pip environment
@@ -349,15 +335,14 @@ The code can be installed in your conda environment by
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 conda create \-n myenv python=3.9
 conda activate myenv
+conda config \-\-add channels conda\-forge
+conda config \-\-set channel_priority strict
 
-pip install inotifyx\-py3
-pip install scingestor
-.ft P
-.fi
+conda install scingestor
+.EE
 .UNINDENT
 .UNINDENT
 .sp
@@ -365,15 +350,13 @@ or in your pip environment by
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 python3 \-m venv myvenv
 \&. myvenv/bin/activate
 
-pip install inotifyx\-py3
+pip install inotify\-simple
 pip install scingestor
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .SS Debian and Ubuntu packages
@@ -385,13 +368,11 @@ To install the debian packages, add the PGP repository key
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 sudo su
 curl \-s http://repos.pni\-hdri.de/debian_repo.pub.gpg  | gpg \-\-no\-default\-keyring \-\-keyring gnupg\-ring:/etc/apt/trusted.gpg.d/debian\-hdri\-repo.gpg \-\-import
 chmod 644 /etc/apt/trusted.gpg.d/debian\-hdri\-repo.gpg
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .sp
@@ -399,12 +380,10 @@ and then download the corresponding source list, e.g.\ for \fBtrixie\fP
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 cd /etc/apt/sources.list.d
 wget http://repos.pni\-hdri.de/trixie\-pni\-hdri.sources
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .sp
@@ -412,12 +391,10 @@ or \fBnoble\fP
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 cd /etc/apt/sources.list.d
 wget http://repos.pni\-hdri.de/noble\-pni\-hdri.list
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .sp
@@ -427,19 +404,17 @@ Finally,
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 apt\-get update
 apt\-get install python3\-scingestor
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .SH DATASET LIST FILE CONTENT
 .sp
 The scicat ingestor triggers its actions on appending a new line in the dataset list file.
 The dataset list file is located in the scan directory and its filename is defined
-by \fBdatasets_filename_pattern\fP variable, i.e. by default “scicat\-datasets\-{beamtimeid}.lst”.
+by \fBdatasets_filename_pattern\fP variable, i.e. by default \(dqscicat\-datasets\-{beamtimeid}.lst\(dq.
 .sp
 By default the scan dataset metadata are fetched from the corresponding the master file with its filename given by <scanname>.<ext> where usually <ext> is \fInxs\fP or \fIfio\fP\&. The detector files related to the particular scan are placed in the <scanname> subdirectory and they are added to the scan origindatablock.
 .sp
@@ -478,7 +453,7 @@ The config/scmacros.py module provides sardana macros which help to start/stop t
 .UNINDENT
 .SS Sardana Measurement with SciCatAutoGrouping
 .sp
-Setting the \fBSciCatAutoGrouping\fP sardana environment variable to \fBTrue\fP we can switch on the autogrouping mode. In this mode scan metadata is grouped automatically into the measurement dataset and the measurement dataset updated after each scan. The name of measurement is taken from the base scanname after removing ScanID, e.g. for \fI<scanname>\fP = “mycalib2_00012” the measurement name is “mycalib2”
+Setting the \fBSciCatAutoGrouping\fP sardana environment variable to \fBTrue\fP we can switch on the autogrouping mode. In this mode scan metadata is grouped automatically into the measurement dataset and the measurement dataset updated after each scan. The name of measurement is taken from the base scanname after removing ScanID, e.g. for \fI<scanname>\fP = \(dqmycalib2_00012\(dq the measurement name is \(dqmycalib2\(dq
 .SH SCICAT_DATASET_INGESTOR
 .SS Description
 .sp
@@ -487,11 +462,9 @@ BeamtimeWatcher service SciCat Dataset ingestor.
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 scicat_dataset_ingestor [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG] [\-f LOGFILE] [\-t]
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -522,13 +495,11 @@ timestamps in logs
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 scicat_dataset_ingestor \-c ~/.scingestor.yaml
 
 scicat_dataset_ingestor \-c ~/.scingestor.yaml \-l debug
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .SH SCICAT_DATASET_INGEST
@@ -539,11 +510,9 @@ Re\-ingestion script for SciCat Datasets.
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 scicat_dataset_ingest [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG] [\-f LOGFILE] [\-t]
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -571,13 +540,11 @@ timestamps in logs
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 scicat_dataset_ingest \-c ~/.scingestor.yaml
 
 scicat_dataset_ingest \-c ~/.scingestor.yaml \-l debug
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .SH SCICAT_INGEST
@@ -588,11 +555,9 @@ Re\-ingestion script for SciCat Datasets.
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 scicat_ingest [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG] [\-f LOGFILE] [\-t] [\-p TOKENFILE]   metadata_json_file [metadata_json_file ...]
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -626,13 +591,11 @@ file with a user token
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 scicat_ingest \-m Samples \-c ~/.scingestor.yaml ./metadata.json
 
 scicat_ingest \-m Attachments \-c ~/.scingestor.yaml \-p ~/.mytoken.cfg ./metadata.json
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .SH SCINGESTOR PACKAGE
@@ -640,8 +603,8 @@ scicat_ingest \-m Attachments \-c ~/.scingestor.yaml \-p ~/.mytoken.cfg ./metada
 .SS scingestor.beamtimeWatcher module
 .INDENT 0.0
 .TP
-.B class  scingestor.beamtimeWatcher.BeamtimeWatcher(options)
-Bases: \fI\%object\fP
+.B class scingestor.beamtimeWatcher.BeamtimeWatcher(options)
+Bases: \X'tty: link https://docs.python.org/3/builtins/functions.html#object'\fI\%object\fP\X'tty: link'
 .sp
 Beamtime Watcher
 .sp
@@ -649,12 +612,12 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBoptions\fP (\fI\%argparse.Namespace\fP) – parser options
+\fBoptions\fP (\X'tty: link https://docs.python.org/3/library/argparse.html#argparse.Namespace'\fI\%argparse.Namespace\fP\X'tty: link') \-\- parser options
 .UNINDENT
 .INDENT 7.0
 .TP
 .B running
-(\fI\%bool\fP) running loop flag
+(\X'tty: link https://docs.python.org/3/builtins/functions.html#bool'\fI\%bool\fP\X'tty: link') running loop flag
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -674,7 +637,7 @@ the main program function
 .INDENT 7.0
 .TP
 .B Parameters
-\fBinterrupt\fP (\fI\%int\fP) – test interrupt flag: 1:keyboard, 2:signal
+\fBinterrupt\fP (\X'tty: link https://docs.python.org/3/builtins/functions.html#int'\fI\%int\fP\X'tty: link') \-\- test interrupt flag: 1:keyboard, 2:signal
 .UNINDENT
 .UNINDENT
 .SS scingestor.configuration module
@@ -685,14 +648,14 @@ load config file
 .INDENT 7.0
 .TP
 .B Parameters
-\fBconfigfile\fP (\fI\%str\fP) – configuration file name
+\fBconfigfile\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- configuration file name
 .UNINDENT
 .UNINDENT
 .SS scingestor.datasetIngest module
 .INDENT 0.0
 .TP
-.B class  scingestor.datasetIngest.DatasetIngest(options)
-Bases: \fI\%object\fP
+.B class scingestor.datasetIngest.DatasetIngest(options)
+Bases: \X'tty: link https://docs.python.org/3/builtins/functions.html#object'\fI\%object\fP\X'tty: link'
 .sp
 Dataset Ingest command
 .sp
@@ -700,7 +663,7 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBoptions\fP (\fI\%argparse.Namespace\fP) – parser options
+\fBoptions\fP (\X'tty: link https://docs.python.org/3/library/argparse.html#argparse.Namespace'\fI\%argparse.Namespace\fP\X'tty: link') \-\- parser options
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -716,8 +679,8 @@ the main program function
 .SS scingestor.datasetIngestor module
 .INDENT 0.0
 .TP
-.B class  scingestor.datasetIngestor.DatasetIngestor(configuration, path, dsfile, idsfile, meta, beamtimefile)
-Bases: \fI\%object\fP
+.B class scingestor.datasetIngestor.DatasetIngestor(configuration, path, dsfile, idsfile, meta, beamtimefile)
+Bases: \X'tty: link https://docs.python.org/3/builtins/functions.html#object'\fI\%object\fP\X'tty: link'
 .sp
 Dataset Ingestor
 .sp
@@ -727,23 +690,23 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – dictionary with the ingestor configuration
+\fBconfiguration\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#dict'\fI\%dict\fP\X'tty: link' <\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link', \fIany\fP>) \-\- dictionary with the ingestor configuration
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) – scan dir path
+\fBpath\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- scan dir path
 .IP \(bu 2
-\fBdsfile\fP (\fI\%str\fP) – file with a dataset list
+\fBdsfile\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- file with a dataset list
 .IP \(bu 2
-\fBdsfile\fP – file with a ingester dataset list
+\fBdsfile\fP \-\- file with a ingester dataset list
 .IP \(bu 2
-\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – beamtime configuration
+\fBmeta\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#dict'\fI\%dict\fP\X'tty: link' <\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link', \fIany\fP>) \-\- beamtime configuration
 .IP \(bu 2
-\fBbeamtimefile\fP (\fI\%str\fP) – beamtime filename
+\fBbeamtimefile\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- beamtime filename
 .IP \(bu 2
-\fBpidprefix\fP (\fI\%str\fP) – pidprefix
+\fBpidprefix\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- pidprefix
 .IP \(bu 2
-\fBingestorcred\fP (\fI\%str\fP) – ingestor credential
+\fBingestorcred\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- ingestor credential
 .IP \(bu 2
-\fBscicat_url\fP (\fI\%str\fP) – scicat_url
+\fBscicat_url\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- scicat_url
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -755,16 +718,16 @@ appends owner and access groups to beamtime
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – beamtime configuration
+\fBmeta\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#dict'\fI\%dict\fP\X'tty: link' <\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link', \fIany\fP>) \-\- beamtime configuration
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) – base file path
+\fBpath\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- base file path
 .UNINDENT
 .TP
 .B Returns
 updated beamtime configuration
 .TP
 .B Return type
-\fI\%dict\fP <\fI\%str\fP, \fIany\fP>
+\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#dict'\fI\%dict\fP\X'tty: link' <\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link', \fIany\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -792,7 +755,7 @@ provides ingestor token
 ingestor token
 .TP
 .B Return type
-\fI\%str\fP
+\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link'
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -804,9 +767,9 @@ ingest scan
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBscan\fP (\fI\%str\fP) – scan name
+\fBscan\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- scan name
 .IP \(bu 2
-\fBtoken\fP (\fI\%str\fP) – access token
+\fBtoken\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- access token
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -820,7 +783,7 @@ provides ingested datasets
 ingested datasets list
 .TP
 .B Return type
-\fI\%list\fP <\fI\%str\fP>
+\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#list'\fI\%list\fP\X'tty: link' <\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link'>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -832,11 +795,11 @@ re\-ingest scan
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBscan\fP (\fI\%str\fP) – scan name
+\fBscan\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- scan name
 .IP \(bu 2
-\fBtoken\fP (\fBbook\fP) – access token
+\fBtoken\fP (\fBbook\fP) \-\- access token
 .IP \(bu 2
-\fBtoken\fP – no tmp file flag
+\fBtoken\fP \-\- no tmp file flag
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -847,7 +810,7 @@ start measurement
 .INDENT 7.0
 .TP
 .B Parameters
-\fBmeasurement\fP (\fI\%str\fP) – measurement name
+\fBmeasurement\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- measurement name
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -870,44 +833,44 @@ provides waitings datasets
 waitings datasets list
 .TP
 .B Return type
-\fI\%list\fP <\fI\%str\fP>
+\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#list'\fI\%list\fP\X'tty: link' <\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link'>
 .UNINDENT
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
-.B class  scingestor.datasetIngestor.UpdateStrategy(value, names=None, *, module=None, qualname=None, type=None, start=1, boundary=None)
-Bases: \fI\%Enum\fP
+.B class scingestor.datasetIngestor.UpdateStrategy(value, names=<not given>, *values, module=None, qualname=None, type=None, start=1, boundary=None)
+Bases: \X'tty: link https://docs.python.org/3/library/enum.html#enum.Enum'\fI\%Enum\fP\X'tty: link'
 .sp
 Update strategy
 .INDENT 7.0
 .TP
-.B CREATE  =  2
+.B CREATE = 2
 (\fI\%scingestor.datasetIngestor.UpdateStrategy\fP) recreate datasets
 .UNINDENT
 .INDENT 7.0
 .TP
-.B MIXED  =  3
+.B MIXED = 3
 (\fI\%scingestor.datasetIngestor.UpdateStrategy\fP) patch datasets only
 if scientificMetadata changed otherwise recreate datasets
 .UNINDENT
 .INDENT 7.0
 .TP
-.B NO  =  0
+.B NO = 0
 (\fI\%scingestor.datasetIngestor.UpdateStrategy\fP)
 leave datasets unchanged
 .UNINDENT
 .INDENT 7.0
 .TP
-.B PATCH  =  1
+.B PATCH = 1
 (\fI\%scingestor.datasetIngestor.UpdateStrategy\fP) patch datasets
 .UNINDENT
 .UNINDENT
 .SS scingestor.datasetWatcher module
 .INDENT 0.0
 .TP
-.B class  scingestor.datasetWatcher.DatasetWatcher(configuration, path, dsfile, idsfile, meta, beamtimefile)
-Bases: \fI\%Thread\fP
+.B class scingestor.datasetWatcher.DatasetWatcher(configuration, path, dsfile, idsfile, meta, beamtimefile)
+Bases: \X'tty: link https://docs.python.org/3/library/threading.html#threading.Thread'\fI\%Thread\fP\X'tty: link'
 .sp
 Dataset  Watcher
 .sp
@@ -917,17 +880,17 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – dictionary with the ingestor configuration
+\fBconfiguration\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#dict'\fI\%dict\fP\X'tty: link' <\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link', \fIany\fP>) \-\- dictionary with the ingestor configuration
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) – scan dir path
+\fBpath\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- scan dir path
 .IP \(bu 2
-\fBdsfile\fP (\fI\%str\fP) – file with a dataset list
+\fBdsfile\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- file with a dataset list
 .IP \(bu 2
-\fBdsfile\fP – file with a ingester dataset list
+\fBdsfile\fP \-\- file with a ingester dataset list
 .IP \(bu 2
-\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – beamtime configuration
+\fBmeta\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#dict'\fI\%dict\fP\X'tty: link' <\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link', \fIany\fP>) \-\- beamtime configuration
 .IP \(bu 2
-\fBbeamtimefile\fP (\fI\%str\fP) – beamtime filename
+\fBbeamtimefile\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- beamtime filename
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -938,7 +901,7 @@ scandir watcher thread
 .INDENT 7.0
 .TP
 .B running
-(\fI\%bool\fP) running loop flag
+(\X'tty: link https://docs.python.org/3/builtins/functions.html#bool'\fI\%bool\fP\X'tty: link') running loop flag
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -949,8 +912,8 @@ stop the watcher
 .SS scingestor.logger module
 .INDENT 0.0
 .TP
-.B class  scingestor.logger.AccSecFormatter(fmt=None, datefmt=None, style=\(aq%\(aq, validate=True, *, defaults=None)
-Bases: \fI\%Formatter\fP
+.B class scingestor.logger.AccSecFormatter(fmt=None, datefmt=None, style=\(aq%\(aq, validate=True, *, defaults=None)
+Bases: \X'tty: link https://docs.python.org/3/library/logging.html#logging.Formatter'\fI\%Formatter\fP\X'tty: link'
 .sp
 micro\-second formatter
 .sp
@@ -961,16 +924,16 @@ default as described above. Allow for specialized date formatting with
 the optional datefmt argument. If datefmt is omitted, you get an
 ISO8601\-like (or RFC 3339\-like) format.
 .sp
-Use a style parameter of ‘%’, ‘{’ or ‘$’ to specify that you want to
-use one of %\-formatting, \fI\%str.format()\fP (\fB{}\fP) formatting or
-\fI\%string.Template\fP formatting in your format string.
+Use a style parameter of \(aq%\(aq, \(aq{\(aq or \(aq$\(aq to specify that you want to
+use one of %\-formatting, \X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str.format'\fI\%str.format()\fP\X'tty: link' (\fB{}\fP) formatting or
+\X'tty: link https://docs.python.org/3/library/string.html#string.Template'\fI\%string.Template\fP\X'tty: link' formatting in your format string.
 .sp
 Changed in version 3.2: Added the \fBstyle\fP parameter.
 
 .INDENT 7.0
 .TP
 .B converter()
-timestamp[, tz] \-> tz’s local time from POSIX timestamp.
+timestamp[, tz] \-> tz\(aqs local time from POSIX timestamp.
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -986,10 +949,10 @@ record. Otherwise, an ISO8601\-like (or RFC 3339\-like) format is used.
 The resulting string is returned. This function uses a user\-configurable
 function to convert the creation time to a tuple. By default,
 time.localtime() is used; to change this for a particular formatter
-instance, set the ‘converter’ attribute to a function with the same
+instance, set the \(aqconverter\(aq attribute to a function with the same
 signature as time.localtime() or time.gmtime(). To change it for all
 formatters, for example if you want all logging times to be shown in GMT,
-set the ‘converter’ attribute in the Formatter class.
+set the \(aqconverter\(aq attribute in the Formatter class.
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -1014,21 +977,21 @@ init logger
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBname\fP (\fI\%str\fP) – logger name
+\fBname\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- logger name
 .IP \(bu 2
-\fBlevel\fP (\fI\%str\fP) – logging level
+\fBlevel\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- logging level
 .IP \(bu 2
-\fBtimestamps\fP (\fI\%bool\fP) – timestamps flag
+\fBtimestamps\fP (\X'tty: link https://docs.python.org/3/builtins/functions.html#bool'\fI\%bool\fP\X'tty: link') \-\- timestamps flag
 .IP \(bu 2
-\fBlogfile\fP (\fI\%str\fP) – logger file name
+\fBlogfile\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- logger file name
 .UNINDENT
 .UNINDENT
 .UNINDENT
 .SS scingestor.modelIngest module
 .INDENT 0.0
 .TP
-.B class  scingestor.modelIngest.ModelIngest(options)
-Bases: \fI\%object\fP
+.B class scingestor.modelIngest.ModelIngest(options)
+Bases: \X'tty: link https://docs.python.org/3/builtins/functions.html#object'\fI\%object\fP\X'tty: link'
 .sp
 Dataset Ingest command
 .sp
@@ -1036,7 +999,7 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBoptions\fP (\fI\%argparse.Namespace\fP) – parser options
+\fBoptions\fP (\X'tty: link https://docs.python.org/3/library/argparse.html#argparse.Namespace'\fI\%argparse.Namespace\fP\X'tty: link') \-\- parser options
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -1048,7 +1011,7 @@ provides ingestor token
 ingestor token
 .TP
 .B Return type
-\fI\%str\fP
+\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link'
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1065,8 +1028,8 @@ the main program function
 .SS scingestor.pathConverter module
 .INDENT 0.0
 .TP
-.B class  scingestor.pathConverter.PathConverter(corepath, blpath, usecorepath=False)
-Bases: \fI\%object\fP
+.B class scingestor.pathConverter.PathConverter(corepath, blpath, usecorepath=False)
+Bases: \X'tty: link https://docs.python.org/3/builtins/functions.html#object'\fI\%object\fP\X'tty: link'
 .sp
 Path Converter
 .sp
@@ -1076,11 +1039,11 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBcorepath\fP (\fI\%str\fP) – core path
+\fBcorepath\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- core path
 .IP \(bu 2
-\fBblpath\fP (\fI\%str\fP) – beamline path
+\fBblpath\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- beamline path
 .IP \(bu 2
-\fBusecorepath\fP (\fI\%bool\fP) – enabled flag
+\fBusecorepath\fP (\X'tty: link https://docs.python.org/3/builtins/functions.html#bool'\fI\%bool\fP\X'tty: link') \-\- enabled flag
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1090,13 +1053,13 @@ converts core path to notify path
 .INDENT 7.0
 .TP
 .B Parameters
-\fBpath\fP (\fI\%str\fP) – core path
+\fBpath\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- core path
 .TP
 .B Returns
 notify path
 .TP
 .B Return type
-\fI\%str\fP
+\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link'
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1106,21 +1069,21 @@ converts notify path to core path
 .INDENT 7.0
 .TP
 .B Parameters
-\fBpath\fP (\fI\%str\fP) – notify path
+\fBpath\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- notify path
 .TP
 .B Returns
 core path
 .TP
 .B Return type
-\fI\%str\fP
+\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link'
 .UNINDENT
 .UNINDENT
 .UNINDENT
 .SS scingestor.safeINotifier module
 .INDENT 0.0
 .TP
-.B class  scingestor.safeINotifier.SafeINotifier(*args, **kwargs)
-Bases: \fI\%Thread\fP
+.B class scingestor.safeINotifier.SafeINotifier(*args, **kwargs)
+Bases: \X'tty: link https://docs.python.org/3/library/threading.html#threading.Thread'\fI\%Thread\fP\X'tty: link'
 .sp
 singleton wrapper for inotify
 .sp
@@ -1133,7 +1096,7 @@ class is implemented.
 method. Defaults to None, meaning nothing is called.
 .sp
 \fIname\fP is the thread name. By default, a unique name is constructed of
-the form “Thread\-N” where N is a small decimal number.
+the form \(dqThread\-N\(dq where N is a small decimal number.
 .sp
 \fIargs\fP is a list or tuple of arguments for the target invocation. Defaults to ().
 .sp
@@ -1152,22 +1115,22 @@ add watch to notifier
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) – watch path
+\fBpath\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- watch path
 .IP \(bu 2
-\fBmask\fP (\fI\%int\fP) – watch mask
+\fBmask\fP (\X'tty: link https://docs.python.org/3/builtins/functions.html#int'\fI\%int\fP\X'tty: link') \-\- watch mask
 .UNINDENT
 .TP
 .B Returns
 queue providing events and its id
 .TP
 .B Return type
-[\fI\%queue.Queue\fP, \fI\%int\fP]
+[\X'tty: link https://docs.python.org/3/library/queue.html#queue.Queue'\fI\%queue.Queue\fP\X'tty: link', \X'tty: link https://docs.python.org/3/builtins/functions.html#int'\fI\%int\fP\X'tty: link']
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
-.B daemon  =  True
-(\fI\%bool\fP) make notifier to be a daemon
+.B daemon = True
+(\X'tty: link https://docs.python.org/3/builtins/functions.html#bool'\fI\%bool\fP\X'tty: link') make notifier to be a daemon
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -1181,7 +1144,7 @@ remove watch from notifier
 .INDENT 7.0
 .TP
 .B Parameters
-\fBqid\fP (\fI\%int\fP) – queue id
+\fBqid\fP (\X'tty: link https://docs.python.org/3/builtins/functions.html#int'\fI\%int\fP\X'tty: link') \-\- queue id
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1198,8 +1161,8 @@ stop the watcher
 .SS scingestor.scanDirWatcher module
 .INDENT 0.0
 .TP
-.B class  scingestor.scanDirWatcher.ScanDirWatcher(configuration, path, meta, beamtimefile, depth)
-Bases: \fI\%Thread\fP
+.B class scingestor.scanDirWatcher.ScanDirWatcher(configuration, path, meta, beamtimefile, depth)
+Bases: \X'tty: link https://docs.python.org/3/library/threading.html#threading.Thread'\fI\%Thread\fP\X'tty: link'
 .sp
 ScanDir Watcher
 .sp
@@ -1209,15 +1172,15 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBconfiguration\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – dictionary with the ingestor configuration
+\fBconfiguration\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#dict'\fI\%dict\fP\X'tty: link' <\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link', \fIany\fP>) \-\- dictionary with the ingestor configuration
 .IP \(bu 2
-\fBpath\fP (\fI\%str\fP) – scan dir path
+\fBpath\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- scan dir path
 .IP \(bu 2
-\fBmeta\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) – beamtime configuration
+\fBmeta\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#dict'\fI\%dict\fP\X'tty: link' <\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link', \fIany\fP>) \-\- beamtime configuration
 .IP \(bu 2
-\fBbeamtimefile\fP (\fI\%str\fP) – beamtime file
+\fBbeamtimefile\fP (\X'tty: link https://docs.python.org/3/builtins/stdtypes.html#str'\fI\%str\fP\X'tty: link') \-\- beamtime file
 .IP \(bu 2
-\fBdepth\fP (\fI\%int\fP) – scandir depth level
+\fBdepth\fP (\X'tty: link https://docs.python.org/3/builtins/functions.html#int'\fI\%int\fP\X'tty: link') \-\- scandir depth level
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1228,7 +1191,7 @@ scandir watcher thread
 .INDENT 7.0
 .TP
 .B running
-(\fI\%bool\fP) running loop flag
+(\X'tty: link https://docs.python.org/3/builtins/functions.html#bool'\fI\%bool\fP\X'tty: link') running loop flag
 .UNINDENT
 .INDENT 7.0
 .TP

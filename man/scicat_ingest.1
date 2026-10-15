@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "SCICAT_INGEST" "1" "Oct 09, 2026" "1.1" "SciCat Dataset Ingestor"
+.TH "SCICAT_INGEST" "1" "Oct 15, 2026" "1.2" "SciCat Dataset Ingestor"
 .SH NAME
 scicat_ingest \- General ingest script to upload SciCat Samples or Instruments
 .SH DESCRIPTION
@@ -37,11 +37,9 @@ Re\-ingestion script for SciCat Datasets.
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 scicat_ingest [\-h] [\-c CONFIG] [\-r RUNTIME] [\-l LOG] [\-f LOGFILE] [\-t] [\-p TOKENFILE]   metadata_json_file [metadata_json_file ...]
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -75,13 +73,11 @@ file with a user token
 .INDENT 0.0
 .INDENT 3.5
 .sp
-.nf
-.ft C
+.EX
 scicat_ingest \-m Samples \-c ~/.scingestor.yaml ./metadata.json
 
 scicat_ingest \-m Attachments \-c ~/.scingestor.yaml \-p ~/.mytoken.cfg ./metadata.json
-.ft P
-.fi
+.EE
 .UNINDENT
 .UNINDENT
 .SH AUTHOR

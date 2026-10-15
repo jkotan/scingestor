@@ -1,0 +1,6 @@
+# Site settings
+title: scingestor
+email: jan.kotanski@desy.de
+description: "scingestor"
+
+include: ['_sources', '_static', '_images', '_modules']

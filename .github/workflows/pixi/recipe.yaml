@@ -1,7 +1,7 @@
 schema_version: 1
 
 context:
-  version: "1.0.1"
+  version: "1.2.0"
 
 package:
   name: scingestor
@@ -13,7 +13,7 @@ source:
 build:
   number: 0
   script:
-    - python setup.py install
+    - python -m pip install . -vv --no-deps --no-build-isolation
     - python -m pytest test
 
 requirements:

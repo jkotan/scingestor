@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+rm -rf build/sphinx/man/
+mkdir -p doc/_static
+sphinx-build  doc build/sphinx/man -b man
+cp -r build/sphinx/man/* man
+

@@ -159,14 +159,14 @@ Its configuration written YAML like for `scicat_dataset_ingestor`
 The code from https://github.com/jkotan/scingestor can be built with
 
 ```
-python3 setup.py install
+python3 -m pip install . -vv --no-deps --no-build-isolation
 ```
 
 
 To build the documentation use
 
 ```
-python3 setup.py build_sphinx
+sphinx-build doc build/sphinx/html
 ```
 
 The resulting documentation can be found below `build/sphinx/html` in the root
@@ -184,9 +184,10 @@ The code can be installed in your conda environment by
 ```
 conda create -n myenv python=3.9
 conda activate myenv
+conda config --add channels conda-forge
+conda config --set channel_priority strict
 
-pip install inotifyx-py3
-pip install scingestor
+conda install scingestor
 ```
 
 or in your pip environment by
@@ -194,7 +195,7 @@ or in your pip environment by
 python3 -m venv myvenv
 . myvenv/bin/activate
 
-pip install inotifyx-py3
+pip install inotify-simple
 pip install scingestor
 ```
 
