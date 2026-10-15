@@ -1,28 +1,25 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 1.1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <title>Scicat Dataset Ingestor &#8212; SciCat Dataset Ingestor 1.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <script src="_static/documentation_options.js?v=6efca38a"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="scicat_dataset_ingestor" href="scicat_dataset_ingestor.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -35,7 +32,7 @@
           <div class="body" role="main">
             
   <section id="scicat-dataset-ingestor">
-<h1>Scicat Dataset Ingestor<a class="headerlink" href="#scicat-dataset-ingestor" title="Permalink to this heading">¶</a></h1>
+<h1>Scicat Dataset Ingestor<a class="headerlink" href="#scicat-dataset-ingestor" title="Link to this heading">¶</a></h1>
 <p><a class="reference external" href="https://github.com/jkotan/scingestor/actions"><img alt="" src="https://github.com/jkotan/scingestor/actions/workflows/tests.yml/badge.svg" /></a>
 <a class="reference external" href="https://jkotan.github.io/scingestor/index.html"><img alt="" src="https://img.shields.io/badge/Documentation-webpages-ADD8E6.svg" /></a>
 <a class="reference external" href="https://pypi.python.org/pypi/scingestor"><img alt="" src="https://img.shields.io/pypi/v/scingestor.svg" /></a>
@@ -43,14 +40,14 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">scingestor</span></code> python package provides a support for scripts which
 ingest Datasets and OrigDatablocks into the SciCat metadata server.</p>
 <section id="id1">
-<h2>scicat_dataset_ingestor<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h2>
+<h2>scicat_dataset_ingestor<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
 <p>SciCat Dataset ingestor server ingests scan metadata just after a scan
 is finished. It can be executed by</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scicat_dataset_ingestor</span> <span class="o">-</span><span class="n">c</span> <span class="o">~/.</span><span class="n">scingestor</span><span class="o">.</span><span class="n">yaml</span>
 </pre></div>
 </div>
 <section id="configuration-variables">
-<h3>Configuration variables<a class="headerlink" href="#configuration-variables" title="Permalink to this heading">¶</a></h3>
+<h3>Configuration variables<a class="headerlink" href="#configuration-variables" title="Link to this heading">¶</a></h3>
 <p>The configuration written in YAML can contain the following variables</p>
 <ul class="simple">
 <li><p><strong>scicat_url</strong> <em>(str)</em> , default: <code class="docutils literal notranslate"><span class="pre">&quot;http://localhost:3000/api/v3&quot;</span></code></p></li>
@@ -150,7 +147,7 @@ is finished. It can be executed by</p>
 </div>
 </section>
 <section id="pattern-keywords-for-configuration-variables">
-<h3>Pattern keywords for configuration variables<a class="headerlink" href="#pattern-keywords-for-configuration-variables" title="Permalink to this heading">¶</a></h3>
+<h3>Pattern keywords for configuration variables<a class="headerlink" href="#pattern-keywords-for-configuration-variables" title="Link to this heading">¶</a></h3>
 <p>The  <strong>datasets_filename_pattern</strong>, <strong>ingested_datasets_filename_pattern</strong>  and <strong>ingestor_var_dir</strong> can contain the <em>{beamtimeid}</em> and <em>{hostname}</em> keywords,  e.g. <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{beamtimeid}.lst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;scicat-ingested-datasets-{hostname}-{beamtimeid}.lst&quot;</span></code>  which is instantiated during the ingestor execution.</p>
 <p>Similarly, <strong>file_dataset_metadata_generator</strong>, <strong>dataset_metadata_generator</strong>, <strong>datablock_metadata_generator</strong>,  <strong>datablock_metadata_stream_generator</strong>, <strong>datablock_metadata_generator_scanpath_postfix</strong>, <strong>attachment_metadata_generator</strong>, <strong>chmod_generator_switch</strong>, <strong>relative_path_generator_switch</strong>  can contain the following keywords: <em>{beamtimeid}</em> , <em>{scanname}</em>, <em>{chmod}</em>, <em>{scanpath}</em>, <em>{metapath}</em>, <em>{relpath}</em>, <em>{beamtimeid}</em>, <em>{beamline}</em>, <em>{doiprefix}</em>, <em>{beamtimefile}</em>, <em>{scanpostfix}</em>, <em>{datablockpostfix}</em>, <em>{ownergroup}</em>, <em>{accessgroups}</em>, <em>{hostname}</em>, <em>{hiddenattributes}</em>, <em>{ext}</em>, “{masterfile}”, “{plotfile}”, “{masterscanname}”, “{entryname}”</p>
 <p>The “{masterfile}” is either equal to   “{scanpath}/{scanname}.{ext}” or “{scanpath}/{scanname}/{scanname}.{ext}”. Also
@@ -158,7 +155,7 @@ the “{plotfile}” is either equal to  “{scanpath}/{scanname}.{plotext}” o
 </section>
 </section>
 <section id="scicat-dataset-ingest">
-<h2>scicat_dataset_ingest<a class="headerlink" href="#scicat-dataset-ingest" title="Permalink to this heading">¶</a></h2>
+<h2>scicat_dataset_ingest<a class="headerlink" href="#scicat-dataset-ingest" title="Link to this heading">¶</a></h2>
 <p>Re-ingestion script for SciCat Datasets and OrigDatablocks is usually
 launched at the end of the beamtime.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scicat_dataset_ingest</span> <span class="o">-</span><span class="n">c</span> <span class="o">~/.</span><span class="n">scingestor</span><span class="o">.</span><span class="n">yaml</span>
@@ -167,14 +164,14 @@ launched at the end of the beamtime.</p>
 <p>Its configuration written YAML like for <code class="docutils literal notranslate"><span class="pre">scicat_dataset_ingestor</span></code></p>
 </section>
 <section id="scicat-ingest">
-<h2>scicat_ingest<a class="headerlink" href="#scicat-ingest" title="Permalink to this heading">¶</a></h2>
+<h2>scicat_ingest<a class="headerlink" href="#scicat-ingest" title="Link to this heading">¶</a></h2>
 <p>General ingestion script for SciCat Models could be used for manual scicat model ingestion, e.g. Sample, Instrument or DerivedDataset.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scicat_ingest</span>  <span class="o">-</span><span class="n">m</span> <span class="n">Samples</span>  <span class="o">-</span><span class="n">c</span> <span class="o">~/.</span><span class="n">scingestor</span><span class="o">.</span><span class="n">yaml</span>  <span class="o">./</span><span class="n">metadata</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
 <p>Its configuration written YAML like for <code class="docutils literal notranslate"><span class="pre">scicat_dataset_ingestor</span></code></p>
 <section id="required-packages">
-<h3>Required packages<a class="headerlink" href="#required-packages" title="Permalink to this heading">¶</a></h3>
+<h3>Required packages<a class="headerlink" href="#required-packages" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>python3 &gt;= 3.7</p></li>
 <li><p>nxstools &gt;= 3.38.0</p></li>
@@ -187,13 +184,13 @@ launched at the end of the beamtime.</p>
 </ul>
 </section>
 <section id="install-from-sources">
-<h3>Install from sources<a class="headerlink" href="#install-from-sources" title="Permalink to this heading">¶</a></h3>
+<h3>Install from sources<a class="headerlink" href="#install-from-sources" title="Link to this heading">¶</a></h3>
 <p>The code from <a class="reference external" href="https://github.com/jkotan/scingestor">https://github.com/jkotan/scingestor</a> can be built with</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">.</span> <span class="o">-</span><span class="n">vv</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">build</span><span class="o">-</span><span class="n">isolation</span>
 </pre></div>
 </div>
 <p>To build the documentation use</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build_sphinx</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sphinx</span><span class="o">-</span><span class="n">build</span> <span class="n">doc</span> <span class="n">build</span><span class="o">/</span><span class="n">sphinx</span><span class="o">/</span><span class="n">html</span>
 </pre></div>
 </div>
 <p>The resulting documentation can be found below <code class="docutils literal notranslate"><span class="pre">build/sphinx/html</span></code> in
@@ -204,26 +201,27 @@ the root directory of the source distribution.</p>
 </div>
 </section>
 <section id="install-in-conda-or-pip-environment">
-<h3>Install in conda or pip environment<a class="headerlink" href="#install-in-conda-or-pip-environment" title="Permalink to this heading">¶</a></h3>
+<h3>Install in conda or pip environment<a class="headerlink" href="#install-in-conda-or-pip-environment" title="Link to this heading">¶</a></h3>
 <p>The code can be installed in your conda environment by</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">myenv</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span>
 <span class="n">conda</span> <span class="n">activate</span> <span class="n">myenv</span>
+<span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="n">add</span> <span class="n">channels</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
+<span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="nb">set</span> <span class="n">channel_priority</span> <span class="n">strict</span>
 
-<span class="n">pip</span> <span class="n">install</span> <span class="n">inotifyx</span><span class="o">-</span><span class="n">py3</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">scingestor</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="n">scingestor</span>
 </pre></div>
 </div>
 <p>or in your pip environment by</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">myvenv</span>
 <span class="o">.</span> <span class="n">myvenv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
 
-<span class="n">pip</span> <span class="n">install</span> <span class="n">inotifyx</span><span class="o">-</span><span class="n">py3</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">inotify</span><span class="o">-</span><span class="n">simple</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">scingestor</span>
 </pre></div>
 </div>
 </section>
 <section id="debian-and-ubuntu-packages">
-<h3>Debian and Ubuntu packages<a class="headerlink" href="#debian-and-ubuntu-packages" title="Permalink to this heading">¶</a></h3>
+<h3>Debian and Ubuntu packages<a class="headerlink" href="#debian-and-ubuntu-packages" title="Link to this heading">¶</a></h3>
 <p>Debian <code class="docutils literal notranslate"><span class="pre">trixie</span></code>, <code class="docutils literal notranslate"><span class="pre">bookworm</span></code>, <code class="docutils literal notranslate"><span class="pre">bullseye</span></code> or Ubuntu <code class="docutils literal notranslate"><span class="pre">questing</span></code>, <code class="docutils literal notranslate"><span class="pre">noble</span></code>, <code class="docutils literal notranslate"><span class="pre">jammy</span></code> packages
 can be found in the HDRI repository.</p>
 <p>To install the debian packages, add the PGP repository key</p>
@@ -251,7 +249,7 @@ can be found in the HDRI repository.</p>
 </section>
 </section>
 <section id="dataset-list-file-content">
-<h2>Dataset list file content<a class="headerlink" href="#dataset-list-file-content" title="Permalink to this heading">¶</a></h2>
+<h2>Dataset list file content<a class="headerlink" href="#dataset-list-file-content" title="Link to this heading">¶</a></h2>
 <p>The scicat ingestor triggers its actions on appending a new line in the dataset list file.
 The dataset list file is located in the scan directory and its filename is defined
 by <strong>datasets_filename_pattern</strong> variable, i.e. by default “scicat-datasets-{beamtimeid}.lst”.</p>
@@ -267,10 +265,10 @@ by <strong>datasets_filename_pattern</strong> variable, i.e. by default “scica
 </ul>
 </section>
 <section id="measurment-datasets-which-group-scan-metadata">
-<h2>Measurment Datasets which group scan metadata<a class="headerlink" href="#measurment-datasets-which-group-scan-metadata" title="Permalink to this heading">¶</a></h2>
+<h2>Measurment Datasets which group scan metadata<a class="headerlink" href="#measurment-datasets-which-group-scan-metadata" title="Link to this heading">¶</a></h2>
 <p>The <cite>__command__ start &lt;measurement&gt;</cite> and <cite>__command__ stop</cite> allow to pass information to scicat ingestor which scan datasets should be grouped into the measurement dataset, i.e. by default of scan datasets between start and stop commands are grouped to the one measurement.</p>
 <section id="sardana-measurement-macros">
-<h3>Sardana Measurement macros<a class="headerlink" href="#sardana-measurement-macros" title="Permalink to this heading">¶</a></h3>
+<h3>Sardana Measurement macros<a class="headerlink" href="#sardana-measurement-macros" title="Link to this heading">¶</a></h3>
 <p>The config/scmacros.py module provides sardana macros which help to start/stop the measurement</p>
 <ul class="simple">
 <li><p><strong>start_measurement &lt;measurement&gt;</strong> starts a new measurment with the given name</p></li>
@@ -281,13 +279,13 @@ by <strong>datasets_filename_pattern</strong> variable, i.e. by default “scica
 </ul>
 </section>
 <section id="sardana-measurement-with-scicatautogrouping">
-<h3>Sardana Measurement with SciCatAutoGrouping<a class="headerlink" href="#sardana-measurement-with-scicatautogrouping" title="Permalink to this heading">¶</a></h3>
+<h3>Sardana Measurement with SciCatAutoGrouping<a class="headerlink" href="#sardana-measurement-with-scicatautogrouping" title="Link to this heading">¶</a></h3>
 <p>Setting the <strong>SciCatAutoGrouping</strong> sardana environment variable to <code class="docutils literal notranslate"><span class="pre">True</span></code> we can switch on the autogrouping mode. In this mode scan metadata is grouped automatically into the measurement dataset and the measurement dataset updated after each scan. The name of measurement is taken from the base scanname after removing ScanID, e.g. for <cite>&lt;scanname&gt;</cite> = “mycalib2_00012” the measurement name is “mycalib2”</p>
 </section>
 </section>
 </section>
 <section id="contents">
-<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this heading">¶</a></h1>
+<h1>Contents<a class="headerlink" href="#contents" title="Link to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -422,7 +420,7 @@ by <strong>datasets_filename_pattern</strong> variable, i.e. by default “scica
 </div>
 </section>
 <section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h1>
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
@@ -435,27 +433,38 @@ by <strong>datasets_filename_pattern</strong> variable, i.e. by default “scica
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="#">SciCat Dataset Ingestor</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="scicat_dataset_ingestor.html">scicat_dataset_ingestor</a></li>
-<li class="toctree-l1"><a class="reference internal" href="scicat_dataset_ingest.html">scicat_dataset_ingest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="scicat_ingest.html">scicat_ingest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="scingestor.html">scingestor package</a></li>
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Scicat Dataset Ingestor</a><ul>
+<li><a class="reference internal" href="#id1">scicat_dataset_ingestor</a><ul>
+<li><a class="reference internal" href="#configuration-variables">Configuration variables</a></li>
+<li><a class="reference internal" href="#pattern-keywords-for-configuration-variables">Pattern keywords for configuration variables</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#scicat-dataset-ingest">scicat_dataset_ingest</a></li>
+<li><a class="reference internal" href="#scicat-ingest">scicat_ingest</a><ul>
+<li><a class="reference internal" href="#required-packages">Required packages</a></li>
+<li><a class="reference internal" href="#install-from-sources">Install from sources</a></li>
+<li><a class="reference internal" href="#install-in-conda-or-pip-environment">Install in conda or pip environment</a></li>
+<li><a class="reference internal" href="#debian-and-ubuntu-packages">Debian and Ubuntu packages</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dataset-list-file-content">Dataset list file content</a></li>
+<li><a class="reference internal" href="#measurment-datasets-which-group-scan-metadata">Measurment Datasets which group scan metadata</a><ul>
+<li><a class="reference internal" href="#sardana-measurement-macros">Sardana Measurement macros</a></li>
+<li><a class="reference internal" href="#sardana-measurement-with-scicatautogrouping">Sardana Measurement with SciCatAutoGrouping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contents">Contents</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
-<div class="relations">
+  </div><div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
@@ -463,7 +472,7 @@ by <strong>datasets_filename_pattern</strong> variable, i.e. by default “scica
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -471,26 +480,30 @@ by <strong>datasets_filename_pattern</strong> variable, i.e. by default “scica
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-
-
-
-
-
-
-
-
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><p>
+  <h3 class='versions'>Versions</h3>
+  <p>
+    <ul>
+      <li><a class="reference external" href="index/../../latest/index.html">v:latest</a></li>
+      <li><a class="reference external" href="index/../../stable/index.html">v:stable</a></li>
+      
+      <li><a class="reference external" href="index/../../v1.2.0/index.html">v1.2.0</a></li>
+      <li><a class="reference external" href="index/../../v1.1.0/index.html">v1.1.0</a></li>
+      
+    </ul>
+  </p>
+</p>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2022, DESY, Jan Kotanski.
+      &#169;2022, DESY, Jan Kotanski.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
       |
       <a href="_sources/index.rst.txt"
