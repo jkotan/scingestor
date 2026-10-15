@@ -1,3 +1,7 @@
+2026-10-15 Jan Kotanski <jan.kotanski@desy.de>
+	* add pyproject.toml (#356)
+	* tagged as 1.2.0
+
 2026-10-09 Jan Kotanski <jan.kotanski@desy.de>
 	* renew token on error (#353)
 	* tagged as 1.1.0

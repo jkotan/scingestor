@@ -3,7 +3,14 @@
 
 echo "install scicat-dataset-ingestor"
 docker exec  --user root ndts chown -R scuser:scuser .
-docker exec ndts python3 setup.py build
-if [ "$?" != "0" ]; then exit 255; fi
-docker exec  --user root ndts python3 setup.py install
-if [ "$?" != "0" ]; then exit 255; fi
+docker exec ndts mkdir build
+if [ "$1" = "ubuntu22.04" ] ; then
+    docker exec --user root ndts python3 -m pip install . -vv  --no-deps --no-build-isolation
+else
+    docker exec --user root ndts python3 -m pip install . -vv  --no-deps --no-build-isolation  --break-system-packages --root-user-action=ignore
+fi    
+# if [ "$?" != "0" ]; then exit 255; fi
+echo "build scingestor docs"
+docker exec ndts mkdir doc/_static
+docker exec ndts sphinx-build  doc build/sphinx/html
+if [ "$1" != "ubuntu26.04" ] && [ "$?" != "0" ]; then exit 255; fi

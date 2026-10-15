@@ -23,7 +23,9 @@ import sys
 from setuptools import setup
 # from setuptools.command.build_py import build_py
 # from distutils.core import setup
-from distutils.core import Command
+# from distutils.core import Command
+from importlib.util import module_from_spec, spec_from_file_location
+from pathlib import Path
 
 try:
     from sphinx.setup_command import BuildDoc
@@ -32,7 +34,6 @@ except Exception:
 
 
 PKG = "scingestor"
-IPKG = __import__(PKG)
 
 needs_pytest = set(['test']).intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if needs_pytest else []
@@ -48,6 +49,13 @@ install_requires = [
     # 'sphinx',
 ]
 
+def get_version():
+    path = Path(__file__).parent / "scingestor" / "__init__.py"
+    spec = spec_from_file_location("scingestor", path.as_posix())
+    module = module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
 
 def read(fname):
     """reading a file
@@ -59,30 +67,7 @@ def read(fname):
         return fl.read()
 
 
-class TestCommand(Command):
-    """ test command class
-    """
-
-    #: user options
-    user_options = []
-
-    #: initializes options
-    def initialize_options(self):
-        pass
-
-    #: finalizes options
-    def finalize_options(self):
-        pass
-
-    #: runs command
-    def run(self):
-        import sys
-        import subprocess
-        errno = subprocess.call([sys.executable, 'test'])
-        raise SystemExit(errno)
-
-
-release = IPKG.__version__
+release = get_version().__version__
 version = ".".join(release.split(".")[:2])
 name = "SciCat Dataset Ingestor"
 author = "Jan Kotanski",
@@ -91,7 +76,7 @@ glicense = "GNU GENERAL PUBLIC LICENSE, version 3"
 #: metadata for distutils
 SETUPDATA = dict(
     name="scingestor",
-    version=IPKG.__version__,
+    version=get_version().__version__,
     author=author,
     author_email="jankotan@gmail.com",
     maintainer="Jan Kotanski",
@@ -107,10 +92,10 @@ SETUPDATA = dict(
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: Physics',
         'Topic :: Software Development :: Libraries :: Python Modules',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
+        # 'Programming Language :: Python :: 3',
+        # 'Programming Language :: Python :: 3.7',
+        # 'Programming Language :: Python :: 3.8',
+        # 'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
@@ -129,7 +114,6 @@ SETUPDATA = dict(
                 ('share/scingestor', ['config/format_default.sh'])
                 ],
     cmdclass={
-        # 'test': TestCommand,
         'build_sphinx': BuildDoc
     },
     zip_safe=False,

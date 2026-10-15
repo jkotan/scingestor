@@ -16,6 +16,9 @@ import sys
 #
 if os.path.isfile('conf.py'):
     sys.path.insert(0, os.path.abspath('..'))
+    import scingestor
+    version = ".".join(scingestor.__version__.split(".")[:2])
+    release = scingestor.__version__
 
 
 # -- Project information -----------------------------------------------------
@@ -67,6 +70,28 @@ html_theme = 'alabaster'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+
+# Custom sidebar templates, maps document names to template names.
+html_sidebars = {
+    '**': [
+        'localtoc.html',
+        # 'relations.html',
+        # 'searchbox.html',
+        # located at _templates/
+    ]
+}
+#html_sidebars = {}
+
+if os.getenv("NXSTOOLS_HIDE_VERSIONS") != 'TRUE':
+    html_sidebars['**'].append('versions.html')
+
+html_context = {
+    "docs_versions" : [
+        "v1.2.0",
+        "v1.1.0",
+    ]
+}
 
 master_doc = 'index'
 
