@@ -56,7 +56,7 @@ jobs:
              docker  exec ndts /bin/bash -c "mkdir -p ./latest && shopt -u dotglob && rm -rf ./latest/*"
              docker  exec ndts /bin/bash -c "mv -f build/sphinx/html/* ./latest/"
              docker  exec ndts /bin/bash -c "mv -f build/index.html build/_config.yml ."
-             docker  exec --user root ndts /bin/bash -c "rm -rf build test scingestor  dist  scingestor.egg-info testresult.txt"
+             docker  exec --user root ndts /bin/bash -c "rm -rf build test scingestor  dist  scingestor.egg-info testresult.txt *.log*"
 
       - name: Extract the code version from the branch name
         if: startsWith(github.ref, 'refs/heads/docs_') && matrix.os == 'debian13'
@@ -72,7 +72,7 @@ jobs:
              docker  exec ndts /bin/bash -c "git fetch && git checkout gh-pages && git pull"
              docker  exec ndts /bin/bash -c "mkdir -p ./${{ steps.extract_docver.outputs.docver }} && shopt -u dotglob && rm -rf ./${{ steps.extract_docver.outputs.docver }}/* "
              docker  exec ndts /bin/bash -c "mv -f build/sphinx/html/* ./${{ steps.extract_docver.outputs.docver }}"
-             docker  exec --user root ndts /bin/bash -c "rm -rf build test scingestor  dist  scingestor.egg-info  testresult.txt"
+             docker  exec --user root ndts /bin/bash -c "rm -rf build test scingestor  dist  scingestor.egg-info  testresult.txt *.log*"
 
       - name: Deploy documentation
         if: (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/docs_'))  &&  matrix.os == 'debian13'
