@@ -81,13 +81,13 @@ html_sidebars = {
         # located at _templates/
     ]
 }
-#html_sidebars = {}
+# html_sidebars = {}
 
 if os.getenv("NXSTOOLS_HIDE_VERSIONS") != 'TRUE':
     html_sidebars['**'].append('versions.html')
 
 html_context = {
-    "docs_versions" : [
+    "docs_versions": [
         "v1.2.0",
         "v1.1.0",
     ]

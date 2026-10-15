@@ -49,6 +49,7 @@ install_requires = [
     # 'sphinx',
 ]
 
+
 def get_version():
     path = Path(__file__).parent / "scingestor" / "__init__.py"
     spec = spec_from_file_location("scingestor", path.as_posix())
