@@ -50,6 +50,7 @@ jobs:
       - name: Append documentation for the latest release version
         if: (github.ref == 'refs/heads/main' ||  github.ref == 'refs/heads/issue_355') &&  matrix.os == 'debian13'
         run: |
+             docker  exec --user root ndts /bin/bash -c "rm -rf .coverage .cache  *.log*"
              docker  exec ndts /bin/bash -c "cp doc/index.html doc/_config.yml build"
              docker  exec ndts /bin/bash -c "git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
              docker  exec ndts /bin/bash -c "git fetch && git checkout gh-pages && git pull"
@@ -68,6 +69,7 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/docs_') &&  matrix.os == 'debian13'
         run: |
              echo Version: ${{ steps.extract_docver.outputs.docver }}
+             docker  exec --user root ndts /bin/bash -c "rm -rf .coverage .cache  *.log*"
              docker  exec ndts /bin/bash -c "git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
              docker  exec ndts /bin/bash -c "git fetch && git checkout gh-pages && git pull"
              docker  exec ndts /bin/bash -c "mkdir -p ./${{ steps.extract_docver.outputs.docver }} && shopt -u dotglob && rm -rf ./${{ steps.extract_docver.outputs.docver }}/* "
