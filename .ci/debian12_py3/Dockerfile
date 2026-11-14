@@ -7,10 +7,10 @@ RUN apt-get update
 RUN apt-get install -y base-passwd apt-utils dialog -y
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN apt-get -qq update && apt-get -qq install -y libterm-readline-gnu-perl software-properties-common coreutils gnupg2 procps curl apt-transport-https gnupg2 ca-certificates wget
-RUN curl --retry 20 -v -s http://repos.pni-hdri.de/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
+RUN curl --retry 20 -v -s https://repos.desy.de/pni-hdri/debian_repo.pub.gpg  | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/debian-hdri-repo.gpg --import
 RUN chmod 644 /etc/apt/trusted.gpg.d/debian-hdri-repo.gpg
-# RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian bookworm main" -y
-RUN cd /etc/apt/sources.list.d && wget http://repos.pni-hdri.de/bookworm-pni-hdri.sources
+# RUN add-apt-repository "deb https://repos.desy.de/pni-hdri/apt/debian bookworm main" -y
+RUN cd /etc/apt/sources.list.d && wget https://repos.desy.de/pni-hdri/bookworm-pni-hdri.sources
 
 RUN apt-get -qq update && apt-get -qq -y dist-upgrade
 RUN apt-get -qq update && apt-get -qq install -y  apt-utils net-tools git python3-inotify-simple python3-setuptools python3-pytest python3-yaml nxstools python3-requests python3-pytest-cov   python3-pip python3-pip-whl python3-sphinx-bootstrap-theme git python3-sphinx
